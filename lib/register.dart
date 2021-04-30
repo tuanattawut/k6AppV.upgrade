@@ -14,40 +14,90 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController phonenumber = TextEditingController();
+  String typeUser;
 
   final auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Register", style: TextStyle(color: Colors.white)),
+        ),
         body: Form(
-      key: _formstate,
-      child: ListView(
-        children: <Widget>[
-          buildNameField(),
-          buildEmailField(),
-          buildPasswordField(),
-          buildRegisterButton(),
-        ],
-      ),
-    ));
+          key: _formstate,
+          child: ListView(
+            children: <Widget>[
+              buildNameField(),
+              buildEmailField(),
+              buildPasswordField(),
+              buildPhoneField(),
+              buildTitle(),
+              buildTyperUser(),
+              buildTyperMerchant(),
+              buildRegisterButton(),
+            ],
+          ),
+        ));
   }
 
-  RaisedButton buildRegisterButton() {
-    return RaisedButton(
+  RadioListTile<String> buildTyperMerchant() {
+    return RadioListTile(
+      value: 'merchant',
+      groupValue: typeUser,
+      onChanged: (value) {
+        setState(() {
+          typeUser = value;
+        });
+      },
+      title: Text('Merchant'),
+    );
+  }
+
+  RadioListTile<String> buildTyperUser() {
+    return RadioListTile(
+      value: 'user',
+      groupValue: typeUser,
+      onChanged: (value) {
+        setState(() {
+          typeUser = value;
+        });
+      },
+      title: Text('User'),
+    );
+  }
+
+  Container buildTitle() {
+    return Container(
+        margin: EdgeInsets.only(top: 20), child: Text('Type User : '));
+  }
+
+  ElevatedButton buildRegisterButton() {
+    return ElevatedButton(
       child: Text('Register'),
       onPressed: () async {
-        print('Regis new Account');
         if (this._formstate.currentState.validate()) print(this.email.text);
         print(this.password.text);
 
         final _user = await auth.createUserWithEmailAndPassword(
             email: this.email.text.trim(), password: this.password.text.trim());
         _user.user.sendEmailVerification();
+        String uid = auth.currentUser.uid.toString();
 
-        User updateUser = FirebaseAuth.instance.currentUser;
-        updateUser.updateProfile(displayName: name.text);
-        userSetup(name.text);
+        Map<String, dynamic> users = {
+          'uid': uid,
+          'name': name.text,
+          'email': email.text,
+          'phone': phonenumber.text,
+          'typeuser': typeUser,
+        };
+
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(uid)
+            .set(users)
+            .then((value) => print('Insert value'));
 
         Navigator.pushAndRemoveUntil(
             context,
@@ -89,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
       decoration: InputDecoration(
         labelText: 'E-mail',
         icon: Icon(Icons.email),
-        hintText: 'x@x.com',
+        hintText: 'aa@aa.com',
       ),
     );
   }
@@ -106,18 +156,27 @@ class _RegisterPageState extends State<RegisterPage> {
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'Name',
+        labelText: 'Full Name',
         icon: Icon(Icons.person),
-        hintText: "Name",
       ),
     );
   }
-}
 
-Future<void> userSetup(String displayName) async {
-  CollectionReference users = FirebaseFirestore.instance.collection('Users');
-  FirebaseAuth auth = FirebaseAuth.instance;
-  String uid = auth.currentUser.uid.toString();
-  users.add({'displayName': displayName, 'uid': uid});
-  return;
+  TextFormField buildPhoneField() {
+    return TextFormField(
+      controller: phonenumber,
+      validator: (value) {
+        if (value.length < 10)
+          return 'Please Enter more than 10 Character';
+        else
+          return null;
+      },
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'Phone Number',
+        icon: Icon(Icons.phone_android),
+      ),
+    );
+  }
 }

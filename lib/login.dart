@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,26 +12,36 @@ class _LoginPageState extends State<LoginPage> {
   String email;
   String password;
   final auth = FirebaseAuth.instance;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(),
         body: Form(
-      autovalidateMode: AutovalidateMode.always,
-      key: _formstate,
-      child: ListView(
-        children: <Widget>[
-          buildEmailField(),
-          buildPasswordField(),
-          buildLoginButton(),
-          buildRegisterButton(context),
-        ],
-      ),
-    ));
+          autovalidateMode: AutovalidateMode.always,
+          key: _formstate,
+          child: ListView(
+            children: <Widget>[
+              buildEmailField(),
+              buildPasswordField(),
+              buildLoginButton(),
+              buildRegisterButton(context),
+              buildButtonFacebook(context),
+            ],
+          ),
+        ));
   }
 
-  RaisedButton buildRegisterButton(BuildContext context) {
-    return RaisedButton(
+  ElevatedButton buildButtonFacebook(BuildContext context) {
+    return ElevatedButton(
+      child: Text('Facebook Login'),
+      onPressed: () {
+        loginWithFacebook(context);
+      },
+    );
+  }
+
+  ElevatedButton buildRegisterButton(BuildContext context) {
+    return ElevatedButton(
       child: Text('Register new account'),
       onPressed: () {
         print('Goto  Regis pagge');
@@ -39,8 +50,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  RaisedButton buildLoginButton() {
-    return RaisedButton(
+  ElevatedButton buildLoginButton() {
+    return ElevatedButton(
         child: Text('Login'),
         onPressed: () async {
           if (this._formstate.currentState.validate()) {
@@ -74,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
         this.password = value.trim();
       },
       validator: (value) {
-        if (value.length < 8)
-          return 'Please Enter more than 8 Character';
+        if (value.length < 6)
+          return 'Please Enter more than 6 Character';
         else
           return null;
       },
@@ -107,5 +118,35 @@ class _LoginPageState extends State<LoginPage> {
         hintText: 'x@x.com',
       ),
     );
+  }
+}
+
+Future loginWithFacebook(BuildContext context) async {
+  FacebookLogin facebookLogin = FacebookLogin();
+
+  FacebookLoginResult result =
+      await facebookLogin.logIn(['email', 'public_profile']);
+
+  String token = result.accessToken.token;
+
+  await FirebaseAuth.instance
+      .signInWithCredential(FacebookAuthProvider.credential(token))
+      .then((value) {
+    String uid = value.user.uid;
+    print('====== Uid =======  $uid');
+  });
+  print('Token = $token');
+  switch (result.status) {
+    case FacebookLoginStatus.error:
+      print("Error");
+      break;
+
+    case FacebookLoginStatus.cancelledByUser:
+      print("CancelledByUser");
+      break;
+
+    case FacebookLoginStatus.loggedIn:
+      Navigator.pushNamed(context, '/homepage');
+      print("LoggedIn");
   }
 }

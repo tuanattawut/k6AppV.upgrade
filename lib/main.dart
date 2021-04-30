@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/homemerchant.dart';
 import 'package:k6_app/homepage.dart';
 import 'package:k6_app/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,13 +22,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        primarySwatch: Colors.teal,
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/homepage': (context) => Homepage(),
+        '/homemerchant': (context) => Homemerchant(),
       },
     );
   }
