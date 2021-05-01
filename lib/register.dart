@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
           typeUser = value;
         });
       },
-      title: Text('Merchant'),
+      title: Text('ผู้ขาย'),
     );
   }
 
@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
           typeUser = value;
         });
       },
-      title: Text('User'),
+      title: Text('สมาชิก'),
     );
   }
 

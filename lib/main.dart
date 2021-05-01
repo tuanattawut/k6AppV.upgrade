@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/homemanager.dart';
 import 'package:k6_app/homemerchant.dart';
 import 'package:k6_app/homepage.dart';
 import 'package:k6_app/login.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/homepage': (context) => Homepage(),
         '/homemerchant': (context) => Homemerchant(),
+        '/homemanager': (context) => Homemanager(),
       },
     );
   }
