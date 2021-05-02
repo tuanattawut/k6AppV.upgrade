@@ -89,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
           'uid': uid,
           'name': name.text,
           'email': email.text,
-          'phone': phonenumber.text,
+          'phonenumber': phonenumber.text,
           'typeuser': typeUser,
         };
 
