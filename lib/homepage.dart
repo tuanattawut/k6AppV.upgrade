@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -9,7 +10,8 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   final auth = FirebaseAuth.instance;
-  final users = FirebaseFirestore.instance;
+  final user = FirebaseFirestore.instance;
+  final fblogout = FacebookLogin();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,27 +41,29 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         appBar: AppBar(
-          title: Text("K6 E-App", style: TextStyle(color: Colors.white)),
+          title: Text("K6 E-App"),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.exit_to_app),
                 onPressed: () {
                   auth.signOut();
+                  fblogout.logOut();
                   Navigator.pop(context);
                 })
           ],
         ),
-        body: StreamBuilder(
-          stream: users.collection('Products').snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            return Scaffold(
-              body: snapshot.hasData
-                  ? buildUsersList(snapshot.data)
-                  : Center(
-                      child: CircularProgressIndicator(),
-                    ),
-            );
-          },
+        body: ListView(
+          children: <Widget>[
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Text(
+                'สินค้า',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ));
   }
 }

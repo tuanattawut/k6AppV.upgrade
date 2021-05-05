@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:k6_app/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/utility/my_style.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -23,19 +25,22 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Register", style: TextStyle(color: Colors.white)),
+          title: Text("สมัครสมาชิก", style: TextStyle(color: Colors.white)),
         ),
         body: Form(
           key: _formstate,
           child: ListView(
+            padding: EdgeInsets.all(20.0),
             children: <Widget>[
               buildNameField(),
               buildEmailField(),
               buildPasswordField(),
               buildPhoneField(),
-              buildTitle(),
+              MyStyle().mySizebox(),
+              MyStyle().showTitleH2('เลือกชนิดของสมาชิก:'),
               buildTyperUser(),
               buildTyperMerchant(),
+              MyStyle().mySizebox(),
               buildRegisterButton(),
             ],
           ),
@@ -68,11 +73,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Container buildTitle() {
-    return Container(
-        margin: EdgeInsets.only(top: 20), child: Text('Type User : '));
-  }
-
   ElevatedButton buildRegisterButton() {
     return ElevatedButton(
       child: Text('Register'),
@@ -85,18 +85,17 @@ class _RegisterPageState extends State<RegisterPage> {
         _user.user.sendEmailVerification();
         String uid = auth.currentUser.uid.toString();
 
-        Map<String, dynamic> users = {
-          'uid': uid,
-          'name': name.text,
-          'email': email.text,
-          'phonenumber': phonenumber.text,
-          'typeuser': typeUser,
-        };
-
+        UserModels model = UserModels(
+            name: name.text,
+            email: email.text,
+            phonenumber: phonenumber.text,
+            typeuser: typeUser,
+            uid: uid);
+        Map<String, dynamic> data = model.toMap();
         await FirebaseFirestore.instance
             .collection('user')
             .doc(uid)
-            .set(users)
+            .set(data)
             .then((value) => print('Insert value'));
 
         Navigator.pushAndRemoveUntil(

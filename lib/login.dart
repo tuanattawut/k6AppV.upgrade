@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/utility/my_style.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,9 +22,20 @@ class _LoginPageState extends State<LoginPage> {
           autovalidateMode: AutovalidateMode.always,
           key: _formstate,
           child: ListView(
+            padding: EdgeInsets.all(20.0),
             children: <Widget>[
+              MyStyle().mySizebox(),
+              MyStyle().showLogo(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MyStyle().showTitle('E-App K6'),
+                ],
+              ),
+              MyStyle().mySizebox(),
               buildEmailField(),
               buildPasswordField(),
+              MyStyle().mySizebox(),
               buildLoginButton(),
               buildRegisterButton(context),
               buildButtonFacebook(context),

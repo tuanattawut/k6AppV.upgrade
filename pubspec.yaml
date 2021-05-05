@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore: ^0.16.0+1
   path_provider: ^1.6.27
   flutter_facebook_login: ^3.0.0
+  dio: ^4.0.0
   
 
 dev_dependencies:
