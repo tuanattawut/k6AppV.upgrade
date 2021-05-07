@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/screens/main_manager.dart';
-import 'package:k6_app/screens/main_shop.dart';
+import 'package:k6_app/screens/main_seller.dart';
 import 'package:k6_app/screens/main_user.dart';
 import 'package:k6_app/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         '/loginpage': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/homepage': (context) => Homepage(),
-        '/': (context) => Homeshop(),
+        '/': (context) => Homeseller(),
         '/homemanager': (context) => Homemanager(),
       },
     );
