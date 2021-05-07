@@ -30,5 +30,20 @@ class MyStyle {
     );
   }
 
+  Widget showProgress() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  BoxDecoration myBoxDecoration(String namePic) {
+    return BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('images/$namePic'),
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
   MyStyle();
 }

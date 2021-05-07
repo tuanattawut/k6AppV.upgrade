@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:k6_app/login.dart';
+import 'package:k6_app/screens/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -39,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
               MyStyle().mySizebox(),
               MyStyle().showTitleH2('เลือกชนิดของสมาชิก:'),
               buildTyperUser(),
-              buildTyperMerchant(),
+              buildTyperSeller(),
               MyStyle().mySizebox(),
               buildRegisterButton(),
             ],
@@ -47,9 +47,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
-  RadioListTile<String> buildTyperMerchant() {
+  RadioListTile<String> buildTyperSeller() {
     return RadioListTile(
-      value: 'merchant',
+      value: 'seller',
       groupValue: typeUser,
       onChanged: (value) {
         setState(() {

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -91,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                       case 'user':
                         Navigator.pushNamed(context, '/homepage');
                         break;
-                      case 'merchant':
-                        Navigator.pushNamed(context, '/homemerchant');
+                      case 'seller':
+                        Navigator.pushNamed(context, '/homeseller');
                         break;
                       case 'manager':
                         Navigator.pushNamed(context, '/homemanager');
@@ -112,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
             });
           } else
             print('Invalid Form');
+          normalDialog(context, 'กรุณากรอกข้อมูล');
         });
   }
 
@@ -175,8 +177,8 @@ class _LoginPageState extends State<LoginPage> {
           case 'user':
             Navigator.pushNamed(context, '/homepage');
             break;
-          case 'merchant':
-            Navigator.pushNamed(context, '/homemerchant');
+          case 'seller':
+            Navigator.pushNamed(context, '/homeseller');
             break;
           case 'manager':
             Navigator.pushNamed(context, '/homemanager');
@@ -210,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                     title: Text('สมาชิก'),
                   ),
                   RadioListTile(
-                    value: 'merchant',
+                    value: 'seller',
                     groupValue: typeUser,
                     onChanged: (value) {
                       setState(() {
@@ -271,8 +273,8 @@ class _LoginPageState extends State<LoginPage> {
                 case 'user':
                   Navigator.pushNamed(context, '/homepage');
                   break;
-                case 'merchant':
-                  Navigator.pushNamed(context, '/homemerchant');
+                case 'seller':
+                  Navigator.pushNamed(context, '/homeseller');
                   break;
                 case 'manager':
                   Navigator.pushNamed(context, '/homemanager');

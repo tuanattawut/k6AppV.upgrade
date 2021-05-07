@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/homemanager.dart';
-import 'package:k6_app/homemerchant.dart';
-import 'package:k6_app/homepage.dart';
-import 'package:k6_app/login.dart';
+import 'package:k6_app/screens/main_manager.dart';
+import 'package:k6_app/screens/main_shop.dart';
+import 'package:k6_app/screens/main_user.dart';
+import 'package:k6_app/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:k6_app/register.dart';
+import 'package:k6_app/screens/register.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,10 +27,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(),
+        '/loginpage': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/homepage': (context) => Homepage(),
-        '/homemerchant': (context) => Homemerchant(),
+        '/': (context) => Homeshop(),
         '/homemanager': (context) => Homemanager(),
       },
     );
