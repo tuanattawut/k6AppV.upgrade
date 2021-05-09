@@ -27,10 +27,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(),
+        '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/homepage': (context) => Homepage(),
-        '/homeseller': (context) => Homeseller(),
+        '/': (context) => Homeseller(),
         '/homemanager': (context) => Homemanager(),
       },
     );
