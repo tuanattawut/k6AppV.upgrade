@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:location/location.dart';
 
 class AddInfoSeller extends StatefulWidget {
   @override
@@ -8,13 +9,38 @@ class AddInfoSeller extends StatefulWidget {
 }
 
 class _AddInfoSellerState extends State<AddInfoSeller> {
+  double lat, lng;
   String nameShop, address, phone, urlImage;
+
+  @override
+  void initState() {
+    super.initState();
+    findLatLng();
+  }
+
+  Future<Null> findLatLng() async {
+    LocationData locationData = await findLocationData();
+    setState(() {
+      lat = locationData.latitude;
+      lng = locationData.longitude;
+    });
+    print('lat = $lat, lng = $lng');
+  }
+
+  Future<LocationData> findLocationData() async {
+    Location location = Location();
+    try {
+      return location.getLocation();
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('เพิ่มข้อมูลผู้ขาย'),
+        title: Text('เพิ่มข้อมูลร้านผู้ขาย'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
@@ -30,6 +56,7 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
             showMap(),
             MyStyle().mySizebox(),
             saveButton(),
+            MyStyle().mySizebox(),
           ],
         ),
       ),

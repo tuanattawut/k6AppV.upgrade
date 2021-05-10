@@ -21,7 +21,7 @@ class _InformationSellerState extends State<InformationSeller> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        MyStyle().titleCenter(context, ' ยังไม่มี ข้อมูล กรุณาเพิ่มข้อมูล'),
+        MyStyle().titleCenter(context, '  ยังไม่มี ข้อมูล กรุณาเพิ่มข้อมูล'),
         addAndEditButton(),
       ],
     );
@@ -37,7 +37,7 @@ class _InformationSellerState extends State<InformationSeller> {
             Container(
               margin: EdgeInsets.only(bottom: 50.0),
               child: FloatingActionButton(
-                child: Icon(Icons.edit),
+                child: Icon(Icons.add),
                 onPressed: () => routeToAddInfo(),
               ),
             ),
