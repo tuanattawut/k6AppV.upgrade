@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/widget/infomation_seller.dart';
 import 'package:k6_app/widget/product_list_seller.dart';
+import 'package:k6_app/widget/rent_seller.dart';
 
 class Homeseller extends StatefulWidget {
   @override
@@ -34,6 +35,7 @@ class _HomesellerState extends State<Homeseller> {
           showHead(),
           foodMenu(),
           infomationMenu(),
+          rentMenu(),
           signOutMenu(),
         ]),
       );
@@ -57,6 +59,18 @@ class _HomesellerState extends State<Homeseller> {
         onTap: () {
           setState(() {
             currentWidget = InformationSeller();
+          });
+          Navigator.pop(context);
+        },
+      );
+
+  ListTile rentMenu() => ListTile(
+        leading: Icon(Icons.food_bank),
+        title: Text('เช่า/จองพื้นที่'),
+        subtitle: Text('เช่าหรือจองพื้นที่สำหรับขายสินค้า'),
+        onTap: () {
+          setState(() {
+            currentWidget = RentSeller();
           });
           Navigator.pop(context);
         },
