@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/covid_models.dart';
 import 'package:k6_app/screens/add_info_seller.dart';
 import 'package:k6_app/utility/my_style.dart';
 
@@ -10,6 +12,22 @@ class InformationSeller extends StatefulWidget {
 }
 
 class _InformationSellerState extends State<InformationSeller> {
+  Covid covid;
+
+  @override
+  void initState() {
+    super.initState();
+    readDataUser();
+  }
+
+  Future<Null> readDataUser() async {
+    print('ดึงข้อมูลมาใช้งาน');
+    String url = 'https://covid19.th-stat.com/api/open/today';
+    Dio().get(url).then((value) {
+      print('value = $value');
+    });
+  }
+
   void routeToAddInfo() {
     MaterialPageRoute materialPageRoute = MaterialPageRoute(
       builder: (context) => AddInfoSeller(),
@@ -21,7 +39,7 @@ class _InformationSellerState extends State<InformationSeller> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        MyStyle().titleCenter(context, '  ยังไม่มี ข้อมูล กรุณาเพิ่มข้อมูล'),
+        MyStyle().showProgress(),
         addAndEditButton(),
       ],
     );

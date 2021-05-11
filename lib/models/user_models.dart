@@ -1,52 +1,76 @@
 import 'dart:convert';
 
 class UserModels {
+  String id;
   final String name;
   final String email;
-  final String phonenumber;
+  final String phone;
   final String typeuser;
   final String uid;
+  String urlPicture;
+  String lat;
+  String lng;
   UserModels({
+    this.id,
     this.name,
     this.email,
-    this.phonenumber,
+    this.phone,
     this.typeuser,
     this.uid,
+    this.urlPicture,
+    this.lat,
+    this.lng,
   });
 
   UserModels copyWith({
+    String id,
     String name,
     String email,
-    String phonenumber,
+    String phone,
     String typeuser,
     String uid,
+    String urlPicture,
+    String lat,
+    String lng,
   }) {
     return UserModels(
+      id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
-      phonenumber: phonenumber ?? this.phonenumber,
+      phone: phone ?? this.phone,
       typeuser: typeuser ?? this.typeuser,
       uid: uid ?? this.uid,
+      urlPicture: urlPicture ?? this.urlPicture,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'email': email,
-      'phonenumber': phonenumber,
+      'phone': phone,
       'typeuser': typeuser,
       'uid': uid,
+      'urlPicture': urlPicture,
+      'lat': lat,
+      'lng': lng,
     };
   }
 
   factory UserModels.fromMap(Map<String, dynamic> map) {
     return UserModels(
+      id: map['id'],
       name: map['name'],
       email: map['email'],
-      phonenumber: map['phonenumber'],
+      phone: map['phone'],
       typeuser: map['typeuser'],
       uid: map['uid'],
+      urlPicture: map['urlPicture'],
+      lat: map['lat'],
+      lng: map['lng'],
     );
   }
 
@@ -57,7 +81,7 @@ class UserModels {
 
   @override
   String toString() {
-    return 'UserModels(name: $name, email: $email, phonenumber: $phonenumber, typeuser: $typeuser,uid: $uid)';
+    return 'UserModels(id: $id, name: $name, email: $email, phone: $phone, typeuser: $typeuser, uid: $uid, urlPicture: $urlPicture, lat: $lat, lng: $lng)';
   }
 
   @override
@@ -65,19 +89,27 @@ class UserModels {
     if (identical(this, other)) return true;
 
     return other is UserModels &&
+        other.id == id &&
         other.name == name &&
         other.email == email &&
-        other.phonenumber == phonenumber &&
+        other.phone == phone &&
         other.typeuser == typeuser &&
-        other.uid == uid;
+        other.uid == uid &&
+        other.urlPicture == urlPicture &&
+        other.lat == lat &&
+        other.lng == lng;
   }
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return id.hashCode ^
+        name.hashCode ^
         email.hashCode ^
-        phonenumber.hashCode ^
+        phone.hashCode ^
         typeuser.hashCode ^
-        uid.hashCode;
+        uid.hashCode ^
+        urlPicture.hashCode ^
+        lat.hashCode ^
+        lng.hashCode;
   }
 }

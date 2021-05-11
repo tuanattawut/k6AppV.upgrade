@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
     UserModels model = UserModels(
       name: name,
       email: email,
-      phonenumber: phone,
+      phone: phone,
       typeuser: typeUser,
       uid: uid,
     );

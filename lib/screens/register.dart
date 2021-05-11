@@ -13,11 +13,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formstate = GlobalKey<FormState>();
 
-  TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController phonenumber = TextEditingController();
-  String typeUser;
+  String name, password, email, phone, typeUser;
 
   final auth = FirebaseAuth.instance;
 
@@ -77,18 +73,18 @@ class _RegisterPageState extends State<RegisterPage> {
     return ElevatedButton(
       child: Text('Register'),
       onPressed: () async {
-        if (this._formstate.currentState.validate()) print(this.email.text);
-        print(this.password.text);
+        if (this._formstate.currentState.validate()) print(this.email);
+        print(this.password);
 
         final _user = await auth.createUserWithEmailAndPassword(
-            email: this.email.text.trim(), password: this.password.text.trim());
+            email: this.email.trim(), password: this.password.trim());
         _user.user.sendEmailVerification();
         String uid = auth.currentUser.uid.toString();
 
         UserModels model = UserModels(
-            name: name.text,
-            email: email.text,
-            phonenumber: phonenumber.text,
+            name: name,
+            email: email,
+            phone: phone,
             typeuser: typeUser,
             uid: uid);
         Map<String, dynamic> data = model.toMap();
@@ -108,10 +104,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildPasswordField() {
     return TextFormField(
-      controller: password,
+      onChanged: (value) => password = value.trim(),
       validator: (value) {
         if (value.length < 6)
-          return 'Please Enter more than 6 Character';
+          return 'โปรดกรอกพาสเวิร์ดมากกว่า 6 หลัก';
         else
           return null;
       },
@@ -126,10 +122,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildEmailField() {
     return TextFormField(
-      controller: email,
+      onChanged: (value) => email = value.trim(),
       validator: (value) {
         if (value.isEmpty)
-          return 'Please fill in E-mail field';
+          return 'โปรดกรอกอีเมลในช่อง';
         else
           return null;
       },
@@ -145,10 +141,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildNameField() {
     return TextFormField(
-      controller: name,
+      onChanged: (value) => name = value.trim(),
       validator: (value) {
         if (value.isEmpty)
-          return 'Please fill in Name field';
+          return 'โปรดกรอกชื่อในช่อง';
         else
           return null;
       },
@@ -163,10 +159,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildPhoneField() {
     return TextFormField(
-      controller: phonenumber,
+      onChanged: (value) => phone = value.trim(),
       validator: (value) {
         if (value.length < 10)
-          return 'Please Enter more than 10 Character';
+          return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;
       },

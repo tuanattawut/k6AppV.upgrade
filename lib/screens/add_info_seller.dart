@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:math';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +15,7 @@ class AddInfoSeller extends StatefulWidget {
 
 class _AddInfoSellerState extends State<AddInfoSeller> {
   double lat, lng;
-  String nameShop, address, phone, urlImage;
+  String nameShop, phonenumber, urlImage;
   File file;
 
   @override
@@ -81,37 +83,44 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
 
   TextFormField phoneForm() {
     return TextFormField(
-        onChanged: (value) => nameShop = value.trim(),
+        onChanged: (value) => phonenumber = value.trim(),
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
             labelText: 'เบอร์โทรศัพท์', icon: Icon(Icons.phone)));
   }
 
-  Row groupImage() {
-    return Row(
+  Column groupImage() {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.add_a_photo,
-            size: 36.0,
-          ),
-          onPressed: () => chooseImage(ImageSource.camera),
-        ),
         Container(
           width: 250.0,
           child: file == null
               ? Image.asset('images/myimage.png')
               : Image.file(file),
         ),
-        IconButton(
-          icon: Icon(
-            Icons.add_photo_alternate,
-            size: 36.0,
-          ),
-          onPressed: () => chooseImage(ImageSource.gallery),
-        )
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.add_a_photo,
+                size: 40.0,
+                color: Colors.teal.shade500,
+              ),
+              onPressed: () => chooseImage(ImageSource.camera),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.add_photo_alternate,
+                size: 40.0,
+                color: Colors.teal.shade500,
+              ),
+              onPressed: () => chooseImage(ImageSource.gallery),
+            )
+          ],
+        ),
       ],
     );
   }
@@ -163,8 +172,38 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
     return ElevatedButton(
       child: Text('บันทึกข้อมูล'),
       onPressed: () {
-        normalDialog(context, 'กดทำเพื่อ ???');
+        if (nameShop == null ||
+            nameShop.isEmpty ||
+            phonenumber == null ||
+            phonenumber.isEmpty) {
+          normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
+        } else if (file == null) {
+          normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
+        } else {}
       },
     );
+  }
+
+  Future<Null> uploadImage() async {
+    Random random = Random();
+    int i = random.nextInt(1000000);
+    String nameImage = 'shop$i.jpg';
+    print('nameImage = $nameImage, pathImage = ${file.path}');
+
+    String url = 'ลิงค์ API';
+
+    try {
+      Map<String, dynamic> map = Map();
+      map['file'] =
+          await MultipartFile.fromFile(file.path, filename: nameImage);
+
+      FormData formData = FormData.fromMap(map);
+      await Dio().post(url, data: formData).then((value) {
+        print('Response ===>>> $value');
+        urlImage = 'ลิงค์ดึงมาทำ URL';
+        print('urlImage = $urlImage');
+        // editUserShop();
+      });
+    } catch (e) {}
   }
 }
