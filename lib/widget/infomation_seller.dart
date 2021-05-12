@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/covid_models.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:k6_app/screens/add_info_seller.dart';
 import 'package:k6_app/utility/my_style.dart';
 
@@ -12,12 +13,9 @@ class InformationSeller extends StatefulWidget {
 }
 
 class _InformationSellerState extends State<InformationSeller> {
-  Covid covid;
-
   @override
   void initState() {
     super.initState();
-    readDataUser();
   }
 
   Future<Null> readDataUser() async {
@@ -39,10 +37,82 @@ class _InformationSellerState extends State<InformationSeller> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        MyStyle().showProgress(),
+        showListInfoShop(),
         addAndEditButton(),
       ],
     );
+  }
+
+  Widget showListInfoShop() => Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          children: <Widget>[
+            MyStyle().showTitleH2('รายละเอียดผู้ขาย '),
+            showImage(),
+            Row(
+              children: <Widget>[
+                MyStyle().showTitleH2('ชื่อร้าน'),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Text('CAT DOG'),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                MyStyle().showTitleH2('เบอร์โทร'),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Text('0123456789'),
+              ],
+            ),
+            MyStyle().mySizebox(),
+            showMap(),
+          ],
+        ),
+      );
+
+  Container showImage() {
+    return Container(
+      width: 200.0,
+      height: 200.0,
+      child: Image.network(
+          'https://images.workpointnews.com/workpointnews/2018/05/04192638/1525436797_55588_451810.jpg'),
+    );
+  }
+
+  Widget showMap() {
+    double lat = double.parse('14.036656358272781');
+    double lng = double.parse('100.73584338182013');
+    print('lat = $lat, lng = $lng');
+
+    LatLng latLng = LatLng(lat, lng);
+    CameraPosition position = CameraPosition(target: latLng, zoom: 15.0);
+
+    return Expanded(
+      child: GoogleMap(
+        initialCameraPosition: position,
+        mapType: MapType.normal,
+        onMapCreated: (controller) {},
+        markers: shopMarker(),
+      ),
+    );
+  }
+
+  Set<Marker> shopMarker() {
+    return <Marker>[
+      Marker(
+          markerId: MarkerId('shopID'),
+          position: LatLng(
+            double.parse('14.036656358272781'),
+            double.parse('100.73584338182013'),
+          ),
+          infoWindow:
+              InfoWindow(title: 'ตำแหน่งร้าน', snippet: 'ร้าน : แก๊งค์เหลือง'))
+    ].toSet();
   }
 
   Row addAndEditButton() {
