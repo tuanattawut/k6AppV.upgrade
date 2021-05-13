@@ -59,7 +59,7 @@ class _InformationSellerState extends State<InformationSeller> {
             ),
             Row(
               children: <Widget>[
-                Text('จารย์ แดง'),
+                Text('จารย์ แดง Shop'),
               ],
             ),
             Row(
