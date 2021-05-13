@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({Key key}) : super(key: key);
@@ -11,7 +12,7 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  String nameFood, price, detail;
+  String nameProduct, price, detail;
   File file;
 
   @override
@@ -28,9 +29,11 @@ class _AddProductState extends State<AddProduct> {
             showTitleFood('รายละเอียดสินค้า'),
             nameForm(),
             MyStyle().mySizebox(),
+            detailForm(),
+            MyStyle().mySizebox(),
             priceForm(),
             MyStyle().mySizebox(),
-            detailForm(),
+            saveButton(),
             MyStyle().mySizebox(),
           ],
         ),
@@ -38,11 +41,31 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
+  ElevatedButton saveButton() {
+    return ElevatedButton(
+      child: Text('บันทึกข้อมูล'),
+      onPressed: () {
+        if (nameProduct == null ||
+            nameProduct.isEmpty ||
+            price == null ||
+            price.isEmpty ||
+            detail == null ||
+            detail.isEmpty) {
+          normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
+        } else if (file == null) {
+          normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
+        } else {
+          print('nameproduct : $nameProduct, price : $price, detail : $detail');
+        }
+      },
+    );
+  }
+
   TextFormField nameForm() {
     return TextFormField(
-      onChanged: (value) => nameFood = value.trim(),
+      onChanged: (value) => nameProduct = value.trim(),
       decoration: InputDecoration(
-        icon: Icon(Icons.fastfood),
+        icon: Icon(Icons.shopping_bag_outlined),
         labelText: 'ชื่อสินค้า',
       ),
     );
@@ -71,14 +94,10 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
-  Row groupImage() {
-    return Row(
+  Column groupImage() {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.add_a_photo),
-          onPressed: () => chooseImage(ImageSource.camera),
-        ),
         Container(
           width: 250.0,
           height: 250.0,
@@ -86,9 +105,26 @@ class _AddProductState extends State<AddProduct> {
               ? Image.asset('images/productmenu.png')
               : Image.file(file),
         ),
-        IconButton(
-          icon: Icon(Icons.add_photo_alternate),
-          onPressed: () => chooseImage(ImageSource.gallery),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.add_a_photo,
+                size: 40.0,
+                color: Colors.teal.shade500,
+              ),
+              onPressed: () => chooseImage(ImageSource.camera),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.add_photo_alternate,
+                size: 40.0,
+                color: Colors.teal.shade500,
+              ),
+              onPressed: () => chooseImage(ImageSource.gallery),
+            ),
+          ],
         ),
       ],
     );

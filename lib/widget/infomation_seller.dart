@@ -20,10 +20,13 @@ class _InformationSellerState extends State<InformationSeller> {
 
   Future<Null> readDataUser() async {
     print('ดึงข้อมูลมาใช้งาน');
-    String url = 'https://covid19.th-stat.com/api/open/today';
-    Dio().get(url).then((value) {
-      print('value = $value');
-    });
+    try {
+      var response =
+          await Dio().get('https://covid19.th-stat.com/api/open/today');
+      print(response.data);
+    } catch (e) {
+      print(e);
+    }
   }
 
   void routeToAddInfo() {
@@ -56,7 +59,7 @@ class _InformationSellerState extends State<InformationSeller> {
             ),
             Row(
               children: <Widget>[
-                Text('CAT DOG'),
+                Text('จารย์ แดง'),
               ],
             ),
             Row(
@@ -80,7 +83,7 @@ class _InformationSellerState extends State<InformationSeller> {
       width: 200.0,
       height: 200.0,
       child: Image.network(
-          'https://images.workpointnews.com/workpointnews/2018/05/04192638/1525436797_55588_451810.jpg'),
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdSLfLgOudHj-ezyrcSxCgSUlw-uUz4qaYZg&usqp=CAU'),
     );
   }
 

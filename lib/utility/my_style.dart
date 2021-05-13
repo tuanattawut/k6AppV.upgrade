@@ -6,13 +6,13 @@ class MyStyle {
   TextStyle mainTitle = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.bold,
-    color: Colors.purple,
+    color: Colors.teal.shade700,
   );
 
   TextStyle mainH2Title = TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
-    color: Colors.green.shade700,
+    color: Colors.red.shade700,
   );
 
   SizedBox mySizebox() => SizedBox(
