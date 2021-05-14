@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class MyStyle {
+  Color tealColor = Colors.teal.shade500;
+  Color lightColor = Color(0xffff713e);
   TextStyle mainTitle = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.bold,

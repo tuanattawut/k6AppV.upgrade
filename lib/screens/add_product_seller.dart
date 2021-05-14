@@ -14,7 +14,7 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   String nameProduct, price, detail;
   File file;
-
+  double screen;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +22,7 @@ class _AddProductState extends State<AddProduct> {
         title: Text('เพิ่มรายการสินค้า'),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
             showTitleFood('รูปสินค้า'),
@@ -65,8 +66,15 @@ class _AddProductState extends State<AddProduct> {
     return TextFormField(
       onChanged: (value) => nameProduct = value.trim(),
       decoration: InputDecoration(
-        icon: Icon(Icons.shopping_bag_outlined),
-        labelText: 'ชื่อสินค้า',
+        icon: Icon(
+          Icons.shopping_bag_outlined,
+          color: Colors.teal.shade500,
+        ),
+        labelText: 'ชื่อสินค้า :',
+        labelStyle: TextStyle(color: MyStyle().tealColor),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: MyStyle().tealColor),
+        ),
       ),
     );
   }
@@ -76,8 +84,15 @@ class _AddProductState extends State<AddProduct> {
       keyboardType: TextInputType.number,
       onChanged: (value) => price = value.trim(),
       decoration: InputDecoration(
-        icon: Icon(Icons.attach_money),
-        labelText: 'ราคาสินค้า',
+        icon: Icon(
+          Icons.attach_money,
+          color: Colors.teal.shade500,
+        ),
+        labelText: 'ราคาสินค้า :',
+        labelStyle: TextStyle(color: MyStyle().tealColor),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: MyStyle().tealColor),
+        ),
       ),
     );
   }
@@ -88,8 +103,15 @@ class _AddProductState extends State<AddProduct> {
       keyboardType: TextInputType.multiline,
       maxLines: 3,
       decoration: InputDecoration(
-        icon: Icon(Icons.details),
-        labelText: 'รายละเอียดสินค้า',
+        icon: Icon(
+          Icons.details,
+          color: Colors.teal.shade500,
+        ),
+        labelText: 'รายละเอียดสินค้า :',
+        labelStyle: TextStyle(color: MyStyle().tealColor),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: MyStyle().tealColor),
+        ),
       ),
     );
   }
@@ -99,8 +121,8 @@ class _AddProductState extends State<AddProduct> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 250.0,
-          height: 250.0,
+          width: 500.0,
+          height: 200.0,
           child: file == null
               ? Image.asset('images/productmenu.png')
               : Image.file(file),

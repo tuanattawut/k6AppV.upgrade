@@ -32,14 +32,26 @@ class _HomesellerState extends State<Homeseller> {
   }
 
   Drawer showDrawer() => Drawer(
-        child: ListView(children: <Widget>[
-          showHead(),
-          productMenu(),
-          infomationMenu(),
-          rentMenu(),
-          chatMenu(),
-          signOutMenu(),
-        ]),
+        child: Stack(
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                showHead(),
+                productMenu(),
+                infomationMenu(),
+                rentMenu(),
+                chatMenu(),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                signOutMenu(),
+              ],
+            ),
+          ],
+        ),
       );
 
   ListTile productMenu() => ListTile(

@@ -76,7 +76,14 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'ชื่อร้านค้า',
-        icon: Icon(Icons.shopping_bag),
+        icon: Icon(
+          Icons.shopping_bag,
+          color: Colors.teal.shade500,
+        ),
+        labelStyle: TextStyle(color: MyStyle().tealColor),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: MyStyle().tealColor),
+        ),
       ),
     );
   }
@@ -87,7 +94,16 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-            labelText: 'เบอร์โทรศัพท์', icon: Icon(Icons.phone)));
+          labelText: 'เบอร์โทรศัพท์',
+          icon: Icon(
+            Icons.phone,
+            color: Colors.teal.shade500,
+          ),
+          labelStyle: TextStyle(color: MyStyle().tealColor),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: MyStyle().tealColor),
+          ),
+        ));
   }
 
   Column groupImage() {
