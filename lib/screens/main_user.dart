@@ -38,7 +38,9 @@ class _HomepageState extends State<Homepage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.teal,
+        selectedItemColor: Colors.teal.shade700,
+        unselectedItemColor: Colors.grey.shade700,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w800),
         onTap: _onItemTapped,
       ),
     );

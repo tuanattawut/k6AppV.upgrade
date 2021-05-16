@@ -1,22 +1,58 @@
+import 'dart:convert';
+
 class ChatModel {
   String name;
-  String icon;
-  bool isGroup;
+  String messageText;
+  String imageURL;
   String time;
-  String currentMessage;
-  String status;
-  bool select = false;
-  int id;
   ChatModel({
     this.name,
-    this.icon,
-    this.isGroup,
+    this.messageText,
+    this.imageURL,
     this.time,
-    this.currentMessage,
-    this.status,
-    this.select = false,
-    this.id,
   });
+
+  ChatModel copyWith({
+    String name,
+    String messageText,
+    String imageURL,
+    String time,
+  }) {
+    return ChatModel(
+      name: name ?? this.name,
+      messageText: messageText ?? this.messageText,
+      imageURL: imageURL ?? this.imageURL,
+      time: time ?? this.time,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'messageText': messageText,
+      'imageURL': imageURL,
+      'time': time,
+    };
+  }
+
+  factory ChatModel.fromMap(Map<String, dynamic> map) {
+    return ChatModel(
+      name: map['name'],
+      messageText: map['messageText'],
+      imageURL: map['imageURL'],
+      time: map['time'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ChatModel.fromJson(String source) =>
+      ChatModel.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'ChatModel(name: $name, messageText: $messageText, imageURL: $imageURL, time: $time)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -24,24 +60,16 @@ class ChatModel {
 
     return other is ChatModel &&
         other.name == name &&
-        other.icon == icon &&
-        other.isGroup == isGroup &&
-        other.time == time &&
-        other.currentMessage == currentMessage &&
-        other.status == status &&
-        other.select == select &&
-        other.id == id;
+        other.messageText == messageText &&
+        other.imageURL == imageURL &&
+        other.time == time;
   }
 
   @override
   int get hashCode {
     return name.hashCode ^
-        icon.hashCode ^
-        isGroup.hashCode ^
-        time.hashCode ^
-        currentMessage.hashCode ^
-        status.hashCode ^
-        select.hashCode ^
-        id.hashCode;
+        messageText.hashCode ^
+        imageURL.hashCode ^
+        time.hashCode;
   }
 }
