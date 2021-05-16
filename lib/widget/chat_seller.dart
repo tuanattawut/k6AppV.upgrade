@@ -25,7 +25,7 @@ class _ChatSellerState extends State<ChatSeller> {
       },
       child: Column(
         children: [
-          Text('หหหหฟกฟหกฟหก'),
+          Text('SHOW Chat '),
         ],
       ),
     );
