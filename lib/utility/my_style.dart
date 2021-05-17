@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 class MyStyle {
   Color tealColor = Colors.teal.shade500;
-  Color lightColor = Color(0xffff713e);
+  Color primaryColor = Color(0xff03ffb4);
+  Color lightColor = Color(0xff6dffe6);
+  Color darkColor = Color(0xff00cb84);
+
   TextStyle mainTitle = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.bold,
@@ -38,7 +41,7 @@ class MyStyle {
         title,
         style: TextStyle(
           fontSize: 16.0,
-          color: Colors.blue.shade900,
+          color: Colors.teal,
           fontWeight: FontWeight.w500,
         ),
       );
@@ -106,6 +109,45 @@ class MyStyle {
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+    );
+  }
+
+  Container buildBackground(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Image(
+              image: AssetImage('images/top1.png'),
+            ),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Image(
+              image: AssetImage('images/top2.png'),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Image(
+              image: AssetImage('images/bottom1.png'),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Image(
+              image: AssetImage('images/bottom2.png'),
+            ),
+          ),
+        ],
       ),
     );
   }

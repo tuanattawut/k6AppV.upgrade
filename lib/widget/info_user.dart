@@ -10,24 +10,27 @@ class _InformationUserState extends State<InformationUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('ข้อมูล')),
-        ),
-        body: Container(
-          child: ListView(
-            padding: EdgeInsets.all(20),
-            children: <Widget>[
-              MyStyle().showTitle('ชื่อผู้ใช้'),
-              MyStyle().mySizebox(),
-              ElevatedButton(onPressed: () {}, child: Text('แชทกับผู้จัดการ')),
-              MyStyle().mySizebox(),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('ออกจากระบบ'))
-            ],
-          ),
-        ));
+      appBar: AppBar(
+        title: Text('หน้า'),
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(5.0),
+        children: <Widget>[
+          showImage(),
+          MyStyle().showTitle('ชื่อ: วัยรุ่นทำอุปกรณ์'),
+          MyStyle().mySizebox(),
+          MyStyle().showTitle('อีเมล: prayat@hotmail.com'),
+        ],
+      ),
+    );
+  }
+
+  Widget showImage() {
+    return Container(
+      width: 300.0,
+      height: 300.0,
+      child: Image.network(
+          'https://www.catdumb.com/wp-content/uploads/2021/05/hey-wai-roon-10.png'),
+    );
   }
 }
