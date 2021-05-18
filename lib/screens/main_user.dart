@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+
 import 'package:k6_app/widget/info_user.dart';
 import 'package:k6_app/widget/product_user.dart';
 import 'package:k6_app/widget/promote_user.dart';
@@ -12,10 +10,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final auth = FirebaseAuth.instance;
-  final user = FirebaseFirestore.instance;
-  final fblogout = FacebookLogin();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +32,6 @@ class _HomepageState extends State<Homepage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.teal.shade700,
-        unselectedItemColor: Colors.grey.shade700,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w800),
         onTap: _onItemTapped,
       ),
     );

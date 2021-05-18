@@ -57,11 +57,7 @@ class _ProductListUserState extends State<ProductListUser> {
           width: MediaQuery.of(context).size.width * 0.5 - 35,
           child: Text(
             'หมูปิ้ง',
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.teal.shade700,
-            ),
+            style: MyStyle().mainTitle,
           ),
         ),
       ],

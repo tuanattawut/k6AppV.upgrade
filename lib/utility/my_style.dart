@@ -3,21 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class MyStyle {
-  Color tealColor = Colors.teal.shade500;
-  Color primaryColor = Color(0xff03ffb4);
-  Color lightColor = Color(0xff6dffe6);
-  Color darkColor = Color(0xff00cb84);
+  Color primaryColor = Color(0xff00b8d4);
+  Color lightColor = Color(0xff62ebff);
+  Color darkColor = Color(0xff0088a3);
 
   TextStyle mainTitle = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.bold,
-    color: Colors.teal.shade700,
   );
 
   TextStyle mainH2Title = TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
-    color: Colors.red.shade700,
   );
 
   SizedBox mySizebox() => SizedBox(
@@ -28,47 +25,23 @@ class MyStyle {
   Text showTitle(String title) => Text(
         title,
         style: TextStyle(
-            fontSize: 25, color: Colors.teal, fontWeight: FontWeight.bold),
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
       );
 
   Text showTitleH2(String title) => Text(
         title,
         style: TextStyle(
-            fontSize: 18, color: Colors.teal, fontWeight: FontWeight.bold),
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
       );
 
   Text showTitleH3(String title) => Text(
         title,
         style: TextStyle(
           fontSize: 16.0,
-          color: Colors.teal,
-          fontWeight: FontWeight.w500,
-        ),
-      );
-
-  Text showTitleH3White(String title) => Text(
-        title,
-        style: TextStyle(
-          fontSize: 16.0,
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-        ),
-      );
-
-  Text showTitleH3Red(String title) => Text(
-        title,
-        style: TextStyle(
-          fontSize: 16.0,
-          color: Colors.red.shade900,
-          fontWeight: FontWeight.w500,
-        ),
-      );
-
-  Text showTitleH3Purple(String title) => Text(
-        title,
-        style: TextStyle(
-          fontSize: 16.0,
-          color: Colors.purple.shade700,
           fontWeight: FontWeight.w500,
         ),
       );

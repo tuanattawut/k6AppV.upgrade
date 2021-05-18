@@ -84,7 +84,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                             IconButton(
                               icon: Icon(
                                 Icons.edit,
-                                color: Colors.blue,
+                                color: Colors.green,
                               ),
                               onPressed: () {},
                             ),

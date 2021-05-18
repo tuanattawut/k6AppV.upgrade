@@ -11,12 +11,13 @@ class _InformationUserState extends State<InformationUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('หน้า'),
-      ),
+          title: Center(
+        child: Text('หน้าโปรไฟล์'),
+      )),
       body: ListView(
         padding: EdgeInsets.all(5.0),
         children: <Widget>[
-          showImage(),
+          showImage() ?? MyStyle().showProgress(),
           MyStyle().showTitle('ชื่อ: วัยรุ่นทำอุปกรณ์'),
           MyStyle().mySizebox(),
           MyStyle().showTitle('อีเมล: prayat@hotmail.com'),

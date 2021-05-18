@@ -68,12 +68,11 @@ class _AddProductState extends State<AddProduct> {
       decoration: InputDecoration(
         icon: Icon(
           Icons.shopping_bag_outlined,
-          color: Colors.teal.shade500,
         ),
         labelText: 'ชื่อสินค้า :',
-        labelStyle: TextStyle(color: MyStyle().tealColor),
+        labelStyle: TextStyle(),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: MyStyle().tealColor),
+          borderSide: BorderSide(),
         ),
       ),
     );
@@ -86,12 +85,11 @@ class _AddProductState extends State<AddProduct> {
       decoration: InputDecoration(
         icon: Icon(
           Icons.attach_money,
-          color: Colors.teal.shade500,
         ),
         labelText: 'ราคาสินค้า :',
-        labelStyle: TextStyle(color: MyStyle().tealColor),
+        labelStyle: TextStyle(),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: MyStyle().tealColor),
+          borderSide: BorderSide(),
         ),
       ),
     );
@@ -105,12 +103,11 @@ class _AddProductState extends State<AddProduct> {
       decoration: InputDecoration(
         icon: Icon(
           Icons.details,
-          color: Colors.teal.shade500,
         ),
         labelText: 'รายละเอียดสินค้า :',
-        labelStyle: TextStyle(color: MyStyle().tealColor),
+        labelStyle: TextStyle(),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: MyStyle().tealColor),
+          borderSide: BorderSide(),
         ),
       ),
     );
@@ -134,7 +131,6 @@ class _AddProductState extends State<AddProduct> {
               icon: Icon(
                 Icons.add_a_photo,
                 size: 40.0,
-                color: Colors.teal.shade500,
               ),
               onPressed: () => chooseImage(ImageSource.camera),
             ),
@@ -142,7 +138,6 @@ class _AddProductState extends State<AddProduct> {
               icon: Icon(
                 Icons.add_photo_alternate,
                 size: 40.0,
-                color: Colors.teal.shade500,
               ),
               onPressed: () => chooseImage(ImageSource.gallery),
             ),

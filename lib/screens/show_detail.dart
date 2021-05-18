@@ -14,6 +14,7 @@ class _ShowDetailState extends State<ShowDetail> {
   @override
   void initState() {
     super.initState();
+    print('ทำตรงนี้ก่อน');
   }
 
   @override
@@ -100,19 +101,19 @@ class _ShowDetailState extends State<ShowDetail> {
         MyStyle().mySizebox(),
         Row(
           children: [
-            MyStyle().showTitle('ร้าน:  '),
+            MyStyle().showTitleH2('ร้าน:  '),
             MyStyle().showTitleH3('MHOO PING SHOP'),
           ],
         ),
         Row(
           children: [
-            MyStyle().showTitle('เบอร์โทร:  '),
+            MyStyle().showTitleH2('เบอร์โทร:  '),
             MyStyle().showTitleH3('0912345678'),
           ],
         ),
         Row(
           children: [
-            MyStyle().showTitle('ตำแหน่งร้าน'),
+            MyStyle().showTitleH2('ตำแหน่งร้าน: '),
           ],
         ),
         showMap(),

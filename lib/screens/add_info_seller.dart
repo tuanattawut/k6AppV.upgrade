@@ -78,11 +78,10 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
         labelText: 'ชื่อร้านค้า',
         icon: Icon(
           Icons.shopping_bag,
-          color: Colors.teal.shade500,
         ),
-        labelStyle: TextStyle(color: MyStyle().tealColor),
+        labelStyle: TextStyle(),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: MyStyle().tealColor),
+          borderSide: BorderSide(),
         ),
       ),
     );
@@ -97,11 +96,10 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
           labelText: 'เบอร์โทรศัพท์',
           icon: Icon(
             Icons.phone,
-            color: Colors.teal.shade500,
           ),
-          labelStyle: TextStyle(color: MyStyle().tealColor),
+          labelStyle: TextStyle(),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: MyStyle().tealColor),
+            borderSide: BorderSide(),
           ),
         ));
   }
@@ -123,7 +121,6 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
               icon: Icon(
                 Icons.add_a_photo,
                 size: 40.0,
-                color: Colors.teal.shade500,
               ),
               onPressed: () => chooseImage(ImageSource.camera),
             ),
@@ -131,7 +128,6 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
               icon: Icon(
                 Icons.add_photo_alternate,
                 size: 40.0,
-                color: Colors.teal.shade500,
               ),
               onPressed: () => chooseImage(ImageSource.gallery),
             )
