@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/covid.dart';
-
-import 'package:http/http.dart' as http;
+import 'package:k6_app/models/Debouncer.dart';
+import 'package:k6_app/utility/my_style.dart';
 
 class PromoteUser extends StatefulWidget {
   PromoteUser({Key key}) : super(key: key);
@@ -11,54 +10,50 @@ class PromoteUser extends StatefulWidget {
 }
 
 class _PromoteUserState extends State<PromoteUser> {
-  Covid dataFromApi;
+  double screenWidth, screenHeight;
+  final debouncer = Debouncer(miliseconds: 500);
 
   @override
   void initState() {
     super.initState();
-    getData();
-  }
-
-  Future<void> getData() async {
-    var response = await http.get('https://covid19.th-stat.com/api/open/today');
-
-    setState(() {
-      dataFromApi = covidFromJson(response.body);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('ข้อมูลโควิด')),
+          title: Center(child: Text('สินค้าแนะนำ')),
         ),
-        body: Container(
-          child: ListView(
-            padding: EdgeInsets.all(20),
+        body: Stack(children: [
+          MyStyle().buildBackground(screenWidth, screenHeight),
+          Column(
             children: <Widget>[
-              Column(
-                children: [
-                  ListTile(
-                    title: Text('ผู้ติดเชื้อใหม่'),
-                    subtitle: Text('${dataFromApi?.newConfirmed}'),
-                  ),
-                  ListTile(
-                    title: Text('หายป่วยกลับบ้าน'),
-                    subtitle: Text('${dataFromApi?.newRecovered}'),
-                  ),
-                  ListTile(
-                    title: Text('เสียชีวิต'),
-                    subtitle: Text('${dataFromApi?.newDeaths ?? "..."}'),
-                  ),
-                  ListTile(
-                    title: Text('ข้อมูลวันที่'),
-                    subtitle: Text('${dataFromApi?.updateDate ?? "..."}'),
-                  ),
-                ],
-              ),
+              searchText(),
+              showListView(),
             ],
-          ),
-        ));
+          )
+        ]));
+  }
+
+  Widget searchText() {
+    return TextField(
+      decoration: InputDecoration(hintText: 'ค้นหา'),
+      onChanged: (value) {
+        debouncer.run(() {
+          setState(() {});
+        });
+      },
+    );
+  }
+
+  Widget showListView() {
+    return Expanded(
+        child: ListView.builder(
+            itemCount: 3,
+            itemBuilder: (BuildContext context, int index) {
+              return Text('ไก่ย่าง');
+            }));
   }
 }

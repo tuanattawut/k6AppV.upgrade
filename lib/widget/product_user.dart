@@ -21,13 +21,17 @@ class _ProductListUserState extends State<ProductListUser> {
       appBar: AppBar(
         title: Center(child: Text('หน้าหลัก')),
       ),
-      body: Container(
-        child: ListView.builder(
-          itemCount: 4,
-          itemBuilder: (BuildContext buildContext, int index) {
-            return showListView(index);
-          },
-        ),
+      body: Stack(
+        children: [
+          Container(
+            child: ListView.builder(
+              itemCount: 4,
+              itemBuilder: (BuildContext buildContext, int index) {
+                return showListView(index);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -39,12 +43,13 @@ class _ProductListUserState extends State<ProductListUser> {
       height: MediaQuery.of(context).size.width * 0.5,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            image: DecorationImage(
-              image: NetworkImage(
-                  'https://www.taokaecafe.com/asp-bin/pic_taokae/sh2308.jpg'),
-              fit: BoxFit.cover,
-            )),
+          borderRadius: BorderRadius.circular(20.0),
+          image: DecorationImage(
+            image: NetworkImage(
+                'https://www.taokaecafe.com/asp-bin/pic_taokae/sh2308.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }

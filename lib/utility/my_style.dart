@@ -86,41 +86,35 @@ class MyStyle {
     );
   }
 
-  Container buildBackground(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Image(
-              image: AssetImage('images/top1.png'),
+  SafeArea buildBackground(double screenWidth, double screenHeight) {
+    return SafeArea(
+      child: Container(
+        width: screenWidth,
+        height: screenHeight,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Image(image: AssetImage('images/top1.png')),
             ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Image(
-              image: AssetImage('images/top2.png'),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Image(image: AssetImage('images/top2.png')),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Image(
-              image: AssetImage('images/bottom1.png'),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Image(image: AssetImage('images/bottom1.png')),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Image(
-              image: AssetImage('images/bottom2.png'),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Image(image: AssetImage('images/bottom2.png')),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
