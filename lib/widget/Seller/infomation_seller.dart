@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:k6_app/screens/add_info_seller.dart';
+import 'package:k6_app/screens/Seller/add_info_seller.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class InformationSeller extends StatefulWidget {

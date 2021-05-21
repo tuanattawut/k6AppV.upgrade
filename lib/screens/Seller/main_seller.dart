@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/utility/my_style.dart';
-import 'package:k6_app/widget/chat_seller.dart';
-import 'package:k6_app/widget/infomation_seller.dart';
-import 'package:k6_app/widget/product_list_seller.dart';
-import 'package:k6_app/widget/rent_seller.dart';
+import 'package:k6_app/widget/Seller/chat_seller.dart';
+import 'package:k6_app/widget/Seller/infomation_seller.dart';
+import 'package:k6_app/widget/Seller/product_list_seller.dart';
+import 'package:k6_app/widget/Seller/rent_seller.dart';
 
 class Homeseller extends StatefulWidget {
   @override

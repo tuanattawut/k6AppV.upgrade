@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/Debouncer.dart';
-import 'package:k6_app/utility/my_style.dart';
 
 class PromoteUser extends StatefulWidget {
   PromoteUser({Key key}) : super(key: key);
@@ -10,7 +9,6 @@ class PromoteUser extends StatefulWidget {
 }
 
 class _PromoteUserState extends State<PromoteUser> {
-  double screenWidth, screenHeight;
   final debouncer = Debouncer(miliseconds: 500);
 
   @override
@@ -20,14 +18,11 @@ class _PromoteUserState extends State<PromoteUser> {
 
   @override
   Widget build(BuildContext context) {
-    screenWidth = MediaQuery.of(context).size.width;
-    screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           title: Center(child: Text('สินค้าแนะนำ')),
         ),
         body: Stack(children: [
-          MyStyle().buildBackground(screenWidth, screenHeight),
           Column(
             children: <Widget>[
               searchText(),

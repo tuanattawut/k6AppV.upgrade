@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/widget/info_user.dart';
-import 'package:k6_app/widget/noti_user.dart';
-import 'package:k6_app/widget/product_user.dart';
-import 'package:k6_app/widget/promote_user.dart';
+import 'package:k6_app/widget/User/info_user.dart';
+import 'package:k6_app/widget/User/noti_user.dart';
+import 'package:k6_app/widget/User/product_user.dart';
+import 'package:k6_app/widget/User/promote_user.dart';
 
 class Homepage extends StatefulWidget {
   @override

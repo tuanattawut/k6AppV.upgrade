@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/screens/show_detail.dart';
+import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ProductListUser extends StatefulWidget {
