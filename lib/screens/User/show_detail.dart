@@ -103,6 +103,15 @@ class _ShowDetailState extends State<ShowDetail> {
           children: [
             MyStyle().showTitleH2('ร้าน:  '),
             MyStyle().showTitleH3('MHOO PING SHOP'),
+            MyStyle().mySizebox(),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.chat,
+                size: 40,
+              ),
+            ),
+            MyStyle().showTitleH3('แชทกับผู้ขาย'),
           ],
         ),
         Row(

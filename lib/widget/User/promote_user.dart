@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/Debouncer.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 
 class PromoteUser extends StatefulWidget {
   PromoteUser({Key key}) : super(key: key);
@@ -9,46 +9,49 @@ class PromoteUser extends StatefulWidget {
 }
 
 class _PromoteUserState extends State<PromoteUser> {
-  final debouncer = Debouncer(miliseconds: 500);
-
   @override
   void initState() {
     super.initState();
   }
 
+  SearchBar searchBar;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        title: Center(child: Text('สินค้าแนะนำ')),
+        actions: [searchBar.getSearchAction(context)]);
+  }
+
+  void onSubmitted(String value) {
+    setState(() => ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('คุณพิมพ์ว่า $value!'))));
+  }
+
+  _PromoteUserState() {
+    searchBar = SearchBar(
+        inBar: false,
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onSubmitted: onSubmitted,
+        onCleared: () {
+          print("เครีย");
+        },
+        onClosed: () {
+          print("ปิด");
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('สินค้าแนะนำ')),
-        ),
-        body: Stack(children: [
-          Column(
-            children: <Widget>[
-              searchText(),
-              showListView(),
-            ],
-          )
-        ]));
-  }
-
-  Widget searchText() {
-    return TextField(
-      decoration: InputDecoration(hintText: 'ค้นหา'),
-      onChanged: (value) {
-        debouncer.run(() {
-          setState(() {});
-        });
-      },
+      appBar: searchBar.build(context),
+      key: _scaffoldKey,
+      body: Stack(
+        children: [
+          Text('ddddd'),
+        ],
+      ),
     );
-  }
-
-  Widget showListView() {
-    return Expanded(
-        child: ListView.builder(
-            itemCount: 3,
-            itemBuilder: (BuildContext context, int index) {
-              return Text('ไก่ย่าง');
-            }));
   }
 }

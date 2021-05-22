@@ -28,10 +28,19 @@ class _InformationUserState extends State<InformationUser> {
 
   Widget showImage() {
     return Container(
-      width: 300.0,
-      height: 300.0,
-      child: Image.network(
-          'https://www.catdumb.com/wp-content/uploads/2021/05/hey-wai-roon-10.png'),
+      padding: EdgeInsets.all(20.0),
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          image: DecorationImage(
+            image: NetworkImage(
+                'https://i.ytimg.com/vi/zW_9uX_HYj0/mqdefault.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 }

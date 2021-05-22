@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_style.dart';
 
@@ -13,14 +14,39 @@ class _ProductListUserState extends State<ProductListUser> {
     super.initState();
   }
 
-  List<Widget> widgets = [];
+  SearchBar searchBar;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        title: Center(child: Text('หน้าหลัก')),
+        actions: [searchBar.getSearchAction(context)]);
+  }
+
+  void onSubmitted(String value) {
+    setState(() => ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('คุณพิมพ์ว่า $value'))));
+  }
+
+  _ProductListUserState() {
+    searchBar = SearchBar(
+        inBar: false,
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onSubmitted: onSubmitted,
+        onCleared: () {
+          print("เครีย");
+        },
+        onClosed: () {
+          print("ปิด");
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('หน้าหลัก')),
-      ),
+      appBar: searchBar.build(context),
+      key: _scaffoldKey,
       body: Stack(
         children: [
           Container(
@@ -71,18 +97,16 @@ class _ProductListUserState extends State<ProductListUser> {
 
   Widget showDetail(int index) {
     String string =
-        'หมูปิ้งจากอินเดีย แช่น้ำคลอง15วัน ก่อนนำมาหมัก และย่างด้วยถ่านที่ไม่ใช่สีม่วง แต่ก็ร่วงได้';
+        'หมูปิ้งจากอินเดีย แช่น้ำคลอง15วัน ก่อนนำมาหมัก และย่างด้วยถ่านที่ไม่ใช่สีม่วง แต่ก็ร่วงได้ อย่างสีเหลือง';
     if (string.length > 100) {
       string = string.substring(0, 99);
       string = '$string ...';
     }
-
     return Text(
       string,
       style: TextStyle(
         fontSize: 14.0,
         fontStyle: FontStyle.italic,
-        color: Colors.grey.shade600,
       ),
     );
   }
