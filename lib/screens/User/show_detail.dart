@@ -101,9 +101,13 @@ class _ShowDetailState extends State<ShowDetail> {
         MyStyle().mySizebox(),
         Row(
           children: [
-            MyStyle().showTitleH2('ร้าน:  '),
-            MyStyle().showTitleH3('MHOO PING SHOP'),
-            MyStyle().mySizebox(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MyStyle().showTitleH2('ร้าน:  MHOO PING SHOP '),
+                MyStyle().showTitleH2('เบอร์โทร: 0912345678 '),
+              ],
+            ),
             IconButton(
               onPressed: () {},
               icon: Icon(
@@ -111,15 +115,11 @@ class _ShowDetailState extends State<ShowDetail> {
                 size: 40,
               ),
             ),
-            MyStyle().showTitleH3('แชทกับผู้ขาย'),
+            MyStyle().mySizebox(),
+            MyStyle().showTitleH3('แชทเลย'),
           ],
         ),
-        Row(
-          children: [
-            MyStyle().showTitleH2('เบอร์โทร:  '),
-            MyStyle().showTitleH3('0912345678'),
-          ],
-        ),
+        MyStyle().mySizebox(),
         Row(
           children: [
             MyStyle().showTitleH2('ตำแหน่งร้าน: '),

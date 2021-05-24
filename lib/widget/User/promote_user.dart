@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_search_bar/flutter_search_bar.dart';
 
 class PromoteUser extends StatefulWidget {
   PromoteUser({Key key}) : super(key: key);
@@ -14,43 +13,34 @@ class _PromoteUserState extends State<PromoteUser> {
     super.initState();
   }
 
-  SearchBar searchBar;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-        title: Center(child: Text('สินค้าแนะนำ')),
-        actions: [searchBar.getSearchAction(context)]);
-  }
-
-  void onSubmitted(String value) {
-    setState(() => ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('คุณพิมพ์ว่า $value!'))));
-  }
-
-  _PromoteUserState() {
-    searchBar = SearchBar(
-        inBar: false,
-        buildDefaultAppBar: buildAppBar,
-        setState: setState,
-        onSubmitted: onSubmitted,
-        onCleared: () {
-          print("เครีย");
-        },
-        onClosed: () {
-          print("ปิด");
-        });
-  }
+  final List<Map> myProducts =
+      List.generate(10, (index) => {"id": index, "name": "Product $index"})
+          .toList();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: searchBar.build(context),
-      key: _scaffoldKey,
-      body: Stack(
-        children: [
-          Text('ddddd'),
-        ],
+      appBar: AppBar(
+        title: Text('HELLO'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 10),
+            itemCount: myProducts.length,
+            itemBuilder: (BuildContext ctx, index) {
+              return Container(
+                alignment: Alignment.center,
+                child: Text(myProducts[index]["name"]),
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              );
+            }),
       ),
     );
   }

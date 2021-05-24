@@ -42,6 +42,13 @@ class _ProductListUserState extends State<ProductListUser> {
         });
   }
 
+  final List<Map> myProducts = List.generate(
+      10,
+      (index) => {
+            "id": index,
+            "name": "สินค้า $index",
+          }).toList();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +58,7 @@ class _ProductListUserState extends State<ProductListUser> {
         children: [
           Container(
             child: ListView.builder(
-              itemCount: 4,
+              itemCount: myProducts.length,
               itemBuilder: (BuildContext buildContext, int index) {
                 return showListView(index);
               },
@@ -87,7 +94,7 @@ class _ProductListUserState extends State<ProductListUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.5 - 35,
           child: Text(
-            'หมูปิ้ง',
+            myProducts[index]["name"],
             style: MyStyle().mainTitle,
           ),
         ),
