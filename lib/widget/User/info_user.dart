@@ -15,12 +15,60 @@ class _InformationUserState extends State<InformationUser> {
         child: Text('หน้าโปรไฟล์'),
       )),
       body: ListView(
-        padding: EdgeInsets.all(5.0),
+        padding: EdgeInsets.all(20.0),
         children: <Widget>[
+          Row(
+            children: [
+              Icon(
+                Icons.account_circle_rounded,
+                size: 40,
+              ),
+              MyStyle().mySizebox(),
+              MyStyle().showTitle('ข้อมูลโปรไฟล์'),
+            ],
+          ),
           showImage() ?? MyStyle().showProgress(),
-          MyStyle().showTitle('ชื่อ: วัยรุ่นทำอุปกรณ์'),
+          Row(
+            children: [
+              Icon(
+                Icons.person,
+                size: 40,
+              ),
+              MyStyle().mySizebox(),
+              MyStyle().showTitle('ชื่อ'),
+            ],
+          ),
+          MyStyle().showTitleH2('วัยรุ่นทำอุปกรณ์'),
           MyStyle().mySizebox(),
-          MyStyle().showTitle('อีเมล: prayat@hotmail.com'),
+          Row(
+            children: [
+              Icon(
+                Icons.mail,
+                size: 40,
+              ),
+              MyStyle().mySizebox(),
+              MyStyle().showTitle('อีเมล'),
+            ],
+          ),
+          MyStyle().showTitleH2('prayat@hotmail.com'),
+          Row(
+            children: [
+              Icon(
+                Icons.phone,
+                size: 40,
+              ),
+              MyStyle().mySizebox(),
+              MyStyle().showTitle('เบอร์โทรศัพท์'),
+            ],
+          ),
+          MyStyle().showTitleH2('0898765432'),
+          SizedBox(
+            height: 30.0,
+          ),
+          ElevatedButton(
+            child: Text('ออกจากระบบ'),
+            onPressed: () {},
+          )
         ],
       ),
     );
@@ -28,19 +76,13 @@ class _InformationUserState extends State<InformationUser> {
 
   Widget showImage() {
     return Container(
-      padding: EdgeInsets.all(20.0),
-      width: MediaQuery.of(context).size.width * 0.5,
-      height: MediaQuery.of(context).size.width * 0.5,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          image: DecorationImage(
-            image: NetworkImage(
-                'https://i.ytimg.com/vi/zW_9uX_HYj0/mqdefault.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
+        padding: EdgeInsets.all(20.0),
+        width: MediaQuery.of(context).size.width * 0.5,
+        height: MediaQuery.of(context).size.width * 0.5,
+        child: CircleAvatar(
+          backgroundImage:
+              NetworkImage('https://i.ytimg.com/vi/GUw7B6OXcX4/hqdefault.jpg'),
+          backgroundColor: Colors.transparent,
+        ));
   }
 }

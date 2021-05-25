@@ -44,7 +44,7 @@ class _NotiUserState extends State<NotiUser> {
                     ListTile(
                       title: Text('ผู้ติดเชื้อใหม่'),
                       subtitle:
-                          Text('${dataFromApi?.newConfirmed ?? 'กำลังโหลด'}'),
+                          Text('+ ${dataFromApi?.newConfirmed ?? 'กำลังโหลด'}'),
                     ),
                     ListTile(
                       title: Text('หายป่วยกลับบ้าน'),

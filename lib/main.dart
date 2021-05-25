@@ -21,17 +21,17 @@ class MyApp extends StatelessWidget {
 
   MaterialApp buildMaterialApp() {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'K6 E-App',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
       initialRoute: '/',
       routes: {
-        '/login': (context) => LoginPage(),
+        '/loginpage': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/': (context) => Homepage(),
+        '/homepage': (context) => Homepage(),
         '/homeseller': (context) => Homeseller(),
-        '/homemanager': (context) => Homemanager(),
+        '/': (context) => Homemanager(),
       },
     );
   }

@@ -128,7 +128,9 @@ class _ProductListUserState extends State<ProductListUser> {
         children: <Widget>[
           showName(index),
           showDetail(index),
-          MyStyle().showTitleH2('ราคา 9000000 บาท'),
+          MyStyle().showTitleH2(
+            'ราคา 9000000 บาท',
+          )
         ],
       ),
     );

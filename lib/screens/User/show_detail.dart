@@ -108,6 +108,7 @@ class _ShowDetailState extends State<ShowDetail> {
                 MyStyle().showTitleH2('เบอร์โทร: 0912345678 '),
               ],
             ),
+            Spacer(),
             IconButton(
               onPressed: () {},
               icon: Icon(
