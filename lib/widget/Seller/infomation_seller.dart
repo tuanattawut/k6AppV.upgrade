@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -20,13 +19,6 @@ class _InformationSellerState extends State<InformationSeller> {
 
   Future<Null> readDataUser() async {
     print('ดึงข้อมูลมาใช้งาน');
-    try {
-      var response =
-          await Dio().get('https://covid19.th-stat.com/api/open/today');
-      print(response.data);
-    } catch (e) {
-      print(e);
-    }
   }
 
   void routeToAddInfo() {

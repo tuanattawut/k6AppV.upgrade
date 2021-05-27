@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/screens/Manager/manage_chat.dart';
-import 'package:k6_app/screens/Manager/manage_promotion.dart';
+import 'package:k6_app/widget/Manager/manage_promotion.dart';
 import 'package:k6_app/screens/Manager/manage_rentarea.dart';
 import 'package:k6_app/screens/Manager/manage_seller.dart';
 import 'package:k6_app/screens/Manager/manage_user.dart';
@@ -55,7 +55,7 @@ class _HomemanagerState extends State<Homemanager> {
                 route: ManageRentArea(),
               ),
               MyMenu(
-                title: 'แชท',
+                title: 'ข้อความ',
                 icon: Icons.chat,
                 color: Colors.blue,
                 route: ManageChats(),

@@ -44,9 +44,9 @@ class _ProductListSellerState extends State<ProductListSeller> {
       );
 
   Widget showListFood() => ListView.builder(
-      itemCount: 6,
+      itemCount: data.length,
       itemBuilder: (context, index) => Card(
-            shadowColor: Colors.teal.shade500,
+            shadowColor: Colors.purple.shade500,
             elevation: 3,
             clipBehavior: Clip.antiAlias,
             child: Row(
@@ -69,7 +69,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'น้องไม่ชอบคนทะเล้นเเต่เธอบอกชอบคนเต้นระบำ บำ บำ บำ บำ บำ',
+                          'สินค้า ${data[index]}',
                           style: MyStyle().mainTitle,
                         ),
                         Text(
@@ -104,4 +104,6 @@ class _ProductListSellerState extends State<ProductListSeller> {
               ],
             ),
           ));
+
+  final List<String> data = <String>['1', '2', '3', '4'];
 }
