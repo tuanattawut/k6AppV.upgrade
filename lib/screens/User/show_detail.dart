@@ -26,7 +26,7 @@ class _ShowDetailState extends State<ShowDetail> {
               : Text('Show ${productModel.name}'),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(5.0),
+          padding: EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
               showDetailProduct(),
@@ -96,7 +96,7 @@ class _ShowDetailState extends State<ShowDetail> {
             MyStyle().showTitleH2('รายละเอียด: '),
           ],
         ),
-        MyStyle().showTitleH3(
+        Text(
             'ไปเก็บข้าวของที่มันจำเป็น แล้วรีบกระโดดขึ้นรถมา ออกจากเมืองฟ้า ไปอยู่บ้านนอกกับฉันไหม'),
         MyStyle().mySizebox(),
         Row(
@@ -104,8 +104,18 @@ class _ShowDetailState extends State<ShowDetail> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                MyStyle().showTitleH2('ร้าน:  MHOO PING SHOP '),
-                MyStyle().showTitleH2('เบอร์โทร: 0912345678 '),
+                Row(
+                  children: [
+                    MyStyle().showTitleH2('ร้าน: '),
+                    Text('MHOO PING SHOP')
+                  ],
+                ),
+                Row(
+                  children: [
+                    MyStyle().showTitleH2('เบอร์โทร: '),
+                    Text('0912345678'),
+                  ],
+                ),
               ],
             ),
             Spacer(),
@@ -113,11 +123,11 @@ class _ShowDetailState extends State<ShowDetail> {
               onPressed: () {},
               icon: Icon(
                 Icons.chat,
-                size: 40,
+                size: 30,
               ),
             ),
             MyStyle().mySizebox(),
-            MyStyle().showTitleH3('แชทเลย'),
+            Text('แชทเลย'),
           ],
         ),
         MyStyle().mySizebox(),

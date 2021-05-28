@@ -8,12 +8,12 @@ class MyStyle {
   Color darkColor = Color(0xff0088a3);
 
   TextStyle mainTitle = TextStyle(
-    fontSize: 18.0,
+    fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 
   TextStyle mainH2Title = TextStyle(
-    fontSize: 16.0,
+    fontSize: 18,
     fontWeight: FontWeight.bold,
   );
 
@@ -25,7 +25,7 @@ class MyStyle {
   Text showTitle(String title) => Text(
         title,
         style: TextStyle(
-          fontSize: 25,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       );
@@ -42,7 +42,7 @@ class MyStyle {
         title,
         style: TextStyle(
           fontSize: 16.0,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.bold,
         ),
       );
 

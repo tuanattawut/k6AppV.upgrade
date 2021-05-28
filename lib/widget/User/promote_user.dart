@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
-
-import 'package:k6_app/utility/normal_dialog.dart';
+import 'package:k6_app/utility/my_style.dart';
 
 class PromoteUser extends StatefulWidget {
   PromoteUser({Key key}) : super(key: key);
@@ -22,6 +21,8 @@ class _PromoteUserState extends State<PromoteUser> {
             "id": index,
             "name": "สินค้า $index",
             "price": "$index บาท",
+            "detail":
+                "$index ตัวอย่างรายละเอียด ตัวอย่างรายละเอียด ตัวอย่างรายละเอียด ตัวอย่างรายละเอียด ตัวอย่างรายละเอียด ตัวอย่างรายละเอียด",
           }).toList();
 
   @override
@@ -30,17 +31,85 @@ class _PromoteUserState extends State<PromoteUser> {
       appBar: AppBar(
         title: Center(child: Text('สินค้าแนะนำ')),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 250,
-              mainAxisSpacing: 10,
+      body: Stack(
+        children: [
+          Container(
+            child: ListView.builder(
+              itemCount: myProducts.length,
+              itemBuilder: (BuildContext buildContext, int index) {
+                return showListView(index);
+              },
             ),
-            itemCount: myProducts.length,
-            itemBuilder: (BuildContext buildContext, int index) {
-              return showListView(index);
-            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showImage(int index) {
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          image: DecorationImage(
+            image: NetworkImage(
+                'https://www.taokaecafe.com/asp-bin/pic_taokae/sh2308.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget showName(int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5 - 35,
+          child: Text(
+            myProducts[index]["name"],
+            style: MyStyle().mainTitle,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget showDetail(int index) {
+    String string = myProducts[index]["detail"];
+    if (string.length > 100) {
+      string = string.substring(0, 99);
+      string = '$string ...';
+    }
+    return Text(
+      string,
+      style: TextStyle(
+        fontSize: 14,
+        fontStyle: FontStyle.italic,
+      ),
+    );
+  }
+
+  Widget showText(int index) {
+    return Container(
+      padding: EdgeInsets.only(right: 20.0),
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          showName(index),
+          showDetail(index),
+          Text(
+            myProducts[index]["price"],
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+          )
+        ],
       ),
     );
   }
@@ -48,30 +117,16 @@ class _PromoteUserState extends State<PromoteUser> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
-        normalDialog(context, 'กดเพื่อ !!');
         MaterialPageRoute route = MaterialPageRoute(
           builder: (value) => ShowDetail(),
         );
         Navigator.of(context).push(route);
       },
-      child: GridTile(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Image.network(
-              'https://mpics.mgronline.com/pics/Images/564000001107901.JPEG'),
-        ),
-        footer: GridTileBar(
-          title: Text(
-            myProducts[index]["name"],
-            style: TextStyle(color: Colors.black, fontSize: 16),
-          ),
-          subtitle: Text(
-            myProducts[index]["price"],
-            style: TextStyle(
-                color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: Colors.white70,
-        ),
+      child: Row(
+        children: <Widget>[
+          showImage(index),
+          showText(index),
+        ],
       ),
     );
   }

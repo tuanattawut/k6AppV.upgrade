@@ -24,10 +24,10 @@ class _ProductListSellerState extends State<ProductListSeller> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(bottom: 20.0),
+                padding: EdgeInsets.only(bottom: 40, right: 20),
                 child: FloatingActionButton(
                   onPressed: () {
                     MaterialPageRoute route = MaterialPageRoute(
@@ -52,7 +52,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
             child: Row(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10),
                   width: MediaQuery.of(context).size.width * 0.4,
                   height: MediaQuery.of(context).size.width * 0.4,
                   child: Image.network(

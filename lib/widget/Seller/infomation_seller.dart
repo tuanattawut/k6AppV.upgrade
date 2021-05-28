@@ -39,7 +39,7 @@ class _InformationSellerState extends State<InformationSeller> {
   }
 
   Widget showListInfoShop() => Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
             MyStyle().showTitleH2('รายละเอียดผู้ขาย '),
@@ -112,13 +112,13 @@ class _InformationSellerState extends State<InformationSeller> {
 
   Row addAndEditButton() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: 50.0),
+              margin: EdgeInsets.only(bottom: 280, right: 20),
               child: FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () => routeToAddInfo(),

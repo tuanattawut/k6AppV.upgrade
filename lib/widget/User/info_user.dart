@@ -21,47 +21,16 @@ class _InformationUserState extends State<InformationUser> {
             children: [
               Icon(
                 Icons.account_circle_rounded,
-                size: 40,
+                size: 25,
               ),
               MyStyle().mySizebox(),
               MyStyle().showTitle('ข้อมูลโปรไฟล์'),
             ],
           ),
           showImage() ?? MyStyle().showProgress(),
-          Row(
-            children: [
-              Icon(
-                Icons.person,
-                size: 40,
-              ),
-              MyStyle().mySizebox(),
-              MyStyle().showTitle('ชื่อ'),
-            ],
-          ),
-          MyStyle().showTitleH2('วัยรุ่นทำอุปกรณ์'),
-          MyStyle().mySizebox(),
-          Row(
-            children: [
-              Icon(
-                Icons.mail,
-                size: 40,
-              ),
-              MyStyle().mySizebox(),
-              MyStyle().showTitle('อีเมล'),
-            ],
-          ),
-          MyStyle().showTitleH2('prayat@hotmail.com'),
-          Row(
-            children: [
-              Icon(
-                Icons.phone,
-                size: 40,
-              ),
-              MyStyle().mySizebox(),
-              MyStyle().showTitle('เบอร์โทรศัพท์'),
-            ],
-          ),
-          MyStyle().showTitleH2('0898765432'),
+          _buildCard(Icons.person, 'ชื่อ', 'วัยรุ่นทำอุปกรณ์'),
+          _buildCard(Icons.email, 'อีเมล', 'Prayat@mail.com'),
+          _buildCard(Icons.phone, 'เบอร์โทรศัพท์', '0987654321'),
           SizedBox(
             height: 30.0,
           ),
@@ -84,5 +53,36 @@ class _InformationUserState extends State<InformationUser> {
               NetworkImage('https://i.ytimg.com/vi/GUw7B6OXcX4/hqdefault.jpg'),
           backgroundColor: Colors.transparent,
         ));
+  }
+
+  Widget _buildCard(IconData icon, String title, String titleH2) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      color: Colors.white38,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 25,
+                ),
+                MyStyle().mySizebox(),
+                MyStyle().showTitle(title),
+              ],
+            ),
+            Text(
+              titleH2,
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
