@@ -42,40 +42,54 @@ class _InformationSellerState extends State<InformationSeller> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            MyStyle().showTitleH2('รายละเอียดผู้ขาย '),
+            MyStyle().showTitle('รายละเอียดผู้ขาย '),
+            MyStyle().mySizebox(),
             showImage(),
             Row(
               children: <Widget>[
-                MyStyle().showTitleH2('ชื่อร้าน'),
+                MyStyle().showTitle('ชื่อร้าน'),
               ],
             ),
             Row(
               children: <Widget>[
-                Text('จารย์ แดง Shop'),
+                Text(
+                  'TEST SELLER SHOP',
+                  style: TextStyle(fontSize: 18),
+                ),
               ],
             ),
             Row(
               children: <Widget>[
-                MyStyle().showTitleH2('เบอร์โทร'),
+                MyStyle().showTitle('เบอร์โทร'),
               ],
             ),
             Row(
               children: <Widget>[
-                Text('0123456789'),
+                Text(
+                  '0000000000',
+                  style: TextStyle(fontSize: 18),
+                ),
               ],
             ),
             MyStyle().mySizebox(),
+            Row(
+              children: [
+                MyStyle().showTitle('ตำแหน่งร้าน: '),
+              ],
+            ),
             showMap(),
           ],
         ),
       );
 
-  Container showImage() {
-    return Container(
-      width: 200.0,
-      height: 200.0,
-      child: Image.network(
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdSLfLgOudHj-ezyrcSxCgSUlw-uUz4qaYZg&usqp=CAU'),
+  Widget showImage() {
+    return Center(
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        backgroundImage: NetworkImage(
+            "https://image.shutterstock.com/image-vector/fruit-seller-selling-apples-oranges-600w-795476500.jpg"),
+        radius: 70,
+      ),
     );
   }
 
@@ -87,7 +101,8 @@ class _InformationSellerState extends State<InformationSeller> {
     LatLng latLng = LatLng(lat, lng);
     CameraPosition position = CameraPosition(target: latLng, zoom: 15.0);
 
-    return Expanded(
+    return Container(
+      height: 250,
       child: GoogleMap(
         initialCameraPosition: position,
         mapType: MapType.normal,

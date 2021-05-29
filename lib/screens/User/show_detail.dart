@@ -26,10 +26,12 @@ class _ShowDetailState extends State<ShowDetail> {
               : Text('Show ${productModel.name}'),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(5),
           child: Column(
             children: <Widget>[
               showDetailProduct(),
+              MyStyle().mySizebox(),
+              MyStyle().mySizebox(),
             ],
           ),
         ));
@@ -40,7 +42,7 @@ class _ShowDetailState extends State<ShowDetail> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.5,
       child: Image.network(
-          'https://www.taokaecafe.com/asp-bin/pic_taokae/sh2308.jpg'),
+          'https://food.mthai.com/app/uploads/2017/09/Grilled-Pork-Sticks.jpg'),
     );
   }
 
@@ -56,7 +58,7 @@ class _ShowDetailState extends State<ShowDetail> {
     );
 
     return Container(
-      height: 300.0,
+      height: 250,
       child: GoogleMap(
         initialCameraPosition: position,
         mapType: MapType.normal,
@@ -83,11 +85,22 @@ class _ShowDetailState extends State<ShowDetail> {
       padding: EdgeInsets.all(5.0),
       child: Column(children: <Widget>[
         showImage(),
+        MyStyle().mySizebox(),
+        MyStyle().showTitle(
+            'หมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้ง'),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            MyStyle().showTitle('หมูปิ้ง'),
-            MyStyle().showTitle('ราคา 9,999,999 บาท'),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                '9,999,999 บาท',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.red,
+                ),
+              ),
+            ),
           ],
         ),
         MyStyle().mySizebox(),
@@ -97,7 +110,11 @@ class _ShowDetailState extends State<ShowDetail> {
           ],
         ),
         Text(
-            'ไปเก็บข้าวของที่มันจำเป็น แล้วรีบกระโดดขึ้นรถมา ออกจากเมืองฟ้า ไปอยู่บ้านนอกกับฉันไหม'),
+          'ไปเก็บข้าวของที่มันจำเป็น แล้วรีบกระโดดขึ้นรถมา ออกจากเมืองฟ้า ไปอยู่บ้านนอกกับฉันไหม',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
         MyStyle().mySizebox(),
         Row(
           children: [
@@ -107,13 +124,23 @@ class _ShowDetailState extends State<ShowDetail> {
                 Row(
                   children: [
                     MyStyle().showTitleH2('ร้าน: '),
-                    Text('MHOO PING SHOP')
+                    Text(
+                      'MHOO PING SHOP',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    )
                   ],
                 ),
                 Row(
                   children: [
                     MyStyle().showTitleH2('เบอร์โทร: '),
-                    Text('0912345678'),
+                    Text(
+                      '0912345678',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -127,7 +154,12 @@ class _ShowDetailState extends State<ShowDetail> {
               ),
             ),
             MyStyle().mySizebox(),
-            Text('แชทเลย'),
+            Text(
+              'แชท',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
           ],
         ),
         MyStyle().mySizebox(),

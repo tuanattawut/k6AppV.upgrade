@@ -55,8 +55,7 @@ class _PromoteUserState extends State<PromoteUser> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           image: DecorationImage(
-            image: NetworkImage(
-                'https://www.taokaecafe.com/asp-bin/pic_taokae/sh2308.jpg'),
+            image: NetworkImage('${image[index]}'),
             fit: BoxFit.cover,
           ),
         ),
@@ -88,7 +87,7 @@ class _PromoteUserState extends State<PromoteUser> {
     return Text(
       string,
       style: TextStyle(
-        fontSize: 14,
+        fontSize: 16,
         fontStyle: FontStyle.italic,
       ),
     );
@@ -106,8 +105,7 @@ class _PromoteUserState extends State<PromoteUser> {
           showDetail(index),
           Text(
             myProducts[index]["price"],
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+            style: TextStyle(fontSize: 18, color: Colors.red),
           )
         ],
       ),
@@ -130,4 +128,17 @@ class _PromoteUserState extends State<PromoteUser> {
       ),
     );
   }
+
+  final List<String> image = <String>[
+    'https://food.mthai.com/app/uploads/2017/09/Grilled-Pork-Sticks.jpg',
+    'https://i.ytimg.com/vi/WZVGW5DiYlY/maxresdefault.jpg',
+    'https://www.greenery.org/wp-content/uploads/2018/10/PC-01.jpg',
+    'https://static.thairath.co.th/media/dFQROr7oWzulq5FZUEh1bGHbkAlMP6YU69FzlfmtDtIvKULTA65Qg2Y02blCtbVGNLp.jpg',
+    'https://www.livingpop.com/wp-content/uploads/2019/11/3-1200x960.jpg',
+    'https://imgcp.aacdn.jp/img-a/1200/900/global-aaj-front/article/2016/11/582922b20dfbd_582922a622783_178712518.jpg',
+    'https://www.prachachat.net/wp-content/uploads/2019/03/S__21585924-728x546.jpg',
+    'https://img-global.cpcdn.com/recipes/052796c4ff9d3068/751x532cq70/%E0%B8%A3%E0%B8%B9%E0%B8%9B-%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%81-%E0%B8%82%E0%B8%AD%E0%B8%87-%E0%B8%AA%E0%B8%B9%E0%B8%95%E0%B8%A3-%E0%B9%82%E0%B8%88%E0%B9%8A%E0%B8%81%E0%B8%AB%E0%B8%A1%E0%B8%B9%E0%B8%81%E0%B9%89%E0%B8%AD%E0%B8%99%E0%B8%81%E0%B8%A5%E0%B8%A1.jpg',
+    'https://www.bongkoch.com/shop/image/catalog/products/magazine/renlub/renlub513.jpg',
+    'https://static.bigc.co.th/media/catalog/product/8/8/8850127010213.jpg'
+  ];
 }

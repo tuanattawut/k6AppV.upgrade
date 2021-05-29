@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/screens/User/chatmana_user.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class InformationUser extends StatefulWidget {
@@ -27,12 +28,24 @@ class _InformationUserState extends State<InformationUser> {
               MyStyle().showTitle('ข้อมูลโปรไฟล์'),
             ],
           ),
+          MyStyle().mySizebox(),
           showImage() ?? MyStyle().showProgress(),
-          _buildCard(Icons.person, 'ชื่อ', 'วัยรุ่นทำอุปกรณ์'),
-          _buildCard(Icons.email, 'อีเมล', 'Prayat@mail.com'),
-          _buildCard(Icons.phone, 'เบอร์โทรศัพท์', '0987654321'),
+          MyStyle().mySizebox(),
+          _buildCard(Icons.person, 'ชื่อ', 'USER TEST'),
+          _buildCard(Icons.email, 'อีเมล', 'TEST_USER@mail.com'),
+          _buildCard(Icons.phone, 'เบอร์โทรศัพท์', '0000000000'),
           SizedBox(
             height: 30.0,
+          ),
+          ElevatedButton.icon(
+            label: Text('ติดต่อผู้จัดการ'),
+            icon: Icon(Icons.manage_accounts),
+            onPressed: () {
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ChatmanaUser(),
+              );
+              Navigator.of(context).push(route);
+            },
           ),
           ElevatedButton(
             child: Text('ออกจากระบบ'),
@@ -44,15 +57,14 @@ class _InformationUserState extends State<InformationUser> {
   }
 
   Widget showImage() {
-    return Container(
-        padding: EdgeInsets.all(20.0),
-        width: MediaQuery.of(context).size.width * 0.5,
-        height: MediaQuery.of(context).size.width * 0.5,
-        child: CircleAvatar(
-          backgroundImage:
-              NetworkImage('https://i.ytimg.com/vi/GUw7B6OXcX4/hqdefault.jpg'),
-          backgroundColor: Colors.transparent,
-        ));
+    return Center(
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        backgroundImage: NetworkImage(
+            "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"),
+        radius: 70,
+      ),
+    );
   }
 
   Widget _buildCard(IconData icon, String title, String titleH2) {

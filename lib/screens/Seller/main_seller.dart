@@ -125,7 +125,7 @@ class _HomesellerState extends State<Homeseller> {
     return UserAccountsDrawerHeader(
       arrowColor: Colors.amber,
       currentAccountPicture: MyStyle().showLogo(),
-      accountName: Text('จารย์ แดง'),
+      accountName: Text('USER SELLER'),
       accountEmail: Text('เข้าสู่ระบบ'),
     );
   }
