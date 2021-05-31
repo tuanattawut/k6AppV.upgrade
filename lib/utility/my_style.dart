@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class MyStyle {
-  Color primaryColor = Color(0xff00b8d4);
-  Color lightColor = Color(0xff62ebff);
-  Color darkColor = Color(0xff0088a3);
+  Color primaryColor = Colors.deepPurple;
+  Color lightColor = Colors.deepPurple.shade200;
+  Color darkColor = Colors.deepPurple.shade800;
 
   TextStyle mainTitle = TextStyle(
     fontSize: 20,
