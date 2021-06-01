@@ -1,75 +1,45 @@
-import 'dart:convert';
-
 class ChatModel {
-  String name;
-  String messageText;
-  String imageURL;
-  String time;
-  ChatModel({
-    this.name,
-    this.messageText,
-    this.imageURL,
-    this.time,
-  });
+  final String manatitle;
+  final String datetime;
+  final String message;
 
-  ChatModel copyWith({
-    String name,
-    String messageText,
-    String imageURL,
-    String time,
-  }) {
-    return ChatModel(
-      name: name ?? this.name,
-      messageText: messageText ?? this.messageText,
-      imageURL: imageURL ?? this.imageURL,
-      time: time ?? this.time,
-    );
-  }
+  ChatModel({this.manatitle, this.datetime, this.message});
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'messageText': messageText,
-      'imageURL': imageURL,
-      'time': time,
-    };
-  }
-
-  factory ChatModel.fromMap(Map<String, dynamic> map) {
-    return ChatModel(
-      name: map['name'],
-      messageText: map['messageText'],
-      imageURL: map['imageURL'],
-      time: map['time'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory ChatModel.fromJson(String source) =>
-      ChatModel.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'ChatModel(name: $name, messageText: $messageText, imageURL: $imageURL, time: $time)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is ChatModel &&
-        other.name == name &&
-        other.messageText == messageText &&
-        other.imageURL == imageURL &&
-        other.time == time;
-  }
-
-  @override
-  int get hashCode {
-    return name.hashCode ^
-        messageText.hashCode ^
-        imageURL.hashCode ^
-        time.hashCode;
-  }
+  static final List<ChatModel> dummyData = [
+    ChatModel(
+      manatitle: "อะไรครับเนี่ยห",
+      datetime: "2021-05-27  08:15",
+      message: "อยู่ที่ไหน",
+    ),
+    ChatModel(
+      manatitle: "ติดต่อหน่อยงับ",
+      datetime: "2021-05-28  20:18",
+      message: "คุณช่วยฉันได้ไหม",
+    ),
+    ChatModel(
+      manatitle: "เฮลโล่ฮาวอายู",
+      datetime: "2021-05-29  19:22",
+      message: "ห้องน้ำไปทางไหน!",
+    ),
+    ChatModel(
+      manatitle: "สวัสดีครับ",
+      datetime: "2021-05-30  14:34",
+      message: "ฉันลืมของช่วยหาหน่อย",
+    ),
+    ChatModel(
+      manatitle: "สวัสดีครับ",
+      datetime: "2021-05-31  11:05",
+      message: "หาเจอยัง",
+    ),
+    ChatModel(
+      manatitle: "สวัสดีครับ",
+      datetime: "2021-06-01  09:46",
+      message: "หาให้อีกทีเผื่อเจอนะ",
+    ),
+    ChatModel(
+      manatitle: "สวัสดีครับ",
+      datetime: "2021-06-02  08:15",
+      message: "เจอแล้วครับ ไม่ได้เอาไป",
+    ),
+  ];
 }

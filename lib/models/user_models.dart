@@ -7,9 +7,9 @@ class UserModels {
   final String phone;
   final String typeuser;
   final String uid;
-  String urlPicture;
-  String lat;
-  String lng;
+  final String urlPicture;
+  final String lat;
+  final String lng;
   UserModels({
     this.id,
     this.name,
