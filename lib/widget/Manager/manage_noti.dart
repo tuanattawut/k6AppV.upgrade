@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/screens/Manager/add_promotion_manager.dart';
+import 'package:k6_app/screens/Manager/add_noti_manager.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ManagePromotion extends StatefulWidget {
@@ -12,7 +12,7 @@ class _ManagePromotionState extends State<ManagePromotion> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('จัดการประกาศโปรโมชั่น'),
+          title: Text('จัดการแจ้งเตือน'),
         ),
         backgroundColor: Colors.white70,
         body: Stack(
@@ -38,7 +38,7 @@ class _ManagePromotionState extends State<ManagePromotion> {
                                 child: Column(
                                   children: <Widget>[
                                     Text(
-                                      'ประกาศ ${data[index]}',
+                                      'แจ้งเตือน ${data[index]}',
                                       style: MyStyle().mainTitle,
                                     ),
                                     Text('${data2[index]}'),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/screens/Manager/manage_chat.dart';
-import 'package:k6_app/widget/Manager/manage_promotion.dart';
+import 'package:k6_app/widget/Manager/manage_noti.dart';
 import 'package:k6_app/screens/Manager/manage_rentarea.dart';
 import 'package:k6_app/screens/Manager/manage_seller.dart';
 import 'package:k6_app/screens/Manager/manage_user.dart';
@@ -43,7 +43,7 @@ class _HomemanagerState extends State<Homemanager> {
                 route: ManageSeller(),
               ),
               MyMenu(
-                title: 'เพิ่มโปรโมชั่น',
+                title: 'เพิ่มแจ้งเตือน',
                 icon: Icons.campaign,
                 color: Colors.red,
                 route: ManagePromotion(),

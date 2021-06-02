@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/chat_models.dart';
+
 import 'package:k6_app/utility/normal_dialog.dart';
 
 class ShowChatmana extends StatefulWidget {
@@ -29,7 +30,9 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                 child: ListTile(
                   title: Row(
                     children: <Widget>[
-                      Text(_model.manatitle),
+                      Text(
+                        _model.manatitle,
+                      ),
                       SizedBox(
                         width: 20,
                       ),

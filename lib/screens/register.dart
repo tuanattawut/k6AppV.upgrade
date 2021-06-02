@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
               buildPasswordField(),
               buildPhoneField(),
               MyStyle().mySizebox(),
-              MyStyle().showTitleH2('เลือกชนิดของสมาชิก:'),
+              MyStyle().showTitleH2('เลือกชนิดของสมาชิก: '),
               buildTyperUser(),
               buildTyperSeller(),
               MyStyle().mySizebox(),
@@ -71,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   ElevatedButton buildRegisterButton() {
     return ElevatedButton(
-      child: Text('Register'),
+      child: Text('สมัครสมาชิก'),
       onPressed: () async {
         if (this._formstate.currentState.validate()) print(this.email);
         print(this.password);
@@ -169,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'Phone Number',
+        labelText: 'เบอร์โทรศัพท์',
         icon: Icon(Icons.phone_android),
       ),
     );

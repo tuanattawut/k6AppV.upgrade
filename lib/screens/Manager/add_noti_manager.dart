@@ -16,7 +16,7 @@ class _AddPromotionState extends State<AddPromotion> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('เพิ่มประกาศโปรโมชั่น'),
+        title: Text('เพิ่มการแจ้งเตือน'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),

@@ -6,6 +6,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -30,7 +31,10 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MyStyle().showTitle('E-App K6'),
+                  Text(
+                    'ระบบแนะนำสินค้าและร้านค้า',
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ],
               ),
               MyStyle().mySizebox(),
@@ -39,15 +43,17 @@ class _LoginPageState extends State<LoginPage> {
               MyStyle().mySizebox(),
               buildLoginButton(),
               buildRegisterButton(context),
-              buildButtonFacebook(context),
+              facebookButton(context),
             ],
           ),
         ));
   }
 
-  ElevatedButton buildButtonFacebook(BuildContext context) {
-    return ElevatedButton(
-      child: Text('Facebook Login'),
+  SignInButtonBuilder facebookButton(BuildContext context) {
+    return SignInButtonBuilder(
+      backgroundColor: Colors.deepPurple,
+      text: 'ล็อกอินด้วย Facebook',
+      icon: Icons.facebook,
       onPressed: () {
         loginWithFacebook();
       },
@@ -56,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ElevatedButton buildRegisterButton(BuildContext context) {
     return ElevatedButton(
-      child: Text('Register new account'),
+      child: Text('สมัครสมาชิกใหม่'),
       onPressed: () {
         print('Goto  Regis pagge');
         Navigator.pushNamed(context, '/register');
@@ -66,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ElevatedButton buildLoginButton() {
     return ElevatedButton(
-        child: Text('Login'),
+        child: Text('ล็อกอิน'),
         onPressed: () async {
           if (this._formstate.currentState.validate()) {
             print('Valid Form');

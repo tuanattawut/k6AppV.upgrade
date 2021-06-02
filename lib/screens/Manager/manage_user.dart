@@ -26,7 +26,7 @@ class _ManageUserState extends State<ManageUser> {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 32,
+                      fontSize: 25,
                     ),
                   ),
                 ),

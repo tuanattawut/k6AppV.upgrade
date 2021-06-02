@@ -68,6 +68,14 @@ class _ProductListUserState extends State<ProductListUser> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 10, left: 10),
+              child: Row(
+                children: [
+                  Text('โปรโมชั่น', style: MyStyle().mainTitle),
+                ],
+              ),
+            ),
             buildCarouselSlider(),
             MyStyle().mySizebox(),
             Padding(
@@ -139,6 +147,7 @@ class _ProductListUserState extends State<ProductListUser> {
               autoPlayAnimationDuration: Duration(seconds: 2),
               aspectRatio: 16 / 9,
               enlargeCenterPage: true,
+              pauseAutoPlayOnTouch: true,
               onPageChanged: (index, reason) {
                 setState(() {
                   _current = index;

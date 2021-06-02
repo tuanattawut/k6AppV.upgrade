@@ -41,6 +41,8 @@ dependencies:
   cached_network_image: ^2.5.1
   flutter_search_bar: ^2.1.0
   carousel_slider: ^3.0.0
+  flutter_signin_button: ^2.0.0
+ 
   
   
   
