@@ -36,6 +36,7 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                       SizedBox(
                         width: 20,
                       ),
+                      VerticalDivider(),
                       Text(_model.message),
                     ],
                   ),
@@ -44,7 +45,7 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                     style: TextStyle(fontSize: 12.0),
                   ),
                 ),
-              )
+              ),
             ],
           );
         },

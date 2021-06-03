@@ -130,7 +130,7 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
                 size: 40.0,
               ),
               onPressed: () => chooseImage(ImageSource.gallery),
-            )
+            ),
           ],
         ),
       ],
