@@ -145,7 +145,7 @@ class _ShowDetailState extends State<ShowDetail> {
                 ),
               ],
             ),
-            Spacer(),
+            Container(height: 50, child: VerticalDivider(color: Colors.black)),
             IconButton(
               onPressed: () {},
               icon: Icon(

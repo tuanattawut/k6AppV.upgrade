@@ -7,9 +7,9 @@ class ChatModel {
 
   static final List<ChatModel> dummyData = [
     ChatModel(
-      manatitle: "อะไรครับเนี่ยห",
+      manatitle: "อะไรครับเนี่ย",
       datetime: "2021-05-27  08:15",
-      message: "อยู่ที่ไหน",
+      message: "อยู่ที่ไหนนนนนนนนนนนนนนนนนนนนนนนนน",
     ),
     ChatModel(
       manatitle: "ติดต่อหน่อยงับ",
@@ -22,22 +22,22 @@ class ChatModel {
       message: "ห้องน้ำไปทางไหน!",
     ),
     ChatModel(
-      manatitle: "สวัสดีครับ",
+      manatitle: "สวัสดีครับ 1 ",
       datetime: "2021-05-30  14:34",
       message: "ฉันลืมของช่วยหาหน่อย",
     ),
     ChatModel(
-      manatitle: "สวัสดีครับ",
+      manatitle: "สวัสดีครับ 2 ",
       datetime: "2021-05-31  11:05",
       message: "หาเจอยัง",
     ),
     ChatModel(
-      manatitle: "สวัสดีครับ",
+      manatitle: "สวัสดีครับ 3 ",
       datetime: "2021-06-01  09:46",
       message: "หาให้อีกทีเผื่อเจอนะ",
     ),
     ChatModel(
-      manatitle: "สวัสดีครับ",
+      manatitle: "สวัสดีครับ 4 ",
       datetime: "2021-06-02  08:15",
       message: "เจอแล้วครับ ไม่ได้เอาไป",
     ),
