@@ -15,7 +15,6 @@ class _NotiUserState extends State<NotiUser> {
   @override
   void initState() {
     super.initState();
-    getData();
   }
 
   Future<Null> getData() async {

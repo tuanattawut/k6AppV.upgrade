@@ -11,7 +11,7 @@ class RentSeller extends StatefulWidget {
 class _RentSellerState extends State<RentSeller> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: <Widget>[
         showInfoRent(),
       ],
@@ -23,14 +23,8 @@ class _RentSellerState extends State<RentSeller> {
         child: Column(
           children: <Widget>[
             MyStyle().showTitleH2('เช่าจองแผงขายสินค้า'),
-            showImage(),
-            MyStyle().showTitleH2('ติดด่อเบอร์โทร'),
-            Column(
-              children: <Widget>[
-                Text('0123456789'),
-              ],
-            ),
             MyStyle().mySizebox(),
+            showImage() == null ? showImage() : MyStyle().showProgress(),
           ],
         ),
       );
@@ -38,8 +32,7 @@ class _RentSellerState extends State<RentSeller> {
     return Container(
       width: 500.0,
       height: 300.0,
-      child: Image.network(
-          'https://www.img.in.th/images/fbb204c0efd9c36f6030f875d0f0ea40.png'),
+      child: Image.network(''),
     );
   }
 }

@@ -42,6 +42,7 @@ dependencies:
   flutter_search_bar: ^2.1.0
   carousel_slider: ^3.0.0
   flutter_signin_button: ^2.0.0
+  pie_chart: ^5.0.0
  
   
   

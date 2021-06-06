@@ -57,8 +57,6 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
             MyStyle().mySizebox(),
             nameForm(),
             MyStyle().mySizebox(),
-            phoneForm(),
-            MyStyle().mySizebox(),
             lat == null ? MyStyle().showProgress() : showMap(),
             MyStyle().mySizebox(),
             saveButton(),
@@ -85,23 +83,6 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
         ),
       ),
     );
-  }
-
-  TextFormField phoneForm() {
-    return TextFormField(
-        onChanged: (value) => phonenumber = value.trim(),
-        keyboardType: TextInputType.number,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          labelText: 'เบอร์โทรศัพท์',
-          icon: Icon(
-            Icons.phone,
-          ),
-          labelStyle: TextStyle(),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(),
-          ),
-        ));
   }
 
   Column groupImage() {
