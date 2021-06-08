@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
@@ -11,9 +14,24 @@ class ProductListUser extends StatefulWidget {
 }
 
 class _ProductListUserState extends State<ProductListUser> {
+  List<ProductModel> productModels = [];
+
   @override
   void initState() {
     super.initState();
+    getData();
+  }
+
+  Future<Null> getData() async {
+    String api = 'https://956cb6dd125b.jp.ngrok.io/k6app/getProduct.php';
+    await Dio().get(api).then((value) {
+      for (var item in json.decode(value.data)) {
+        ProductModel model = ProductModel.fromJson(item);
+        setState(() {
+          productModels.add(model);
+        });
+      }
+    });
   }
 
   SearchBar searchBar;
@@ -71,17 +89,19 @@ class _ProductListUserState extends State<ProductListUser> {
               ),
             ),
             MyStyle().mySizebox(),
-            GridView.builder(
-                physics: ScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: (3 / 2),
-                ),
-                itemCount: ProductModels.testData.length,
-                itemBuilder: (BuildContext buildContext, int index) {
-                  return showListView(index);
-                }),
+            productModels.length == 0
+                ? MyStyle().showProgress()
+                : GridView.builder(
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: (3 / 2),
+                    ),
+                    itemCount: productModels.length,
+                    itemBuilder: (BuildContext buildContext, int index) {
+                      return showListView(index);
+                    }),
           ],
         ),
       ),
@@ -89,7 +109,6 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
   Widget showListView(int index) {
-    ProductModels _model = ProductModels.testData[index];
     return GestureDetector(
       onTap: () {
         MaterialPageRoute route = MaterialPageRoute(
@@ -100,16 +119,17 @@ class _ProductListUserState extends State<ProductListUser> {
       child: GridTile(
         child: Padding(
           padding: EdgeInsets.all(5),
-          child: Image.network('${_model.imgUrl}'),
+          child: Image.network(
+              'http://956cb6dd125b.jp.ngrok.io/${productModels[index].image}'),
         ),
         footer: GridTileBar(
           title: Text(
-            _model.name,
+            productModels[index].nameproduct,
             style: TextStyle(
                 color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            '${_model.price} ฿',
+            '${productModels[index].price} ฿',
             style: TextStyle(
               color: Colors.red,
               fontSize: 18,

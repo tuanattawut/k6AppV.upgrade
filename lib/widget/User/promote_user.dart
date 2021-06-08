@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/product_models.dart';
+
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_style.dart';
 
@@ -26,7 +26,7 @@ class _PromoteUserState extends State<PromoteUser> {
         children: [
           Container(
             child: ListView.builder(
-              itemCount: ProductModels.testData.length,
+              itemCount: 1,
               itemBuilder: (BuildContext buildContext, int index) {
                 return showListView(index);
               },
@@ -38,7 +38,6 @@ class _PromoteUserState extends State<PromoteUser> {
   }
 
   Widget showImage(int index) {
-    ProductModels _model = ProductModels.testData[index];
     return Container(
       padding: EdgeInsets.all(20.0),
       width: MediaQuery.of(context).size.width * 0.5,
@@ -47,7 +46,7 @@ class _PromoteUserState extends State<PromoteUser> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           image: DecorationImage(
-            image: NetworkImage('${_model.imgUrl}'),
+            image: NetworkImage(''),
             fit: BoxFit.cover,
           ),
         ),
@@ -56,14 +55,13 @@ class _PromoteUserState extends State<PromoteUser> {
   }
 
   Widget showName(int index) {
-    ProductModels _model = ProductModels.testData[index];
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width * 0.5 - 35,
           child: Text(
-            _model.name,
+            '_model.name',
             style: MyStyle().mainTitle,
           ),
         ),
@@ -72,8 +70,7 @@ class _PromoteUserState extends State<PromoteUser> {
   }
 
   Widget showDetail(int index) {
-    ProductModels _model = ProductModels.testData[index];
-    String string = _model.descriptions;
+    String string = '_model.descriptions';
     if (string.length > 100) {
       string = string.substring(0, 99);
       string = '$string ...';
@@ -88,7 +85,6 @@ class _PromoteUserState extends State<PromoteUser> {
   }
 
   Widget showText(int index) {
-    ProductModels _model = ProductModels.testData[index];
     return Container(
       padding: EdgeInsets.only(right: 20.0),
       width: MediaQuery.of(context).size.width * 0.5,
@@ -99,7 +95,7 @@ class _PromoteUserState extends State<PromoteUser> {
           showName(index),
           showDetail(index),
           Text(
-            '${_model.price} ฿',
+            '{_model.price} ฿',
             style: TextStyle(fontSize: 18, color: Colors.red),
           )
         ],

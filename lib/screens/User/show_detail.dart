@@ -9,7 +9,7 @@ class ShowDetail extends StatefulWidget {
 }
 
 class _ShowDetailState extends State<ShowDetail> {
-  ProductModels productModel;
+  ProductModel productModel;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _ShowDetailState extends State<ShowDetail> {
         appBar: AppBar(
           title: productModel == null
               ? Text('รายละเอียด')
-              : Text('Show ${productModel.name}'),
+              : Text('Show {productModel.name}'),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(5),
