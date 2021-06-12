@@ -38,8 +38,8 @@ class _MakeBannerState extends State<MakeBanner> {
               autoPlayAnimationDuration: Duration(seconds: 2),
               aspectRatio: 16 / 9,
               viewportFraction: 1,
-              enlargeCenterPage: true,
               pauseAutoPlayOnTouch: true,
+              height: MediaQuery.of(context).size.width * 0.4,
               onPageChanged: (index, reason) {
                 setState(() {
                   _current = index;
