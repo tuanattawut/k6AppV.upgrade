@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ShowDetail extends StatefulWidget {
+  final ProductModel productModel;
+  ShowDetail({this.productModel});
   @override
   _ShowDetailState createState() => _ShowDetailState();
 }
@@ -14,7 +17,10 @@ class _ShowDetailState extends State<ShowDetail> {
   @override
   void initState() {
     super.initState();
-    print('ทำตรงนี้ก่อน');
+    setState(() {
+      productModel = widget.productModel;
+      print('url ==> ${productModel.image}');
+    });
   }
 
   @override
@@ -23,7 +29,7 @@ class _ShowDetailState extends State<ShowDetail> {
         appBar: AppBar(
           title: productModel == null
               ? Text('รายละเอียด')
-              : Text('Show {productModel.name}'),
+              : Text(productModel.nameproduct),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(5),
@@ -39,11 +45,12 @@ class _ShowDetailState extends State<ShowDetail> {
 
   Widget showImage() {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.5,
-      child: Image.network(
-          'https://food.mthai.com/app/uploads/2017/09/Grilled-Pork-Sticks.jpg'),
-    );
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: Image.network(
+          '${MyConstant().domain}/${productModel.image}',
+          fit: BoxFit.contain,
+        ));
   }
 
   Widget showMap() {
@@ -83,91 +90,93 @@ class _ShowDetailState extends State<ShowDetail> {
 
   Widget showDetailProduct() => Padding(
       padding: EdgeInsets.all(5.0),
-      child: Column(children: <Widget>[
-        showImage(),
-        MyStyle().mySizebox(),
-        MyStyle().showTitle(
-            'หมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้งหมูปิ้ง'),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                '9,999,999 บาท',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          ],
-        ),
-        MyStyle().mySizebox(),
-        Row(
-          children: [
-            MyStyle().showTitleH2('รายละเอียด: '),
-          ],
-        ),
-        Text(
-          'ไปเก็บข้าวของที่มันจำเป็น แล้วรีบกระโดดขึ้นรถมา ออกจากเมืองฟ้า ไปอยู่บ้านนอกกับฉันไหม',
-          style: TextStyle(
-            fontSize: 18,
-          ),
-        ),
-        MyStyle().mySizebox(),
-        Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            showImage(),
+            MyStyle().mySizebox(),
+            MyStyle().showTitle(productModel.nameproduct),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  children: [
-                    MyStyle().showTitleH2('ร้าน: '),
-                    Text(
-                      'MHOO PING SHOP',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    MyStyle().showTitleH2('เบอร์โทร: '),
-                    Text(
-                      '0912345678',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    '${productModel.price} ฿',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.red,
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
-            Container(height: 50, child: VerticalDivider(color: Colors.black)),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.chat,
-                size: 30,
-              ),
-            ),
             MyStyle().mySizebox(),
+            Row(
+              children: [
+                MyStyle().showTitleH2('รายละเอียด: '),
+              ],
+            ),
             Text(
-              'แชท',
+              productModel.detail,
               style: TextStyle(
                 fontSize: 18,
               ),
             ),
-          ],
-        ),
-        MyStyle().mySizebox(),
-        Row(
-          children: [
-            MyStyle().showTitleH2('ตำแหน่งร้าน: '),
-          ],
-        ),
-        showMap(),
-      ]));
+            MyStyle().mySizebox(),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        MyStyle().showTitleH2('ร้าน: '),
+                        Text(
+                          'TEST ',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        MyStyle().showTitleH2('เบอร์โทร: '),
+                        Text(
+                          'TEST',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Container(
+                    height: 50, child: VerticalDivider(color: Colors.black)),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.chat,
+                    size: 30,
+                  ),
+                ),
+                MyStyle().mySizebox(),
+                Text(
+                  'แชท',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+            MyStyle().mySizebox(),
+            Row(
+              children: [
+                MyStyle().showTitleH2('ตำแหน่งร้าน: '),
+              ],
+            ),
+            showMap(),
+          ]));
 }

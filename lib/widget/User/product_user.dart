@@ -28,9 +28,9 @@ class _ProductListUserState extends State<ProductListUser> {
     String api = '${MyConstant().domain}/k6app/getProduct.php';
     await Dio().get(api).then((value) {
       for (var item in json.decode(value.data)) {
-        ProductModel model = ProductModel.fromJson(item);
+        ProductModel productModel = ProductModel.fromJson(item);
         setState(() {
-          productModels.add(model);
+          productModels.add(productModel);
         });
       }
     });
@@ -67,55 +67,51 @@ class _ProductListUserState extends State<ProductListUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: searchBar.build(context),
-        key: _scaffoldKey,
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              MakeBanner(),
-              MyStyle().mySizebox(),
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      appBar: searchBar.build(context),
+      key: _scaffoldKey,
+      body: ListView(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                MakeBanner(),
+                MyStyle().mySizebox(),
+                _buildSectiontitle('สินค้าทั้งหมด', () {
+                  final snackbar = SnackBar(
+                    content: Text("คลิก"),
+                    action: SnackBarAction(
+                      label: "ok",
+                      onPressed: () {},
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                }),
+                Column(
                   children: [
-                    Text("สินค้าทั้งหมด",
-                        style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)),
-                    TextButton(
-                        onPressed: () {
-                          final snackbar = SnackBar(
-                            content: Text("you clicked"),
-                            action: SnackBarAction(
-                              label: "ok",
-                              onPressed: () {},
-                            ),
-                          );
-                          _scaffoldKey.currentState.showSnackBar(snackbar);
-                        },
-                        child: Text(
-                          "ดูทั้งหมด",
-                          style: new TextStyle(color: Colors.blue),
-                        ))
+                    GridView.builder(
+                        padding: EdgeInsets.all(6),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 0.75,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 6,
+                          crossAxisSpacing: 6,
+                        ),
+                        itemCount: productModels.length,
+                        itemBuilder: (BuildContext buildContext, int index) {
+                          return showListView(index);
+                        }),
                   ],
                 ),
-              ),
-              GridView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: (3 / 2),
-                  ),
-                  itemCount: productModels.length,
-                  itemBuilder: (BuildContext buildContext, int index) {
-                    return showListView(index);
-                  }),
-            ],
-          ),
-        ));
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget showListView(int index) {
@@ -123,25 +119,26 @@ class _ProductListUserState extends State<ProductListUser> {
       child: InkWell(
         onTap: () {
           MaterialPageRoute route = MaterialPageRoute(
-            builder: (value) => ShowDetail(),
+            builder: (value) => ShowDetail(
+              productModel: productModels[index],
+            ),
           );
           Navigator.of(context).push(route);
         },
         child: GridTile(
-            child: Padding(
-              padding: EdgeInsets.all(5),
-              child: Image.network(
-                '${MyConstant().domain}/${productModels[index].image}',
-                fit: BoxFit.contain,
-              ),
+            child: Image.network(
+              '${MyConstant().domain}/${productModels[index].image}',
+              fit: BoxFit.cover,
             ),
             footer: GridTileBar(
               title: Text(
                 productModels[index].nameproduct,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                ),
               ),
               subtitle: Text(
                 '${productModels[index].price} ฿',
@@ -152,6 +149,29 @@ class _ProductListUserState extends State<ProductListUser> {
               ),
               backgroundColor: Colors.white60,
             )),
+      ),
+    );
+  }
+
+  Widget _buildSectiontitle(String title, [Function onTap]) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title,
+              style: TextStyle(
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
+          InkWell(
+            onTap: onTap ?? () {},
+            child: Text(
+              'ดูทั้งหมด',
+              style: new TextStyle(color: Colors.blue),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -17,28 +17,27 @@ class _HomepageState extends State<Homepage> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'หน้าหลัก',
-            backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.thumb_up),
             label: 'สินค้าแนะนำ',
-            backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             label: 'แจ้งเตือน',
-            backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'ฉัน',
-            backgroundColor: Colors.blue,
           ),
         ],
+        backgroundColor: Colors.blue,
+        unselectedItemColor: Colors.white,
         selectedItemColor: Colors.blue[900],
         showUnselectedLabels: true,
         currentIndex: _selectedIndex,
