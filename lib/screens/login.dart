@@ -86,28 +86,28 @@ class _LoginPageState extends State<LoginPage> {
                     .showSnackBar(SnackBar(content: Text('Login Pass')));
                 print('#### Login with Email SS');
 
-                await Firebase.initializeApp().then((value) async {
-                  String uid = FirebaseAuth.instance.currentUser.uid.toString();
-                  FirebaseFirestore.instance
-                      .collection('user')
-                      .doc(uid)
-                      .snapshots()
-                      .listen((event) {
-                    UserModels model = UserModels.fromMap(event.data());
-                    switch (model.typeuser) {
-                      case 'user':
-                        Navigator.pushNamed(context, '/homepage');
-                        break;
-                      case 'seller':
-                        Navigator.pushNamed(context, '/homeseller');
-                        break;
-                      case 'manager':
-                        Navigator.pushNamed(context, '/homemanager');
-                        break;
-                      default:
-                    }
-                  });
-                });
+                // await Firebase.initializeApp().then((value) async {
+                //   String uid = FirebaseAuth.instance.currentUser.uid.toString();
+                //   FirebaseFirestore.instance
+                //       .collection('user')
+                //       .doc(uid)
+                //       .snapshots()
+                //       .listen((event) {
+                //     UserModels model = UserModels.fromMap(event.data());
+                //     switch (model.typeuser) {
+                //       case 'user':
+                //         Navigator.pushNamed(context, '/homepage');
+                //         break;
+                //       case 'seller':
+                //         Navigator.pushNamed(context, '/homeseller');
+                //         break;
+                //       case 'manager':
+                //         Navigator.pushNamed(context, '/homemanager');
+                //         break;
+                //       default:
+                //     }
+                //   });
+                // });
               } else {
                 ScaffoldMessenger.of(this._formstate.currentContext)
                     .showSnackBar(
@@ -165,34 +165,34 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<Null> insertUserfbtoCloud() async {
-    UserModels model = UserModels(
-      name: name,
-      email: email,
-      phone: phone,
-      typeuser: typeUser,
-      uid: uid,
-    );
-    Map<String, dynamic> data = model.toMap();
-    await Firebase.initializeApp().then((value) async {
-      await FirebaseFirestore.instance
-          .collection('user')
-          .doc(uid)
-          .set(data)
-          .then((value) {
-        switch (typeUser) {
-          case 'user':
-            Navigator.pushNamed(context, '/homepage');
-            break;
-          case 'seller':
-            Navigator.pushNamed(context, '/homeseller');
-            break;
-          case 'manager':
-            Navigator.pushNamed(context, '/homemanager');
-            break;
-          default:
-        }
-      });
-    });
+    // UserModel model = UserModel(
+    //   name: name,
+    //   email: email,
+    //   phone: phone,
+    //   typeuser: typeUser,
+    //   uid: uid,
+    // );
+    // Map<String, dynamic> data = model.toMap();
+    // await Firebase.initializeApp().then((value) async {
+    //   await FirebaseFirestore.instance
+    //       .collection('user')
+    //       .doc(uid)
+    //       .set(data)
+    //       .then((value) {
+    //     switch (typeUser) {
+    //       case 'user':
+    //         Navigator.pushNamed(context, '/homepage');
+    //         break;
+    //       case 'seller':
+    //         Navigator.pushNamed(context, '/homeseller');
+    //         break;
+    //       case 'manager':
+    //         Navigator.pushNamed(context, '/homemanager');
+    //         break;
+    //       default:
+    //     }
+    //   });
+    // });
   }
 
   Future<Null> callTypeUserDialog() async {
@@ -244,67 +244,67 @@ class _LoginPageState extends State<LoginPage> {
 
   String name, phone, uid, typeUser = 'user';
   Future<Null> loginWithFacebook() async {
-    FacebookLogin facebookLogin = FacebookLogin();
+    //   FacebookLogin facebookLogin = FacebookLogin();
 
-    FacebookLoginResult result =
-        await facebookLogin.logIn(['email', 'public_profile']);
+    //   FacebookLoginResult result =
+    //       await facebookLogin.logIn(['email', 'public_profile']);
 
-    String token = result.accessToken.token;
+    //   String token = result.accessToken.token;
 
-    FirebaseAuth.instance
-        .signInWithCredential(FacebookAuthProvider.credential(token))
-        .then((value) async {
-      uid = value.user.uid;
-      name = value.user.displayName;
-      email = value.user.email;
-      phone = value.user.phoneNumber;
+    //   FirebaseAuth.instance
+    //       .signInWithCredential(FacebookAuthProvider.credential(token))
+    //       .then((value) async {
+    //     uid = value.user.uid;
+    //     name = value.user.displayName;
+    //     email = value.user.email;
+    //     phone = value.user.phoneNumber;
 
-      FirebaseFirestore.instance
-          .collection('user')
-          .doc(uid)
-          .snapshots()
-          .listen((event) {
-        print('event ==> ${event.data()}');
-        if (event.data() == null) {
-          callTypeUserDialog();
-        } else {
-          Firebase.initializeApp().then((value) async {
-            FirebaseFirestore.instance
-                .collection('user')
-                .doc(uid)
-                .snapshots()
-                .listen((event) {
-              UserModels model = UserModels.fromMap(event.data());
-              switch (model.typeuser) {
-                case 'user':
-                  Navigator.pushNamed(context, '/homepage');
-                  break;
-                case 'seller':
-                  Navigator.pushNamed(context, '/homeseller');
-                  break;
-                case 'manager':
-                  Navigator.pushNamed(context, '/homemanager');
-                  break;
-                default:
-              }
-            });
-          });
-        }
-      });
-    });
-    print('Token = $token');
-    switch (result.status) {
-      case FacebookLoginStatus.error:
-        print("Error");
-        break;
+    //     FirebaseFirestore.instance
+    //         .collection('user')
+    //         .doc(uid)
+    //         .snapshots()
+    //         .listen((event) {
+    //       print('event ==> ${event.data()}');
+    //       if (event.data() == null) {
+    //         callTypeUserDialog();
+    //       } else {
+    //         Firebase.initializeApp().then((value) async {
+    //           FirebaseFirestore.instance
+    //               .collection('user')
+    //               .doc(uid)
+    //               .snapshots()
+    //               .listen((event) {
+    //             UserModels model = UserModels.fromMap(event.data());
+    //             switch (model.typeuser) {
+    //               case 'user':
+    //                 Navigator.pushNamed(context, '/homepage');
+    //                 break;
+    //               case 'seller':
+    //                 Navigator.pushNamed(context, '/homeseller');
+    //                 break;
+    //               case 'manager':
+    //                 Navigator.pushNamed(context, '/homemanager');
+    //                 break;
+    //               default:
+    //             }
+    //           });
+    //         });
+    //       }
+    //     });
+    //   });
+    //   print('Token = $token');
+    //   switch (result.status) {
+    //     case FacebookLoginStatus.error:
+    //       print("Error");
+    //       break;
 
-      case FacebookLoginStatus.cancelledByUser:
-        print("CancelledByUser");
-        break;
+    //     case FacebookLoginStatus.cancelledByUser:
+    //       print("CancelledByUser");
+    //       break;
 
-      case FacebookLoginStatus.loggedIn:
-        print('login');
-        break;
-    }
+    //     case FacebookLoginStatus.loggedIn:
+    //       print('login');
+    //       break;
+    //   }
   }
 }

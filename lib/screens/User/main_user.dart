@@ -20,19 +20,23 @@ class _HomepageState extends State<Homepage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
             label: 'หน้าหลัก',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up),
+            icon: Icon(Icons.thumb_up_alt_outlined),
+            activeIcon: Icon(Icons.thumb_up),
             label: 'สินค้าแนะนำ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
+            icon: Icon(Icons.notifications_outlined),
+            activeIcon: Icon(Icons.notifications),
             label: 'แจ้งเตือน',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
             label: 'ฉัน',
           ),
         ],

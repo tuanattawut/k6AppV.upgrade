@@ -76,23 +76,23 @@ class _RegisterPageState extends State<RegisterPage> {
         if (this._formstate.currentState.validate()) print(this.email);
         print(this.password);
 
-        final _user = await auth.createUserWithEmailAndPassword(
-            email: this.email.trim(), password: this.password.trim());
-        _user.user.sendEmailVerification();
-        String uid = auth.currentUser.uid.toString();
+        // final _user = await auth.createUserWithEmailAndPassword(
+        //     email: this.email.trim(), password: this.password.trim());
+        // _user.user.sendEmailVerification();
+        // String id = auth.currentUser.uid.toString();
 
-        UserModels model = UserModels(
-            name: name,
-            email: email,
-            phone: phone,
-            typeuser: typeUser,
-            uid: uid);
-        Map<String, dynamic> data = model.toMap();
-        await FirebaseFirestore.instance
-            .collection('user')
-            .doc(uid)
-            .set(data)
-            .then((value) => print('Insert value'));
+        // UserModel model = UserModel(
+        //     name: name,
+        //     email: email,
+        //     phone: phone,
+        //     typeuser: typeUser,
+        //     id: id);
+        // Map<String, dynamic> data = model.toMap();
+        // await FirebaseFirestore.instance
+        //     .collection('user')
+        //     .doc(id)
+        //     .set(data)
+        //     .then((value) => print('Insert value'));
 
         Navigator.pushAndRemoveUntil(
             context,

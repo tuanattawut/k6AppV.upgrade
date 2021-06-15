@@ -9,6 +9,7 @@ String productModelToJson(List<ProductModel> data) =>
 class ProductModel {
   ProductModel({
     this.id,
+    this.idshop,
     this.nameproduct,
     this.category,
     this.price,
@@ -17,6 +18,7 @@ class ProductModel {
   });
 
   String id;
+  String idshop;
   String nameproduct;
   Category category;
   String price;
@@ -24,7 +26,8 @@ class ProductModel {
   String image;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        id: json["ID"] == null ? null : json["ID"],
+        id: json["id"] == null ? null : json["id"],
+        idshop: json["idshop"] == null ? null : json["idshop"],
         nameproduct: json["nameproduct"] == null ? null : json["nameproduct"],
         category: json["category"] == null
             ? null
@@ -35,7 +38,8 @@ class ProductModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "ID": id == null ? null : id,
+        "id": id == null ? null : id,
+        "idshop": idshop == null ? null : idshop,
         "nameproduct": nameproduct == null ? null : nameproduct,
         "category": category == null ? null : categoryValues.reverse[category],
         "price": price == null ? null : price,

@@ -1,11 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ShowDetail extends StatefulWidget {
   final ProductModel productModel;
+
   ShowDetail({this.productModel});
   @override
   _ShowDetailState createState() => _ShowDetailState();
@@ -13,14 +18,40 @@ class ShowDetail extends StatefulWidget {
 
 class _ShowDetailState extends State<ShowDetail> {
   ProductModel productModel;
+  List<UserModel> userModels = [];
+
+  String idShop;
 
   @override
   void initState() {
     super.initState();
     setState(() {
       productModel = widget.productModel;
+
       print('url ==> ${productModel.image}');
+      print('id ==> ${productModel.idshop}');
+      readSeller();
     });
+  }
+
+  Future<Null> readSeller() async {
+    idShop = productModel.idshop;
+
+    String url =
+        '${MyConstant().domain}/k6app/getproductWhereidShop.php?isAdd=true&id=$idShop';
+    Response response = await Dio().get(url);
+
+    var result = json.decode(response.data);
+    print('result = $result');
+
+    for (var map in result) {
+      UserModel userModel = UserModel.fromJson(map);
+
+      print('NameShop = ${userModel.nameshop}');
+      setState(() {
+        userModels.add(userModel);
+      });
+    }
   }
 
   @override
@@ -31,16 +62,18 @@ class _ShowDetailState extends State<ShowDetail> {
               ? Text('รายละเอียด')
               : Text(productModel.nameproduct),
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.all(5),
-          child: Column(
-            children: <Widget>[
-              showDetailProduct(),
-              MyStyle().mySizebox(),
-              MyStyle().mySizebox(),
-            ],
-          ),
-        ));
+        body: productModel == null
+            ? MyStyle().showProgress()
+            : SingleChildScrollView(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  children: <Widget>[
+                    showDetailProduct(),
+                    MyStyle().mySizebox(),
+                    MyStyle().mySizebox(),
+                  ],
+                ),
+              ));
   }
 
   Widget showImage() {
@@ -133,7 +166,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('ร้าน: '),
                         Text(
-                          'TEST ',
+                          'userModels[index].nameshop',
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -144,7 +177,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('เบอร์โทร: '),
                         Text(
-                          'TEST',
+                          'userModel.phone',
                           style: TextStyle(
                             fontSize: 18,
                           ),
