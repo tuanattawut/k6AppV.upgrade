@@ -62,6 +62,12 @@ class MyStyle {
     );
   }
 
+  Widget showLinearProgress() {
+    return Center(
+      child: LinearProgressIndicator(),
+    );
+  }
+
   BoxDecoration myBoxDecoration(String namePic) {
     return BoxDecoration(
       image: DecorationImage(

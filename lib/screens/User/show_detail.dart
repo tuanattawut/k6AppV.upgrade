@@ -18,7 +18,7 @@ class ShowDetail extends StatefulWidget {
 
 class _ShowDetailState extends State<ShowDetail> {
   ProductModel productModel;
-  List<UserModel> userModels = [];
+  UserModel userModels;
 
   String idShop;
 
@@ -27,9 +27,7 @@ class _ShowDetailState extends State<ShowDetail> {
     super.initState();
     setState(() {
       productModel = widget.productModel;
-
       print('url ==> ${productModel.image}');
-      print('id ==> ${productModel.idshop}');
       readSeller();
     });
   }
@@ -49,7 +47,7 @@ class _ShowDetailState extends State<ShowDetail> {
 
       print('NameShop = ${userModel.nameshop}');
       setState(() {
-        userModels.add(userModel);
+        userModels = (userModel);
       });
     }
   }
@@ -62,18 +60,18 @@ class _ShowDetailState extends State<ShowDetail> {
               ? Text('รายละเอียด')
               : Text(productModel.nameproduct),
         ),
-        body: productModel == null
-            ? MyStyle().showProgress()
-            : SingleChildScrollView(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  children: <Widget>[
-                    showDetailProduct(),
-                    MyStyle().mySizebox(),
-                    MyStyle().mySizebox(),
-                  ],
-                ),
-              ));
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(5),
+          child: Column(
+            children: <Widget>[
+              userModels == null
+                  ? MyStyle().showLinearProgress()
+                  : showDetailProduct(),
+              MyStyle().mySizebox(),
+              MyStyle().mySizebox(),
+            ],
+          ),
+        ));
   }
 
   Widget showImage() {
@@ -87,14 +85,14 @@ class _ShowDetailState extends State<ShowDetail> {
   }
 
   Widget showMap() {
-    double lat = double.parse('14.036656358272781');
-    double lng = double.parse('100.73584338182013');
+    double lat = double.parse(userModels?.lat);
+    double lng = double.parse(userModels?.lng);
     print('lat = $lat, lng = $lng');
 
     LatLng latLng = LatLng(lat, lng);
     CameraPosition position = CameraPosition(
       target: latLng,
-      zoom: 15.0,
+      zoom: 16,
     );
 
     return Container(
@@ -113,11 +111,12 @@ class _ShowDetailState extends State<ShowDetail> {
       Marker(
           markerId: MarkerId('shopID'),
           position: LatLng(
-            double.parse('14.036656358272781'),
-            double.parse('100.73584338182013'),
+            double.parse(userModels?.lat),
+            double.parse(userModels?.lng),
           ),
-          infoWindow:
-              InfoWindow(title: 'ตำแหน่งร้าน', snippet: 'ร้าน : แก๊งค์เหลือง'))
+          infoWindow: InfoWindow(
+              title: 'ตำแหน่งร้าน',
+              snippet: 'ร้าน : ${userModels?.nameshop ?? 'กำลังโหลด'}'))
     ].toSet();
   }
 
@@ -166,7 +165,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('ร้าน: '),
                         Text(
-                          'userModels[index].nameshop',
+                          '${userModels?.nameshop ?? 'กำลังโหลด'}',
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -177,7 +176,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('เบอร์โทร: '),
                         Text(
-                          'userModel.phone',
+                          '${userModels?.phone ?? 'กำลังโหลด'}',
                           style: TextStyle(
                             fontSize: 18,
                           ),
