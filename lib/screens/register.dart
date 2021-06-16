@@ -1,9 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:k6_app/screens/login.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -13,9 +12,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formstate = GlobalKey<FormState>();
 
-  String name, password, email, phone, typeUser;
-
-  final auth = FirebaseAuth.instance;
+  String name, password, email, phone, typeuser, imageavatar;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +43,10 @@ class _RegisterPageState extends State<RegisterPage> {
   RadioListTile<String> buildTyperSeller() {
     return RadioListTile(
       value: 'seller',
-      groupValue: typeUser,
+      groupValue: typeuser,
       onChanged: (value) {
         setState(() {
-          typeUser = value;
+          typeuser = value;
         });
       },
       title: Text('ผู้ขาย'),
@@ -59,13 +56,13 @@ class _RegisterPageState extends State<RegisterPage> {
   RadioListTile<String> buildTyperUser() {
     return RadioListTile(
       value: 'user',
-      groupValue: typeUser,
+      groupValue: typeuser,
       onChanged: (value) {
         setState(() {
-          typeUser = value;
+          typeuser = value;
         });
       },
-      title: Text('สมาชิก'),
+      title: Text('สมาชิกทั่วไป'),
     );
   }
 
@@ -73,33 +70,56 @@ class _RegisterPageState extends State<RegisterPage> {
     return ElevatedButton(
       child: Text('สมัครสมาชิก'),
       onPressed: () async {
-        if (this._formstate.currentState.validate()) print(this.email);
-        print(this.password);
-
-        // final _user = await auth.createUserWithEmailAndPassword(
-        //     email: this.email.trim(), password: this.password.trim());
-        // _user.user.sendEmailVerification();
-        // String id = auth.currentUser.uid.toString();
-
-        // UserModel model = UserModel(
-        //     name: name,
-        //     email: email,
-        //     phone: phone,
-        //     typeuser: typeUser,
-        //     id: id);
-        // Map<String, dynamic> data = model.toMap();
-        // await FirebaseFirestore.instance
-        //     .collection('user')
-        //     .doc(id)
-        //     .set(data)
-        //     .then((value) => print('Insert value'));
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-            ModalRoute.withName('/'));
+        if (this._formstate.currentState.validate())
+          print(
+              'name = $name, email = $email, password = $password, typeuser = $typeuser');
+        if (name == null ||
+            name.isEmpty ||
+            password == null ||
+            password.isEmpty ||
+            phone == null ||
+            phone.isEmpty) {
+          print('Have Space');
+          normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
+        } else if (typeuser == null) {
+          normalDialog(context, 'โปรด เลือกชนิดของผู้สมัคร');
+        } else if (email == null || email.isEmpty || !email.contains('@')) {
+          normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
+        } else {
+          checkUser();
+        }
       },
     );
+  }
+
+  Future<Null> checkUser() async {
+    String url =
+        '${MyConstant().domain}/k6app/getUserWhereUser.php?isAdd=true&email=$email';
+    try {
+      Response response = await Dio().get(url);
+      if (response.toString() == 'null') {
+        registerThread();
+      } else {
+        normalDialog(
+            context, 'อีเมลนี้ $email ได้ถูกใช้ไปแล้ว กรุณาเปลี่ยนใหม่');
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> registerThread() async {
+    String url =
+        '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar$imageavatar';
+
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองใหม่ คะ');
+      }
+    } catch (e) {}
   }
 
   TextFormField buildPasswordField() {
@@ -114,7 +134,7 @@ class _RegisterPageState extends State<RegisterPage> {
       obscureText: true,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: 'พาสเวิร์ด',
         icon: Icon(Icons.lock),
       ),
     );
@@ -124,17 +144,17 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (value.isEmpty)
-          return 'โปรดกรอกอีเมลในช่อง';
+        if (!value.contains('@') || value.isEmpty)
+          return 'โปรดกรอกอีเมลในช่อง ตัวอย่าง  xx@xx.com';
         else
           return null;
       },
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'E-mail',
+        labelText: 'อีเมล',
         icon: Icon(Icons.email),
-        hintText: 'aa@aa.com',
+        hintText: 'xx@xx.com',
       ),
     );
   }
@@ -151,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'Full Name',
+        labelText: 'ชื่อ',
         icon: Icon(Icons.person),
       ),
     );
@@ -166,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
         else
           return null;
       },
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'เบอร์โทรศัพท์',

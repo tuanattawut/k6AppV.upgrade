@@ -1,7 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -15,7 +12,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formstate = GlobalKey<FormState>();
-  String email, password;
+
+  String name, password, email, phone, typeuser, imageavatar;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
 
   SignInButtonBuilder facebookButton(BuildContext context) {
     return SignInButtonBuilder(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.indigo,
       text: 'ล็อกอินด้วย Facebook',
       icon: Icons.facebook,
       onPressed: () {
@@ -74,51 +72,51 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
         child: Text('ล็อกอิน'),
         onPressed: () async {
-          if (this._formstate.currentState.validate()) {
-            print('Valid Form');
-            this._formstate.currentState.save();
-            await FirebaseAuth.instance
-                .signInWithEmailAndPassword(
-                    email: this.email, password: this.password)
-                .then((value) async {
-              if (value.user.emailVerified) {
-                ScaffoldMessenger.of(this._formstate.currentContext)
-                    .showSnackBar(SnackBar(content: Text('Login Pass')));
-                print('#### Login with Email SS');
+          // if (this._formstate.currentState.validate()) {
+          //   print('Valid Form');
+          // this._formstate.currentState.save();
+          // await FirebaseAuth.instance
+          //     .signInWithEmailAndPassword(
+          //         email: this.email, password: this.password)
+          //     .then((value) async {
+          //   if (value.user.emailVerified) {
+          //     ScaffoldMessenger.of(this._formstate.currentContext)
+          //         .showSnackBar(SnackBar(content: Text('Login Pass')));
+          //     print('#### Login with Email SS');
 
-                // await Firebase.initializeApp().then((value) async {
-                //   String uid = FirebaseAuth.instance.currentUser.uid.toString();
-                //   FirebaseFirestore.instance
-                //       .collection('user')
-                //       .doc(uid)
-                //       .snapshots()
-                //       .listen((event) {
-                //     UserModels model = UserModels.fromMap(event.data());
-                //     switch (model.typeuser) {
-                //       case 'user':
-                //         Navigator.pushNamed(context, '/homepage');
-                //         break;
-                //       case 'seller':
-                //         Navigator.pushNamed(context, '/homeseller');
-                //         break;
-                //       case 'manager':
-                //         Navigator.pushNamed(context, '/homemanager');
-                //         break;
-                //       default:
-                //     }
-                //   });
-                // });
-              } else {
-                ScaffoldMessenger.of(this._formstate.currentContext)
-                    .showSnackBar(
-                        SnackBar(content: Text('Please verify email')));
-              }
-            }).catchError((reason) {
-              ScaffoldMessenger.of(this._formstate.currentContext).showSnackBar(
-                  SnackBar(content: Text('Login or Password Invalid')));
-            });
-          } else
-            print('Invalid Form');
+          // await Firebase.initializeApp().then((value) async {
+          //   String uid = FirebaseAuth.instance.currentUser.uid.toString();
+          //   FirebaseFirestore.instance
+          //       .collection('user')
+          //       .doc(uid)
+          //       .snapshots()
+          //       .listen((event) {
+          //     UserModels model = UserModels.fromMap(event.data());
+          //     switch (model.typeuser) {
+          //       case 'user':
+          //         Navigator.pushNamed(context, '/homepage');
+          //         break;
+          //       case 'seller':
+          //         Navigator.pushNamed(context, '/homeseller');
+          //         break;
+          //       case 'manager':
+          //         Navigator.pushNamed(context, '/homemanager');
+          //         break;
+          //       default:
+          //     }
+          //   });
+          // });
+          //     } else {
+          //       ScaffoldMessenger.of(this._formstate.currentContext)
+          //           .showSnackBar(
+          //               SnackBar(content: Text('Please verify email')));
+          //     }
+          //   }).catchError((reason) {
+          //     ScaffoldMessenger.of(this._formstate.currentContext).showSnackBar(
+          //         SnackBar(content: Text('Login or Password Invalid')));
+          //   });
+          // } else
+          //     print('Invalid Form');
           normalDialog(context, 'กรุณากรอกข้อมูล');
         });
   }
@@ -165,14 +163,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<Null> insertUserfbtoCloud() async {
-    // UserModel model = UserModel(
-    //   name: name,
-    //   email: email,
-    //   phone: phone,
-    //   typeuser: typeUser,
-    //   uid: uid,
-    // );
-    // Map<String, dynamic> data = model.toMap();
+    //    UserModel model = UserModel(
+    //      name: name,
+    //      email: email,
+    //      phone: phone,
+    //      typeuser: typeUser,
+    //      id: uid,
+    //    );
+    //   Map<String, dynamic> data = model.toMap();
     // await Firebase.initializeApp().then((value) async {
     //   await FirebaseFirestore.instance
     //       .collection('user')
@@ -209,20 +207,20 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   RadioListTile(
                     value: 'user',
-                    groupValue: typeUser,
+                    groupValue: typeuser,
                     onChanged: (value) {
                       setState(() {
-                        typeUser = value;
+                        typeuser = value;
                       });
                     },
                     title: Text('สมาชิก'),
                   ),
                   RadioListTile(
                     value: 'seller',
-                    groupValue: typeUser,
+                    groupValue: typeuser,
                     onChanged: (value) {
                       setState(() {
-                        typeUser = value;
+                        typeuser = value;
                       });
                     },
                     title: Text('ผู้ขาย'),
@@ -231,8 +229,8 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         Navigator.pop(context);
                         print(
-                            ' Uid :    $uid , Name    :  $name , email :    $email , Phone  : $phone, TypeUser  : $typeUser');
-                        insertUserfbtoCloud();
+                            ', Name    :  $name , email :    $email , Phone  : $phone, TypeUser  : $typeuser');
+                        // insertUserfbtoCloud();
                       },
                       child: Text('ตกลง')),
                 ],
@@ -242,14 +240,14 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  String name, phone, uid, typeUser = 'user';
   Future<Null> loginWithFacebook() async {
-    //   FacebookLogin facebookLogin = FacebookLogin();
+    FacebookLogin facebookLogin = FacebookLogin();
 
-    //   FacebookLoginResult result =
-    //       await facebookLogin.logIn(['email', 'public_profile']);
+    FacebookLoginResult result =
+        await facebookLogin.logIn(['email', 'public_profile']);
 
-    //   String token = result.accessToken.token;
+    String token = result.accessToken.token;
+    print(token);
 
     //   FirebaseAuth.instance
     //       .signInWithCredential(FacebookAuthProvider.credential(token))

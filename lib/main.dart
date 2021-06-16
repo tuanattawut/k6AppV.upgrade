@@ -3,12 +3,11 @@ import 'package:k6_app/screens/Manager/main_manager.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
 import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/screens/login.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:k6_app/screens/register.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
@@ -27,9 +26,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/login': (context) => LoginPage(),
+        '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/': (context) => Homepage(),
+        '/homepage': (context) => Homepage(),
         '/homeseller': (context) => Homeseller(),
         '/homemanager': (context) => Homemanager(),
       },
