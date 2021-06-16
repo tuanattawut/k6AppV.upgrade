@@ -1,3 +1,2 @@
 #WELCOME TO YUPYERN
 
-PROJECT FINAL YEAR จบไหมอีกเรื่อง
