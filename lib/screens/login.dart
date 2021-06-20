@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:k6_app/models/user_models.dart';
+
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -14,6 +13,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formstate = GlobalKey<FormState>();
 
   String name, password, email, phone, typeuser, imageavatar;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: true,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: 'พาสเวิร์ด',
         icon: Icon(Icons.lock),
       ),
     );
@@ -155,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'E-mail',
+        labelText: 'อีเมล',
         icon: Icon(Icons.email),
         hintText: 'x@x.com',
       ),
@@ -241,13 +241,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<Null> loginWithFacebook() async {
-    FacebookLogin facebookLogin = FacebookLogin();
+    // FacebookLogin facebookLogin = FacebookLogin();
 
-    FacebookLoginResult result =
-        await facebookLogin.logIn(['email', 'public_profile']);
+    // FacebookLoginResult result =
+    //     await facebookLogin.logIn(['email', 'public_profile']);
 
-    String token = result.accessToken.token;
-    print(token);
+    // String token = result.accessToken.token;
+    // print(token);
+    // String userid = result.accessToken.userId;
+    // print(' USER ID ===>  $userid');
 
     //   FirebaseAuth.instance
     //       .signInWithCredential(FacebookAuthProvider.credential(token))
