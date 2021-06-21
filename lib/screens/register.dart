@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -108,7 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<Null> registerThread() async {
     String url =
-        '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar$imageavatar';
+        '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar=$imageavatar';
 
     try {
       Response response = await Dio().get(url);
@@ -117,7 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (response.toString() == 'true') {
         Navigator.pop(context);
       } else {
-        normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองใหม่ คะ');
+        normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }
     } catch (e) {}
   }
