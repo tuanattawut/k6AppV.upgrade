@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:k6_app/utility/my_constant.dart';
 
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -27,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       this.isLoggedIn = isLoggedIn;
       this.profileData = profileData;
+      print('ชื่อ ====>>>> ${profileData['name']} ');
     });
   }
 
@@ -161,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       validator: (value) {
         if (value.length < 6)
-          return 'Please Enter more than 6 Character';
+          return 'โปรดกรอกพาสเวิร์ด 6 ตัวขึ้นไป';
         else
           return null;
       },
@@ -181,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       validator: (value) {
         if (value.isEmpty)
-          return 'Please fill in E-mail field';
+          return 'โปรดเติม อีเมล ลงในช่อง';
         else
           return null;
       },
@@ -195,35 +198,20 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<Null> insertUserfbtoCloud() async {
-    //    UserModel model = UserModel(
-    //      name: name,
-    //      email: email,
-    //      phone: phone,
-    //      typeuser: typeUser,
-    //      id: uid,
-    //    );
-    //   Map<String, dynamic> data = model.toMap();
-    // await Firebase.initializeApp().then((value) async {
-    //   await FirebaseFirestore.instance
-    //       .collection('user')
-    //       .doc(uid)
-    //       .set(data)
-    //       .then((value) {
-    //     switch (typeUser) {
-    //       case 'user':
-    //         Navigator.pushNamed(context, '/homepage');
-    //         break;
-    //       case 'seller':
-    //         Navigator.pushNamed(context, '/homeseller');
-    //         break;
-    //       case 'manager':
-    //         Navigator.pushNamed(context, '/homemanager');
-    //         break;
-    //       default:
-    //     }
-    //   });
-    // });
+  Future<Null> registerFb() async {
+    String url =
+        '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar=$imageavatar';
+
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
+      }
+    } catch (e) {}
   }
 
   Future<Null> callTypeUserDialog() async {
@@ -342,7 +330,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void initiateFacebookLogin() async {
-    var facebookLoginResult = await facebookLogin.logIn(['email']);
+    var facebookLoginResult =
+        await facebookLogin.logIn(['email', 'public_profile']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
@@ -359,8 +348,9 @@ class _LoginPageState extends State<LoginPage> {
 
         var profile = json.decode(graphResponse.body);
         print(profile.toString());
-        print('ชื่อ ====>>>> ${profileData['name']} ');
+
         onLoginStatusChanged(true, profileData: profile);
+
         break;
     }
   }
