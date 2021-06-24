@@ -2,13 +2,11 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
-
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:http/http.dart' as http;
+import 'package:k6_app/widget/User/loginfacebook.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,42 +16,20 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formstate = GlobalKey<FormState>();
 
-  String name, password, email, phone, typeuser, imageavatar;
-
-  bool isLoggedIn = false;
-  var profileData;
-
-  var facebookLogin = FacebookLogin();
-
-  void onLoginStatusChanged(bool isLoggedIn, {profileData}) {
-    setState(() {
-      this.isLoggedIn = isLoggedIn;
-      this.profileData = profileData;
-      print('ชื่อ ====>>>> ${profileData['name']} ');
-    });
-  }
+  String email, password;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.exit_to_app,
-              color: Colors.white,
-            ),
-            onPressed: () => facebookLogin.isLoggedIn
-                .then((isLoggedIn) => isLoggedIn ? _logout() : {}),
-          ),
-        ],
-      ),
       body: Form(
         autovalidateMode: AutovalidateMode.always,
         key: _formstate,
         child: ListView(
           padding: EdgeInsets.all(20.0),
           children: <Widget>[
+            SizedBox(
+              height: 70,
+            ),
             MyStyle().mySizebox(),
             MyStyle().showLogo(),
             Row(
@@ -61,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Text(
                   'ระบบแนะนำสินค้าและร้านค้า',
-                  style: TextStyle(fontSize: 20),
+                  style: MyStyle().mainTitle,
                 ),
               ],
             ),
@@ -71,26 +47,10 @@ class _LoginPageState extends State<LoginPage> {
             MyStyle().mySizebox(),
             buildLoginButton(),
             buildRegisterButton(context),
-            facebookButton(context),
+            LoginFacebook(),
           ],
         ),
       ),
-      // body: Container(
-      //   child: Center(
-      //     child: isLoggedIn
-      //         ? _displayUserData(profileData)
-      //         : _displayLoginButton(),
-      //   ),
-      // ),
-    );
-  }
-
-  SignInButtonBuilder facebookButton(BuildContext context) {
-    return SignInButtonBuilder(
-      backgroundColor: Colors.indigo,
-      text: 'ล็อกอินด้วย Facebook',
-      icon: Icons.facebook,
-      onPressed: () => initiateFacebookLogin(),
     );
   }
 
@@ -108,60 +68,25 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
         child: Text('ล็อกอิน'),
         onPressed: () async {
-          // if (this._formstate.currentState.validate()) {
-          //   print('Valid Form');
-          // this._formstate.currentState.save();
-          // await FirebaseAuth.instance
-          //     .signInWithEmailAndPassword(
-          //         email: this.email, password: this.password)
-          //     .then((value) async {
-          //   if (value.user.emailVerified) {
-          //     ScaffoldMessenger.of(this._formstate.currentContext)
-          //         .showSnackBar(SnackBar(content: Text('Login Pass')));
-          //     print('#### Login with Email SS');
+          if (this._formstate.currentState.validate())
+            print('email =====> $email\npassword =====> $password');
 
-          // await Firebase.initializeApp().then((value) async {
-          //   String uid = FirebaseAuth.instance.currentUser.uid.toString();
-          //   FirebaseFirestore.instance
-          //       .collection('user')
-          //       .doc(uid)
-          //       .snapshots()
-          //       .listen((event) {
-          //     UserModels model = UserModels.fromMap(event.data());
-          //     switch (model.typeuser) {
-          //       case 'user':
-          //         Navigator.pushNamed(context, '/homepage');
-          //         break;
-          //       case 'seller':
-          //         Navigator.pushNamed(context, '/homeseller');
-          //         break;
-          //       case 'manager':
-          //         Navigator.pushNamed(context, '/homemanager');
-          //         break;
-          //       default:
-          //     }
-          //   });
-          // });
-          //     } else {
-          //       ScaffoldMessenger.of(this._formstate.currentContext)
-          //           .showSnackBar(
-          //               SnackBar(content: Text('Please verify email')));
-          //     }
-          //   }).catchError((reason) {
-          //     ScaffoldMessenger.of(this._formstate.currentContext).showSnackBar(
-          //         SnackBar(content: Text('Login or Password Invalid')));
-          //   });
-          // } else
-          //     print('Invalid Form');
-          normalDialog(context, 'กรุณากรอกข้อมูล');
+          if (email == null ||
+              email.isEmpty ||
+              !email.contains('@') ||
+              password == null ||
+              password.isEmpty ||
+              password.length < 6) {
+            normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
+          } else {
+            checkAuthen();
+          }
         });
   }
 
   TextFormField buildPasswordField() {
     return TextFormField(
-      onSaved: (value) {
-        this.password = value.trim();
-      },
+      onChanged: (value) => password = value.trim(),
       validator: (value) {
         if (value.length < 6)
           return 'โปรดกรอกพาสเวิร์ด 6 ตัวขึ้นไป';
@@ -179,12 +104,10 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildEmailField() {
     return TextFormField(
-      onSaved: (value) {
-        this.email = value.trim();
-      },
+      onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (value.isEmpty)
-          return 'โปรดเติม อีเมล ลงในช่อง';
+        if (value.isEmpty || value.contains('@'))
+          return 'โปรดกรอกอีเมลให้ถูกต้อง';
         else
           return null;
       },
@@ -198,68 +121,68 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<Null> registerFb() async {
-    String url =
-        '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar=$imageavatar';
+  // Future<Null> registerFb() async {
+  //   String url =
+  //       '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar=$imageavatar';
 
-    try {
-      Response response = await Dio().get(url);
-      print('res = $response');
+  //   try {
+  //     Response response = await Dio().get(url);
+  //     print('res = $response');
 
-      if (response.toString() == 'true') {
-        Navigator.pop(context);
-      } else {
-        normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
-      }
-    } catch (e) {}
-  }
+  //     if (response.toString() == 'true') {
+  //       Navigator.pop(context);
+  //     } else {
+  //       normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
+  //     }
+  //   } catch (e) {}
+  // }
 
-  Future<Null> callTypeUserDialog() async {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return SimpleDialog(
-                title: ListTile(
-                  title: Text('ประเภทผู้ใช้ ?'),
-                  subtitle: Text('โปรดเลือกประเภทผู้ใช้'),
-                ),
-                children: [
-                  RadioListTile(
-                    value: 'user',
-                    groupValue: typeuser,
-                    onChanged: (value) {
-                      setState(() {
-                        typeuser = value;
-                      });
-                    },
-                    title: Text('สมาชิก'),
-                  ),
-                  RadioListTile(
-                    value: 'seller',
-                    groupValue: typeuser,
-                    onChanged: (value) {
-                      setState(() {
-                        typeuser = value;
-                      });
-                    },
-                    title: Text('ผู้ขาย'),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        print(
-                            ', Name    :  $name , email :    $email , Phone  : $phone, TypeUser  : $typeuser');
-                        // insertUserfbtoCloud();
-                      },
-                      child: Text('ตกลง')),
-                ],
-              );
-            },
-          );
-        });
-  }
+  // Future<Null> callTypeUserDialog() async {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return StatefulBuilder(
+  //           builder: (context, setState) {
+  //             return SimpleDialog(
+  //               title: ListTile(
+  //                 title: Text('ประเภทผู้ใช้ ?'),
+  //                 subtitle: Text('โปรดเลือกประเภทผู้ใช้'),
+  //               ),
+  //               children: [
+  //                 RadioListTile(
+  //                   value: 'user',
+  //                   groupValue: typeuser,
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       typeuser = value;
+  //                     });
+  //                   },
+  //                   title: Text('สมาชิก'),
+  //                 ),
+  //                 RadioListTile(
+  //                   value: 'seller',
+  //                   groupValue: typeuser,
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       typeuser = value;
+  //                     });
+  //                   },
+  //                   title: Text('ผู้ขาย'),
+  //                 ),
+  //                 TextButton(
+  //                     onPressed: () {
+  //                       Navigator.pop(context);
+  //                       print(
+  //                           ', Name    :  $name , email :    $email , Phone  : $phone, TypeUser  : $typeuser');
+  //                       // insertUserfbtoCloud();
+  //                     },
+  //                     child: Text('ตกลง')),
+  //               ],
+  //             );
+  //           },
+  //         );
+  //       });
+  // }
 
   Future<Null> loginWithFacebook() async {
     // FacebookLogin facebookLogin = FacebookLogin();
@@ -329,35 +252,43 @@ class _LoginPageState extends State<LoginPage> {
     //   }
   }
 
-  void initiateFacebookLogin() async {
-    var facebookLoginResult =
-        await facebookLogin.logIn(['email', 'public_profile']);
+  Future<Null> checkAuthen() async {
+    String url =
+        '${MyConstant().domain}/k6app/getUserWhereUser.php?isAdd=true&email=$email';
+    print('url ===>> $url');
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
 
-    switch (facebookLoginResult.status) {
-      case FacebookLoginStatus.error:
-        onLoginStatusChanged(false);
-        print('การล็อกอินเออเร่อ');
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        onLoginStatusChanged(false);
-        print('การล็อกอินถูกยกเลิกโดยผู้ใช้');
-        break;
-      case FacebookLoginStatus.loggedIn:
-        var graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}');
-
-        var profile = json.decode(graphResponse.body);
-        print(profile.toString());
-
-        onLoginStatusChanged(true, profileData: profile);
-
-        break;
+      var result = json.decode(response.data);
+      print('result = $result');
+      if (result == null) {
+        normalDialog(context, 'อีเมลผิด กรุณา ลองอีกครั้ง ');
+      } else {
+        for (var map in result) {
+          UserModel userModel = UserModel.fromJson(map);
+          if (password == userModel.password) {
+            String typeuser = userModel.typeuser;
+            if (typeuser == 'user') {
+              Navigator.pushNamed(context, '/homepage');
+              break;
+            } else if (typeuser == 'seller') {
+              Navigator.pushNamed(context, '/homeseller');
+              break;
+            } else if (typeuser == 'manager') {
+              Navigator.pushNamed(context, '/homemanager');
+              break;
+            } else {
+              normalDialog(context, 'ผิดพลาด');
+            }
+          } else {
+            normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
+          }
+        }
+      }
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด');
+      print('Have e Error ===>> ${e.toString()}');
     }
-  }
-
-  _logout() async {
-    await facebookLogin.logOut();
-    onLoginStatusChanged(false);
-    print("Logged out");
   }
 }

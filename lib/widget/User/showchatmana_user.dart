@@ -23,7 +23,7 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                 child: Center(
                   child: Text(
                     'หัวข้อ',
-                    style: TextStyle(fontSize: 18),
+                    style: MyStyle().mainH2Title,
                   ),
                 ),
               ),
@@ -32,7 +32,7 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                 child: Center(
                   child: Text(
                     'รายละเอียด',
-                    style: TextStyle(fontSize: 18),
+                    style: MyStyle().mainH2Title,
                   ),
                 ),
               ),
@@ -41,7 +41,7 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                 child: Center(
                   child: Text(
                     'วันที่และเวลา',
-                    style: TextStyle(fontSize: 18),
+                    style: MyStyle().mainH2Title,
                   ),
                 ),
               ),

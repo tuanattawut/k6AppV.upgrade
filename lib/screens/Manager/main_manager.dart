@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/screens/Manager/manage_chat.dart';
-import 'package:k6_app/widget/Manager/manage_noti.dart';
+import 'package:k6_app/screens/Manager/manage_noti.dart';
 import 'package:k6_app/screens/Manager/manage_rentarea.dart';
 import 'package:k6_app/screens/Manager/manage_seller.dart';
 import 'package:k6_app/screens/Manager/manage_user.dart';

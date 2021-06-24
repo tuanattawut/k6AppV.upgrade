@@ -46,9 +46,6 @@ class _ProductListSellerState extends State<ProductListSeller> {
   Widget showListFood() => ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, index) => Card(
-            shadowColor: Colors.red.shade500,
-            elevation: 3,
-            clipBehavior: Clip.antiAlias,
             child: Row(
               children: <Widget>[
                 Container(
@@ -80,7 +77,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                           ),
                         ),
                         Text(
-                          'ตัวอย่าง ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง  ตัวอย่าง ',
+                          'รายละเอียด รายละเอียด รายละเอียด รายละเอียด ..  ',
                           style: TextStyle(
                             fontSize: 16,
                           ),
