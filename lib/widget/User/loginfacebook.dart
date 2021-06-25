@@ -5,6 +5,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:http/http.dart' as http;
 import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
 class LoginFacebook extends StatefulWidget {
@@ -30,8 +31,6 @@ class _LoginFacebookState extends State<LoginFacebook> {
       email = profileData['email'];
       imageavatar = profileData['picture']['data']['url'];
 
-      print('ชื่อ ====>>>> $name');
-      print(imageavatar);
       checkUser();
     });
   }
@@ -59,9 +58,118 @@ class _LoginFacebookState extends State<LoginFacebook> {
     try {
       Response response = await Dio().get(url);
 
-      print('ตรงนี้คืออะไร ====>> $response');
-      registerThread();
+      if (response.toString() == 'true') {
+        print('YESSSSSSSSSSSSSSSSSSSSSSSS');
+      } else {
+        showAddFBDialog();
+      }
     } catch (e) {}
+  }
+
+  Future<Null> showAddFBDialog() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) => SimpleDialog(
+              title: ListTile(
+                title: Text('ลงชื่อเข้าใช้ด้วย Facebook',
+                    style: MyStyle().mainH2Title),
+              ),
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage('$imageavatar'),
+                    radius: 70,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    'ชื่อ : $name',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    'อีเมล : $email',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                buildPhoneField(),
+                ListTile(
+                  title: Text('เลือกชนิดของสมาชิก: '),
+                ),
+                RadioListTile(
+                  value: 'user',
+                  groupValue: typeuser,
+                  onChanged: (value) {
+                    setState(() {
+                      typeuser = value;
+                    });
+                  },
+                  title: Text('สมาชิกทั่วไป'),
+                ),
+                RadioListTile(
+                  value: 'seller',
+                  groupValue: typeuser,
+                  onChanged: (value) {
+                    setState(() {
+                      typeuser = value;
+                    });
+                  },
+                  title: Text('ผู้ขาย'),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        print('เก็บข้อมูล : $name,$email, $phone, $typeuser');
+
+                        if (phone == null ||
+                            phone.isEmpty ||
+                            phone.length < 10) {
+                          normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
+                        } else if (typeuser == null) {
+                          normalDialog(context, 'โปรด เลือกชนิดของผู้สมัคร');
+                        } else {
+                          registerThread();
+                        }
+                      },
+                      child: Text('ยืนยัน'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('ยกเลิก'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  TextFormField buildPhoneField() {
+    return TextFormField(
+      onChanged: (value) => phone = value.trim(),
+      validator: (value) {
+        if (value.length < 10)
+          return 'โปรดกรอกเบอร์โทร 10 หลัก';
+        else
+          return null;
+      },
+      keyboardType: TextInputType.phone,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'เบอร์โทรศัพท์',
+        icon: Icon(Icons.phone_android),
+      ),
+    );
   }
 
   @override

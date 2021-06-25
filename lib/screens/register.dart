@@ -80,7 +80,6 @@ class _RegisterPageState extends State<RegisterPage> {
             password.isEmpty ||
             phone == null ||
             phone.isEmpty) {
-          print('Have Space');
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
         } else if (typeuser == null) {
           normalDialog(context, 'โปรด เลือกชนิดของผู้สมัคร');
@@ -99,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       Response response = await Dio().get(url);
       if (response.toString() == 'null') {
-        registerThread();
+        Navigator.pop(context);
       } else {
         normalDialog(
             context, 'อีเมลนี้ $email ได้ถูกใช้ไปแล้ว กรุณาเปลี่ยนใหม่');
