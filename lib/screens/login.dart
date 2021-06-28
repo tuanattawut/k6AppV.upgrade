@@ -27,9 +27,6 @@ class _LoginPageState extends State<LoginPage> {
         child: ListView(
           padding: EdgeInsets.all(20.0),
           children: <Widget>[
-            SizedBox(
-              height: 70,
-            ),
             MyStyle().mySizebox(),
             MyStyle().showLogo(),
             Row(
@@ -48,10 +45,28 @@ class _LoginPageState extends State<LoginPage> {
             buildLoginButton(),
             buildRegisterButton(context),
             LoginFacebook(),
+            buildSellerButton(),
+            buildManagerButton(),
           ],
         ),
       ),
     );
+  }
+
+  ElevatedButton buildManagerButton() {
+    return ElevatedButton(
+        child: Text('สำหรับผู้จัดการ'),
+        onPressed: () async {
+          normalDialog(context, 'คลิกทำไมครับ');
+        });
+  }
+
+  ElevatedButton buildSellerButton() {
+    return ElevatedButton(
+        child: Text('สำหรับผู้ขาย'),
+        onPressed: () async {
+          normalDialog(context, 'คลิกทำไมครับ');
+        });
   }
 
   ElevatedButton buildRegisterButton(BuildContext context) {
@@ -120,22 +135,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  // Future<Null> registerFb() async {
-  //   String url =
-  //       '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar=$imageavatar';
-
-  //   try {
-  //     Response response = await Dio().get(url);
-  //     print('res = $response');
-
-  //     if (response.toString() == 'true') {
-  //       Navigator.pop(context);
-  //     } else {
-  //       normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
-  //     }
-  //   } catch (e) {}
-  // }
 
   // Future<Null> callTypeUserDialog() async {
   //   showDialog(

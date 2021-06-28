@@ -1,5 +1,9 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -13,7 +17,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formstate = GlobalKey<FormState>();
 
-  String name, password, email, phone, typeuser, imageavatar;
+  String name, lastname, password, email, phone, gender, image;
+  File file;
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +31,15 @@ class _RegisterPageState extends State<RegisterPage> {
           child: ListView(
             padding: EdgeInsets.all(20.0),
             children: <Widget>[
+              MyStyle().mySizebox(),
+              groupImage(),
               buildNameField(),
+              buildSurNameField(),
               buildEmailField(),
               buildPasswordField(),
+              buildGenderField(),
               buildPhoneField(),
               MyStyle().mySizebox(),
-              MyStyle().showTitleH2('เลือกชนิดของสมาชิก: '),
-              buildTyperUser(),
-              buildTyperSeller(),
               MyStyle().mySizebox(),
               buildRegisterButton(),
             ],
@@ -41,74 +47,70 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
-  RadioListTile<String> buildTyperSeller() {
-    return RadioListTile(
-      value: 'seller',
-      groupValue: typeuser,
-      onChanged: (value) {
-        setState(() {
-          typeuser = value;
-        });
-      },
-      title: Text('ผู้ขาย'),
-    );
-  }
-
-  RadioListTile<String> buildTyperUser() {
-    return RadioListTile(
-      value: 'user',
-      groupValue: typeuser,
-      onChanged: (value) {
-        setState(() {
-          typeuser = value;
-        });
-      },
-      title: Text('สมาชิกทั่วไป'),
-    );
-  }
-
   ElevatedButton buildRegisterButton() {
     return ElevatedButton(
       child: Text('สมัครสมาชิก'),
       onPressed: () async {
-        if (this._formstate.currentState.validate())
-          print(
-              'name = $name, email = $email, password = $password, typeuser = $typeuser');
-        if (name == null ||
+        if (this._formstate.currentState.validate()) if (name == null ||
             name.isEmpty ||
+            lastname == null ||
+            lastname.isEmpty ||
             password == null ||
             password.isEmpty ||
             phone == null ||
             phone.isEmpty) {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
-        } else if (typeuser == null) {
-          normalDialog(context, 'โปรด เลือกชนิดของผู้สมัคร');
         } else if (email == null || email.isEmpty || !email.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
+        } else if (file == null) {
+          normalDialog(context, 'โปรดใส่รูปภาพ');
         } else {
-          checkUser();
+          uploadImage();
         }
       },
     );
   }
 
+  Future<Null> uploadImage() async {
+    Random random = Random();
+    int i = random.nextInt(1000000);
+
+    String nameImage = 'avatar$i.png';
+    print('nameImage = $nameImage, pathImage = ${file.path}');
+
+    String url = '${MyConstant().domain}/projectk6/saveimage.php';
+
+    try {
+      Map<String, dynamic> map = Map();
+      map['file'] =
+          await MultipartFile.fromFile(file.path, filename: nameImage);
+
+      FormData formData = FormData.fromMap(map);
+      await Dio().post(url, data: formData).then((value) {
+        print('Response ===>>> $value');
+        image = '/projectk6/Avatar/$nameImage';
+        print('urlImage = $image');
+        checkUser();
+      });
+    } catch (e) {}
+  }
+
   Future<Null> checkUser() async {
     String url =
-        '${MyConstant().domain}/k6app/getUserWhereUser.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
       if (response.toString() == 'null') {
-        Navigator.pop(context);
+        register();
       } else {
-        normalDialog(
-            context, 'อีเมลนี้ $email ได้ถูกใช้ไปแล้ว กรุณาเปลี่ยนใหม่');
+        normalDialog(context, 'อีเมล $email ได้ถูกใช้ไปแล้ว กรุณาเปลี่ยนใหม่');
       }
     } catch (e) {}
   }
 
-  Future<Null> registerThread() async {
+  Future<Null> register() async {
     String url =
-        '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar=$imageavatar';
+        '${MyConstant().domain}/projectk6/addUser.php?isAdd=true&name=$name&lastname=$lastname&email=$email&password=$password&gender=$gender&phone=$phone&image=$image';
 
     try {
       Response response = await Dio().get(url);
@@ -120,6 +122,57 @@ class _RegisterPageState extends State<RegisterPage> {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }
     } catch (e) {}
+  }
+
+  Column groupImage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Container(
+          width: 150,
+          child:
+              file == null ? Image.asset('images/user.png') : Image.file(file),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton(
+              onPressed: () => chooseImage(ImageSource.camera),
+              child: Text('ถ่ายภาพ'),
+            ),
+            TextButton(
+                onPressed: () => chooseImage(ImageSource.gallery),
+                child: Text('เลือกจากคลัง')),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Future<Null> chooseImage(ImageSource imageSource) async {
+    try {
+      var object = await ImagePicker().getImage(
+        source: imageSource,
+        maxHeight: 800.0,
+        maxWidth: 800.0,
+      );
+
+      setState(() {
+        file = File(object.path);
+      });
+    } catch (e) {}
+  }
+
+  TextFormField buildGenderField() {
+    return TextFormField(
+      onChanged: (value) => gender = value.trim(),
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'เพศ',
+        hintText: 'ระบุหรือไม่ก็ได้',
+      ),
+    );
   }
 
   TextFormField buildPasswordField() {
@@ -135,7 +188,6 @@ class _RegisterPageState extends State<RegisterPage> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'พาสเวิร์ด',
-        icon: Icon(Icons.lock),
       ),
     );
   }
@@ -153,8 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'อีเมล',
-        icon: Icon(Icons.email),
-        hintText: 'xx@xx.com',
       ),
     );
   }
@@ -172,7 +222,24 @@ class _RegisterPageState extends State<RegisterPage> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'ชื่อ',
-        icon: Icon(Icons.person),
+      ),
+    );
+  }
+
+  TextFormField buildSurNameField() {
+    return TextFormField(
+      onChanged: (value) => lastname = value.trim(),
+      validator: (value) {
+        if (value.isEmpty)
+          return 'โปรดกรอกนามสกุลในช่อง';
+        else
+          return null;
+      },
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'นามสกุล',
+        icon: null,
       ),
     );
   }
@@ -190,7 +257,6 @@ class _RegisterPageState extends State<RegisterPage> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'เบอร์โทรศัพท์',
-        icon: Icon(Icons.phone_android),
       ),
     );
   }
