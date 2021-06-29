@@ -14,7 +14,7 @@ class LoginFacebook extends StatefulWidget {
 }
 
 class _LoginFacebookState extends State<LoginFacebook> {
-  String name, password, email, phone, typeuser, imageavatar;
+  String name, lastname, email, password, gender, phone, typeuser, image, idfb;
 
   bool isLoggedIn = false;
 
@@ -27,17 +27,18 @@ class _LoginFacebookState extends State<LoginFacebook> {
       this.isLoggedIn = isLoggedIn;
       this.profileData = profileData;
 
-      name = profileData['name'];
+      name = profileData['first_name'];
+      lastname = profileData['last_name'];
       email = profileData['email'];
-      imageavatar = profileData['picture']['data']['url'];
-
+      image = profileData['picture']['data']['url'];
+      idfb = profileData['id'];
       checkUser();
     });
   }
 
   Future<Null> registerThread() async {
     String url =
-        '${MyConstant().domain}/k6app/addUser.php?isAdd=true&name=$name&email=$email&password=$password&phone=$phone&typeuser=$typeuser&imageavatar=$imageavatar';
+        '${MyConstant().domain}/projectk6/addUser.php?isAdd=true&name=$name&lastname=$lastname&email=$email&password=$password&gender=$gender&phone=$phone&image=$image&idfb=$idfb';
 
     try {
       Response response = await Dio().get(url);
@@ -54,14 +55,14 @@ class _LoginFacebookState extends State<LoginFacebook> {
 
   Future<Null> checkUser() async {
     String url =
-        '${MyConstant().domain}/k6app/getUserWhereUser.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
 
-      if (response.toString() == 'true') {
-        print('YESSSSSSSSSSSSSSSSSSSSSSSS');
-      } else {
+      if (response.toString() == 'null') {
         showAddFBDialog();
+      } else {
+        print('NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
       }
     } catch (e) {}
   }
@@ -81,7 +82,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
                   padding: EdgeInsets.all(10),
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    backgroundImage: NetworkImage('$imageavatar'),
+                    backgroundImage: NetworkImage('$image'),
                     radius: 70,
                   ),
                 ),
@@ -95,49 +96,39 @@ class _LoginFacebookState extends State<LoginFacebook> {
                 Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
+                    'นามสกุล : $lastname',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
                     'อีเมล : $email',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                buildPhoneField(),
-                ListTile(
-                  title: Text('เลือกชนิดของสมาชิก: '),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: buildGenderField(),
                 ),
-                RadioListTile(
-                  value: 'user',
-                  groupValue: typeuser,
-                  onChanged: (value) {
-                    setState(() {
-                      typeuser = value;
-                    });
-                  },
-                  title: Text('สมาชิกทั่วไป'),
-                ),
-                RadioListTile(
-                  value: 'seller',
-                  groupValue: typeuser,
-                  onChanged: (value) {
-                    setState(() {
-                      typeuser = value;
-                    });
-                  },
-                  title: Text('ผู้ขาย'),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: buildPhoneField(),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TextButton(
                       onPressed: () {
-                        print('เก็บข้อมูล : $name,$email, $phone, $typeuser');
+                        print('เก็บข้อมูล : $name,$email, $phone, $gender');
 
                         if (phone == null ||
                             phone.isEmpty ||
                             phone.length < 10) {
                           normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
-                        } else if (typeuser == null) {
-                          normalDialog(context, 'โปรด เลือกชนิดของผู้สมัคร');
                         } else {
                           registerThread();
+                          Navigator.pop(context);
                         }
                       },
                       child: Text('ยืนยัน'),
@@ -154,6 +145,18 @@ class _LoginFacebookState extends State<LoginFacebook> {
         });
   }
 
+  TextFormField buildGenderField() {
+    return TextFormField(
+      onChanged: (value) => gender = value.trim(),
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'เพศ',
+        hintText: 'ระบุหรือไม่ก็ได้',
+      ),
+    );
+  }
+
   TextFormField buildPhoneField() {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
@@ -167,7 +170,6 @@ class _LoginFacebookState extends State<LoginFacebook> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'เบอร์โทรศัพท์',
-        icon: Icon(Icons.phone_android),
       ),
     );
   }

@@ -1,20 +1,11 @@
-import 'dart:io';
-import 'dart:math';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
-import 'package:k6_app/utility/my_constant.dart';
-import 'package:k6_app/utility/my_style.dart';
-import 'package:k6_app/utility/normal_dialog.dart';
-
-class RegisterPage extends StatefulWidget {
+class RegisterSeller extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterSellerState createState() => _RegisterSellerState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterSellerState extends State<RegisterSeller> {
   final _formstate = GlobalKey<FormState>();
 
   String name, lastname, password, email, phone, gender, image;

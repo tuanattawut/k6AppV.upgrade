@@ -3,18 +3,17 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
-import 'package:k6_app/screens/Seller/loginseller.dart';
+import 'package:k6_app/screens/Seller/registerseller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
-import 'package:k6_app/widget/User/loginfacebook.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginSeller extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginSellerState createState() => _LoginSellerState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginSellerState extends State<LoginSeller> {
   final _formstate = GlobalKey<FormState>();
 
   String email, password;
@@ -22,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Form(
         autovalidateMode: AutovalidateMode.always,
         key: _formstate,
@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'ระบบแนะนำสินค้าและร้านค้า',
+                  'สำหรับผู้ขาย',
                   style: MyStyle().mainTitle,
                 ),
               ],
@@ -45,31 +45,11 @@ class _LoginPageState extends State<LoginPage> {
             MyStyle().mySizebox(),
             buildLoginButton(),
             buildRegisterButton(context),
-            LoginFacebook(),
-            buildSellerButton(),
-            buildManagerButton(),
+            //LoginFacebook(),
           ],
         ),
       ),
     );
-  }
-
-  ElevatedButton buildManagerButton() {
-    return ElevatedButton(
-        child: Text('สำหรับผู้จัดการ'),
-        onPressed: () async {
-          normalDialog(context, 'คลิกทำไมครับ');
-        });
-  }
-
-  ElevatedButton buildSellerButton() {
-    return ElevatedButton(
-        child: Text('สำหรับผู้ขาย'),
-        onPressed: () async {
-          MaterialPageRoute route =
-              MaterialPageRoute(builder: (value) => LoginSeller());
-          Navigator.of(context).push(route);
-        });
   }
 
   ElevatedButton buildRegisterButton(BuildContext context) {
@@ -77,7 +57,9 @@ class _LoginPageState extends State<LoginPage> {
       child: Text('สมัครสมาชิกใหม่'),
       onPressed: () {
         print('Goto  Regis pagge');
-        Navigator.pushNamed(context, '/register');
+        MaterialPageRoute route =
+            MaterialPageRoute(builder: (value) => RegisterSeller());
+        Navigator.of(context).push(route);
       },
     );
   }
