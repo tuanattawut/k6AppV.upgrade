@@ -31,13 +31,53 @@ class _RegisterPageState extends State<RegisterPage> {
           child: ListView(
             padding: EdgeInsets.all(20.0),
             children: <Widget>[
-              MyStyle().mySizebox(),
               groupImage(),
               buildNameField(),
               buildLastNameField(),
               buildEmailField(),
               buildPasswordField(),
-              buildGenderField(),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'เพศ',
+                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: RadioListTile(
+                          value: 'male',
+                          groupValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value;
+                            });
+                          },
+                          title: Text("ชาย"),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: RadioListTile(
+                          value: 'female',
+                          groupValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value;
+                            });
+                          },
+                          title: Text("หญิง"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
               buildPhoneField(),
               MyStyle().mySizebox(),
               MyStyle().mySizebox(),
@@ -58,7 +98,9 @@ class _RegisterPageState extends State<RegisterPage> {
             password == null ||
             password.isEmpty ||
             phone == null ||
-            phone.isEmpty) {
+            phone.isEmpty ||
+            gender == null ||
+            gender.isEmpty) {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
         } else if (email == null || email.isEmpty || !email.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
@@ -163,17 +205,16 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {}
   }
 
-  TextFormField buildGenderField() {
-    return TextFormField(
-      onChanged: (value) => gender = value.trim(),
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        labelText: 'เพศ',
-        hintText: 'ระบุหรือไม่ก็ได้',
-      ),
-    );
-  }
+  // TextFormField buildGenderField() {
+  //   return TextFormField(
+  //     onChanged: (value) => gender = value.trim(),
+  //     keyboardType: TextInputType.text,
+  //     textInputAction: TextInputAction.next,
+  //     decoration: InputDecoration(
+  //       hintText: 'เพศ(ระบุหรือไม่ก็ได้)',
+  //     ),
+  //   );
+  // }
 
   TextFormField buildPasswordField() {
     return TextFormField(

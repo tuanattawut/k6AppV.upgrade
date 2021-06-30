@@ -1,4 +1,12 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class RegisterSeller extends StatefulWidget {
   @override
@@ -8,8 +16,9 @@ class RegisterSeller extends StatefulWidget {
 class _RegisterSellerState extends State<RegisterSeller> {
   final _formstate = GlobalKey<FormState>();
 
-  String name, lastname, password, email, phone, gender, image;
+  String name, lastname, password, idcard, email, phone, gender, image;
   File file;
+  DateTime birthday = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +35,72 @@ class _RegisterSellerState extends State<RegisterSeller> {
               groupImage(),
               buildNameField(),
               buildLastNameField(),
+              buildIDcardField(),
               buildEmailField(),
               buildPasswordField(),
-              buildGenderField(),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'เพศ',
+                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: RadioListTile(
+                          value: 'male',
+                          groupValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value;
+                            });
+                          },
+                          title: Text("ชาย"),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: RadioListTile(
+                          value: 'female',
+                          groupValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value;
+                            });
+                          },
+                          title: Text("หญิง"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
               buildPhoneField(),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'วันเกิด',
+                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      ),
+                    ],
+                  ),
+                  ListTile(
+                    title: Text(
+                      "${birthday.day} /${birthday.month} /${birthday.year}",
+                      style: TextStyle(fontSize: 18, color: Colors.black54),
+                    ),
+                    trailing: Icon(Icons.keyboard_arrow_down),
+                    onTap: chooseDateTime,
+                  ),
+                ],
+              ),
               MyStyle().mySizebox(),
               MyStyle().mySizebox(),
               buildRegisterButton(),
@@ -53,10 +124,12 @@ class _RegisterSellerState extends State<RegisterSeller> {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
         } else if (email == null || email.isEmpty || !email.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
-        } else if (file == null) {
-          normalDialog(context, 'โปรดใส่รูปภาพ');
-        } else {
-          uploadImage();
+        } //else if (file == null) {
+        //normalDialog(context, 'โปรดใส่รูปภาพ');
+        //}
+        else {
+          // uploadImage();
+          print(birthday);
         }
       },
     );
@@ -154,18 +227,6 @@ class _RegisterSellerState extends State<RegisterSeller> {
     } catch (e) {}
   }
 
-  TextFormField buildGenderField() {
-    return TextFormField(
-      onChanged: (value) => gender = value.trim(),
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        labelText: 'เพศ',
-        hintText: 'ระบุหรือไม่ก็ได้',
-      ),
-    );
-  }
-
   TextFormField buildPasswordField() {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
@@ -248,6 +309,40 @@ class _RegisterSellerState extends State<RegisterSeller> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'เบอร์โทรศัพท์',
+      ),
+    );
+  }
+
+  chooseDateTime() async {
+    DateTime _datepicker = await showDatePicker(
+      context: context,
+      initialDate: birthday,
+      firstDate: DateTime(1947),
+      lastDate: DateTime(2030),
+    );
+    if (_datepicker != null && _datepicker != birthday) {
+      setState(() {
+        birthday = _datepicker;
+        print(
+          birthday.toString(),
+        );
+      });
+    }
+  }
+
+  TextFormField buildIDcardField() {
+    return TextFormField(
+      onChanged: (value) => idcard = value.trim(),
+      validator: (value) {
+        if (value.length < 13)
+          return 'โปรดกรอกรหัสบัตรประจำตัวประชาชน 13 หลัก';
+        else
+          return null;
+      },
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'รหัสบัตรประชาชน',
       ),
     );
   }

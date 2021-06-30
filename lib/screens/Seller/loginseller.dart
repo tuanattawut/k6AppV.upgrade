@@ -34,7 +34,7 @@ class _LoginSellerState extends State<LoginSeller> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'สำหรับผู้ขาย',
+                  'สำหรับผู้ขายล็อกอิน',
                   style: MyStyle().mainTitle,
                 ),
               ],
