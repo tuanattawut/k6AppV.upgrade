@@ -22,12 +22,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        autovalidateMode: AutovalidateMode.always,
-        key: _formstate,
+        body: Form(
+      autovalidateMode: AutovalidateMode.always,
+      key: _formstate,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        behavior: HitTestBehavior.opaque,
         child: ListView(
           padding: EdgeInsets.all(20.0),
           children: <Widget>[
+            MyStyle().mySizebox(),
             MyStyle().mySizebox(),
             MyStyle().showLogo(),
             Row(
@@ -46,12 +50,25 @@ class _LoginPageState extends State<LoginPage> {
             buildLoginButton(),
             buildRegisterButton(context),
             LoginFacebook(),
-            buildSellerButton(),
-            buildManagerButton(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: buildSellerButton(),
+                ),
+                MyStyle().mySizebox(),
+                MyStyle().mySizebox(),
+                Expanded(
+                  flex: 1,
+                  child: buildManagerButton(),
+                ),
+              ],
+            ),
           ],
         ),
       ),
-    );
+    ));
   }
 
   ElevatedButton buildManagerButton() {

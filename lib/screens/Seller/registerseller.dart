@@ -27,86 +27,91 @@ class _RegisterSellerState extends State<RegisterSeller> {
           title: Text("สมัครสมาชิก", style: TextStyle(color: Colors.white)),
         ),
         body: Form(
-          key: _formstate,
-          child: ListView(
-            padding: EdgeInsets.all(20.0),
-            children: <Widget>[
-              MyStyle().mySizebox(),
-              groupImage(),
-              buildNameField(),
-              buildLastNameField(),
-              buildIDcardField(),
-              buildEmailField(),
-              buildPasswordField(),
-              Column(
-                children: [
-                  Row(
+            key: _formstate,
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              behavior: HitTestBehavior.opaque,
+              child: ListView(
+                padding: EdgeInsets.all(20.0),
+                children: <Widget>[
+                  MyStyle().mySizebox(),
+                  groupImage(),
+                  buildNameField(),
+                  buildLastNameField(),
+                  buildIDcardField(),
+                  buildEmailField(),
+                  buildPasswordField(),
+                  Column(
                     children: [
-                      Text(
-                        'เพศ',
-                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      Row(
+                        children: [
+                          Text(
+                            'เพศ',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: RadioListTile(
+                              value: 'ชาย',
+                              groupValue: gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  gender = value;
+                                });
+                              },
+                              title: Text("ชาย"),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: RadioListTile(
+                              value: 'หญิง',
+                              groupValue: gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  gender = value;
+                                });
+                              },
+                              title: Text("หญิง"),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Row(
+                  buildPhoneField(),
+                  Column(
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: RadioListTile(
-                          value: 'male',
-                          groupValue: gender,
-                          onChanged: (value) {
-                            setState(() {
-                              gender = value;
-                            });
-                          },
-                          title: Text("ชาย"),
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            'วันเกิด',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.black54),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: RadioListTile(
-                          value: 'female',
-                          groupValue: gender,
-                          onChanged: (value) {
-                            setState(() {
-                              gender = value;
-                            });
-                          },
-                          title: Text("หญิง"),
+                      ListTile(
+                        title: Text(
+                          "${birthday.day} /${birthday.month} /${birthday.year}",
+                          style: TextStyle(fontSize: 18, color: Colors.black54),
                         ),
+                        trailing: Icon(Icons.keyboard_arrow_down),
+                        onTap: chooseDateTime,
                       ),
                     ],
                   ),
+                  MyStyle().mySizebox(),
+                  MyStyle().mySizebox(),
+                  buildRegisterButton(),
                 ],
               ),
-              buildPhoneField(),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'วันเกิด',
-                        style: TextStyle(fontSize: 18, color: Colors.black54),
-                      ),
-                    ],
-                  ),
-                  ListTile(
-                    title: Text(
-                      "${birthday.day} /${birthday.month} /${birthday.year}",
-                      style: TextStyle(fontSize: 18, color: Colors.black54),
-                    ),
-                    trailing: Icon(Icons.keyboard_arrow_down),
-                    onTap: chooseDateTime,
-                  ),
-                ],
-              ),
-              MyStyle().mySizebox(),
-              MyStyle().mySizebox(),
-              buildRegisterButton(),
-            ],
-          ),
-        ));
+            )));
   }
 
   ElevatedButton buildRegisterButton() {
@@ -120,16 +125,18 @@ class _RegisterSellerState extends State<RegisterSeller> {
             password == null ||
             password.isEmpty ||
             phone == null ||
-            phone.isEmpty) {
+            phone.isEmpty ||
+            idcard == null ||
+            idcard.isEmpty ||
+            gender == null ||
+            gender.isEmpty) {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
         } else if (email == null || email.isEmpty || !email.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
-        } //else if (file == null) {
-        //normalDialog(context, 'โปรดใส่รูปภาพ');
-        //}
-        else {
-          // uploadImage();
-          print(birthday);
+        } else if (file == null) {
+          normalDialog(context, 'โปรดใส่รูปภาพ');
+        } else {
+          uploadImage();
         }
       },
     );
@@ -139,7 +146,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     Random random = Random();
     int i = random.nextInt(1000000);
 
-    String nameImage = 'avatar$i.png';
+    String nameImage = 'seller$i.png';
     print('nameImage = $nameImage, pathImage = ${file.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveimage.php';
@@ -161,7 +168,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
   Future<Null> checkUser() async {
     String url =
-        '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
       if (response.toString() == 'null') {
@@ -174,7 +181,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
   Future<Null> register() async {
     String url =
-        '${MyConstant().domain}/projectk6/addUser.php?isAdd=true&name=$name&lastname=$lastname&email=$email&password=$password&gender=$gender&phone=$phone&image=$image';
+        '${MyConstant().domain}/projectk6/addSeller.php?isAdd=true&name=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$password&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
 
     try {
       Response response = await Dio().get(url);
@@ -300,7 +307,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length < 10)
+        if (value.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;
@@ -334,7 +341,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => idcard = value.trim(),
       validator: (value) {
-        if (value.length < 13)
+        if (value.length != 13)
           return 'โปรดกรอกรหัสบัตรประจำตัวประชาชน 13 หลัก';
         else
           return null;

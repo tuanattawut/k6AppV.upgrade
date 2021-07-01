@@ -27,64 +27,68 @@ class _RegisterPageState extends State<RegisterPage> {
           title: Text("สมัครสมาชิก", style: TextStyle(color: Colors.white)),
         ),
         body: Form(
-          key: _formstate,
-          child: ListView(
-            padding: EdgeInsets.all(20.0),
-            children: <Widget>[
-              groupImage(),
-              buildNameField(),
-              buildLastNameField(),
-              buildEmailField(),
-              buildPasswordField(),
-              Column(
-                children: [
-                  Row(
+            key: _formstate,
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              behavior: HitTestBehavior.opaque,
+              child: ListView(
+                padding: EdgeInsets.all(20.0),
+                children: <Widget>[
+                  groupImage(),
+                  buildNameField(),
+                  buildLastNameField(),
+                  buildEmailField(),
+                  buildPasswordField(),
+                  Column(
                     children: [
-                      Text(
-                        'เพศ',
-                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      Row(
+                        children: [
+                          Text(
+                            'เพศ',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: RadioListTile(
+                              value: 'ชาย',
+                              groupValue: gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  gender = value;
+                                });
+                              },
+                              title: Text("ชาย"),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: RadioListTile(
+                              value: 'หญิง',
+                              groupValue: gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  gender = value;
+                                });
+                              },
+                              title: Text("หญิง"),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: RadioListTile(
-                          value: 'male',
-                          groupValue: gender,
-                          onChanged: (value) {
-                            setState(() {
-                              gender = value;
-                            });
-                          },
-                          title: Text("ชาย"),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: RadioListTile(
-                          value: 'female',
-                          groupValue: gender,
-                          onChanged: (value) {
-                            setState(() {
-                              gender = value;
-                            });
-                          },
-                          title: Text("หญิง"),
-                        ),
-                      ),
-                    ],
-                  ),
+                  buildPhoneField(),
+                  MyStyle().mySizebox(),
+                  MyStyle().mySizebox(),
+                  buildRegisterButton(),
                 ],
               ),
-              buildPhoneField(),
-              MyStyle().mySizebox(),
-              MyStyle().mySizebox(),
-              buildRegisterButton(),
-            ],
-          ),
-        ));
+            )));
   }
 
   ElevatedButton buildRegisterButton() {
