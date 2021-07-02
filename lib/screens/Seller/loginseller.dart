@@ -147,7 +147,7 @@ class _LoginSellerState extends State<LoginSeller> {
               break;
             } else {
               normalDialog(
-                  context, 'บัญชีของคุณยังไม่ได้รับการยืนยันจากผู้จัดการ');
+                  context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
             }
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:http/http.dart' as http;
+import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -15,7 +16,7 @@ class LoginFacebookSeller extends StatefulWidget {
 
 class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
   String name, lastname, password, idcard, email, phone, gender, image, idfb;
-  DateTime birthday;
+  DateTime birthday = DateTime.now();
 
   bool isLoggedIn = false;
 
@@ -61,13 +62,25 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
         '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
-
+      var result = json.decode(response.data);
       if (response.toString() == 'null') {
         showAddFBDialog();
       } else {
-        print('NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+        for (var map in result) {
+          SellerModel sellerModel = SellerModel.fromJson(map);
+          if (sellerModel.status == 'yes') {
+            Navigator.pushNamed(context, '/homeseller');
+            break;
+          } else {
+            normalDialog(
+                context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
+          }
+        }
       }
-    } catch (e) {}
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด');
+      print('Have e Error ===>> ${e.toString()}');
+    }
   }
 
   Future<Null> showAddFBDialog() async {
@@ -126,7 +139,8 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                               Text(
                                 'เพศ',
                                 style: TextStyle(
-                                    fontSize: 18, color: Colors.black54),
+                                  fontSize: 18,
+                                ),
                               ),
                             ],
                           ),
@@ -165,6 +179,34 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                     ),
                     Padding(
                       padding: EdgeInsets.all(10),
+                      child: Text('วันเกิด',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 18,
+                          )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: InkWell(
+                        child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                "${birthday.day} /${birthday.month} /${birthday.year}",
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.black54),
+                              ),
+                              InkWell(
+                                child: Icon(Icons.keyboard_arrow_down),
+                                onTap: chooseDateTime,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
                       child: buildPhoneField(),
                     ),
                     Row(
@@ -178,10 +220,16 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
 
                             if (phone == null ||
                                 phone.isEmpty ||
-                                phone.length < 10) {
-                              normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
+                                phone.length != 10) {
+                              normalDialog(
+                                  context, 'โปรด กรอกเบอร์โทรศัพท์ให้ถูกต้อง');
+                            } else if (idcard.length != 13 ||
+                                idcard.isEmpty ||
+                                idcard == null) {
+                              normalDialog(
+                                  context, 'โปรด กรอกบัตรประชาชนให้ถูกต้อง');
                             } else {
-                              // registerThread();
+                              registerThread();
                               Navigator.pop(context);
                             }
                           },
@@ -197,6 +245,23 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                 ),
               ));
         });
+  }
+
+  chooseDateTime() async {
+    DateTime _datepicker = await showDatePicker(
+      context: context,
+      initialDate: birthday,
+      firstDate: DateTime(1947),
+      lastDate: DateTime(2030),
+    );
+    if (_datepicker != null && _datepicker != birthday) {
+      setState(() {
+        birthday = _datepicker;
+        print(
+          birthday.toString(),
+        );
+      });
+    }
   }
 
   TextFormField buildIDcardField() {
@@ -220,7 +285,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length < 10)
+        if (value.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;

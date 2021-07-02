@@ -62,106 +62,143 @@ class _LoginFacebookState extends State<LoginFacebook> {
       if (response.toString() == 'null') {
         showAddFBDialog();
       } else {
-        print('NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+        Navigator.pushNamed(context, '/homepage');
       }
-    } catch (e) {}
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด');
+      print('Have e Error ===>> ${e.toString()}');
+    }
   }
 
   Future<Null> showAddFBDialog() async {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, setState) => SimpleDialog(
-              title: ListTile(
-                title: Text('ลงชื่อเข้าใช้ด้วย Facebook',
-                    style: MyStyle().mainH2Title),
-              ),
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: NetworkImage('$image'),
-                    radius: 70,
+          return GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              behavior: HitTestBehavior.opaque,
+              child: StatefulBuilder(
+                builder: (context, setState) => SimpleDialog(
+                  title: ListTile(
+                    title: Text('ลงชื่อเข้าใช้ด้วย Facebook',
+                        style: MyStyle().mainH2Title),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    'ชื่อ : $name',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    'นามสกุล : $lastname',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    'อีเมล : $email',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: buildGenderField(),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: buildPhoneField(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        print('เก็บข้อมูล : $name,$email, $phone, $gender');
-
-                        if (phone == null ||
-                            phone.isEmpty ||
-                            phone.length < 10) {
-                          normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
-                        } else {
-                          registerThread();
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text('ยืนยัน'),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: NetworkImage('$image'),
+                        radius: 70,
+                      ),
                     ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text('ยกเลิก'),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'ชื่อ : $name',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'นามสกุล : $lastname',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'อีเมล : $email',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'เพศ',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: RadioListTile(
+                                  value: 'ชาย',
+                                  groupValue: gender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      gender = value;
+                                    });
+                                  },
+                                  title: Text("ชาย"),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: RadioListTile(
+                                  value: 'หญิง',
+                                  groupValue: gender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      gender = value;
+                                    });
+                                  },
+                                  title: Text("หญิง"),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: buildPhoneField(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            print('เก็บข้อมูล : $name,$email, $phone, $gender');
+
+                            if (phone == null ||
+                                phone.isEmpty ||
+                                phone.length != 10) {
+                              normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
+                            } else {
+                              registerThread();
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text('ยืนยัน'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('ยกเลิก'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          );
+              ));
         });
-  }
-
-  TextFormField buildGenderField() {
-    return TextFormField(
-      onChanged: (value) => gender = value.trim(),
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        labelText: 'เพศ',
-        hintText: 'ระบุหรือไม่ก็ได้',
-      ),
-    );
   }
 
   TextFormField buildPhoneField() {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length < 10)
+        if (value.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;
