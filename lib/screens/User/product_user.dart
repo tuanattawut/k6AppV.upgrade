@@ -116,12 +116,13 @@ class _ProductListUserState extends State<ProductListUser> {
     return Card(
       child: InkWell(
         onTap: () {
-          MaterialPageRoute route = MaterialPageRoute(
-            builder: (value) => ShowDetail(
-              productModel: productModels[index],
-            ),
-          );
-          Navigator.of(context).push(route);
+          // MaterialPageRoute route = MaterialPageRoute(
+          //   builder: (value) => ShowDetail(
+          //     productModel: productModels[index],
+          //   ),
+          // );
+          // Navigator.of(context).push(route);
+          print('You Click index = $index');
         },
         child: GridTile(
             child: Image.network(
@@ -164,9 +165,10 @@ class _ProductListUserState extends State<ProductListUser> {
                   fontSize: 20)),
           InkWell(
             onTap: onTap ?? () {},
-            child: Text(
-              'ดูทั้งหมด',
-              style: new TextStyle(color: Colors.blue),
+            child: Icon(
+              Icons.keyboard_arrow_right,
+              color: Colors.indigo,
+              size: 30,
             ),
           ),
         ],
