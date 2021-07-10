@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/info_user.dart';
 import 'package:k6_app/screens/User/noti_user.dart';
 import 'package:k6_app/screens/User/product_user.dart';
-
 import 'package:k6_app/widget/User/promote_user.dart';
 
 class Homepage extends StatefulWidget {
+  Homepage({this.usermodel});
+  final UserModel usermodel;
   @override
   _HomepageState createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
+  UserModel userModel;
+  List<Widget> _widgetOptions;
+  @override
+  void initState() {
+    super.initState();
+    userModel = widget.usermodel;
+    _widgetOptions = <Widget>[
+      ProductListUser(),
+      PromoteUser(),
+      NotiUser(),
+      InformationUser(usermodel: userModel),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,10 +75,10 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-  List<Widget> _widgetOptions = <Widget>[
-    ProductListUser(),
-    PromoteUser(),
-    NotiUser(),
-    InformationUser(),
-  ];
+  // List<Widget> _widgetOptions = <Widget>[
+  //   ProductListUser(),
+  //   PromoteUser(),
+  //   NotiUser(),
+  //   InformationUser(usermodel: userModel),
+  // ];
 }

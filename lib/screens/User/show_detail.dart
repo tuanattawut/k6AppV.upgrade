@@ -45,7 +45,7 @@ class _ShowDetailState extends State<ShowDetail> {
     for (var map in result) {
       UserModel userModel = UserModel.fromJson(map);
 
-      print('NameShop = ${userModel.nameshop}');
+      print('NameShop = {userModel.nameshop}');
       setState(() {
         userModels = (userModel);
       });
@@ -85,13 +85,13 @@ class _ShowDetailState extends State<ShowDetail> {
   }
 
   Widget showMap() {
-    double lat = double.parse(userModels?.lat);
-    double lng = double.parse(userModels?.lng);
-    print('lat = $lat, lng = $lng');
+    double lat = double.parse('0');
+    double long = double.parse('0');
+    print('lat = $lat, long = $long');
 
-    LatLng latLng = LatLng(lat, lng);
+    LatLng latLong = LatLng(lat, long);
     CameraPosition position = CameraPosition(
-      target: latLng,
+      target: latLong,
       zoom: 16,
     );
 
@@ -111,12 +111,11 @@ class _ShowDetailState extends State<ShowDetail> {
       Marker(
           markerId: MarkerId('shopID'),
           position: LatLng(
-            double.parse(userModels?.lat),
-            double.parse(userModels?.lng),
+            double.parse('0'),
+            double.parse('0'),
           ),
-          infoWindow: InfoWindow(
-              title: 'ตำแหน่งร้าน',
-              snippet: 'ร้าน : ${userModels?.nameshop ?? 'กำลังโหลด'}'))
+          infoWindow:
+              InfoWindow(title: 'ตำแหน่งร้าน', snippet: 'ร้าน :  กำลังโหลด'))
     ].toSet();
   }
 
@@ -165,7 +164,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('ร้าน: '),
                         Text(
-                          '${userModels?.nameshop ?? 'กำลังโหลด'}',
+                          'กำลังโหลด',
                           style: TextStyle(
                             fontSize: 18,
                           ),

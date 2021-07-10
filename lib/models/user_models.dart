@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final userModel = userModelFromJson(jsonString);
+
 import 'dart:convert';
 
 List<UserModel> userModelFromJson(String str) =>
@@ -8,56 +12,48 @@ String userModelToJson(List<UserModel> data) =>
 
 class UserModel {
   UserModel({
-    this.id,
-    this.typeuser,
+    this.idUser,
     this.name,
+    this.lastname,
     this.email,
     this.password,
+    this.gender,
     this.phone,
-    this.imageavatar,
-    this.nameshop,
-    this.imageshop,
-    this.lat,
-    this.lng,
+    this.image,
+    this.idfb,
   });
 
-  String id;
-  String typeuser;
+  String idUser;
   String name;
+  String lastname;
   String email;
   String password;
+  String gender;
   String phone;
-  dynamic imageavatar;
-  String nameshop;
-  String imageshop;
-  String lat;
-  String lng;
+  String image;
+  String idfb;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        id: json["id"] == null ? null : json["id"],
-        typeuser: json["typeuser"] == null ? null : json["typeuser"],
+        idUser: json["id_user"] == null ? null : json["id_user"],
         name: json["name"] == null ? null : json["name"],
+        lastname: json["lastname"] == null ? null : json["lastname"],
         email: json["email"] == null ? null : json["email"],
         password: json["password"] == null ? null : json["password"],
+        gender: json["gender"] == null ? null : json["gender"],
         phone: json["phone"] == null ? null : json["phone"],
-        imageavatar: json["imageavatar"],
-        nameshop: json["nameshop"] == null ? null : json["nameshop"],
-        imageshop: json["imageshop"] == null ? null : json["imageshop"],
-        lat: json["lat"] == null ? null : json["lat"],
-        lng: json["lng"] == null ? null : json["lng"],
+        image: json["image"] == null ? null : json["image"],
+        idfb: json["idfb"] == null ? null : json["idfb"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "typeuser": typeuser == null ? null : typeuser,
+        "id_user": idUser == null ? null : idUser,
         "name": name == null ? null : name,
+        "lastname": lastname == null ? null : lastname,
         "email": email == null ? null : email,
         "password": password == null ? null : password,
+        "gender": gender == null ? null : gender,
         "phone": phone == null ? null : phone,
-        "imageavatar": imageavatar,
-        "nameshop": nameshop == null ? null : nameshop,
-        "imageshop": imageshop == null ? null : imageshop,
-        "lat": lat == null ? null : lat,
-        "lng": lng == null ? null : lng,
+        "image": image == null ? null : image,
+        "idfb": idfb == null ? null : idfb,
       };
 }

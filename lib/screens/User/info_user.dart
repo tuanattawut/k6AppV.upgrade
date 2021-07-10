@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/chatmana_user.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class InformationUser extends StatefulWidget {
+  InformationUser({this.usermodel});
+  final UserModel usermodel;
+
   @override
   _InformationUserState createState() => _InformationUserState();
 }
 
 class _InformationUserState extends State<InformationUser> {
+  UserModel userModel;
+
+  @override
+  void initState() {
+    super.initState();
+    userModel = widget.usermodel;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +44,22 @@ class _InformationUserState extends State<InformationUser> {
           MyStyle().mySizebox(),
           showImage() ?? MyStyle().showProgress(),
           MyStyle().mySizebox(),
-          _buildCard(Icons.person, 'ชื่อ', 'USER TEST'),
-          _buildCard(Icons.email, 'อีเมล', 'TEST_USER@mail.com'),
-          _buildCard(Icons.phone, 'เบอร์โทรศัพท์', '0000000000'),
+          Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child:
+                      _buildCard('ชื่อ', '${userModel.name ?? 'กำลังโหลด'}')),
+              Expanded(
+                flex: 1,
+                child: _buildCard(
+                    'นามสกุล', '${userModel.lastname ?? 'กำลังโหลด'}'),
+              ),
+            ],
+          ),
+          _buildCard('เพศ', '${userModel.gender ?? 'กำลังโหลด'}'),
+          _buildCard('อีเมล', '${userModel.email ?? 'กำลังโหลด'}'),
+          _buildCard('เบอร์โทรศัพท์', '${userModel.phone ?? 'กำลังโหลด'}'),
           SizedBox(
             height: 30.0,
           ),
@@ -60,14 +86,14 @@ class _InformationUserState extends State<InformationUser> {
     return Center(
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
-        backgroundImage: NetworkImage(
-            "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"),
-        radius: 70,
+        backgroundImage:
+            NetworkImage('${MyConstant().domain}/${userModel.image}'),
+        radius: 60,
       ),
     );
   }
 
-  Widget _buildCard(IconData icon, String title, String titleH2) {
+  Widget _buildCard(String title, String titleH2) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
@@ -80,10 +106,6 @@ class _InformationUserState extends State<InformationUser> {
           children: [
             Row(
               children: [
-                Icon(
-                  icon,
-                  size: 25,
-                ),
                 MyStyle().mySizebox(),
                 MyStyle().showTitle(title),
               ],

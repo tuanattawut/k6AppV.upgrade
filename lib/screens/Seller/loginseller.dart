@@ -61,7 +61,6 @@ class _LoginSellerState extends State<LoginSeller> {
     return ElevatedButton(
       child: Text('สมัครสมาชิกใหม่'),
       onPressed: () {
-        print('Goto  Regis pagge');
         MaterialPageRoute route =
             MaterialPageRoute(builder: (value) => RegisterSeller());
         Navigator.of(context).push(route);
@@ -73,18 +72,19 @@ class _LoginSellerState extends State<LoginSeller> {
     return ElevatedButton(
         child: Text('ล็อกอิน'),
         onPressed: () async {
-          if (this._formstate.currentState.validate())
+          if (this._formstate.currentState.validate()) {
             print('email =====> $email\npassword =====> $password');
 
-          if (email == null ||
-              email.isEmpty ||
-              !email.contains('@') ||
-              password == null ||
-              password.isEmpty ||
-              password.length < 6) {
-            normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
-          } else {
-            checkAuthen();
+            if (email == null ||
+                email.isEmpty ||
+                !email.contains('@') ||
+                password == null ||
+                password.isEmpty ||
+                password.length < 6) {
+              normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
+            } else {
+              checkAuthen();
+            }
           }
         });
   }
@@ -111,7 +111,7 @@ class _LoginSellerState extends State<LoginSeller> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (value.isEmpty || value.contains('@'))
+        if (value.isEmpty || !value.contains('@'))
           return 'โปรดกรอกอีเมลให้ถูกต้อง';
         else
           return null;

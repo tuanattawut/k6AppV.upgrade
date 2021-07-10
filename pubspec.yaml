@@ -27,6 +27,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  # icons
   cupertino_icons: ^1.0.2
   path_provider: ^1.6.28
   flutter_facebook_login: ^3.0.0
@@ -41,6 +42,7 @@ dependencies:
   flutter_signin_button: ^2.0.0
   pie_chart: ^5.0.0
   flutter_datetime_picker: ^1.5.1
+  shared_preferences: ^0.5.12+4
   
   
   

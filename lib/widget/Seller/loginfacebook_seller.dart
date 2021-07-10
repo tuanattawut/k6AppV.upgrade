@@ -332,10 +332,10 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
 
         break;
     }
-    _logout() async {
-      await facebookLogin.logOut();
-      onLoginStatusChanged(false);
-      print("Logged out");
-    }
+    // _logout() async {
+    //   await facebookLogin.logOut();
+    //   onLoginStatusChanged(false);
+    //   print("Logged out");
+    // }
   }
 }

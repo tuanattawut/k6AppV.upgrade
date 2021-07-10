@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/Seller/loginseller.dart';
+import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -103,18 +104,19 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
         child: Text('ล็อกอิน'),
         onPressed: () async {
-          if (this._formstate.currentState.validate())
+          if (this._formstate.currentState.validate()) {
             print('email =====> $email\npassword =====> $password');
 
-          if (email == null ||
-              email.isEmpty ||
-              !email.contains('@') ||
-              password == null ||
-              password.isEmpty ||
-              password.length < 6) {
-            normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
-          } else {
-            checkAuthen();
+            if (email == null ||
+                email.isEmpty ||
+                !email.contains('@') ||
+                password == null ||
+                password.isEmpty ||
+                password.length < 6) {
+              normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
+            } else {
+              checkAuthen();
+            }
           }
         });
   }
@@ -141,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (value.isEmpty || value.contains('@'))
+        if (value.isEmpty || !value.contains('@'))
           return 'โปรดกรอกอีเมลให้ถูกต้อง';
         else
           return null;
@@ -240,7 +242,13 @@ class _LoginPageState extends State<LoginPage> {
         for (var map in result) {
           UserModel userModel = UserModel.fromJson(map);
           if (password == userModel.password) {
-            Navigator.pushNamed(context, '/homepage');
+            //Navigator.pushNamed(context, '/homepage');
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => Homepage(
+                usermodel: userModel,
+              ),
+            );
+            Navigator.of(context).push(route);
             break;
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');

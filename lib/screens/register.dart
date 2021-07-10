@@ -103,6 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
             password.isEmpty ||
             phone == null ||
             phone.isEmpty ||
+            phone.length != 10 ||
             gender == null ||
             gender.isEmpty) {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
@@ -119,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<Null> uploadImage() async {
     Random random = Random();
-    int i = random.nextInt(1000000);
+    int i = random.nextInt(9999999);
 
     String nameImage = 'avatar$i.png';
     print('nameImage = $nameImage, pathImage = ${file.path}');
@@ -293,7 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length < 10)
+        if (value.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;
