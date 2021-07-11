@@ -33,7 +33,7 @@ class _ShowDetailState extends State<ShowDetail> {
   }
 
   Future<Null> readSeller() async {
-    idShop = productModel.idshop;
+    idShop = productModel.idShop;
 
     String url =
         '${MyConstant().domain}/k6app/getproductWhereidShop.php?isAdd=true&id=$idShop';

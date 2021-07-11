@@ -8,61 +8,40 @@ String productModelToJson(List<ProductModel> data) =>
 
 class ProductModel {
   ProductModel({
-    this.id,
-    this.idshop,
+    this.idProduct,
+    this.idShop,
+    this.idCategory,
     this.nameproduct,
-    this.category,
     this.price,
     this.detail,
     this.image,
   });
 
-  String id;
-  String idshop;
+  String idProduct;
+  String idShop;
+  String idCategory;
   String nameproduct;
-  Category category;
   String price;
   String detail;
   String image;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        id: json["id"] == null ? null : json["id"],
-        idshop: json["idshop"] == null ? null : json["idshop"],
+        idProduct: json["id_product"] == null ? null : json["id_product"],
+        idShop: json["id_shop"] == null ? null : json["id_shop"],
+        idCategory: json["id_category"] == null ? null : json["id_category"],
         nameproduct: json["nameproduct"] == null ? null : json["nameproduct"],
-        category: json["category"] == null
-            ? null
-            : categoryValues.map[json["category"]],
         price: json["price"] == null ? null : json["price"],
         detail: json["detail"] == null ? null : json["detail"],
         image: json["image"] == null ? null : json["image"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "idshop": idshop == null ? null : idshop,
+        "id_product": idProduct == null ? null : idProduct,
+        "id_shop": idShop == null ? null : idShop,
+        "id_category": idCategory == null ? null : idCategory,
         "nameproduct": nameproduct == null ? null : nameproduct,
-        "category": category == null ? null : categoryValues.reverse[category],
         "price": price == null ? null : price,
         "detail": detail == null ? null : detail,
         "image": image == null ? null : image,
       };
-}
-
-enum Category { EMPTY, CATEGORY }
-
-final categoryValues =
-    EnumValues({"ของกิน": Category.CATEGORY, "ของใช้": Category.EMPTY});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
 }

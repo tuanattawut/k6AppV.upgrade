@@ -146,7 +146,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     Random random = Random();
     int i = random.nextInt(1000000);
 
-    String nameImage = 'seller$i.png';
+    String nameImage = 'seller$i.jpg';
     print('nameImage = $nameImage, pathImage = ${file.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveimage.php';
@@ -207,11 +207,11 @@ class _RegisterSellerState extends State<RegisterSeller> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TextButton(
+            ElevatedButton(
               onPressed: () => chooseImage(ImageSource.camera),
               child: Text('ถ่ายภาพ'),
             ),
-            TextButton(
+            ElevatedButton(
                 onPressed: () => chooseImage(ImageSource.gallery),
                 child: Text('เลือกจากคลัง')),
           ],

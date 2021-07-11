@@ -120,9 +120,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<Null> uploadImage() async {
     Random random = Random();
-    int i = random.nextInt(9999999);
+    int i = random.nextInt(100000);
 
-    String nameImage = 'avatar$i.png';
+    String nameImage = 'avatar$i.jpg';
     print('nameImage = $nameImage, pathImage = ${file.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveimage.php';
@@ -183,11 +183,11 @@ class _RegisterPageState extends State<RegisterPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TextButton(
+            ElevatedButton(
               onPressed: () => chooseImage(ImageSource.camera),
               child: Text('ถ่ายภาพ'),
             ),
-            TextButton(
+            ElevatedButton(
                 onPressed: () => chooseImage(ImageSource.gallery),
                 child: Text('เลือกจากคลัง')),
           ],
@@ -209,17 +209,6 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     } catch (e) {}
   }
-
-  // TextFormField buildGenderField() {
-  //   return TextFormField(
-  //     onChanged: (value) => gender = value.trim(),
-  //     keyboardType: TextInputType.text,
-  //     textInputAction: TextInputAction.next,
-  //     decoration: InputDecoration(
-  //       hintText: 'เพศ(ระบุหรือไม่ก็ได้)',
-  //     ),
-  //   );
-  // }
 
   TextFormField buildPasswordField() {
     return TextFormField(

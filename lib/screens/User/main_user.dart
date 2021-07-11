@@ -74,11 +74,4 @@ class _HomepageState extends State<Homepage> {
       _selectedIndex = index;
     });
   }
-
-  // List<Widget> _widgetOptions = <Widget>[
-  //   ProductListUser(),
-  //   PromoteUser(),
-  //   NotiUser(),
-  //   InformationUser(usermodel: userModel),
-  // ];
 }

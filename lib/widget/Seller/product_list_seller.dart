@@ -1,23 +1,76 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/screens/Seller/add_product_seller.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ProductListSeller extends StatefulWidget {
-  ProductListSeller({Key key}) : super(key: key);
-
+  ProductListSeller({this.sellerModel});
+  final SellerModel sellerModel;
   @override
   _ProductListSellerState createState() => _ProductListSellerState();
 }
 
 class _ProductListSellerState extends State<ProductListSeller> {
+  List<ProductModel> productModels = [];
+  bool loadStatus = true; //  โหลดจากเจซัน
+  bool status = true; // มีข้อมูล
+
+  String idseller; // id คนขาย
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<Null> readProduct() async {
+    if (productModels.length != 0) {
+      loadStatus = true;
+      status = true;
+      productModels.clear();
+    }
+    String url =
+        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_seller=$idseller';
+    await Dio().get(url).then((value) {
+      setState(() {
+        loadStatus = false;
+      });
+
+      if (value.toString() != 'null') {
+        // print('value ==>> $value');
+
+        var result = json.decode(value.data);
+        // print('result ==>> $result');
+
+        for (var map in result) {
+          ProductModel productModel = ProductModel.fromJson(map);
+          setState(() {
+            productModels.add(productModel);
+          });
+        }
+      } else {
+        setState(() {
+          status = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        showListFood(),
-        addProductButton(),
-      ],
-    );
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('สินค้าของคุณ'),
+        ),
+        body: Stack(
+          children: <Widget>[
+            showListFood(),
+            addProductButton(),
+          ],
+        ));
   }
 
   Widget addProductButton() => Column(

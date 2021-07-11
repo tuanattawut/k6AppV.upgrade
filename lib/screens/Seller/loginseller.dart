@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/screens/Seller/main_seller.dart';
 
 import 'package:k6_app/screens/Seller/registerseller.dart';
 import 'package:k6_app/utility/my_constant.dart';
@@ -143,7 +144,12 @@ class _LoginSellerState extends State<LoginSeller> {
           SellerModel sellerModel = SellerModel.fromJson(map);
           if (password == sellerModel.password) {
             if (sellerModel.status == 'yes') {
-              Navigator.pushNamed(context, '/homeseller');
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => Homeseller(
+                  sellerModel: sellerModel,
+                ),
+              );
+              Navigator.of(context).push(route);
               break;
             } else {
               normalDialog(

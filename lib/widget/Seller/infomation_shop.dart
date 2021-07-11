@@ -1,24 +1,52 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/models/shop_model.dart';
 
 import 'package:k6_app/screens/Seller/add_info_seller.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
-class InformationSeller extends StatefulWidget {
-  InformationSeller({Key key}) : super(key: key);
-
+class InformationShop extends StatefulWidget {
+  InformationShop({this.sellerModel});
+  final SellerModel sellerModel;
   @override
-  _InformationSellerState createState() => _InformationSellerState();
+  _InformationShopState createState() => _InformationShopState();
 }
 
-class _InformationSellerState extends State<InformationSeller> {
+class _InformationShopState extends State<InformationShop> {
+  SellerModel sellerModel;
+  ShopModel shopModels;
+  String idseller;
+
   @override
   void initState() {
     super.initState();
+    sellerModel = widget.sellerModel;
+    readDataShop();
   }
 
-  Future<Null> readDataUser() async {
-    print('ดึงข้อมูลมาใช้งาน');
+  Future<Null> readDataShop() async {
+    idseller = sellerModel.idSeller;
+
+    String url =
+        '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
+    Response response = await Dio().get(url);
+
+    var result = json.decode(response.data);
+    print('result = $result');
+
+    for (var map in result) {
+      ShopModel shopModel = ShopModel.fromJson(map);
+
+      print('NameShop = ${shopModel.nameshop}');
+      setState(() {
+        shopModels = shopModel;
+      });
+    }
   }
 
   void routeToAddInfo() {
@@ -30,19 +58,37 @@ class _InformationSellerState extends State<InformationSeller> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        showListInfoShop(),
-        addAndEditButton(),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('ข้อมูลร้านค้า'),
+      ),
+      body: Stack(
+        children: <Widget>[
+          shopModels == null
+              ? MyStyle().showProgress()
+              : shopModels.nameshop.isEmpty
+                  ? showNoData(context)
+                  : showListInfoShop(),
+          addAndEditButton(),
+        ],
+      ),
     );
+  }
+
+  Widget showNoData(BuildContext context) {
+    return MyStyle()
+        .titleCenter(context, 'ยังไม่มี ข้อมูล กรุณาเพิ่มข้อมูลร้านค้า');
   }
 
   Widget showListInfoShop() => Padding(
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            MyStyle().showTitle('รายละเอียดผู้ขาย '),
+            Row(
+              children: <Widget>[
+                MyStyle().showTitle('รูปร้าน'),
+              ],
+            ),
             MyStyle().mySizebox(),
             showImage(),
             Row(
@@ -53,7 +99,7 @@ class _InformationSellerState extends State<InformationSeller> {
             Row(
               children: <Widget>[
                 Text(
-                  'TEST SELLER SHOP',
+                  shopModels.nameshop,
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -66,7 +112,7 @@ class _InformationSellerState extends State<InformationSeller> {
             Row(
               children: <Widget>[
                 Text(
-                  '0000000000',
+                  sellerModel.phone,
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -86,20 +132,20 @@ class _InformationSellerState extends State<InformationSeller> {
     return Center(
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
-        backgroundImage: NetworkImage(
-            "https://image.shutterstock.com/image-vector/fruit-seller-selling-apples-oranges-600w-795476500.jpg"),
-        radius: 70,
+        backgroundImage:
+            NetworkImage('${MyConstant().domain}/${shopModels.image}'),
+        radius: 60,
       ),
     );
   }
 
   Widget showMap() {
-    double lat = double.parse('14.036656358272781');
-    double lng = double.parse('100.73584338182013');
-    print('lat = $lat, lng = $lng');
+    double lat = double.parse('${shopModels.lat ?? '0'}');
+    double long = double.parse('${shopModels.long ?? '0'}');
+    print('lat = $lat, lng = $long');
 
-    LatLng latLng = LatLng(lat, lng);
-    CameraPosition position = CameraPosition(target: latLng, zoom: 15.0);
+    LatLng latLong = LatLng(lat, long);
+    CameraPosition position = CameraPosition(target: latLong, zoom: 15.0);
 
     return Container(
       height: 250,
@@ -117,11 +163,11 @@ class _InformationSellerState extends State<InformationSeller> {
       Marker(
           markerId: MarkerId('shopID'),
           position: LatLng(
-            double.parse('14.036656358272781'),
-            double.parse('100.73584338182013'),
+            double.parse('${shopModels.lat ?? '0'}'),
+            double.parse('${shopModels.long ?? '0'}'),
           ),
-          infoWindow:
-              InfoWindow(title: 'ตำแหน่งร้าน', snippet: 'ร้าน : แก๊งค์เหลือง'))
+          infoWindow: InfoWindow(
+              title: 'ตำแหน่งร้าน', snippet: 'ร้าน : ${shopModels.nameshop}'))
     ].toSet();
   }
 
