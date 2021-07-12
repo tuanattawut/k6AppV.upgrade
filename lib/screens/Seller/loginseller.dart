@@ -144,6 +144,7 @@ class _LoginSellerState extends State<LoginSeller> {
           SellerModel sellerModel = SellerModel.fromJson(map);
           if (password == sellerModel.password) {
             if (sellerModel.status == 'yes') {
+              
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => Homeseller(
                   sellerModel: sellerModel,

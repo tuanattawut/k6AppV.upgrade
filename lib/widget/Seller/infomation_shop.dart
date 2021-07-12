@@ -9,6 +9,7 @@ import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/screens/Seller/add_info_seller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class InformationShop extends StatefulWidget {
   InformationShop({this.sellerModel});
@@ -20,8 +21,8 @@ class InformationShop extends StatefulWidget {
 class _InformationShopState extends State<InformationShop> {
   SellerModel sellerModel;
   ShopModel shopModels;
-  String idseller;
 
+  String idseller;
   @override
   void initState() {
     super.initState();
@@ -39,21 +40,24 @@ class _InformationShopState extends State<InformationShop> {
     var result = json.decode(response.data);
     print('result = $result');
 
-    for (var map in result) {
-      ShopModel shopModel = ShopModel.fromJson(map);
-
-      print('NameShop = ${shopModel.nameshop}');
-      setState(() {
-        shopModels = shopModel;
-      });
+    if (result != null) {
+      for (var map in result) {
+        setState(() {
+          shopModels = ShopModel.fromJson(map);
+        });
+      }
+    } else {
+      showAddDialog();
     }
   }
 
   void routeToAddInfo() {
-    MaterialPageRoute materialPageRoute = MaterialPageRoute(
-      builder: (context) => AddInfoSeller(),
+    MaterialPageRoute route = MaterialPageRoute(
+      builder: (context) => AddInfoShop(
+        sellerModel: sellerModel,
+      ),
     );
-    Navigator.push(context, materialPageRoute);
+    Navigator.of(context).pushReplacement(route);
   }
 
   @override
@@ -62,26 +66,30 @@ class _InformationShopState extends State<InformationShop> {
       appBar: AppBar(
         title: Text('ข้อมูลร้านค้า'),
       ),
-      body: Stack(
-        children: <Widget>[
-          shopModels == null
-              ? MyStyle().showProgress()
-              : shopModels.nameshop.isEmpty
-                  ? showNoData(context)
-                  : showListInfoShop(),
-          addAndEditButton(),
-        ],
-      ),
+      body: shopModels == null ? MyStyle().showProgress() : showListInfoShop(),
     );
   }
 
   Widget showNoData(BuildContext context) {
-    return MyStyle()
-        .titleCenter(context, 'ยังไม่มี ข้อมูล กรุณาเพิ่มข้อมูลร้านค้า');
+    return Column(
+      children: [
+        MyStyle().titleCenter(
+            context, 'ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า'),
+      ],
+    );
+  }
+
+  ElevatedButton buildSellerButton() {
+    return ElevatedButton(
+      child: Text('เพิ่มข้อมูล'),
+      onPressed: () async => routeToAddInfo(),
+    );
   }
 
   Widget showListInfoShop() => Padding(
-        padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(5),
         child: Column(
           children: <Widget>[
             Row(
@@ -126,17 +134,16 @@ class _InformationShopState extends State<InformationShop> {
             showMap(),
           ],
         ),
-      );
+      ));
 
   Widget showImage() {
-    return Center(
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        backgroundImage:
-            NetworkImage('${MyConstant().domain}/${shopModels.image}'),
-        radius: 60,
-      ),
-    );
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: Image.network(
+          '${MyConstant().domain}/${shopModels.image}',
+          fit: BoxFit.contain,
+        ));
   }
 
   Widget showMap() {
@@ -173,7 +180,7 @@ class _InformationShopState extends State<InformationShop> {
 
   Row addAndEditButton() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -189,5 +196,27 @@ class _InformationShopState extends State<InformationShop> {
         ),
       ],
     );
+  }
+
+  Future<Null> showAddDialog() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) => SimpleDialog(
+              title: ListTile(
+                title: Text('ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า',
+                    style: TextStyle(color: Colors.red, fontSize: 20)),
+              ),
+              children: [
+                Column(
+                  children: [
+                    buildSellerButton(),
+                  ],
+                )
+              ],
+            ),
+          );
+        });
   }
 }

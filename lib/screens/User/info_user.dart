@@ -86,8 +86,9 @@ class _InformationUserState extends State<InformationUser> {
     return Center(
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
-        backgroundImage:
-            NetworkImage('${MyConstant().domain}/${userModel.image}'),
+        backgroundImage: NetworkImage(
+          '${MyConstant().domain}/${userModel.image}',
+        ),
         radius: 60,
       ),
     );

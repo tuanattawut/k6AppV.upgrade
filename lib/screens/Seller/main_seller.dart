@@ -14,13 +14,11 @@ class Homeseller extends StatefulWidget {
 
 class _HomesellerState extends State<Homeseller> {
   SellerModel sellerModel;
-  List<Widget> _widgetOptions;
-  // Widget currentWidget = ProductListSeller();
+
   @override
   void initState() {
     super.initState();
     sellerModel = widget.sellerModel;
-    _widgetOptions = <Widget>[RentSeller(), ChatSeller()];
   }
 
   @override

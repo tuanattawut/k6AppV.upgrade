@@ -4,33 +4,40 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:location/location.dart';
 
-class AddInfoSeller extends StatefulWidget {
+class AddInfoShop extends StatefulWidget {
+  AddInfoShop({this.sellerModel});
+  final SellerModel sellerModel;
   @override
-  _AddInfoSellerState createState() => _AddInfoSellerState();
+  _AddInfoShopState createState() => _AddInfoShopState();
 }
 
-class _AddInfoSellerState extends State<AddInfoSeller> {
-  double lat, lng;
-  String nameShop, phonenumber, urlImage;
+class _AddInfoShopState extends State<AddInfoShop> {
+  SellerModel sellerModel;
+
+  double lat, long;
+  String nameShop, image, idseller;
   File file;
 
   @override
   void initState() {
     super.initState();
     findLatLng();
+    sellerModel = widget.sellerModel;
   }
 
   Future<Null> findLatLng() async {
     LocationData locationData = await findLocationData();
     setState(() {
       lat = locationData.latitude;
-      lng = locationData.longitude;
+      long = locationData.longitude;
     });
-    print('lat = $lat, lng = $lng');
+    print('lat = $lat, lng = $long');
   }
 
   Future<LocationData> findLocationData() async {
@@ -73,14 +80,7 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'ชื่อร้านค้า',
-        icon: Icon(
-          Icons.shopping_bag,
-        ),
-        labelStyle: TextStyle(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(),
-        ),
+        labelText: 'ชื่อร้าน',
       ),
     );
   }
@@ -90,28 +90,21 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 250.0,
+          width: 150,
           child: file == null
-              ? Image.asset('images/myimage.png')
+              ? Image.asset('images/myshop.png')
               : Image.file(file),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(
-              icon: Icon(
-                Icons.add_a_photo,
-                size: 40.0,
-              ),
+            ElevatedButton(
               onPressed: () => chooseImage(ImageSource.camera),
+              child: Text('ถ่ายภาพ'),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.add_photo_alternate,
-                size: 40.0,
-              ),
-              onPressed: () => chooseImage(ImageSource.gallery),
-            ),
+            ElevatedButton(
+                onPressed: () => chooseImage(ImageSource.gallery),
+                child: Text('เลือกจากคลัง')),
           ],
         ),
       ],
@@ -136,17 +129,17 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
     return <Marker>[
       Marker(
         markerId: MarkerId('myShop'),
-        position: LatLng(lat, lng),
+        position: LatLng(lat, long),
         infoWindow: InfoWindow(
           title: 'ร้านของคุณ',
-          snippet: 'ละติจูด = $lat, ลองติจูต = $lng',
+          snippet: 'ละติจูด = $lat, ลองติจูต = $long',
         ),
       )
     ].toSet();
   }
 
   Container showMap() {
-    LatLng latLng = LatLng(lat, lng);
+    LatLng latLng = LatLng(lat, long);
     CameraPosition cameraPosition = CameraPosition(
       target: latLng,
       zoom: 15.0,
@@ -165,14 +158,13 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
     return ElevatedButton(
       child: Text('บันทึกข้อมูล'),
       onPressed: () {
-        if (nameShop == null ||
-            nameShop.isEmpty ||
-            phonenumber == null ||
-            phonenumber.isEmpty) {
+        if (nameShop == null || nameShop.isEmpty) {
           normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
-        } else {}
+        } else {
+          uploadImage();
+        }
       },
     );
   }
@@ -183,7 +175,7 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
     String nameImage = 'shop$i.jpg';
     print('nameImage = $nameImage, pathImage = ${file.path}');
 
-    String url = 'ลิงค์ API';
+    String url = '${MyConstant().domain}/projectk6/saveimage.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -193,10 +185,28 @@ class _AddInfoSellerState extends State<AddInfoSeller> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         print('Response ===>>> $value');
-        urlImage = 'ลิงค์ดึงมาทำ URL';
-        print('urlImage = $urlImage');
-        // editUserShop();
+        image = '/projectk6/Avatar/$nameImage';
+        print('urlImage = $image');
+        addSHOP();
       });
+    } catch (e) {}
+  }
+
+  Future<Null> addSHOP() async {
+    idseller = sellerModel.idSeller;
+
+    String url =
+        '${MyConstant().domain}/projectk6/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&long=$long';
+
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
     } catch (e) {}
   }
 }
