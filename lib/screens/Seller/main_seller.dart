@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/models/shop_model.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/widget/Seller/chat_seller.dart';
 import 'package:k6_app/widget/Seller/infomation_shop.dart';
 import 'package:k6_app/widget/Seller/product_list_seller.dart';
@@ -14,11 +19,32 @@ class Homeseller extends StatefulWidget {
 
 class _HomesellerState extends State<Homeseller> {
   SellerModel sellerModel;
-
+  String idseller;
+  ShopModel shopModels;
   @override
   void initState() {
     super.initState();
     sellerModel = widget.sellerModel;
+    readDataShop();
+  }
+
+  Future<Null> readDataShop() async {
+    idseller = sellerModel.idSeller;
+
+    String url =
+        '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
+    Response response = await Dio().get(url);
+
+    var result = json.decode(response.data);
+    print('result = $result');
+
+    if (result != null) {
+      for (var map in result) {
+        setState(() {
+          shopModels = ShopModel.fromJson(map);
+        });
+      }
+    } else {}
   }
 
   @override
@@ -40,11 +66,11 @@ class _HomesellerState extends State<Homeseller> {
             crossAxisCount: 2,
             children: <Widget>[
               MyMenu(
-                title: 'สินค้าของคุณ',
+                title: 'สินค้าของฉัน',
                 icon: Icons.shopping_cart,
                 color: Colors.blue,
                 route: ProductListSeller(
-                  sellerModel: sellerModel,
+                  shopModel: shopModels,
                 ),
               ),
               MyMenu(

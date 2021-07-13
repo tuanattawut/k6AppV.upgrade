@@ -4,26 +4,30 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/screens/Seller/add_product_seller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ProductListSeller extends StatefulWidget {
-  ProductListSeller({this.sellerModel});
-  final SellerModel sellerModel;
+  ProductListSeller({this.shopModel});
+  final ShopModel shopModel;
   @override
   _ProductListSellerState createState() => _ProductListSellerState();
 }
 
 class _ProductListSellerState extends State<ProductListSeller> {
   List<ProductModel> productModels = [];
+  ShopModel shopModel;
   bool loadStatus = true; //  โหลดจากเจซัน
   bool status = true; // มีข้อมูล
 
-  String idseller; // id คนขาย
+  String idshop; // id คนขาย
   @override
   void initState() {
     super.initState();
+    shopModel = widget.shopModel;
+    readProduct();
   }
 
   Future<Null> readProduct() async {
@@ -32,8 +36,10 @@ class _ProductListSellerState extends State<ProductListSeller> {
       status = true;
       productModels.clear();
     }
+
+    idshop = shopModel.idShop;
     String url =
-        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_seller=$idseller';
+        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
     await Dio().get(url).then((value) {
       setState(() {
         loadStatus = false;
@@ -43,7 +49,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
         // print('value ==>> $value');
 
         var result = json.decode(value.data);
-        // print('result ==>> $result');
+        //print('result ==>> $result');
 
         for (var map in result) {
           ProductModel productModel = ProductModel.fromJson(map);
@@ -67,26 +73,40 @@ class _ProductListSellerState extends State<ProductListSeller> {
         ),
         body: Stack(
           children: <Widget>[
-            showListFood(),
+            loadStatus ? MyStyle().showProgress() : showContent(),
             addProductButton(),
           ],
         ));
+  }
+
+  Widget showContent() {
+    return status
+        ? showListFood()
+        : Center(
+            child: Text(
+              'ยังไม่มีสินค้า',
+              style: TextStyle(fontSize: 18),
+            ),
+          );
   }
 
   Widget addProductButton() => Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only(bottom: 40, right: 20),
                 child: FloatingActionButton(
                   onPressed: () {
                     MaterialPageRoute route = MaterialPageRoute(
-                      builder: (context) => AddProduct(),
+                      builder: (context) => AddProduct(
+                        shopModel: shopModel,
+                      ),
                     );
-                    Navigator.push(context, route).then((value) => {});
+                    Navigator.push(context, route)
+                        .then((value) => {Navigator.pop(context)});
                   },
                   child: Icon(Icons.add),
                 ),
@@ -97,7 +117,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
       );
 
   Widget showListFood() => ListView.builder(
-      itemCount: data.length,
+      itemCount: productModels.length,
       itemBuilder: (context, index) => Card(
             child: Row(
               children: <Widget>[
@@ -106,7 +126,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                   width: MediaQuery.of(context).size.width * 0.4,
                   height: MediaQuery.of(context).size.width * 0.4,
                   child: Image.network(
-                    '${image[index]}',
+                    '${MyConstant().domain}/${productModels[index].image}',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -119,18 +139,18 @@ class _ProductListSellerState extends State<ProductListSeller> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'สินค้า ${data[index]}',
+                          '${productModels[index].nameproduct}',
                           style: MyStyle().mainTitle,
                         ),
                         Text(
-                          ' 99999 - 99999 บาท',
+                          '${productModels[index].price} บาท',
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 18,
                           ),
                         ),
                         Text(
-                          'รายละเอียด รายละเอียด รายละเอียด รายละเอียด ..  ',
+                          productModels[index].detail,
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -150,7 +170,8 @@ class _ProductListSellerState extends State<ProductListSeller> {
                                 Icons.delete,
                                 color: Colors.red,
                               ),
-                              onPressed: () => {},
+                              onPressed: () =>
+                                  deleteproduct(productModels[index]),
                             ),
                           ],
                         ),
@@ -162,11 +183,33 @@ class _ProductListSellerState extends State<ProductListSeller> {
             ),
           ));
 
-  final List<String> data = <String>['1', '2'];
-  final List<String> image = <String>[
-    'https://food.mthai.com/app/uploads/2017/09/Grilled-Pork-Sticks.jpg',
-    'https://th.louisvuitton.com/images/is/image/lv/1/PP_VP_L/%E0%B8%AB%E0%B8%A5%E0%B8%B8%E0%B8%A2%E0%B8%AA%E0%B9%8C-%E0%B8%A7%E0%B8%B4%E0%B8%95%E0%B8%95%E0%B8%AD%E0%B8%87-%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%9B%E0%B9%8B%E0%B8%B2%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99-multi-pochette-accessoires-monogram-%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%9B%E0%B9%8B%E0%B8%B2%E0%B8%96%E0%B8%B7%E0%B8%AD--M44813_PM1_Side%20view.jpg',
-    'https://i.ytimg.com/vi/WZVGW5DiYlY/maxresdefault.jpg',
-    'https://www.greenery.org/wp-content/uploads/2018/10/PC-01.jpg',
-  ];
+  Future<Null> deleteproduct(ProductModel productModel) async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: MyStyle()
+            .showTitleH2('คุณต้องการลบสินค้า ${productModel.nameproduct} ?'),
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  String url =
+                      '${MyConstant().domain}/projectk6/deleteformid.php?isAdd=true&id_product=${productModel.idProduct}';
+                  await Dio().get(url).then((value) => readProduct());
+                },
+                child: Text('ยืนยัน'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('ยกเลิก'),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }

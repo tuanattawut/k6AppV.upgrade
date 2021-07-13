@@ -1,20 +1,32 @@
 import 'dart:io';
+import 'dart:math';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:k6_app/models/shop_model.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
 class AddProduct extends StatefulWidget {
-  AddProduct({Key key}) : super(key: key);
-
+  AddProduct({this.shopModel});
+  final ShopModel shopModel;
   @override
   _AddProductState createState() => _AddProductState();
 }
 
 class _AddProductState extends State<AddProduct> {
-  String nameProduct, price, detail;
+  String nameProduct, price, detail, image, idcategory;
   File file;
-  double screen;
+
+  ShopModel shopModel;
+  String idshop;
+  @override
+  void initState() {
+    super.initState();
+    shopModel = widget.shopModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,20 +35,24 @@ class _AddProductState extends State<AddProduct> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            showTitleFood('รูปสินค้า'),
-            groupImage(),
-            showTitleFood('รายละเอียดสินค้า'),
-            nameForm(),
-            MyStyle().mySizebox(),
-            detailForm(),
-            MyStyle().mySizebox(),
-            priceForm(),
-            MyStyle().mySizebox(),
-            saveButton(),
-            MyStyle().mySizebox(),
-          ],
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: Column(
+            children: <Widget>[
+              showTitleFood('รูปสินค้า'),
+              groupImage(),
+              showTitleFood('รายละเอียดสินค้า'),
+              nameForm(),
+              MyStyle().mySizebox(),
+              detailForm(),
+              MyStyle().mySizebox(),
+              priceForm(),
+              MyStyle().mySizebox(),
+              saveButton(),
+              MyStyle().mySizebox(),
+            ],
+          ),
         ),
       ),
     );
@@ -56,24 +72,58 @@ class _AddProductState extends State<AddProduct> {
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
-          print('nameproduct : $nameProduct, price : $price, detail : $detail');
+          uploadImage();
         }
       },
     );
+  }
+
+  Future<Null> uploadImage() async {
+    Random random = Random();
+    int i = random.nextInt(1000000);
+    String nameImage = 'product$i.jpg';
+    print('nameImage = $nameImage, pathImage = ${file.path}');
+
+    String url = '${MyConstant().domain}/projectk6/saveproduct.php';
+
+    try {
+      Map<String, dynamic> map = Map();
+      map['file'] =
+          await MultipartFile.fromFile(file.path, filename: nameImage);
+
+      FormData formData = FormData.fromMap(map);
+      await Dio().post(url, data: formData).then((value) {
+        print('Response ===>>> $value');
+        image = '/projectk6/Image/product/$nameImage';
+        print('urlImage = $image');
+        addProduct();
+      });
+    } catch (e) {}
+  }
+
+  Future<Null> addProduct() async {
+    idshop = shopModel.idShop;
+
+    String url =
+        '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$idcategory&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
+
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
   }
 
   TextFormField nameForm() {
     return TextFormField(
       onChanged: (value) => nameProduct = value.trim(),
       decoration: InputDecoration(
-        icon: Icon(
-          Icons.shopping_bag_outlined,
-        ),
         labelText: 'ชื่อสินค้า :',
-        labelStyle: TextStyle(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(),
-        ),
       ),
     );
   }
@@ -83,14 +133,7 @@ class _AddProductState extends State<AddProduct> {
       keyboardType: TextInputType.number,
       onChanged: (value) => price = value.trim(),
       decoration: InputDecoration(
-        icon: Icon(
-          Icons.attach_money,
-        ),
         labelText: 'ราคาสินค้า :',
-        labelStyle: TextStyle(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(),
-        ),
       ),
     );
   }
@@ -101,14 +144,7 @@ class _AddProductState extends State<AddProduct> {
       keyboardType: TextInputType.multiline,
       maxLines: 3,
       decoration: InputDecoration(
-        icon: Icon(
-          Icons.details,
-        ),
         labelText: 'รายละเอียดสินค้า :',
-        labelStyle: TextStyle(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(),
-        ),
       ),
     );
   }
@@ -118,8 +154,8 @@ class _AddProductState extends State<AddProduct> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 500.0,
-          height: 200.0,
+          width: 200,
+          height: 200,
           child: file == null
               ? Image.asset('images/productmenu.png')
               : Image.file(file),
@@ -127,20 +163,13 @@ class _AddProductState extends State<AddProduct> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(
-              icon: Icon(
-                Icons.add_a_photo,
-                size: 40.0,
-              ),
+            ElevatedButton(
               onPressed: () => chooseImage(ImageSource.camera),
+              child: Text('ถ่ายภาพ'),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.add_photo_alternate,
-                size: 40.0,
-              ),
-              onPressed: () => chooseImage(ImageSource.gallery),
-            ),
+            ElevatedButton(
+                onPressed: () => chooseImage(ImageSource.gallery),
+                child: Text('เลือกจากคลัง')),
           ],
         ),
       ],

@@ -5,6 +5,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:http/http.dart' as http;
 import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/screens/Seller/main_seller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -49,8 +50,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
       print('res = $response');
 
       if (response.toString() == 'true') {
-        normalDialog(
-            context, 'เข้าใช้สำเร็จด้วยชื่อ :\n${profileData['name']} ');
+        normalDialog(context, 'สมัครสมาชิกสำเร็จ');
       } else {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }
@@ -63,14 +63,22 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
     try {
       Response response = await Dio().get(url);
       var result = json.decode(response.data);
-      if (response.toString() == 'null') {
+      if (result == null) {
         showAddFBDialog();
       } else {
         for (var map in result) {
           SellerModel sellerModel = SellerModel.fromJson(map);
           if (sellerModel.status == 'yes') {
-            Navigator.pushNamed(context, '/homeseller');
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => Homeseller(
+                sellerModel: sellerModel,
+              ),
+            );
+            Navigator.of(context).push(route);
             break;
+          } else if (sellerModel.status == 'no') {
+            normalDialog(
+                context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
           } else {
             normalDialog(
                 context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');

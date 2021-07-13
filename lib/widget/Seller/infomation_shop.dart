@@ -47,7 +47,8 @@ class _InformationShopState extends State<InformationShop> {
         });
       }
     } else {
-      showAddDialog();
+      //showAddDialog();
+      routeToAddInfo();
     }
   }
 
@@ -70,21 +71,21 @@ class _InformationShopState extends State<InformationShop> {
     );
   }
 
-  Widget showNoData(BuildContext context) {
-    return Column(
-      children: [
-        MyStyle().titleCenter(
-            context, 'ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า'),
-      ],
-    );
-  }
+  // Widget showNoData(BuildContext context) {
+  //   return Column(
+  //     children: [
+  //       MyStyle().titleCenter(
+  //           context, 'ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า'),
+  //     ],
+  //   );
+  // }
 
-  ElevatedButton buildSellerButton() {
-    return ElevatedButton(
-      child: Text('เพิ่มข้อมูล'),
-      onPressed: () async => routeToAddInfo(),
-    );
-  }
+  // ElevatedButton buildSellerButton() {
+  //   return ElevatedButton(
+  //     child: Text('เพิ่มข้อมูล'),
+  //     onPressed: () async => routeToAddInfo(),
+  //   );
+  // }
 
   Widget showListInfoShop() => Padding(
       padding: EdgeInsets.all(10),
@@ -198,25 +199,25 @@ class _InformationShopState extends State<InformationShop> {
     );
   }
 
-  Future<Null> showAddDialog() async {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, setState) => SimpleDialog(
-              title: ListTile(
-                title: Text('ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า',
-                    style: TextStyle(color: Colors.red, fontSize: 20)),
-              ),
-              children: [
-                Column(
-                  children: [
-                    buildSellerButton(),
-                  ],
-                )
-              ],
-            ),
-          );
-        });
-  }
+  // Future<Null> showAddDialog() async {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return StatefulBuilder(
+  //           builder: (context, setState) => SimpleDialog(
+  //             title: ListTile(
+  //               title: Text('ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า',
+  //                   style: TextStyle(color: Colors.red, fontSize: 20)),
+  //             ),
+  //             children: [
+  //               Column(
+  //                 children: [
+  //                   buildSellerButton(),
+  //                 ],
+  //               )
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
 }

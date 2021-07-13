@@ -90,7 +90,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 150,
+          width: 200,
+          height: 200,
           child: file == null
               ? Image.asset('images/myshop.png')
               : Image.file(file),

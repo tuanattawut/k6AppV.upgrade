@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Form(
-      autovalidateMode: AutovalidateMode.always,
       key: _formstate,
       child: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -106,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () async {
           if (this._formstate.currentState.validate()) {
             print('email =====> $email\npassword =====> $password');
-
             if (email == null ||
                 email.isEmpty ||
                 !email.contains('@') ||
