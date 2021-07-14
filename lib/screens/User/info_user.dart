@@ -42,7 +42,7 @@ class _InformationUserState extends State<InformationUser> {
             ],
           ),
           MyStyle().mySizebox(),
-          showImage() ?? MyStyle().showProgress(),
+          showImage(),
           MyStyle().mySizebox(),
           Row(
             children: [
@@ -87,8 +87,17 @@ class _InformationUserState extends State<InformationUser> {
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         backgroundImage: NetworkImage(
-          '${MyConstant().domain}/${userModel.image}',
-        ),
+                  '${MyConstant().domain}/${userModel.image}',
+                ) ==
+                null
+            ? Image.asset(
+                'images/user.png',
+                height: 150,
+                width: 150,
+              )
+            : NetworkImage(
+                '${MyConstant().domain}/${userModel.image}',
+              ),
         radius: 60,
       ),
     );

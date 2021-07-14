@@ -135,7 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         print('Response ===>>> $value');
-        image = '/projectk6/Avatar/$nameImage';
+        image = '/projectk6/Image/avatar/$nameImage';
         print('urlImage = $image');
         checkUser();
       });

@@ -149,7 +149,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     String nameImage = 'seller$i.jpg';
     print('nameImage = $nameImage, pathImage = ${file.path}');
 
-    String url = '${MyConstant().domain}/projectk6/saveimage.php';
+    String url = '${MyConstant().domain}/projectk6/saveseller.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -159,7 +159,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         print('Response ===>>> $value');
-        image = '/projectk6/Avatar/$nameImage';
+        image = '/projectk6/Image/seller/$nameImage';
         print('urlImage = $image');
         checkUser();
       });

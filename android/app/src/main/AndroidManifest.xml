@@ -3,7 +3,7 @@
    <application
         android:label="k6_app"
         android:icon="@mipmap/ic_launcher">
-
+        android:requestLegacyExternalStorage="true"
             <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyDCHce4tz7ZkjyUZw4-XlBCMNY2UuyUEfo"/>
 
