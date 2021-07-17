@@ -18,7 +18,8 @@ class _NotiUserState extends State<NotiUser> {
   }
 
   Future<Null> getData() async {
-    var response = await http.get('https://covid19.th-stat.com/api/open/today');
+    var response =
+        await http.get(Uri.parse('https://covid19.th-stat.com/api/open/today'));
 
     setState(() {
       dataFromApi = covidFromJson(response.body);

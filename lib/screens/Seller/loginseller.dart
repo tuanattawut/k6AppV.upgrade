@@ -60,7 +60,7 @@ class _LoginSellerState extends State<LoginSeller> {
 
   ElevatedButton buildRegisterButton(BuildContext context) {
     return ElevatedButton(
-      child: Text('สมัครสมาชิกใหม่'),
+      child: Text('สมัครขายสินค้า'),
       onPressed: () {
         MaterialPageRoute route =
             MaterialPageRoute(builder: (value) => RegisterSeller());

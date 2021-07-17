@@ -24,7 +24,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("สมัครสมาชิก", style: TextStyle(color: Colors.white)),
+          title: Text("สมัครขายสินค้า", style: TextStyle(color: Colors.white)),
         ),
         body: Form(
             key: _formstate,
@@ -207,13 +207,16 @@ class _RegisterSellerState extends State<RegisterSeller> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton(
+            ElevatedButton.icon(
+              icon: Icon(Icons.camera),
               onPressed: () => chooseImage(ImageSource.camera),
-              child: Text('ถ่ายภาพ'),
+              label: Text('ถ่ายภาพ'),
             ),
-            ElevatedButton(
-                onPressed: () => chooseImage(ImageSource.gallery),
-                child: Text('เลือกจากคลัง')),
+            ElevatedButton.icon(
+              icon: Icon(Icons.image),
+              onPressed: () => chooseImage(ImageSource.gallery),
+              label: Text('เลือกจากคลัง'),
+            ),
           ],
         ),
       ],
@@ -222,7 +225,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
   Future<Null> chooseImage(ImageSource imageSource) async {
     try {
-      var object = await ImagePicker().getImage(
+      var object = await ImagePicker().pickImage(
         source: imageSource,
         maxHeight: 800.0,
         maxWidth: 800.0,

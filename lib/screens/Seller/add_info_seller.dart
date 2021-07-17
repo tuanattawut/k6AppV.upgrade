@@ -99,13 +99,16 @@ class _AddInfoShopState extends State<AddInfoShop> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton(
+            ElevatedButton.icon(
+              icon: Icon(Icons.camera),
               onPressed: () => chooseImage(ImageSource.camera),
-              child: Text('ถ่ายภาพ'),
+              label: Text('ถ่ายภาพ'),
             ),
-            ElevatedButton(
-                onPressed: () => chooseImage(ImageSource.gallery),
-                child: Text('เลือกจากคลัง')),
+            ElevatedButton.icon(
+              icon: Icon(Icons.image),
+              onPressed: () => chooseImage(ImageSource.gallery),
+              label: Text('เลือกจากคลัง'),
+            ),
           ],
         ),
       ],
@@ -114,7 +117,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
   Future<Null> chooseImage(ImageSource imageSource) async {
     try {
-      var object = await ImagePicker().getImage(
+      var object = await ImagePicker().pickImage(
         source: imageSource,
         maxHeight: 800.0,
         maxWidth: 800.0,

@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
-
 import 'package:k6_app/screens/Seller/add_info_seller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
-import 'package:k6_app/utility/normal_dialog.dart';
 
 class InformationShop extends StatefulWidget {
   InformationShop({this.sellerModel});

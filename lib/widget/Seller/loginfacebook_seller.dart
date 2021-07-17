@@ -330,8 +330,8 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
         print('การล็อกอินถูกยกเลิกโดยผู้ใช้');
         break;
       case FacebookLoginStatus.loggedIn:
-        var graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}');
+        var graphResponse = await http.get(Uri.parse(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}'));
 
         var profile = json.decode(graphResponse.body);
         print(profile.toString());
