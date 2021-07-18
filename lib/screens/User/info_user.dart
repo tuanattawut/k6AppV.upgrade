@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/chatmana_user.dart';
-import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class InformationUser extends StatefulWidget {
-  InformationUser({this.usermodel});
+  InformationUser({required this.usermodel});
   final UserModel usermodel;
 
   @override
@@ -13,7 +12,7 @@ class InformationUser extends StatefulWidget {
 }
 
 class _InformationUserState extends State<InformationUser> {
-  UserModel userModel;
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -49,17 +48,17 @@ class _InformationUserState extends State<InformationUser> {
               Expanded(
                   flex: 1,
                   child:
-                      _buildCard('ชื่อ', '${userModel.name ?? 'กำลังโหลด'}')),
+                      _buildCard('ชื่อ', '${userModel?.name ?? 'กำลังโหลด'}')),
               Expanded(
                 flex: 1,
                 child: _buildCard(
-                    'นามสกุล', '${userModel.lastname ?? 'กำลังโหลด'}'),
+                    'นามสกุล', '${userModel?.lastname ?? 'กำลังโหลด'}'),
               ),
             ],
           ),
-          _buildCard('เพศ', '${userModel.gender ?? 'กำลังโหลด'}'),
-          _buildCard('อีเมล', '${userModel.email ?? 'กำลังโหลด'}'),
-          _buildCard('เบอร์โทรศัพท์', '${userModel.phone ?? 'กำลังโหลด'}'),
+          _buildCard('เพศ', '${userModel?.gender ?? 'กำลังโหลด'}'),
+          _buildCard('อีเมล', '${userModel?.email ?? 'กำลังโหลด'}'),
+          _buildCard('เบอร์โทรศัพท์', '${userModel?.phone ?? 'กำลังโหลด'}'),
           SizedBox(
             height: 30.0,
           ),
@@ -86,23 +85,19 @@ class _InformationUserState extends State<InformationUser> {
     return Center(
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
-        backgroundImage: NetworkImage(
-                  '${MyConstant().domain}/${userModel.image}',
-                ) ==
-                null
-            ? Image.asset(
-                'images/user.png',
-                height: 150,
-                width: 150,
-              )
-            : NetworkImage(
-                '${MyConstant().domain}/${userModel.image}',
-              ),
+        backgroundImage: Image.asset(
+          'images/user.png',
+          height: 150,
+          width: 150,
+        ) as ImageProvider,
         radius: 60,
       ),
     );
   }
 
+// NetworkImage(
+//                 '${MyConstant().domain}/${userModel?.image}',
+//               ),
   Widget _buildCard(String title, String titleH2) {
     return Card(
       shape: RoundedRectangleBorder(

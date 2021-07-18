@@ -1,9 +1,64 @@
+import 'dart:convert';
+
 class ChatModel {
   final String manatitle;
   final String datetime;
   final String message;
+  ChatModel({
+    required this.manatitle,
+    required this.datetime,
+    required this.message,
+  });
 
-  ChatModel({this.manatitle, this.datetime, this.message});
+  ChatModel copyWith({
+    String? manatitle,
+    String? datetime,
+    String? message,
+  }) {
+    return ChatModel(
+      manatitle: manatitle ?? this.manatitle,
+      datetime: datetime ?? this.datetime,
+      message: message ?? this.message,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'manatitle': manatitle,
+      'datetime': datetime,
+      'message': message,
+    };
+  }
+
+  factory ChatModel.fromMap(Map<String, dynamic> map) {
+    return ChatModel(
+      manatitle: map['manatitle'],
+      datetime: map['datetime'],
+      message: map['message'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ChatModel.fromJson(String source) =>
+      ChatModel.fromMap(json.decode(source));
+
+  @override
+  String toString() =>
+      'ChatModel(manatitle: $manatitle, datetime: $datetime, message: $message)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ChatModel &&
+        other.manatitle == manatitle &&
+        other.datetime == datetime &&
+        other.message == message;
+  }
+
+  @override
+  int get hashCode => manatitle.hashCode ^ datetime.hashCode ^ message.hashCode;
 
   static final List<ChatModel> dummyData = [
     ChatModel(

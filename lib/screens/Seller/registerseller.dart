@@ -16,8 +16,8 @@ class RegisterSeller extends StatefulWidget {
 class _RegisterSellerState extends State<RegisterSeller> {
   final _formstate = GlobalKey<FormState>();
 
-  String name, lastname, password, idcard, email, phone, gender, image;
-  File file;
+  String? name, lastname, password, idcard, email, phone, gender, image;
+  File? file;
   DateTime birthday = DateTime.now();
 
   @override
@@ -61,7 +61,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                               groupValue: gender,
                               onChanged: (value) {
                                 setState(() {
-                                  gender = value;
+                                  gender = value as String?;
                                 });
                               },
                               title: Text("ชาย"),
@@ -74,7 +74,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                               groupValue: gender,
                               onChanged: (value) {
                                 setState(() {
-                                  gender = value;
+                                  gender = value as String?;
                                 });
                               },
                               title: Text("หญิง"),
@@ -118,20 +118,20 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return ElevatedButton(
       child: Text('สมัครสมาชิก'),
       onPressed: () async {
-        if (this._formstate.currentState.validate()) if (name == null ||
-            name.isEmpty ||
+        if (this._formstate.currentState!.validate()) if (name == null ||
+            name!.isEmpty ||
             lastname == null ||
-            lastname.isEmpty ||
+            lastname!.isEmpty ||
             password == null ||
-            password.isEmpty ||
+            password!.isEmpty ||
             phone == null ||
-            phone.isEmpty ||
+            phone!.isEmpty ||
             idcard == null ||
-            idcard.isEmpty ||
+            idcard!.isEmpty ||
             gender == null ||
-            gender.isEmpty) {
+            gender!.isEmpty) {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
-        } else if (email == null || email.isEmpty || !email.contains('@')) {
+        } else if (email == null || email!.isEmpty || !email!.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
         } else if (file == null) {
           normalDialog(context, 'โปรดใส่รูปภาพ');
@@ -147,14 +147,14 @@ class _RegisterSellerState extends State<RegisterSeller> {
     int i = random.nextInt(1000000);
 
     String nameImage = 'seller$i.jpg';
-    print('nameImage = $nameImage, pathImage = ${file.path}');
+    print('nameImage = $nameImage, pathImage = ${file!.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveseller.php';
 
     try {
       Map<String, dynamic> map = Map();
       map['file'] =
-          await MultipartFile.fromFile(file.path, filename: nameImage);
+          await MultipartFile.fromFile(file!.path, filename: nameImage);
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
@@ -202,7 +202,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
         Container(
           width: 150,
           child:
-              file == null ? Image.asset('images/user.png') : Image.file(file),
+              file == null ? Image.asset('images/user.png') : Image.file(file!),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -232,7 +232,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
       );
 
       setState(() {
-        file = File(object.path);
+        file = File(object!.path);
       });
     } catch (e) {}
   }
@@ -241,7 +241,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value.length < 6)
+        if (value!.length < 6)
           return 'โปรดกรอกพาสเวิร์ดมากกว่า 6 หลัก';
         else
           return null;
@@ -258,7 +258,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (!value.contains('@') || value.isEmpty)
+        if (!value!.contains('@') || value.isEmpty)
           return 'โปรดกรอกอีเมลในช่อง ตัวอย่าง  xx@xx.com';
         else
           return null;
@@ -275,7 +275,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => name = value.trim(),
       validator: (value) {
-        if (value.isEmpty)
+        if (value!.isEmpty)
           return 'โปรดกรอกชื่อในช่อง';
         else
           return null;
@@ -292,7 +292,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => lastname = value.trim(),
       validator: (value) {
-        if (value.isEmpty)
+        if (value!.isEmpty)
           return 'โปรดกรอกนามสกุลในช่อง';
         else
           return null;
@@ -310,7 +310,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length != 10)
+        if (value!.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;
@@ -324,7 +324,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
   }
 
   chooseDateTime() async {
-    DateTime _datepicker = await showDatePicker(
+    DateTime? _datepicker = await showDatePicker(
       context: context,
       initialDate: birthday,
       firstDate: DateTime(1947),
@@ -344,7 +344,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return TextFormField(
       onChanged: (value) => idcard = value.trim(),
       validator: (value) {
-        if (value.length != 13)
+        if (value!.length != 13)
           return 'โปรดกรอกรหัสบัตรประจำตัวประชาชน 13 หลัก';
         else
           return null;

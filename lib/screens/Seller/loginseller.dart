@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
+
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
 
 import 'package:k6_app/screens/Seller/registerseller.dart';
+import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -18,8 +21,8 @@ class LoginSeller extends StatefulWidget {
 
 class _LoginSellerState extends State<LoginSeller> {
   final _formstate = GlobalKey<FormState>();
-
-  String email, password;
+  bool statusRedEye = true;
+  String? email, password;
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +76,15 @@ class _LoginSellerState extends State<LoginSeller> {
     return ElevatedButton(
         child: Text('ล็อกอิน'),
         onPressed: () async {
-          if (this._formstate.currentState.validate()) {
+          if (this._formstate.currentState!.validate()) {
             print('email =====> $email\npassword =====> $password');
 
             if (email == null ||
-                email.isEmpty ||
-                !email.contains('@') ||
+                email!.isEmpty ||
+                !email!.contains('@') ||
                 password == null ||
-                password.isEmpty ||
-                password.length < 6) {
+                password!.isEmpty ||
+                password!.length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
               checkAuthen();
@@ -94,14 +97,28 @@ class _LoginSellerState extends State<LoginSeller> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value.length < 6)
+        if (value!.length < 6)
           return 'โปรดกรอกพาสเวิร์ด 6 ตัวขึ้นไป';
         else
           return null;
       },
-      obscureText: true,
+      obscureText: statusRedEye,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              statusRedEye = !statusRedEye;
+            });
+          },
+          icon: statusRedEye
+              ? Icon(
+                  Icons.remove_red_eye,
+                )
+              : Icon(
+                  Icons.remove_red_eye_outlined,
+                ),
+        ),
         labelText: 'พาสเวิร์ด',
         icon: Icon(Icons.lock),
       ),
@@ -112,7 +129,7 @@ class _LoginSellerState extends State<LoginSeller> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (value.isEmpty || !value.contains('@'))
+        if (value!.isEmpty || !value.contains('@'))
           return 'โปรดกรอกอีเมลให้ถูกต้อง';
         else
           return null;
@@ -131,17 +148,13 @@ class _LoginSellerState extends State<LoginSeller> {
     String url =
         '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
     print('url ===>> $url');
-    try {
-      Response response = await Dio().get(url);
-      print('res = $response');
-
-      var result = json.decode(response.data);
-      print('result = $result');
-      if (result == null) {
+    await Dio().get(url).then((value) async {
+      if (value.toString() == 'null') {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
-        for (var map in result) {
-          SellerModel sellerModel = SellerModel.fromJson(map);
+        for (var item in json.decode(value.data)) {
+          SellerModel sellerModel = SellerModel.fromMap(item);
+
           if (password == sellerModel.password) {
             if (sellerModel.status == 'yes') {
               MaterialPageRoute route = MaterialPageRoute(
@@ -163,9 +176,6 @@ class _LoginSellerState extends State<LoginSeller> {
           }
         }
       }
-    } catch (e) {
-      normalDialog(context, 'ผิดพลาด');
-      print('Have e Error ===>> ${e.toString()}');
-    }
+    });
   }
 }

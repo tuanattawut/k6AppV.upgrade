@@ -11,18 +11,6 @@ String userModelToJson(List<UserModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class UserModel {
-  UserModel({
-    this.idUser,
-    this.name,
-    this.lastname,
-    this.email,
-    this.password,
-    this.gender,
-    this.phone,
-    this.image,
-    this.idfb,
-  });
-
   String idUser;
   String name;
   String lastname;
@@ -32,28 +20,106 @@ class UserModel {
   String phone;
   String image;
   String idfb;
+  UserModel({
+    required this.idUser,
+    required this.name,
+    required this.lastname,
+    required this.email,
+    required this.password,
+    required this.gender,
+    required this.phone,
+    required this.image,
+    required this.idfb,
+  });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        idUser: json["id_user"] == null ? null : json["id_user"],
-        name: json["name"] == null ? null : json["name"],
-        lastname: json["lastname"] == null ? null : json["lastname"],
-        email: json["email"] == null ? null : json["email"],
-        password: json["password"] == null ? null : json["password"],
-        gender: json["gender"] == null ? null : json["gender"],
-        phone: json["phone"] == null ? null : json["phone"],
-        image: json["image"] == null ? null : json["image"],
-        idfb: json["idfb"] == null ? null : json["idfb"],
-      );
+  UserModel copyWith({
+    String? idUser,
+    String? name,
+    String? lastname,
+    String? email,
+    String? password,
+    String? gender,
+    String? phone,
+    String? image,
+    String? idfb,
+  }) {
+    return UserModel(
+      idUser: idUser ?? this.idUser,
+      name: name ?? this.name,
+      lastname: lastname ?? this.lastname,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      gender: gender ?? this.gender,
+      phone: phone ?? this.phone,
+      image: image ?? this.image,
+      idfb: idfb ?? this.idfb,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id_user": idUser == null ? null : idUser,
-        "name": name == null ? null : name,
-        "lastname": lastname == null ? null : lastname,
-        "email": email == null ? null : email,
-        "password": password == null ? null : password,
-        "gender": gender == null ? null : gender,
-        "phone": phone == null ? null : phone,
-        "image": image == null ? null : image,
-        "idfb": idfb == null ? null : idfb,
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'idUser': idUser,
+      'name': name,
+      'lastname': lastname,
+      'email': email,
+      'password': password,
+      'gender': gender,
+      'phone': phone,
+      'image': image,
+      'idfb': idfb,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      idUser: map['idUser'],
+      name: map['name'],
+      lastname: map['lastname'],
+      email: map['email'],
+      password: map['password'],
+      gender: map['gender'],
+      phone: map['phone'],
+      image: map['image'],
+      idfb: map['idfb'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'UserModel(idUser: $idUser, name: $name, lastname: $lastname, email: $email, password: $password, gender: $gender, phone: $phone, image: $image, idfb: $idfb)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is UserModel &&
+        other.idUser == idUser &&
+        other.name == name &&
+        other.lastname == lastname &&
+        other.email == email &&
+        other.password == password &&
+        other.gender == gender &&
+        other.phone == phone &&
+        other.image == image &&
+        other.idfb == idfb;
+  }
+
+  @override
+  int get hashCode {
+    return idUser.hashCode ^
+        name.hashCode ^
+        lastname.hashCode ^
+        email.hashCode ^
+        password.hashCode ^
+        gender.hashCode ^
+        phone.hashCode ^
+        image.hashCode ^
+        idfb.hashCode;
+  }
 }

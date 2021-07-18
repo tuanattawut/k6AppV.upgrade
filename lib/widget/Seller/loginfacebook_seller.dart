@@ -16,7 +16,7 @@ class LoginFacebookSeller extends StatefulWidget {
 }
 
 class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
-  String name, lastname, password, idcard, email, phone, gender, image, idfb;
+  String? name, lastname, password, idcard, email, phone, gender, image, idfb;
   DateTime birthday = DateTime.now();
 
   bool isLoggedIn = false;
@@ -161,7 +161,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                                   groupValue: gender,
                                   onChanged: (value) {
                                     setState(() {
-                                      gender = value;
+                                      gender = value as String;
                                     });
                                   },
                                   title: Text("ชาย"),
@@ -174,7 +174,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                                   groupValue: gender,
                                   onChanged: (value) {
                                     setState(() {
-                                      gender = value;
+                                      gender = value as String;
                                     });
                                   },
                                   title: Text("หญิง"),
@@ -227,12 +227,12 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                             );
 
                             if (phone == null ||
-                                phone.isEmpty ||
-                                phone.length != 10) {
+                                phone!.isEmpty ||
+                                phone!.length != 10) {
                               normalDialog(
                                   context, 'โปรด กรอกเบอร์โทรศัพท์ให้ถูกต้อง');
-                            } else if (idcard.length != 13 ||
-                                idcard.isEmpty ||
+                            } else if (idcard!.length != 13 ||
+                                idcard!.isEmpty ||
                                 idcard == null) {
                               normalDialog(
                                   context, 'โปรด กรอกบัตรประชาชนให้ถูกต้อง');
@@ -256,7 +256,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
   }
 
   chooseDateTime() async {
-    DateTime _datepicker = await showDatePicker(
+    DateTime? _datepicker = await showDatePicker(
       context: context,
       initialDate: birthday,
       firstDate: DateTime(1947),
@@ -276,7 +276,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
     return TextFormField(
       onChanged: (value) => idcard = value.trim(),
       validator: (value) {
-        if (value.length != 13)
+        if (value!.length != 13)
           return 'โปรดกรอกรหัสบัตรประจำตัวประชาชน 13 หลัก';
         else
           return null;
@@ -293,7 +293,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length != 10)
+        if (value!.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;

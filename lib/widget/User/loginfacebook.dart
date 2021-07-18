@@ -14,7 +14,7 @@ class LoginFacebook extends StatefulWidget {
 }
 
 class _LoginFacebookState extends State<LoginFacebook> {
-  String name, lastname, email, password, gender, phone, typeuser, image, idfb;
+  String? name, lastname, email, password, gender, phone, typeuser, image, idfb;
 
   bool isLoggedIn = false;
 
@@ -136,7 +136,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
                                   groupValue: gender,
                                   onChanged: (value) {
                                     setState(() {
-                                      gender = value;
+                                      gender = value as String;
                                     });
                                   },
                                   title: Text("ชาย"),
@@ -149,7 +149,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
                                   groupValue: gender,
                                   onChanged: (value) {
                                     setState(() {
-                                      gender = value;
+                                      gender = value as String;
                                     });
                                   },
                                   title: Text("หญิง"),
@@ -172,8 +172,8 @@ class _LoginFacebookState extends State<LoginFacebook> {
                             print('เก็บข้อมูล : $name,$email, $phone, $gender');
 
                             if (phone == null ||
-                                phone.isEmpty ||
-                                phone.length != 10) {
+                                phone!.isEmpty ||
+                                phone!.length != 10) {
                               normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
                             } else {
                               registerThread();
@@ -198,7 +198,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length != 10)
+        if (value!.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;

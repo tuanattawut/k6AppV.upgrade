@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:k6_app/screens/Manager/main_manager.dart';
-import 'package:k6_app/screens/Seller/main_seller.dart';
-import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/screens/login.dart';
 import 'package:k6_app/screens/register.dart';
 
@@ -29,8 +26,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/homepage': (context) => Homepage(),
-        '/homeseller': (context) => Homeseller(),
         '/homemanager': (context) => Homemanager(),
       },
     );

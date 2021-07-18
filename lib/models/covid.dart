@@ -5,21 +5,6 @@ Covid covidFromJson(String str) => Covid.fromJson(json.decode(str));
 String covidToJson(Covid data) => json.encode(data.toJson());
 
 class Covid {
-  Covid({
-    this.confirmed,
-    this.recovered,
-    this.hospitalized,
-    this.deaths,
-    this.newConfirmed,
-    this.newRecovered,
-    this.newHospitalized,
-    this.newDeaths,
-    this.updateDate,
-    this.source,
-    this.devBy,
-    this.severBy,
-  });
-
   int confirmed;
   int recovered;
   int hospitalized;
@@ -32,38 +17,126 @@ class Covid {
   String source;
   String devBy;
   String severBy;
+  Covid({
+    required this.confirmed,
+    required this.recovered,
+    required this.hospitalized,
+    required this.deaths,
+    required this.newConfirmed,
+    required this.newRecovered,
+    required this.newHospitalized,
+    required this.newDeaths,
+    required this.updateDate,
+    required this.source,
+    required this.devBy,
+    required this.severBy,
+  });
 
-  factory Covid.fromJson(Map<String, dynamic> json) => Covid(
-        confirmed: json["Confirmed"] == null ? null : json["Confirmed"],
-        recovered: json["Recovered"] == null ? null : json["Recovered"],
-        hospitalized:
-            json["Hospitalized"] == null ? null : json["Hospitalized"],
-        deaths: json["Deaths"] == null ? null : json["Deaths"],
-        newConfirmed:
-            json["NewConfirmed"] == null ? null : json["NewConfirmed"],
-        newRecovered:
-            json["NewRecovered"] == null ? null : json["NewRecovered"],
-        newHospitalized:
-            json["NewHospitalized"] == null ? null : json["NewHospitalized"],
-        newDeaths: json["NewDeaths"] == null ? null : json["NewDeaths"],
-        updateDate: json["UpdateDate"] == null ? null : json["UpdateDate"],
-        source: json["Source"] == null ? null : json["Source"],
-        devBy: json["DevBy"] == null ? null : json["DevBy"],
-        severBy: json["SeverBy"] == null ? null : json["SeverBy"],
-      );
+  Covid copyWith({
+    int? confirmed,
+    int? recovered,
+    int? hospitalized,
+    int? deaths,
+    int? newConfirmed,
+    int? newRecovered,
+    int? newHospitalized,
+    int? newDeaths,
+    String? updateDate,
+    String? source,
+    String? devBy,
+    String? severBy,
+  }) {
+    return Covid(
+      confirmed: confirmed ?? this.confirmed,
+      recovered: recovered ?? this.recovered,
+      hospitalized: hospitalized ?? this.hospitalized,
+      deaths: deaths ?? this.deaths,
+      newConfirmed: newConfirmed ?? this.newConfirmed,
+      newRecovered: newRecovered ?? this.newRecovered,
+      newHospitalized: newHospitalized ?? this.newHospitalized,
+      newDeaths: newDeaths ?? this.newDeaths,
+      updateDate: updateDate ?? this.updateDate,
+      source: source ?? this.source,
+      devBy: devBy ?? this.devBy,
+      severBy: severBy ?? this.severBy,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "Confirmed": confirmed == null ? null : confirmed,
-        "Recovered": recovered == null ? null : recovered,
-        "Hospitalized": hospitalized == null ? null : hospitalized,
-        "Deaths": deaths == null ? null : deaths,
-        "NewConfirmed": newConfirmed == null ? null : newConfirmed,
-        "NewRecovered": newRecovered == null ? null : newRecovered,
-        "NewHospitalized": newHospitalized == null ? null : newHospitalized,
-        "NewDeaths": newDeaths == null ? null : newDeaths,
-        "UpdateDate": updateDate == null ? null : updateDate,
-        "Source": source == null ? null : source,
-        "DevBy": devBy == null ? null : devBy,
-        "SeverBy": severBy == null ? null : severBy,
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'confirmed': confirmed,
+      'recovered': recovered,
+      'hospitalized': hospitalized,
+      'deaths': deaths,
+      'newConfirmed': newConfirmed,
+      'newRecovered': newRecovered,
+      'newHospitalized': newHospitalized,
+      'newDeaths': newDeaths,
+      'updateDate': updateDate,
+      'source': source,
+      'devBy': devBy,
+      'severBy': severBy,
+    };
+  }
+
+  factory Covid.fromMap(Map<String, dynamic> map) {
+    return Covid(
+      confirmed: map['confirmed'],
+      recovered: map['recovered'],
+      hospitalized: map['hospitalized'],
+      deaths: map['deaths'],
+      newConfirmed: map['newConfirmed'],
+      newRecovered: map['newRecovered'],
+      newHospitalized: map['newHospitalized'],
+      newDeaths: map['newDeaths'],
+      updateDate: map['updateDate'],
+      source: map['source'],
+      devBy: map['devBy'],
+      severBy: map['severBy'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Covid.fromJson(String source) => Covid.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Covid(confirmed: $confirmed, recovered: $recovered, hospitalized: $hospitalized, deaths: $deaths, newConfirmed: $newConfirmed, newRecovered: $newRecovered, newHospitalized: $newHospitalized, newDeaths: $newDeaths, updateDate: $updateDate, source: $source, devBy: $devBy, severBy: $severBy)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Covid &&
+        other.confirmed == confirmed &&
+        other.recovered == recovered &&
+        other.hospitalized == hospitalized &&
+        other.deaths == deaths &&
+        other.newConfirmed == newConfirmed &&
+        other.newRecovered == newRecovered &&
+        other.newHospitalized == newHospitalized &&
+        other.newDeaths == newDeaths &&
+        other.updateDate == updateDate &&
+        other.source == source &&
+        other.devBy == devBy &&
+        other.severBy == severBy;
+  }
+
+  @override
+  int get hashCode {
+    return confirmed.hashCode ^
+        recovered.hashCode ^
+        hospitalized.hashCode ^
+        deaths.hashCode ^
+        newConfirmed.hashCode ^
+        newRecovered.hashCode ^
+        newHospitalized.hashCode ^
+        newDeaths.hashCode ^
+        updateDate.hashCode ^
+        source.hashCode ^
+        devBy.hashCode ^
+        severBy.hashCode;
+  }
 }

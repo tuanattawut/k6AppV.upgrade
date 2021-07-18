@@ -11,29 +11,29 @@ import 'package:k6_app/utility/my_style.dart';
 class ShowDetail extends StatefulWidget {
   final ProductModel productModel;
 
-  ShowDetail({this.productModel});
+  ShowDetail({required this.productModel});
   @override
   _ShowDetailState createState() => _ShowDetailState();
 }
 
 class _ShowDetailState extends State<ShowDetail> {
-  ProductModel productModel;
-  UserModel userModels;
+  ProductModel? productModel;
+  UserModel? userModels;
 
-  String idShop;
+  String? idShop;
 
   @override
   void initState() {
     super.initState();
     setState(() {
       productModel = widget.productModel;
-      print('url ==> ${productModel.image}');
+      print('url ==> ${productModel?.image}');
       readSeller();
     });
   }
 
   Future<Null> readSeller() async {
-    idShop = productModel.idShop;
+    idShop = productModel!.idShop;
 
     String url =
         '${MyConstant().domain}/k6app/getproductWhereidShop.php?isAdd=true&id=$idShop';
@@ -58,7 +58,7 @@ class _ShowDetailState extends State<ShowDetail> {
         appBar: AppBar(
           title: productModel == null
               ? Text('รายละเอียด')
-              : Text(productModel.nameproduct),
+              : Text(productModel!.nameproduct),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(5),
@@ -79,7 +79,7 @@ class _ShowDetailState extends State<ShowDetail> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/${productModel.image}',
+          '${MyConstant().domain}/${productModel?.image}',
           fit: BoxFit.contain,
         ));
   }
@@ -126,14 +126,14 @@ class _ShowDetailState extends State<ShowDetail> {
           children: <Widget>[
             showImage(),
             MyStyle().mySizebox(),
-            MyStyle().showTitle(productModel.nameproduct),
+            MyStyle().showTitle(productModel!.nameproduct),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    '${productModel.price} ฿',
+                    '${productModel?.price} ฿',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.red,
@@ -149,7 +149,7 @@ class _ShowDetailState extends State<ShowDetail> {
               ],
             ),
             Text(
-              productModel.detail,
+              productModel!.detail,
               style: TextStyle(
                 fontSize: 18,
               ),

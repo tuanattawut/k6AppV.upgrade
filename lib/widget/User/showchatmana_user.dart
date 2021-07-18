@@ -3,8 +3,6 @@ import 'package:k6_app/models/chat_models.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ShowChatmana extends StatefulWidget {
-  ShowChatmana({Key key}) : super(key: key);
-
   @override
   _ShowChatmanaState createState() => _ShowChatmanaState();
 }

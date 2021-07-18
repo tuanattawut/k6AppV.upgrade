@@ -9,18 +9,18 @@ import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
 class AddProduct extends StatefulWidget {
-  AddProduct({this.shopModel});
+  AddProduct({required this.shopModel});
   final ShopModel shopModel;
   @override
   _AddProductState createState() => _AddProductState();
 }
 
 class _AddProductState extends State<AddProduct> {
-  String nameProduct, price, detail, image, idcategory;
-  File file;
+  String? nameProduct, price, detail, image, idcategory;
+  File? file;
 
-  ShopModel shopModel;
-  String idshop;
+  ShopModel? shopModel;
+  String? idshop;
   @override
   void initState() {
     super.initState();
@@ -63,11 +63,11 @@ class _AddProductState extends State<AddProduct> {
       child: Text('บันทึกข้อมูล'),
       onPressed: () {
         if (nameProduct == null ||
-            nameProduct.isEmpty ||
+            nameProduct!.isEmpty ||
             price == null ||
-            price.isEmpty ||
+            price!.isEmpty ||
             detail == null ||
-            detail.isEmpty) {
+            detail!.isEmpty) {
           normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
@@ -82,14 +82,14 @@ class _AddProductState extends State<AddProduct> {
     Random random = Random();
     int i = random.nextInt(1000000);
     String nameImage = 'product$i.jpg';
-    print('nameImage = $nameImage, pathImage = ${file.path}');
+    print('nameImage = $nameImage, pathImage = ${file!.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveproduct.php';
 
     try {
       Map<String, dynamic> map = Map();
       map['file'] =
-          await MultipartFile.fromFile(file.path, filename: nameImage);
+          await MultipartFile.fromFile(file!.path, filename: nameImage);
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
@@ -102,7 +102,7 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Future<Null> addProduct() async {
-    idshop = shopModel.idShop;
+    idshop = shopModel?.idShop;
 
     String url =
         '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$idcategory&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
@@ -158,7 +158,7 @@ class _AddProductState extends State<AddProduct> {
           height: 200,
           child: file == null
               ? Image.asset('images/productmenu.png')
-              : Image.file(file),
+              : Image.file(file!),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -187,7 +187,7 @@ class _AddProductState extends State<AddProduct> {
         maxHeight: 800.0,
       );
       setState(() {
-        file = File(object.path);
+        file = File(object!.path);
       });
     } catch (e) {}
   }

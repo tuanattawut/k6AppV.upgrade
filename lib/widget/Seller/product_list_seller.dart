@@ -10,24 +10,44 @@ import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ProductListSeller extends StatefulWidget {
-  ProductListSeller({this.shopModel});
-  final ShopModel shopModel;
+  ProductListSeller({required this.sellerModel});
+  final SellerModel sellerModel;
   @override
   _ProductListSellerState createState() => _ProductListSellerState();
 }
 
 class _ProductListSellerState extends State<ProductListSeller> {
   List<ProductModel> productModels = [];
-  ShopModel shopModel;
-  bool loadStatus = true; //  โหลดจากเจซัน
-  bool status = true; // มีข้อมูล
-
-  String idshop; // id คนขาย
+  ShopModel? shopModel;
+  bool? loadStatus = true;
+  bool? status = true;
+  SellerModel? sellerModel;
+  String? idshop, idseller;
   @override
   void initState() {
     super.initState();
-    shopModel = widget.shopModel;
+    sellerModel = widget.sellerModel;
+    readDataShop();
+
     readProduct();
+  }
+
+  Future<Null> readDataShop() async {
+    idseller = sellerModel?.idSeller;
+    String url =
+        '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
+    Response response = await Dio().get(url);
+
+    var result = json.decode(response.data);
+    print('result = $result');
+
+    if (result != null) {
+      for (var map in result) {
+        setState(() {
+          shopModel = ShopModel.fromMap(map);
+        });
+      }
+    } else {}
   }
 
   Future<Null> readProduct() async {
@@ -37,7 +57,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
       productModels.clear();
     }
 
-    idshop = shopModel.idShop;
+    idshop = shopModel!.idShop;
     String url =
         '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
     await Dio().get(url).then((value) {
@@ -73,14 +93,14 @@ class _ProductListSellerState extends State<ProductListSeller> {
         ),
         body: Stack(
           children: <Widget>[
-            loadStatus ? MyStyle().showProgress() : showContent(),
+            loadStatus! ? MyStyle().showProgress() : showContent(),
             addProductButton(),
           ],
         ));
   }
 
   Widget showContent() {
-    return status
+    return status!
         ? showListFood()
         : Center(
             child: Text(
@@ -102,7 +122,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                   onPressed: () {
                     MaterialPageRoute route = MaterialPageRoute(
                       builder: (context) => AddProduct(
-                        shopModel: shopModel,
+                        shopModel: shopModel!,
                       ),
                     );
                     Navigator.push(context, route)

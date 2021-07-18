@@ -17,8 +17,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formstate = GlobalKey<FormState>();
 
-  String name, lastname, password, email, phone, gender, image;
-  File file;
+  String? name, lastname, password, email, phone, gender, image;
+  File? file;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               groupValue: gender,
                               onChanged: (value) {
                                 setState(() {
-                                  gender = value;
+                                  gender = value as String?;
                                 });
                               },
                               title: Text("ชาย"),
@@ -72,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               groupValue: gender,
                               onChanged: (value) {
                                 setState(() {
-                                  gender = value;
+                                  gender = value as String?;
                                 });
                               },
                               title: Text("หญิง"),
@@ -95,19 +95,19 @@ class _RegisterPageState extends State<RegisterPage> {
     return ElevatedButton(
       child: Text('สมัครสมาชิก'),
       onPressed: () async {
-        if (this._formstate.currentState.validate()) if (name == null ||
-            name.isEmpty ||
+        if (this._formstate.currentState!.validate()) if (name == null ||
+            name!.isEmpty ||
             lastname == null ||
-            lastname.isEmpty ||
+            lastname!.isEmpty ||
             password == null ||
-            password.isEmpty ||
+            password!.isEmpty ||
             phone == null ||
-            phone.isEmpty ||
-            phone.length != 10 ||
+            phone!.isEmpty ||
+            phone!.length != 10 ||
             gender == null ||
-            gender.isEmpty) {
+            gender!.isEmpty) {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
-        } else if (email == null || email.isEmpty || !email.contains('@')) {
+        } else if (email == null || email!.isEmpty || !email!.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
         } else if (file == null) {
           normalDialog(context, 'โปรดใส่รูปภาพ');
@@ -123,14 +123,14 @@ class _RegisterPageState extends State<RegisterPage> {
     int i = random.nextInt(100000);
 
     String nameImage = 'avatar$i.jpg';
-    print('nameImage = $nameImage, pathImage = ${file.path}');
+    print('nameImage = $nameImage, pathImage = ${file?.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveimage.php';
 
     try {
       Map<String, dynamic> map = Map();
       map['file'] =
-          await MultipartFile.fromFile(file.path, filename: nameImage);
+          await MultipartFile.fromFile(file!.path, filename: nameImage);
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
@@ -178,7 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
         Container(
           width: 150,
           child:
-              file == null ? Image.asset('images/user.png') : Image.file(file),
+              file == null ? Image.asset('images/user.png') : Image.file(file!),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -208,7 +208,7 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       setState(() {
-        file = File(object.path);
+        file = File(object!.path);
       });
     } catch (e) {}
   }
@@ -217,7 +217,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value.length < 6)
+        if (value!.length < 6)
           return 'โปรดกรอกพาสเวิร์ดมากกว่า 6 หลัก';
         else
           return null;
@@ -234,7 +234,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (!value.contains('@') || value.isEmpty)
+        if (!value!.contains('@') || value.isEmpty)
           return 'โปรดกรอกอีเมลในช่อง ตัวอย่าง  xx@xx.com';
         else
           return null;
@@ -251,7 +251,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => name = value.trim(),
       validator: (value) {
-        if (value.isEmpty)
+        if (value!.isEmpty)
           return 'โปรดกรอกชื่อในช่อง';
         else
           return null;
@@ -268,7 +268,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => lastname = value.trim(),
       validator: (value) {
-        if (value.isEmpty)
+        if (value!.isEmpty)
           return 'โปรดกรอกนามสกุลในช่อง';
         else
           return null;
@@ -286,7 +286,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => phone = value.trim(),
       validator: (value) {
-        if (value.length != 10)
+        if (value!.length != 10)
           return 'โปรดกรอกเบอร์โทร 10 หลัก';
         else
           return null;

@@ -3,14 +3,12 @@ import 'package:http/http.dart' as http;
 import 'package:k6_app/models/covid.dart';
 
 class NotiUser extends StatefulWidget {
-  NotiUser({Key key}) : super(key: key);
-
   @override
   _NotiUserState createState() => _NotiUserState();
 }
 
 class _NotiUserState extends State<NotiUser> {
-  Covid dataFromApi;
+  Covid? dataFromApi;
 
   @override
   void initState() {

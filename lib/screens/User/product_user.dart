@@ -34,13 +34,13 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
-  SearchBar searchBar;
+  SearchBar? searchBar;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
         title: Center(child: Text('หน้าหลัก')),
-        actions: [searchBar.getSearchAction(context)]);
+        actions: [searchBar!.getSearchAction(context)]);
   }
 
   void onSubmitted(String value) {
@@ -65,7 +65,7 @@ class _ProductListUserState extends State<ProductListUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: searchBar.build(context),
+      appBar: searchBar!.build(context),
       key: _scaffoldKey,
       body: ListView(
         children: <Widget>[
@@ -152,7 +152,7 @@ class _ProductListUserState extends State<ProductListUser> {
     );
   }
 
-  Widget _buildSectiontitle(String title, [Function onTap]) {
+  Widget _buildSectiontitle(String title, [Function? onTap]) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
@@ -164,7 +164,7 @@ class _ProductListUserState extends State<ProductListUser> {
                   fontWeight: FontWeight.bold,
                   fontSize: 20)),
           InkWell(
-            onTap: onTap ?? () {},
+            onTap: () {},
             child: Icon(
               Icons.keyboard_arrow_right,
               color: Colors.indigo,

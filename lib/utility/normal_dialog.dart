@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 Future<void> normalDialog(BuildContext context, String message) async {
   showDialog(
@@ -44,6 +46,28 @@ Future<void> normalDialog2(
                 )),
           ],
         )
+      ],
+    ),
+  );
+}
+
+Future<Null> alertLocationService(
+    BuildContext context, String title, String message) async {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: ListTile(
+        title: Text(title),
+        subtitle: Text(message),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () async {
+              // Navigator.pop(context);
+              await Geolocator.openLocationSettings();
+              exit(0);
+            },
+            child: Text('OK'))
       ],
     ),
   );

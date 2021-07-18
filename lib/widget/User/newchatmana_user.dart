@@ -3,14 +3,12 @@ import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
 class NewChatMana extends StatefulWidget {
-  NewChatMana({Key key}) : super(key: key);
-
   @override
   _NewChatManaState createState() => _NewChatManaState();
 }
 
 class _NewChatManaState extends State<NewChatMana> {
-  String toppicchat, detailchat;
+  String? toppicchat, detailchat;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -86,9 +84,9 @@ class _NewChatManaState extends State<NewChatMana> {
       child: Text('สร้างข้อความ'),
       onPressed: () {
         if (toppicchat == null ||
-            toppicchat.isEmpty ||
+            toppicchat!.isEmpty ||
             detailchat == null ||
-            detailchat.isEmpty) {
+            detailchat!.isEmpty) {
           normalDialog(context, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         } else {
           print('Title : $toppicchat, Text : $detailchat');

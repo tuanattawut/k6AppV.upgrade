@@ -3,14 +3,12 @@ import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
 class AddPromotion extends StatefulWidget {
-  AddPromotion({Key key}) : super(key: key);
-
   @override
   _AddPromotionState createState() => _AddPromotionState();
 }
 
 class _AddPromotionState extends State<AddPromotion> {
-  String titletext, text;
+  String? titletext, text;
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +83,9 @@ class _AddPromotionState extends State<AddPromotion> {
       child: Text('บันทึกข้อมูล'),
       onPressed: () {
         if (titletext == null ||
-            titletext.isEmpty ||
+            titletext!.isEmpty ||
             text == null ||
-            text.isEmpty) {
+            text!.isEmpty) {
           normalDialog(context, 'กรุณากรอกให้ครบทุกช่อง');
         } else {
           print('Title : $titletext, Text : $text');

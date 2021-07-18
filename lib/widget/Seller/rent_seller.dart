@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class RentSeller extends StatefulWidget {
-  RentSeller({Key key}) : super(key: key);
-
   @override
   _RentSellerState createState() => _RentSellerState();
 }

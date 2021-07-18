@@ -6,15 +6,15 @@ import 'package:k6_app/screens/User/product_user.dart';
 import 'package:k6_app/widget/User/promote_user.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage({this.usermodel});
+  Homepage({required this.usermodel});
   final UserModel usermodel;
   @override
   _HomepageState createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
-  UserModel userModel;
-  List<Widget> _widgetOptions;
+  UserModel? userModel;
+  List<Widget>? _widgetOptions;
   @override
   void initState() {
     super.initState();
@@ -23,7 +23,7 @@ class _HomepageState extends State<Homepage> {
       ProductListUser(),
       PromoteUser(),
       NotiUser(),
-      InformationUser(usermodel: userModel),
+      InformationUser(usermodel: userModel!),
     ];
   }
 
@@ -31,7 +31,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetOptions!.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

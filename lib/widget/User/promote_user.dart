@@ -4,8 +4,6 @@ import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class PromoteUser extends StatefulWidget {
-  PromoteUser({Key key}) : super(key: key);
-
   @override
   _PromoteUserState createState() => _PromoteUserState();
 }
@@ -106,10 +104,10 @@ class _PromoteUserState extends State<PromoteUser> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
-        MaterialPageRoute route = MaterialPageRoute(
-          builder: (value) => ShowDetail(),
-        );
-        Navigator.of(context).push(route);
+        // MaterialPageRoute route = MaterialPageRoute(
+        //   builder: (value) => ShowDetail(productModel: ,),
+        // );
+        // Navigator.of(context).push(route);
       },
       child: Row(
         children: <Widget>[

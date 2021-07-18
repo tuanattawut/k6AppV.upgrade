@@ -3,8 +3,6 @@ import 'package:k6_app/widget/User/newchatmana_user.dart';
 import 'package:k6_app/widget/User/showchatmana_user.dart';
 
 class ChatmanaUser extends StatefulWidget {
-  ChatmanaUser({Key key}) : super(key: key);
-
   @override
   _ChatmanaUserState createState() => _ChatmanaUserState();
 }

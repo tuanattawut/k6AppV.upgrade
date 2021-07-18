@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,17 +9,17 @@ import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class InformationShop extends StatefulWidget {
-  InformationShop({this.sellerModel});
+  InformationShop({required this.sellerModel});
   final SellerModel sellerModel;
   @override
   _InformationShopState createState() => _InformationShopState();
 }
 
 class _InformationShopState extends State<InformationShop> {
-  SellerModel sellerModel;
-  ShopModel shopModels;
+  SellerModel? sellerModel;
+  ShopModel? shopModels;
 
-  String idseller;
+  String? idseller;
   @override
   void initState() {
     super.initState();
@@ -29,7 +28,7 @@ class _InformationShopState extends State<InformationShop> {
   }
 
   Future<Null> readDataShop() async {
-    idseller = sellerModel.idSeller;
+    idseller = sellerModel?.idSeller;
 
     String url =
         '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
@@ -41,7 +40,7 @@ class _InformationShopState extends State<InformationShop> {
     if (result != null) {
       for (var map in result) {
         setState(() {
-          shopModels = ShopModel.fromJson(map);
+          shopModels = ShopModel.fromMap(map);
         });
       }
     } else {
@@ -53,7 +52,7 @@ class _InformationShopState extends State<InformationShop> {
   void routeToAddInfo() {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => AddInfoShop(
-        sellerModel: sellerModel,
+        sellerModel: sellerModel!,
       ),
     );
     Navigator.of(context).pushReplacement(route);
@@ -68,22 +67,6 @@ class _InformationShopState extends State<InformationShop> {
       body: shopModels == null ? MyStyle().showProgress() : showListInfoShop(),
     );
   }
-
-  // Widget showNoData(BuildContext context) {
-  //   return Column(
-  //     children: [
-  //       MyStyle().titleCenter(
-  //           context, 'ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า'),
-  //     ],
-  //   );
-  // }
-
-  // ElevatedButton buildSellerButton() {
-  //   return ElevatedButton(
-  //     child: Text('เพิ่มข้อมูล'),
-  //     onPressed: () async => routeToAddInfo(),
-  //   );
-  // }
 
   Widget showListInfoShop() => Padding(
       padding: EdgeInsets.all(10),
@@ -106,7 +89,7 @@ class _InformationShopState extends State<InformationShop> {
             Row(
               children: <Widget>[
                 Text(
-                  shopModels.nameshop,
+                  shopModels!.nameshop,
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -119,7 +102,7 @@ class _InformationShopState extends State<InformationShop> {
             Row(
               children: <Widget>[
                 Text(
-                  sellerModel.phone,
+                  sellerModel!.phone,
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -140,14 +123,14 @@ class _InformationShopState extends State<InformationShop> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/${shopModels.image}',
+          '${MyConstant().domain}/${shopModels?.image}',
           fit: BoxFit.contain,
         ));
   }
 
   Widget showMap() {
-    double lat = double.parse('${shopModels.lat ?? '0'}');
-    double long = double.parse('${shopModels.long ?? '0'}');
+    double lat = double.parse('${shopModels?.lat ?? '0'}');
+    double long = double.parse('${shopModels?.long ?? '0'}');
     print('lat = $lat, lng = $long');
 
     LatLng latLong = LatLng(lat, long);
@@ -169,11 +152,11 @@ class _InformationShopState extends State<InformationShop> {
       Marker(
           markerId: MarkerId('shopID'),
           position: LatLng(
-            double.parse('${shopModels.lat ?? '0'}'),
-            double.parse('${shopModels.long ?? '0'}'),
+            double.parse('${shopModels?.lat ?? '0'}'),
+            double.parse('${shopModels?.long ?? '0'}'),
           ),
           infoWindow: InfoWindow(
-              title: 'ตำแหน่งร้าน', snippet: 'ร้าน : ${shopModels.nameshop}'))
+              title: 'ตำแหน่งร้าน', snippet: 'ร้าน : ${shopModels?.nameshop}'))
     ].toSet();
   }
 

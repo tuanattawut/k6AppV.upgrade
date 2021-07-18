@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formstate = GlobalKey<FormState>();
 
-  String email, password;
+  String? email, password;
 
   @override
   Widget build(BuildContext context) {
@@ -103,14 +103,14 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
         child: Text('ล็อกอิน'),
         onPressed: () async {
-          if (this._formstate.currentState.validate()) {
+          if (this._formstate.currentState!.validate()) {
             print('email =====> $email\npassword =====> $password');
             if (email == null ||
-                email.isEmpty ||
-                !email.contains('@') ||
+                email!.isEmpty ||
+                !email!.contains('@') ||
                 password == null ||
-                password.isEmpty ||
-                password.length < 6) {
+                password!.isEmpty ||
+                password!.length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
               checkAuthen();
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value.length < 6)
+        if (value!.length < 6)
           return 'โปรดกรอกพาสเวิร์ด 6 ตัวขึ้นไป';
         else
           return null;
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (value.isEmpty || !value.contains('@'))
+        if (value!.isEmpty || !value.contains('@'))
           return 'โปรดกรอกอีเมลให้ถูกต้อง';
         else
           return null;

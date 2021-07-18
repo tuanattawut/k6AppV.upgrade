@@ -68,10 +68,10 @@ class _HomemanagerState extends State<Homemanager> {
 
 class MyMenu extends StatelessWidget {
   MyMenu({
-    this.title,
-    this.icon,
-    this.color,
-    this.route,
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.route,
   });
 
   final String title;

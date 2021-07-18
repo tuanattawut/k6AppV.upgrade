@@ -7,16 +7,6 @@ String productModelToJson(List<ProductModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ProductModel {
-  ProductModel({
-    this.idProduct,
-    this.idShop,
-    this.idCategory,
-    this.nameproduct,
-    this.price,
-    this.detail,
-    this.image,
-  });
-
   String idProduct;
   String idShop;
   String idCategory;
@@ -24,24 +14,92 @@ class ProductModel {
   String price;
   String detail;
   String image;
+  ProductModel({
+    required this.idProduct,
+    required this.idShop,
+    required this.idCategory,
+    required this.nameproduct,
+    required this.price,
+    required this.detail,
+    required this.image,
+  });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        idProduct: json["id_product"] == null ? null : json["id_product"],
-        idShop: json["id_shop"] == null ? null : json["id_shop"],
-        idCategory: json["id_category"] == null ? null : json["id_category"],
-        nameproduct: json["nameproduct"] == null ? null : json["nameproduct"],
-        price: json["price"] == null ? null : json["price"],
-        detail: json["detail"] == null ? null : json["detail"],
-        image: json["image"] == null ? null : json["image"],
-      );
+  ProductModel copyWith({
+    String? idProduct,
+    String? idShop,
+    String? idCategory,
+    String? nameproduct,
+    String? price,
+    String? detail,
+    String? image,
+  }) {
+    return ProductModel(
+      idProduct: idProduct ?? this.idProduct,
+      idShop: idShop ?? this.idShop,
+      idCategory: idCategory ?? this.idCategory,
+      nameproduct: nameproduct ?? this.nameproduct,
+      price: price ?? this.price,
+      detail: detail ?? this.detail,
+      image: image ?? this.image,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id_product": idProduct == null ? null : idProduct,
-        "id_shop": idShop == null ? null : idShop,
-        "id_category": idCategory == null ? null : idCategory,
-        "nameproduct": nameproduct == null ? null : nameproduct,
-        "price": price == null ? null : price,
-        "detail": detail == null ? null : detail,
-        "image": image == null ? null : image,
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'idProduct': idProduct,
+      'idShop': idShop,
+      'idCategory': idCategory,
+      'nameproduct': nameproduct,
+      'price': price,
+      'detail': detail,
+      'image': image,
+    };
+  }
+
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel(
+      idProduct: map['idProduct'],
+      idShop: map['idShop'],
+      idCategory: map['idCategory'],
+      nameproduct: map['nameproduct'],
+      price: map['price'],
+      detail: map['detail'],
+      image: map['image'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ProductModel.fromJson(String source) =>
+      ProductModel.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'ProductModel(idProduct: $idProduct, idShop: $idShop, idCategory: $idCategory, nameproduct: $nameproduct, price: $price, detail: $detail, image: $image)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ProductModel &&
+        other.idProduct == idProduct &&
+        other.idShop == idShop &&
+        other.idCategory == idCategory &&
+        other.nameproduct == nameproduct &&
+        other.price == price &&
+        other.detail == detail &&
+        other.image == image;
+  }
+
+  @override
+  int get hashCode {
+    return idProduct.hashCode ^
+        idShop.hashCode ^
+        idCategory.hashCode ^
+        nameproduct.hashCode ^
+        price.hashCode ^
+        detail.hashCode ^
+        image.hashCode;
+  }
 }

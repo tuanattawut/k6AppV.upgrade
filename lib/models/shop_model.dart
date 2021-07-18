@@ -7,16 +7,6 @@ String shopModelToJson(List<ShopModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ShopModel {
-  ShopModel({
-    this.idShop,
-    this.idSeller,
-    this.idArea,
-    this.nameshop,
-    this.image,
-    this.lat,
-    this.long,
-  });
-
   String idShop;
   String idSeller;
   String idArea;
@@ -24,24 +14,92 @@ class ShopModel {
   String image;
   String lat;
   String long;
+  ShopModel({
+    required this.idShop,
+    required this.idSeller,
+    required this.idArea,
+    required this.nameshop,
+    required this.image,
+    required this.lat,
+    required this.long,
+  });
 
-  factory ShopModel.fromJson(Map<String, dynamic> json) => ShopModel(
-        idShop: json["id_shop"] == null ? null : json["id_shop"],
-        idSeller: json["id_seller"] == null ? null : json["id_seller"],
-        idArea: json["id_area"] == null ? null : json["id_area"],
-        nameshop: json["nameshop"] == null ? null : json["nameshop"],
-        image: json["image"] == null ? null : json["image"],
-        lat: json["lat"] == null ? null : json["lat"],
-        long: json["long"] == null ? null : json["long"],
-      );
+  ShopModel copyWith({
+    String? idShop,
+    String? idSeller,
+    String? idArea,
+    String? nameshop,
+    String? image,
+    String? lat,
+    String? long,
+  }) {
+    return ShopModel(
+      idShop: idShop ?? this.idShop,
+      idSeller: idSeller ?? this.idSeller,
+      idArea: idArea ?? this.idArea,
+      nameshop: nameshop ?? this.nameshop,
+      image: image ?? this.image,
+      lat: lat ?? this.lat,
+      long: long ?? this.long,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id_shop": idShop == null ? null : idShop,
-        "id_seller": idSeller == null ? null : idSeller,
-        "id_area": idArea == null ? null : idArea,
-        "nameshop": nameshop == null ? null : nameshop,
-        "image": image == null ? null : image,
-        "lat": lat == null ? null : lat,
-        "long": long == null ? null : long,
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'idShop': idShop,
+      'idSeller': idSeller,
+      'idArea': idArea,
+      'nameshop': nameshop,
+      'image': image,
+      'lat': lat,
+      'long': long,
+    };
+  }
+
+  factory ShopModel.fromMap(Map<String, dynamic> map) {
+    return ShopModel(
+      idShop: map['idShop'],
+      idSeller: map['idSeller'],
+      idArea: map['idArea'],
+      nameshop: map['nameshop'],
+      image: map['image'],
+      lat: map['lat'],
+      long: map['long'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ShopModel.fromJson(String source) =>
+      ShopModel.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'ShopModel(idShop: $idShop, idSeller: $idSeller, idArea: $idArea, nameshop: $nameshop, image: $image, lat: $lat, long: $long)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ShopModel &&
+        other.idShop == idShop &&
+        other.idSeller == idSeller &&
+        other.idArea == idArea &&
+        other.nameshop == nameshop &&
+        other.image == image &&
+        other.lat == lat &&
+        other.long == long;
+  }
+
+  @override
+  int get hashCode {
+    return idShop.hashCode ^
+        idSeller.hashCode ^
+        idArea.hashCode ^
+        nameshop.hashCode ^
+        image.hashCode ^
+        lat.hashCode ^
+        long.hashCode;
+  }
 }
