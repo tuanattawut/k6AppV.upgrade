@@ -8,7 +8,7 @@ import 'package:k6_app/screens/Seller/infomation_shop.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/widget/Seller/chat_seller.dart';
 
-import 'package:k6_app/widget/Seller/product_list_seller.dart';
+import 'package:k6_app/screens/Seller/product_list_seller.dart';
 import 'package:k6_app/widget/Seller/rent_seller.dart';
 
 class Homeseller extends StatefulWidget {

@@ -44,7 +44,6 @@ class _InformationShopState extends State<InformationShop> {
         });
       }
     } else {
-      //showAddDialog();
       routeToAddInfo();
     }
   }

@@ -28,7 +28,6 @@ class _ProductListSellerState extends State<ProductListSeller> {
     super.initState();
     sellerModel = widget.sellerModel;
     readDataShop();
-
     readProduct();
   }
 
@@ -48,6 +47,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
         });
       }
     } else {}
+    print(shopModel?.nameshop);
   }
 
   Future<Null> readProduct() async {
@@ -57,32 +57,33 @@ class _ProductListSellerState extends State<ProductListSeller> {
       productModels.clear();
     }
 
-    idshop = shopModel!.idShop;
-    String url =
-        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
-    await Dio().get(url).then((value) {
-      setState(() {
-        loadStatus = false;
-      });
+    idshop = shopModel?.idShop;
+    print('>>>>>>>$idshop');
+    // String url =
+    //     '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
+    // await Dio().get(url).then((value) {
+    //   setState(() {
+    //     loadStatus = false;
+    //   });
 
-      if (value.toString() != 'null') {
-        // print('value ==>> $value');
+    //   if (value.toString() != 'null') {
+    //     // print('value ==>> $value');
 
-        var result = json.decode(value.data);
-        //print('result ==>> $result');
+    //     var result = json.decode(value.data);
+    //     //print('result ==>> $result');
 
-        for (var map in result) {
-          ProductModel productModel = ProductModel.fromJson(map);
-          setState(() {
-            productModels.add(productModel);
-          });
-        }
-      } else {
-        setState(() {
-          status = false;
-        });
-      }
-    });
+    //     for (var map in result) {
+    //       ProductModel productModel = ProductModel.fromJson(map);
+    //       setState(() {
+    //         productModels.add(productModel);
+    //       });
+    //     }
+    //   } else {
+    //     setState(() {
+    //       status = false;
+    //     });
+    //   }
+    // });
   }
 
   @override

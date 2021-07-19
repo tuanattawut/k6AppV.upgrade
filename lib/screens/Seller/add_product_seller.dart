@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -18,13 +21,28 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   String? nameProduct, price, detail, image, idcategory;
   File? file;
-
+  List categoryItemList = [];
+  String? selectedValue;
   ShopModel? shopModel;
   String? idshop;
   @override
   void initState() {
     super.initState();
     shopModel = widget.shopModel;
+    readCategory();
+  }
+
+  Future<Null> readCategory() async {
+    String api = '${MyConstant().domain}/projectk6/getCategory.php';
+    await Dio().get(api).then((value) {
+      for (var item in json.decode(value.data)) {
+        setState(() {
+          categoryItemList.add(item);
+        });
+      }
+    });
+
+    print(categoryItemList);
   }
 
   @override
@@ -45,6 +63,7 @@ class _AddProductState extends State<AddProduct> {
               showTitleFood('รายละเอียดสินค้า'),
               nameForm(),
               MyStyle().mySizebox(),
+              dropdowncategory(),
               detailForm(),
               MyStyle().mySizebox(),
               priceForm(),
@@ -55,6 +74,26 @@ class _AddProductState extends State<AddProduct> {
           ),
         ),
       ),
+    );
+  }
+
+  Row dropdowncategory() {
+    return Row(
+      children: [
+        DropdownButton(
+          hint: Text('เลือกประเภทสินค้า'),
+          value: selectedValue,
+          items: categoryItemList.map((list) {
+            return DropdownMenuItem(
+                value: list['namecategory'], child: Text(list['namecategory']));
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedValue = value as String;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -72,7 +111,8 @@ class _AddProductState extends State<AddProduct> {
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
-          uploadImage();
+          // uploadImage();
+          addProduct();
         }
       },
     );
@@ -102,21 +142,21 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Future<Null> addProduct() async {
-    idshop = shopModel?.idShop;
+    idshop = shopModel!.idShop;
+    print(idshop);
+    // String url =
+    //     '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$idcategory&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
 
-    String url =
-        '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$idcategory&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
+    // try {
+    //   Response response = await Dio().get(url);
+    //   print('res = $response');
 
-    try {
-      Response response = await Dio().get(url);
-      print('res = $response');
-
-      if (response.toString() == 'true') {
-        Navigator.pop(context);
-      } else {
-        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
-      }
-    } catch (e) {}
+    //   if (response.toString() == 'true') {
+    //     Navigator.pop(context);
+    //   } else {
+    //     normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+    //   }
+    // } catch (e) {}
   }
 
   TextFormField nameForm() {

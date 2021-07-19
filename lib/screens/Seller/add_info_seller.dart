@@ -98,7 +98,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
             MyStyle().mySizebox(),
             nameForm(),
             MyStyle().mySizebox(),
-            lat == null ? MyStyle().showProgress() : showMap(),
+            buildMap(),
             Text(lat.toString()),
             Text(long.toString()),
             MyStyle().mySizebox(),
@@ -165,34 +165,29 @@ class _AddInfoShopState extends State<AddInfoShop> {
     } catch (e) {}
   }
 
-  Set<Marker> myMarker() {
-    return <Marker>[
-      Marker(
-        markerId: MarkerId('myShop'),
-        position: LatLng(lat!, long!),
-        infoWindow: InfoWindow(
-          title: 'ร้านของคุณ',
-          snippet: 'ละติจูด = $lat, ลองติจูต = $long',
+  Set<Marker> setMarker() => <Marker>[
+        Marker(
+          markerId: MarkerId('id'),
+          position: LatLng(lat!, long!),
+          infoWindow: InfoWindow(
+              title: 'ร้านของคุณ', snippet: 'Lat = $lat, long = $long'),
         ),
-      )
-    ].toSet();
-  }
+      ].toSet();
 
-  Container showMap() {
-    LatLng latLng = LatLng(lat!, long!);
-    CameraPosition cameraPosition = CameraPosition(
-      target: latLng,
-      zoom: 15.0,
-    );
-    return Container(
-        height: 300.0,
-        child: GoogleMap(
-          initialCameraPosition: cameraPosition,
-          mapType: MapType.normal,
-          onMapCreated: (controller) {},
-          markers: myMarker(),
-        ));
-  }
+  Widget buildMap() => Container(
+        width: double.infinity,
+        height: 300,
+        child: lat == null
+            ? MyStyle().showProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, long!),
+                  zoom: 16,
+                ),
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+              ),
+      );
 
   ElevatedButton saveButton() {
     return ElevatedButton(
