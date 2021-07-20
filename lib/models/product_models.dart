@@ -58,9 +58,9 @@ class ProductModel {
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      idProduct: map['idProduct'],
-      idShop: map['idShop'],
-      idCategory: map['idCategory'],
+      idProduct: map['id_product'],
+      idShop: map['id_shop'],
+      idCategory: map['id_category'],
       nameproduct: map['nameproduct'],
       price: map['price'],
       detail: map['detail'],

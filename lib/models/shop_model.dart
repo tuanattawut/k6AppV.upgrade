@@ -58,9 +58,9 @@ class ShopModel {
 
   factory ShopModel.fromMap(Map<String, dynamic> map) {
     return ShopModel(
-      idShop: map['idShop'],
-      idSeller: map['idSeller'],
-      idArea: map['idArea'],
+      idShop: map['id_shop'],
+      idSeller: map['id_seller'],
+      idArea: map['id_area'],
       nameshop: map['nameshop'],
       image: map['image'],
       lat: map['lat'],

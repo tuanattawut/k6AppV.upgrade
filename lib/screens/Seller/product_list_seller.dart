@@ -10,8 +10,8 @@ import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class ProductListSeller extends StatefulWidget {
-  ProductListSeller({required this.sellerModel});
-  final SellerModel sellerModel;
+  ProductListSeller({required this.shopModel});
+  final ShopModel shopModel;
   @override
   _ProductListSellerState createState() => _ProductListSellerState();
 }
@@ -26,29 +26,28 @@ class _ProductListSellerState extends State<ProductListSeller> {
   @override
   void initState() {
     super.initState();
-    sellerModel = widget.sellerModel;
-    readDataShop();
+    shopModel = widget.shopModel;
     readProduct();
   }
 
-  Future<Null> readDataShop() async {
-    idseller = sellerModel?.idSeller;
-    String url =
-        '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
-    Response response = await Dio().get(url);
+  // Future<Null> readDataShop() async {
+  //   idseller = sellerModel?.idSeller;
+  //   String url =
+  //       '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
+  //   Response response = await Dio().get(url);
 
-    var result = json.decode(response.data);
-    print('result = $result');
+  //   var result = json.decode(response.data);
+  //   print('result = $result');
 
-    if (result != null) {
-      for (var map in result) {
-        setState(() {
-          shopModel = ShopModel.fromMap(map);
-        });
-      }
-    } else {}
-    print(shopModel?.nameshop);
-  }
+  //   if (result != null) {
+  //     for (var map in result) {
+  //       setState(() {
+  //         shopModel = ShopModel.fromMap(map);
+  //       });
+  //     }
+  //   } else {}
+  //   print(shopModel?.nameshop);
+  // }
 
   Future<Null> readProduct() async {
     if (productModels.length != 0) {
@@ -58,45 +57,59 @@ class _ProductListSellerState extends State<ProductListSeller> {
     }
 
     idshop = shopModel?.idShop;
-    print('>>>>>>>$idshop');
-    // String url =
-    //     '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
-    // await Dio().get(url).then((value) {
-    //   setState(() {
-    //     loadStatus = false;
-    //   });
 
-    //   if (value.toString() != 'null') {
-    //     // print('value ==>> $value');
+    String url =
+        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
+    await Dio().get(url).then((value) {
+      setState(() {
+        loadStatus = false;
+      });
 
-    //     var result = json.decode(value.data);
-    //     //print('result ==>> $result');
+      if (value.toString() != 'null') {
+        // print('value ==>> $value');
 
-    //     for (var map in result) {
-    //       ProductModel productModel = ProductModel.fromJson(map);
-    //       setState(() {
-    //         productModels.add(productModel);
-    //       });
-    //     }
-    //   } else {
-    //     setState(() {
-    //       status = false;
-    //     });
-    //   }
-    // });
+        var result = json.decode(value.data);
+        //  print('result ==>> $result');
+
+        for (var map in result) {
+          ProductModel productModel = ProductModel.fromMap(map);
+          setState(() {
+            productModels.add(productModel);
+          });
+        }
+      } else {
+        setState(() {
+          status = false;
+        });
+      }
+    });
   }
+
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      readProduct();
+    });
+
+    return null;
+  }
+
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('สินค้าของคุณ'),
+          title: Text('สินค้าของฉัน'),
         ),
-        body: Stack(
-          children: <Widget>[
-            loadStatus! ? MyStyle().showProgress() : showContent(),
-            addProductButton(),
-          ],
+        body: RefreshIndicator(
+          child: Stack(
+            children: <Widget>[
+              loadStatus! ? MyStyle().showProgress() : showContent(),
+            ],
+          ),
+          onRefresh: refreshList,
         ));
   }
 
@@ -208,8 +221,8 @@ class _ProductListSellerState extends State<ProductListSeller> {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: MyStyle()
-            .showTitleH2('คุณต้องการลบสินค้า ${productModel.nameproduct} ?'),
+        title:
+            MyStyle().showTitleH2('คุณต้องการลบ ${productModel.nameproduct} ?'),
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

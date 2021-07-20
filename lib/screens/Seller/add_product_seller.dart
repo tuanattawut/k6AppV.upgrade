@@ -143,20 +143,20 @@ class _AddProductState extends State<AddProduct> {
 
   Future<Null> addProduct() async {
     idshop = shopModel!.idShop;
-    print(idshop);
-    // String url =
-    //     '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$idcategory&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
 
-    // try {
-    //   Response response = await Dio().get(url);
-    //   print('res = $response');
+    String url =
+        '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$idcategory&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
 
-    //   if (response.toString() == 'true') {
-    //     Navigator.pop(context);
-    //   } else {
-    //     normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
-    //   }
-    // } catch (e) {}
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
   }
 
   TextFormField nameForm() {

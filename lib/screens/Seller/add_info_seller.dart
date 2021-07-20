@@ -45,7 +45,6 @@ class _AddInfoShopState extends State<AddInfoShop> {
           alertLocationService(
               context, 'ไม่อนุญาติแชร์ Location', 'โปรดแชร์ Location');
         } else {
-          // Find LatLang
           findLatLng();
         }
       } else {
@@ -86,28 +85,29 @@ class _AddInfoShopState extends State<AddInfoShop> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('เพิ่มข้อมูลร้านผู้ขาย'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            MyStyle().mySizebox(),
-            groupImage(),
-            MyStyle().mySizebox(),
-            nameForm(),
-            MyStyle().mySizebox(),
-            buildMap(),
-            Text(lat.toString()),
-            Text(long.toString()),
-            MyStyle().mySizebox(),
-            saveButton(),
-            MyStyle().mySizebox(),
-          ],
+        appBar: AppBar(
+          title: Text('เพิ่มข้อมูลร้านค้า'),
         ),
-      ),
-    );
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              children: <Widget>[
+                MyStyle().mySizebox(),
+                groupImage(),
+                MyStyle().mySizebox(),
+                nameForm(),
+                MyStyle().mySizebox(),
+                buildMap(),
+                MyStyle().mySizebox(),
+                saveButton(),
+                MyStyle().mySizebox(),
+              ],
+            ),
+          ),
+        ));
   }
 
   TextFormField nameForm() {
@@ -155,8 +155,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
     try {
       var object = await ImagePicker().pickImage(
         source: imageSource,
-        maxHeight: 800.0,
-        maxWidth: 800.0,
+        maxHeight: 800,
+        maxWidth: 800,
       );
 
       setState(() {
