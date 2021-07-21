@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formstate = GlobalKey<FormState>();
-
+  bool statusRedEye = true;
   String? email, password;
 
   @override
@@ -89,9 +89,9 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  ElevatedButton buildRegisterButton(BuildContext context) {
-    return ElevatedButton(
-      child: Text('สมัครสมาชิกใหม่'),
+  TextButton buildRegisterButton(BuildContext context) {
+    return TextButton(
+      child: Text('สมัครสมาชิก'),
       onPressed: () {
         print('Goto  Regis pagge');
         Navigator.pushNamed(context, '/register');
@@ -128,9 +128,23 @@ class _LoginPageState extends State<LoginPage> {
         else
           return null;
       },
-      obscureText: true,
+      obscureText: statusRedEye,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              statusRedEye = !statusRedEye;
+            });
+          },
+          icon: statusRedEye
+              ? Icon(
+                  Icons.remove_red_eye,
+                )
+              : Icon(
+                  Icons.remove_red_eye_outlined,
+                ),
+        ),
         labelText: 'พาสเวิร์ด',
         icon: Icon(Icons.lock),
       ),
@@ -227,26 +241,26 @@ class _LoginPageState extends State<LoginPage> {
   Future<Null> checkAuthen() async {
     String url =
         '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
-    print('url ===>> $url');
+    //print('url ===>> $url');
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      // print('res = $response');
 
       var result = json.decode(response.data);
-      print('result = $result');
+      //  print('result = $result');
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
         for (var map in result) {
-          UserModel userModel = UserModel.fromJson(map);
+          UserModel userModel = UserModel.fromMap(map);
           if (password == userModel.password) {
-            //Navigator.pushNamed(context, '/homepage');
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => Homepage(
                 usermodel: userModel,
               ),
             );
             Navigator.of(context).push(route);
+
             break;
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');

@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -20,16 +18,20 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   String? nameProduct, price, detail, image, idcategory;
+  List<File?> files = [];
   File? file;
   List categoryItemList = [];
+  List<String> paths = [];
   String? selectedValue;
   ShopModel? shopModel;
   String? idshop;
+
   @override
   void initState() {
     super.initState();
     shopModel = widget.shopModel;
     readCategory();
+    initialFile();
   }
 
   Future<Null> readCategory() async {
@@ -43,6 +45,12 @@ class _AddProductState extends State<AddProduct> {
     });
 
     print(categoryItemList);
+  }
+
+  void initialFile() {
+    for (var i = 0; i < 4; i++) {
+      files.add(null);
+    }
   }
 
   @override
@@ -85,7 +93,9 @@ class _AddProductState extends State<AddProduct> {
           value: selectedValue,
           items: categoryItemList.map((list) {
             return DropdownMenuItem(
-                value: list['namecategory'], child: Text(list['namecategory']));
+              value: list['id_category'],
+              child: Text(list['namecategory']),
+            );
           }).toList(),
           onChanged: (value) {
             setState(() {
@@ -111,8 +121,8 @@ class _AddProductState extends State<AddProduct> {
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
-          // uploadImage();
-          addProduct();
+          uploadImage();
+          // addProduct();
         }
       },
     );
@@ -132,11 +142,11 @@ class _AddProductState extends State<AddProduct> {
           await MultipartFile.fromFile(file!.path, filename: nameImage);
 
       FormData formData = FormData.fromMap(map);
-      await Dio().post(url, data: formData).then((value) {
-        print('Response ===>>> $value');
+      await Dio().post(url, data: formData).then((value) async {
+        // print('Response ===>>> $value');
         image = '/projectk6/Image/product/$nameImage';
-        print('urlImage = $image');
-        addProduct();
+        // print('urlImage = $image');
+        await addProduct();
       });
     } catch (e) {}
   }
@@ -145,7 +155,7 @@ class _AddProductState extends State<AddProduct> {
     idshop = shopModel!.idShop;
 
     String url =
-        '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$idcategory&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
+        '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$selectedValue&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
 
     try {
       Response response = await Dio().get(url);
@@ -223,9 +233,10 @@ class _AddProductState extends State<AddProduct> {
     try {
       var object = await ImagePicker().pickImage(
         source: source,
-        maxWidth: 800.0,
-        maxHeight: 800.0,
+        maxWidth: 800,
+        maxHeight: 800,
       );
+
       setState(() {
         file = File(object!.path);
       });

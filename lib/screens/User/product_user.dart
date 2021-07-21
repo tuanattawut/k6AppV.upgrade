@@ -3,30 +3,34 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/widget/User/banner.dart';
 
 class ProductListUser extends StatefulWidget {
+  ProductListUser({required this.usermodel});
+  final UserModel usermodel;
   @override
   _ProductListUserState createState() => _ProductListUserState();
 }
 
 class _ProductListUserState extends State<ProductListUser> {
   List<ProductModel> productModels = [];
-
+  UserModel? userModel;
   @override
   void initState() {
     super.initState();
     getData();
+    userModel = widget.usermodel;
   }
 
   Future<Null> getData() async {
-    String api = '${MyConstant().domain}/k6app/getProduct.php';
+    String api = '${MyConstant().domain}/projectk6/getProduct.php';
     await Dio().get(api).then((value) {
       for (var item in json.decode(value.data)) {
-        ProductModel productModel = ProductModel.fromJson(item);
+        ProductModel productModel = ProductModel.fromMap(item);
         setState(() {
           productModels.add(productModel);
         });
@@ -67,45 +71,104 @@ class _ProductListUserState extends State<ProductListUser> {
     return Scaffold(
       appBar: searchBar!.build(context),
       key: _scaffoldKey,
-      body: ListView(
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  MakeBanner(),
+                  MyStyle().mySizebox(),
+                  _buildSectiontitle('สินค้าทั้งหมด', () {
+                    final snackbar = SnackBar(
+                      content: Text("คลิก"),
+                      action: SnackBarAction(
+                        label: "ok",
+                        onPressed: () {},
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  }),
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: productModels.length,
+                    itemBuilder: (BuildContext buildContext, int index) {
+                      return showListView(index);
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget showImage(int index) {
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          image: DecorationImage(
+            image: NetworkImage(
+                '${MyConstant().domain}/${productModels[index].image}'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget showName(int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5 - 35,
+          child: Text(
+            '${productModels[index].nameproduct}',
+            style: MyStyle().mainTitle,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget showDetail(int index) {
+    String string = '${productModels[index].detail}';
+    if (string.length > 100) {
+      string = string.substring(0, 99);
+      string = '$string ...';
+    }
+    return Text(
+      string,
+      style: TextStyle(
+        fontSize: 16,
+        fontStyle: FontStyle.italic,
+      ),
+    );
+  }
+
+  Widget showText(int index) {
+    return Container(
+      padding: EdgeInsets.only(right: 20.0),
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                MakeBanner(),
-                MyStyle().mySizebox(),
-                _buildSectiontitle('สินค้าทั้งหมด', () {
-                  final snackbar = SnackBar(
-                    content: Text("คลิก"),
-                    action: SnackBarAction(
-                      label: "ok",
-                      onPressed: () {},
-                    ),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                }),
-                Column(
-                  children: [
-                    GridView.builder(
-                        padding: EdgeInsets.all(6),
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 0.75,
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 6,
-                          crossAxisSpacing: 6,
-                        ),
-                        itemCount: productModels.length,
-                        itemBuilder: (BuildContext buildContext, int index) {
-                          return showListView(index);
-                        }),
-                  ],
-                ),
-              ],
-            ),
+          showName(index),
+          showDetail(index),
+          Text(
+            '${productModels[index].price} ฿',
+            style: TextStyle(fontSize: 18, color: Colors.red),
           )
         ],
       ),
@@ -113,66 +176,83 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
   Widget showListView(int index) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          // MaterialPageRoute route = MaterialPageRoute(
-          //   builder: (value) => ShowDetail(
-          //     productModel: productModels[index],
-          //   ),
-          // );
-          // Navigator.of(context).push(route);
-          print('You Click index = $index');
-        },
-        child: GridTile(
-            child: Image.network(
-              '${MyConstant().domain}/${productModels[index].image}',
-              fit: BoxFit.cover,
-            ),
-            footer: GridTileBar(
-              title: Text(
-                productModels[index].nameproduct,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
-              subtitle: Text(
-                '${productModels[index].price} ฿',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 18,
-                ),
-              ),
-              backgroundColor: Colors.white60,
-            )),
-      ),
-    );
-  }
-
-  Widget _buildSectiontitle(String title, [Function? onTap]) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    return GestureDetector(
+      onTap: () {
+        if (userModel?.idUser != null) {
+          print(userModel?.idUser);
+          print(productModels[index].nameproduct);
+        }
+      },
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title,
-              style: TextStyle(
-                  color: Colors.grey[700],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20)),
-          InkWell(
-            onTap: () {},
-            child: Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.indigo,
-              size: 30,
-            ),
-          ),
+        children: <Widget>[
+          showImage(index),
+          showText(index),
         ],
       ),
     );
   }
+}
+
+// Widget showListView(int index) {
+//   return Card(
+//     child: InkWell(
+//       onTap: () {
+//         // MaterialPageRoute route = MaterialPageRoute(
+//         //   builder: (value) => ShowDetail(
+//         //     productModel: productModels[index],
+//         //   ),
+//         // );
+//         // Navigator.of(context).push(route);
+//         print('You Click index = $index');
+//       },
+//       child: GridTile(
+//           child: Image.network(
+//             '${MyConstant().domain}/${productModels[index].image}',
+//             fit: BoxFit.cover,
+//           ),
+//           footer: GridTileBar(
+//             title: Text(
+//               productModels[index].nameproduct,
+//               overflow: TextOverflow.ellipsis,
+//               style: TextStyle(
+//                 color: Colors.black,
+//                 fontWeight: FontWeight.w600,
+//                 fontSize: 20,
+//               ),
+//             ),
+//             subtitle: Text(
+//               '${productModels[index].price} ฿',
+//               style: TextStyle(
+//                 color: Colors.red,
+//                 fontSize: 18,
+//               ),
+//             ),
+//             backgroundColor: Colors.white60,
+//           )),
+//     ),
+//   );
+// }
+
+Widget _buildSectiontitle(String title, [Function? onTap]) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title,
+            style: TextStyle(
+                color: Colors.grey[700],
+                fontWeight: FontWeight.bold,
+                fontSize: 20)),
+        InkWell(
+          onTap: () {},
+          child: Icon(
+            Icons.keyboard_arrow_right,
+            color: Colors.indigo,
+            size: 30,
+          ),
+        ),
+      ],
+    ),
+  );
 }

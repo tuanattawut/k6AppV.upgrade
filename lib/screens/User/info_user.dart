@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/chatmana_user.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class InformationUser extends StatefulWidget {
@@ -85,19 +86,14 @@ class _InformationUserState extends State<InformationUser> {
     return Center(
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
-        backgroundImage: Image.asset(
-          'images/user.png',
-          height: 150,
-          width: 150,
-        ) as ImageProvider,
+        backgroundImage: NetworkImage(
+          '${MyConstant().domain}/${userModel?.image}',
+        ),
         radius: 60,
       ),
     );
   }
 
-// NetworkImage(
-//                 '${MyConstant().domain}/${userModel?.image}',
-//               ),
   Widget _buildCard(String title, String titleH2) {
     return Card(
       shape: RoundedRectangleBorder(

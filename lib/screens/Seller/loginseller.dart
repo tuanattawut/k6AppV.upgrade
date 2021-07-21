@@ -147,14 +147,13 @@ class _LoginSellerState extends State<LoginSeller> {
   Future<Null> checkAuthen() async {
     String url =
         '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
-    print('url ===>> $url');
+    // print('url ===>> $url');
     await Dio().get(url).then((value) async {
       if (value.toString() == 'null') {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
         for (var item in json.decode(value.data)) {
           SellerModel sellerModel = SellerModel.fromMap(item);
-
           if (password == sellerModel.password) {
             if (sellerModel.status == 'yes') {
               MaterialPageRoute route = MaterialPageRoute(
