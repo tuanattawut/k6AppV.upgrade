@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/screens/Manager/approve_seller.dart';
 import 'package:k6_app/screens/Manager/manage_chat.dart';
 import 'package:k6_app/screens/Manager/manage_noti.dart';
 import 'package:k6_app/screens/Manager/manage_rentarea.dart';
@@ -24,12 +25,17 @@ class _HomemanagerState extends State<Homemanager> {
                 })
           ],
         ),
-        backgroundColor: Colors.white70,
         body: Container(
           padding: EdgeInsets.all(20.0),
           child: GridView.count(
             crossAxisCount: 2,
             children: <Widget>[
+              MyMenu(
+                title: 'จัดการผู้ขาย',
+                icon: Icons.approval,
+                color: Colors.red,
+                route: ApproveSeller(),
+              ),
               MyMenu(
                 title: 'การใช้งานสมาชิก',
                 icon: Icons.trending_up,

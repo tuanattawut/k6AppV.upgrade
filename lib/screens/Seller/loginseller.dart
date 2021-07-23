@@ -1,14 +1,9 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
-
-import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
-
 import 'package:k6_app/screens/Seller/registerseller.dart';
-import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -61,8 +56,8 @@ class _LoginSellerState extends State<LoginSeller> {
         ));
   }
 
-  ElevatedButton buildRegisterButton(BuildContext context) {
-    return ElevatedButton(
+  TextButton buildRegisterButton(BuildContext context) {
+    return TextButton(
       child: Text('สมัครขายสินค้า'),
       onPressed: () {
         MaterialPageRoute route =

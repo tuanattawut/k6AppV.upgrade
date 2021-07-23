@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/Manager/loginmanager.dart';
 import 'package:k6_app/screens/Seller/loginseller.dart';
 import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
@@ -75,7 +76,9 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
         child: Text('สำหรับผู้จัดการ'),
         onPressed: () async {
-          normalDialog(context, 'คลิกทำไมครับ');
+          MaterialPageRoute route =
+              MaterialPageRoute(builder: (value) => LoginManager());
+          Navigator.of(context).push(route);
         });
   }
 
