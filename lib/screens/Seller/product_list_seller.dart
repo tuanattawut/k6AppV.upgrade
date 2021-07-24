@@ -30,25 +30,6 @@ class _ProductListSellerState extends State<ProductListSeller> {
     readProduct();
   }
 
-  // Future<Null> readDataShop() async {
-  //   idseller = sellerModel?.idSeller;
-  //   String url =
-  //       '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
-  //   Response response = await Dio().get(url);
-
-  //   var result = json.decode(response.data);
-  //   print('result = $result');
-
-  //   if (result != null) {
-  //     for (var map in result) {
-  //       setState(() {
-  //         shopModel = ShopModel.fromMap(map);
-  //       });
-  //     }
-  //   } else {}
-  //   print(shopModel?.nameshop);
-  // }
-
   Future<Null> readProduct() async {
     if (productModels.length != 0) {
       loadStatus = true;

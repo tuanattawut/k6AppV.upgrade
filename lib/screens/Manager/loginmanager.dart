@@ -54,7 +54,7 @@ class _LoginManagerState extends State<LoginManager> {
     return TextFormField(
       onChanged: (value) => email = value.trim(),
       validator: (value) {
-        if (value!.isEmpty || !value.contains('@'))
+        if (value!.isEmpty)
           return 'โปรดกรอกอีเมลให้ถูกต้อง';
         else
           return null;
@@ -109,7 +109,6 @@ class _LoginManagerState extends State<LoginManager> {
             print('email =====> $email\npassword =====> $password');
             if (email == null ||
                 email!.isEmpty ||
-                !email!.contains('@') ||
                 password == null ||
                 password!.isEmpty ||
                 password!.length < 6) {

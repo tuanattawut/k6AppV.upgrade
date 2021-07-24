@@ -5,14 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class ApproveSeller extends StatefulWidget {
   @override
   _ApproveSellerState createState() => _ApproveSellerState();
 }
 
+class ListItem {
+  String status;
+  String name;
+  ListItem(this.status, this.name);
+}
+
 class _ApproveSellerState extends State<ApproveSeller> {
   List<SellerModel> sellerModels = [];
+  String? _value;
+  List<ListItem> _dropdownItems = [
+    ListItem('yes', 'อนุมัติ'),
+    ListItem('no', 'ไม่อนุมัติ'),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +40,20 @@ class _ApproveSellerState extends State<ApproveSeller> {
         setState(() {
           sellerModels.add(sellerModel);
         });
+      }
+    });
+  }
+
+  Future<Null> editSeller(SellerModel sellermodel) async {
+    String id = sellermodel.idSeller;
+
+    String url =
+        '${MyConstant().domain}/projectk6/editSeller.php?isAdd=true&id_seller=$id&status=$_value';
+    await Dio().get(url).then((value) async {
+      if (value.toString() == 'true') {
+        await normalDialog(context, 'สำเร็จ');
+      } else {
+        normalDialog(context, 'กรุณาลองใหม่ มีอะไร ? ผิดพลาด');
       }
     });
   }
@@ -116,11 +143,17 @@ class _ApproveSellerState extends State<ApproveSeller> {
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: dropdownapprove(),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            editSeller(sellermodel);
+                          },
                           child: Text('ยืนยัน'),
                         ),
                         TextButton(
@@ -133,5 +166,27 @@ class _ApproveSellerState extends State<ApproveSeller> {
                 ),
               ));
         });
+  }
+
+  Row dropdownapprove() {
+    return Row(
+      children: [
+        Text('อนุมัติผู้ขาย: '),
+        DropdownButton<String>(
+          value: _value,
+          items: _dropdownItems.map((ListItem item) {
+            return DropdownMenuItem<String>(
+              value: item.status,
+              child: Text(item.name),
+            );
+          }).toList(),
+          onChanged: (String? value) {
+            setState(() {
+              _value = value;
+            });
+          },
+        ),
+      ],
+    );
   }
 }

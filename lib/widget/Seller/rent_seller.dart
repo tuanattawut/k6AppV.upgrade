@@ -22,7 +22,6 @@ class _RentSellerState extends State<RentSeller> {
           children: <Widget>[
             MyStyle().showTitleH2('เช่าจองแผงขายสินค้า'),
             MyStyle().mySizebox(),
-            showImage() == null ? showImage() : MyStyle().showProgress(),
           ],
         ),
       );

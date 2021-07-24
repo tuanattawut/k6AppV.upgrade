@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
@@ -49,7 +48,12 @@ class _LoginPageState extends State<LoginPage> {
             buildPasswordField(),
             MyStyle().mySizebox(),
             buildLoginButton(),
-            buildRegisterButton(context),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                buildRegisterButton(context),
+              ],
+            ),
             LoginFacebook(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,9 +76,11 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 
-  ElevatedButton buildManagerButton() {
-    return ElevatedButton(
-        child: Text('สำหรับผู้จัดการ'),
+  OutlinedButton buildManagerButton() {
+    return OutlinedButton(
+        child: Text(
+          'สำหรับผู้จัดการ',
+        ),
         onPressed: () async {
           MaterialPageRoute route =
               MaterialPageRoute(builder: (value) => LoginManager());
@@ -82,8 +88,8 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  ElevatedButton buildSellerButton() {
-    return ElevatedButton(
+  OutlinedButton buildSellerButton() {
+    return OutlinedButton(
         child: Text('สำหรับผู้ขาย'),
         onPressed: () async {
           MaterialPageRoute route =
@@ -96,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
     return TextButton(
       child: Text('สมัครสมาชิก'),
       onPressed: () {
-        print('Goto  Regis pagge');
         Navigator.pushNamed(context, '/register');
       },
     );

@@ -33,7 +33,7 @@ class _LoginSellerState extends State<LoginSeller> {
               padding: EdgeInsets.all(20.0),
               children: <Widget>[
                 MyStyle().mySizebox(),
-                MyStyle().showLogo(),
+                // MyStyle().showLogo(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

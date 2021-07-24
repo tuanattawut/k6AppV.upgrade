@@ -19,6 +19,9 @@ class ProductListUser extends StatefulWidget {
 class _ProductListUserState extends State<ProductListUser> {
   List<ProductModel> productModels = [];
   UserModel? userModel;
+  bool? loadStatus = true;
+  bool? status = true;
+
   @override
   void initState() {
     super.initState();
@@ -27,12 +30,28 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
   Future<Null> getData() async {
+    if (productModels.length != 0) {
+      loadStatus = true;
+      status = true;
+      productModels.clear();
+    }
+
     String api = '${MyConstant().domain}/projectk6/getProduct.php';
+
     await Dio().get(api).then((value) {
-      for (var item in json.decode(value.data)) {
-        ProductModel productModel = ProductModel.fromMap(item);
+      setState(() {
+        loadStatus = false;
+      });
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          ProductModel productModel = ProductModel.fromMap(item);
+          setState(() {
+            productModels.add(productModel);
+          });
+        }
+      } else {
         setState(() {
-          productModels.add(productModel);
+          status = false;
         });
       }
     });
@@ -71,40 +90,42 @@ class _ProductListUserState extends State<ProductListUser> {
     return Scaffold(
       appBar: searchBar!.build(context),
       key: _scaffoldKey,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
+      body: loadStatus!
+          ? MyStyle().showProgress()
+          : SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  MakeBanner(),
-                  MyStyle().mySizebox(),
-                  _buildSectiontitle('สินค้าทั้งหมด', () {
-                    final snackbar = SnackBar(
-                      content: Text("คลิก"),
-                      action: SnackBarAction(
-                        label: "ok",
-                        onPressed: () {},
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                  }),
-                  ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: productModels.length,
-                    itemBuilder: (BuildContext buildContext, int index) {
-                      return showListView(index);
-                    },
-                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        MakeBanner(),
+                        MyStyle().mySizebox(),
+                        _buildSectiontitle('สินค้าทั้งหมด', () {
+                          final snackbar = SnackBar(
+                            content: Text("คลิก"),
+                            action: SnackBarAction(
+                              label: "ok",
+                              onPressed: () {},
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        }),
+                        ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: productModels.length,
+                          itemBuilder: (BuildContext buildContext, int index) {
+                            return showListView(index);
+                          },
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
+            ),
     );
   }
 
