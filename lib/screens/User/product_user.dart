@@ -7,6 +7,7 @@ import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:k6_app/widget/User/banner.dart';
 
 class ProductListUser extends StatefulWidget {
@@ -21,6 +22,8 @@ class _ProductListUserState extends State<ProductListUser> {
   UserModel? userModel;
   bool? loadStatus = true;
   bool? status = true;
+
+  String? name, id;
 
   @override
   void initState() {
@@ -55,6 +58,23 @@ class _ProductListUserState extends State<ProductListUser> {
         });
       }
     });
+  }
+
+  Future<Null> addData() async {
+    String iduser = userModel!.idUser;
+
+    String url =
+        '${MyConstant().domain}/projectk6/addData.php?isAdd=true&id_user=$iduser&id_product=$id&nameproduct=$name';
+
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
   }
 
   SearchBar? searchBar;
@@ -199,10 +219,11 @@ class _ProductListUserState extends State<ProductListUser> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
-        if (userModel?.idUser != null) {
-          print(userModel?.idUser);
-          print(productModels[index].nameproduct);
-        }
+        name = productModels[index].nameproduct;
+        id = productModels[index].idProduct;
+        print(name);
+        print(id);
+        addData();
       },
       child: Row(
         children: <Widget>[

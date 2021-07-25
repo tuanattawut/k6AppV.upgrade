@@ -31,7 +31,6 @@ class _AddProductState extends State<AddProduct> {
     super.initState();
     shopModel = widget.shopModel;
     readCategory();
-    initialFile();
   }
 
   Future<Null> readCategory() async {
@@ -45,12 +44,6 @@ class _AddProductState extends State<AddProduct> {
     });
 
     print(categoryItemList);
-  }
-
-  void initialFile() {
-    for (var i = 0; i < 4; i++) {
-      files.add(null);
-    }
   }
 
   @override
@@ -184,6 +177,7 @@ class _AddProductState extends State<AddProduct> {
       onChanged: (value) => price = value.trim(),
       decoration: InputDecoration(
         labelText: 'ราคาสินค้า :',
+        suffixText: 'บาท',
       ),
     );
   }
