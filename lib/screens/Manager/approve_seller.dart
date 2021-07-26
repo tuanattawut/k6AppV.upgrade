@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/screens/Manager/detailapprove.dart';
 import 'package:k6_app/utility/my_constant.dart';
-import 'package:k6_app/utility/my_style.dart';
-import 'package:k6_app/utility/normal_dialog.dart';
 
 class ApproveSeller extends StatefulWidget {
   @override

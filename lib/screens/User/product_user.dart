@@ -25,6 +25,8 @@ class _ProductListUserState extends State<ProductListUser> {
 
   String? name, id;
 
+  List dataId = [];
+  List dataName = [];
   @override
   void initState() {
     super.initState();
@@ -64,7 +66,7 @@ class _ProductListUserState extends State<ProductListUser> {
     String iduser = userModel!.idUser;
 
     String url =
-        '${MyConstant().domain}/projectk6/addData.php?isAdd=true&id_user=$iduser&id_product=$id&nameproduct=$name';
+        '${MyConstant().domain}/projectk6/addData.php?isAdd=true&id_user=$iduser&id_product=$dataId&nameproduct=$dataName';
 
     try {
       Response response = await Dio().get(url);
@@ -221,9 +223,25 @@ class _ProductListUserState extends State<ProductListUser> {
       onTap: () {
         name = productModels[index].nameproduct;
         id = productModels[index].idProduct;
-        print(name);
-        print(id);
-        addData();
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (value) => ShowDetail(
+            productModel: productModels[index],
+          ),
+        );
+        Navigator.of(context).push(route);
+        dataId.add(id);
+        dataName.add(name);
+
+        if (dataName.length < 4) {
+          print(dataName);
+          if (dataName.length == 3) {
+            addData();
+            print(dataId);
+          }
+        } else {
+          dataName.clear();
+          dataId.clear();
+        }
       },
       child: Row(
         children: <Widget>[
@@ -283,7 +301,7 @@ Widget _buildSectiontitle(String title, [Function? onTap]) {
       children: [
         Text(title,
             style: TextStyle(
-                color: Colors.grey[700],
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
         InkWell(

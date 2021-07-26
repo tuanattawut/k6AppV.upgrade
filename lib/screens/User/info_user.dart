@@ -75,7 +75,9 @@ class _InformationUserState extends State<InformationUser> {
           ),
           ElevatedButton(
             child: Text('ออกจากระบบ'),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/');
+            },
           )
         ],
       ),

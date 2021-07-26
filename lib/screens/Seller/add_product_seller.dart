@@ -18,10 +18,10 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   String? nameProduct, price, detail, image, idcategory;
-  List<File?> files = [];
+
   File? file;
   List categoryItemList = [];
-  List<String> paths = [];
+
   String? selectedValue;
   ShopModel? shopModel;
   String? idshop;

@@ -78,6 +78,9 @@ class _LoginPageState extends State<LoginPage> {
 
   OutlinedButton buildManagerButton() {
     return OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(width: 2, color: Colors.blue),
+        ),
         child: Text(
           'สำหรับผู้จัดการ',
         ),
@@ -90,6 +93,9 @@ class _LoginPageState extends State<LoginPage> {
 
   OutlinedButton buildSellerButton() {
     return OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(width: 2, color: Colors.blue),
+        ),
         child: Text('สำหรับผู้ขาย'),
         onPressed: () async {
           MaterialPageRoute route =
@@ -100,7 +106,9 @@ class _LoginPageState extends State<LoginPage> {
 
   TextButton buildRegisterButton(BuildContext context) {
     return TextButton(
-      child: Text('สมัครสมาชิก'),
+      child: Text(
+        'สมัครสมาชิก',
+      ),
       onPressed: () {
         Navigator.pushNamed(context, '/register');
       },
@@ -176,74 +184,6 @@ class _LoginPageState extends State<LoginPage> {
         hintText: 'x@x.com',
       ),
     );
-  }
-
-  Future<Null> loginWithFacebook() async {
-    // FacebookLogin facebookLogin = FacebookLogin();
-
-    // FacebookLoginResult result =
-    //     await facebookLogin.logIn(['email', 'public_profile']);
-
-    // String token = result.accessToken.token;
-    // print(token);
-    // String userid = result.accessToken.userId;
-    // print(' USER ID ===>  $userid');
-
-    //   FirebaseAuth.instance
-    //       .signInWithCredential(FacebookAuthProvider.credential(token))
-    //       .then((value) async {
-    //     uid = value.user.uid;
-    //     name = value.user.displayName;
-    //     email = value.user.email;
-    //     phone = value.user.phoneNumber;
-
-    //     FirebaseFirestore.instance
-    //         .collection('user')
-    //         .doc(uid)
-    //         .snapshots()
-    //         .listen((event) {
-    //       print('event ==> ${event.data()}');
-    //       if (event.data() == null) {
-    //         callTypeUserDialog();
-    //       } else {
-    //         Firebase.initializeApp().then((value) async {
-    //           FirebaseFirestore.instance
-    //               .collection('user')
-    //               .doc(uid)
-    //               .snapshots()
-    //               .listen((event) {
-    //             UserModels model = UserModels.fromMap(event.data());
-    //             switch (model.typeuser) {
-    //               case 'user':
-    //                 Navigator.pushNamed(context, '/homepage');
-    //                 break;
-    //               case 'seller':
-    //                 Navigator.pushNamed(context, '/homeseller');
-    //                 break;
-    //               case 'manager':
-    //                 Navigator.pushNamed(context, '/homemanager');
-    //                 break;
-    //               default:
-    //             }
-    //           });
-    //         });
-    //       }
-    //     });
-    //   });
-    //   print('Token = $token');
-    //   switch (result.status) {
-    //     case FacebookLoginStatus.error:
-    //       print("Error");
-    //       break;
-
-    //     case FacebookLoginStatus.cancelledByUser:
-    //       print("CancelledByUser");
-    //       break;
-
-    //     case FacebookLoginStatus.loggedIn:
-    //       print('login');
-    //       break;
-    //   }
   }
 
   Future<Null> checkAuthen() async {

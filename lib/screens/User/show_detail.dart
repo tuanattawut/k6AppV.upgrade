@@ -27,7 +27,7 @@ class _ShowDetailState extends State<ShowDetail> {
     super.initState();
     setState(() {
       productModel = widget.productModel;
-      print('url ==> ${productModel?.image}');
+      //print('url ==> ${productModel?.image}');
       readSeller();
     });
   }
@@ -36,20 +36,20 @@ class _ShowDetailState extends State<ShowDetail> {
     idShop = productModel!.idShop;
 
     String url =
-        '${MyConstant().domain}/k6app/getproductWhereidShop.php?isAdd=true&id=$idShop';
+        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id=$idShop';
     Response response = await Dio().get(url);
 
     var result = json.decode(response.data);
     print('result = $result');
 
-    for (var map in result) {
-      UserModel userModel = UserModel.fromJson(map);
+    // for (var map in result) {
+    //   UserModel userModel = UserModel.fromMap(map);
 
-      print('NameShop = {userModel.nameshop}');
-      setState(() {
-        userModels = (userModel);
-      });
-    }
+    //   print('NameShop = {userModel.nameshop}');
+    //   setState(() {
+    //     userModels = (userModel);
+    //   });
+    // }
   }
 
   @override
