@@ -4,7 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/product_models.dart';
-import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
@@ -18,9 +19,10 @@ class ShowDetail extends StatefulWidget {
 
 class _ShowDetailState extends State<ShowDetail> {
   ProductModel? productModel;
-  UserModel? userModels;
+  SellerModel? sellerModel;
+  ShopModel? shopModels;
 
-  String? idShop;
+  String? idShop, idSeller;
 
   @override
   void initState() {
@@ -28,28 +30,45 @@ class _ShowDetailState extends State<ShowDetail> {
     setState(() {
       productModel = widget.productModel;
       //print('url ==> ${productModel?.image}');
-      readSeller();
+      readShop();
     });
   }
 
-  Future<Null> readSeller() async {
+  Future<Null> readShop() async {
     idShop = productModel!.idShop;
-
+    //print(idShop);
     String url =
-        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id=$idShop';
+        '${MyConstant().domain}/projectk6/getShopWhereidShop.php?isAdd=true&id_shop=$idShop';
     Response response = await Dio().get(url);
 
+    //print(response);
     var result = json.decode(response.data);
     print('result = $result');
 
-    // for (var map in result) {
-    //   UserModel userModel = UserModel.fromMap(map);
+    for (var map in result) {
+      setState(() {
+        shopModels = ShopModel.fromMap(map);
+        readSeller();
+      });
+    }
+  }
 
-    //   print('NameShop = {userModel.nameshop}');
-    //   setState(() {
-    //     userModels = (userModel);
-    //   });
-    // }
+  Future<Null> readSeller() async {
+    idSeller = shopModels?.idSeller;
+    print(idSeller);
+    String url =
+        '${MyConstant().domain}/projectk6/getSellerWhereidSeller.php?isAdd=true&id_seller=$idSeller';
+    Response response = await Dio().get(url);
+
+    print(response);
+    var result = json.decode(response.data);
+    print('result = $result');
+
+    for (var map in result) {
+      setState(() {
+        sellerModel = SellerModel.fromMap(map);
+      });
+    }
   }
 
   @override
@@ -64,9 +83,11 @@ class _ShowDetailState extends State<ShowDetail> {
           padding: EdgeInsets.all(5),
           child: Column(
             children: <Widget>[
-              userModels == null
+              shopModels == null
                   ? MyStyle().showLinearProgress()
-                  : showDetailProduct(),
+                  : sellerModel == null
+                      ? MyStyle().showLinearProgress()
+                      : showDetailProduct(),
               MyStyle().mySizebox(),
               MyStyle().mySizebox(),
             ],
@@ -85,9 +106,9 @@ class _ShowDetailState extends State<ShowDetail> {
   }
 
   Widget showMap() {
-    double lat = double.parse('0');
-    double long = double.parse('0');
-    print('lat = $lat, long = $long');
+    double lat = double.parse(shopModels!.lat);
+    double long = double.parse(shopModels!.long);
+    //print('lat = $lat, long = $long');
 
     LatLng latLong = LatLng(lat, long);
     CameraPosition position = CameraPosition(
@@ -111,11 +132,9 @@ class _ShowDetailState extends State<ShowDetail> {
       Marker(
           markerId: MarkerId('shopID'),
           position: LatLng(
-            double.parse('0'),
-            double.parse('0'),
-          ),
-          infoWindow:
-              InfoWindow(title: 'ตำแหน่งร้าน', snippet: 'ร้าน :  กำลังโหลด'))
+              double.parse(shopModels!.lat), double.parse(shopModels!.long)),
+          infoWindow: InfoWindow(
+              title: 'ตำแหน่งร้าน', snippet: 'ร้าน :  ${shopModels!.nameshop}'))
     ].toSet();
   }
 
@@ -126,7 +145,13 @@ class _ShowDetailState extends State<ShowDetail> {
           children: <Widget>[
             showImage(),
             MyStyle().mySizebox(),
-            MyStyle().showTitle(productModel!.nameproduct),
+            Text(
+              productModel!.nameproduct,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -135,7 +160,7 @@ class _ShowDetailState extends State<ShowDetail> {
                   child: Text(
                     '${productModel?.price} ฿',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 25,
                       color: Colors.red,
                     ),
                   ),
@@ -164,7 +189,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('ร้าน: '),
                         Text(
-                          'กำลังโหลด',
+                          shopModels!.nameshop,
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -175,7 +200,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('เบอร์โทร: '),
                         Text(
-                          '${userModels?.phone ?? 'กำลังโหลด'}',
+                          sellerModel!.phone,
                           style: TextStyle(
                             fontSize: 18,
                           ),

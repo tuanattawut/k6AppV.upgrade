@@ -194,7 +194,6 @@ class _ProductListUserState extends State<ProductListUser> {
       string,
       style: TextStyle(
         fontSize: 16,
-        fontStyle: FontStyle.italic,
       ),
     );
   }
@@ -211,7 +210,7 @@ class _ProductListUserState extends State<ProductListUser> {
           showDetail(index),
           Text(
             '${productModels[index].price} ฿',
-            style: TextStyle(fontSize: 18, color: Colors.red),
+            style: TextStyle(fontSize: 20, color: Colors.red),
           )
         ],
       ),
@@ -301,7 +300,7 @@ Widget _buildSectiontitle(String title, [Function? onTap]) {
       children: [
         Text(title,
             style: TextStyle(
-                color: Colors.black,
+                color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
         InkWell(
