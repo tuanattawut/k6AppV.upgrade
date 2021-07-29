@@ -209,8 +209,8 @@ class _ProductListUserState extends State<ProductListUser> {
           showName(index),
           showDetail(index),
           Text(
-            '${productModels[index].price} ฿',
-            style: TextStyle(fontSize: 20, color: Colors.red),
+            '${productModels[index].price} บาท',
+            style: TextStyle(fontSize: 25, color: Colors.red),
           )
         ],
       ),
@@ -250,49 +250,79 @@ class _ProductListUserState extends State<ProductListUser> {
       ),
     );
   }
+
+//   Widget showRecomView(int index) {
+//     return Container(
+//       margin: EdgeInsets.only(
+//         left: 20,
+//         right: 20,
+//         top: 10,
+//         bottom: 10,
+//       ),
+//       child: Column(
+//         children: <Widget>[
+//           Image.network('${MyConstant().domain}/${productModels[index].image}'),
+//           GestureDetector(
+//             onTap: () {
+//               print(index);
+//             },
+//             child: Container(
+//               padding: EdgeInsets.all(20 / 2),
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.only(
+//                   bottomLeft: Radius.circular(10),
+//                   bottomRight: Radius.circular(10),
+//                 ),
+//                 boxShadow: [
+//                   BoxShadow(
+//                     offset: Offset(0, 10),
+//                     blurRadius: 50,
+//                     color: Colors.grey.withOpacity(0.23),
+//                   ),
+//                 ],
+//               ),
+//               child: Row(
+//                 children: <Widget>[
+//                   RichText(
+//                     text: TextSpan(
+//                       children: [
+//                         TextSpan(
+//                           text: "${productModels[index].nameproduct}\n"
+//                               .toUpperCase(),
+//                           style: Theme.of(context)
+//                               .textTheme
+//                               .button!
+//                               .copyWith(fontSize: 20),
+//                         ),
+//                         TextSpan(
+//                           text: "${productModels[index].detail}",
+//                           style: TextStyle(
+//                             color: Colors.black.withOpacity(0.5),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                   Spacer(),
+//                   Text(
+//                     '${productModels[index].price} \บาท',
+//                     style: Theme.of(context)
+//                         .textTheme
+//                         .button!
+//                         .copyWith(color: Colors.red, fontSize: 20),
+//                   )
+//                 ],
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
 }
 
-// Widget showListView(int index) {
-//   return Card(
-//     child: InkWell(
-//       onTap: () {
-//         // MaterialPageRoute route = MaterialPageRoute(
-//         //   builder: (value) => ShowDetail(
-//         //     productModel: productModels[index],
-//         //   ),
-//         // );
-//         // Navigator.of(context).push(route);
-//         print('You Click index = $index');
-//       },
-//       child: GridTile(
-//           child: Image.network(
-//             '${MyConstant().domain}/${productModels[index].image}',
-//             fit: BoxFit.cover,
-//           ),
-//           footer: GridTileBar(
-//             title: Text(
-//               productModels[index].nameproduct,
-//               overflow: TextOverflow.ellipsis,
-//               style: TextStyle(
-//                 color: Colors.black,
-//                 fontWeight: FontWeight.w600,
-//                 fontSize: 20,
-//               ),
-//             ),
-//             subtitle: Text(
-//               '${productModels[index].price} ฿',
-//               style: TextStyle(
-//                 color: Colors.red,
-//                 fontSize: 18,
-//               ),
-//             ),
-//             backgroundColor: Colors.white60,
-//           )),
-//     ),
-//   );
-// }
-
-Widget _buildSectiontitle(String title, [Function? onTap]) {
+Widget _buildSectiontitle(String title, [Function()? onTap]) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
     child: Row(
@@ -304,7 +334,7 @@ Widget _buildSectiontitle(String title, [Function? onTap]) {
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
         InkWell(
-          onTap: () {},
+          onTap: onTap,
           child: Icon(
             Icons.keyboard_arrow_right,
             color: Colors.indigo,
