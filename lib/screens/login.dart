@@ -32,8 +32,10 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.all(20.0),
           children: <Widget>[
             MyStyle().mySizebox(),
-            MyStyle().mySizebox(),
-            MyStyle().showLogo(),
+            SizedBox(
+              height: 150,
+            ),
+            //MyStyle().showLogo(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

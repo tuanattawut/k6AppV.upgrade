@@ -33,6 +33,9 @@ class _LoginSellerState extends State<LoginSeller> {
               padding: EdgeInsets.all(20.0),
               children: <Widget>[
                 MyStyle().mySizebox(),
+                SizedBox(
+                  height: 50,
+                ),
                 // MyStyle().showLogo(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +51,12 @@ class _LoginSellerState extends State<LoginSeller> {
                 buildPasswordField(),
                 MyStyle().mySizebox(),
                 buildLoginButton(),
-                buildRegisterButton(context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    buildRegisterButton(context),
+                  ],
+                ),
                 LoginFacebookSeller(),
               ],
             ),

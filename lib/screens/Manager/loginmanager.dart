@@ -30,6 +30,9 @@ class _LoginManagerState extends State<LoginManager> {
             child: ListView(
               padding: EdgeInsets.all(20.0),
               children: <Widget>[
+                SizedBox(
+                  height: 100,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

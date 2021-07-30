@@ -112,42 +112,90 @@ class _ProductListUserState extends State<ProductListUser> {
     return Scaffold(
       appBar: searchBar!.build(context),
       key: _scaffoldKey,
-      body: loadStatus!
-          ? MyStyle().showProgress()
-          : SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        MakeBanner(),
-                        MyStyle().mySizebox(),
-                        _buildSectiontitle('สินค้าทั้งหมด', () {
-                          final snackbar = SnackBar(
-                            content: Text("คลิก"),
-                            action: SnackBarAction(
-                              label: "ok",
-                              onPressed: () {},
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        }),
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: productModels.length,
-                          itemBuilder: (BuildContext buildContext, int index) {
-                            return showListView(index);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            MakeBanner(),
+            _buildSectiontitle('สินค้าแนะนำ', () {
+              final snackbar = SnackBar(
+                content: Text("คลิก"),
+                action: SnackBarAction(
+                  label: "ok",
+                  onPressed: () {},
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            }),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: productModels.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    showListView(index),
               ),
             ),
+            _buildSectiontitle('สินค้าทั้งหมด', () {
+              final snackbar = SnackBar(
+                content: Text("คลิก"),
+                action: SnackBarAction(
+                  label: "ok",
+                  onPressed: () {},
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            }),
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: productModels.length,
+              itemBuilder: (BuildContext buildContext, int index) {
+                return showRecomView(index);
+              },
+            ),
+          ],
+        ),
+      ),
+
+      //  loadStatus!
+      //     ? MyStyle().showProgress()
+      //     : SingleChildScrollView(
+      //         child: Column(
+      //           children: <Widget>[
+      //             Container(
+      //               width: double.infinity,
+      //               child: Column(
+      //                 crossAxisAlignment: CrossAxisAlignment.start,
+      //                 children: <Widget>[
+      //                   MakeBanner(),
+      //                   MyStyle().mySizebox(),
+      // _buildSectiontitle('สินค้าทั้งหมด', () {
+      //   final snackbar = SnackBar(
+      //     content: Text("คลิก"),
+      //     action: SnackBarAction(
+      //       label: "ok",
+      //       onPressed: () {},
+      //     ),
+      //   );
+      //   ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      // }),
+      // ListView.builder(
+      //   physics: NeverScrollableScrollPhysics(),
+      //   shrinkWrap: true,
+      //   itemCount: productModels.length,
+      //   itemBuilder: (BuildContext buildContext, int index) {
+      //     return showRecomView(index);
+      //   },
+      // ),
+      //                 ],
+      //               ),
+      //             )
+      //           ],
+      //         ),
+      //       ),
     );
   }
 
@@ -200,7 +248,7 @@ class _ProductListUserState extends State<ProductListUser> {
 
   Widget showText(int index) {
     return Container(
-      padding: EdgeInsets.only(right: 20.0),
+      padding: EdgeInsets.only(right: 10),
       width: MediaQuery.of(context).size.width * 0.5,
       height: MediaQuery.of(context).size.width * 0.5,
       child: Column(
@@ -251,75 +299,78 @@ class _ProductListUserState extends State<ProductListUser> {
     );
   }
 
-//   Widget showRecomView(int index) {
-//     return Container(
-//       margin: EdgeInsets.only(
-//         left: 20,
-//         right: 20,
-//         top: 10,
-//         bottom: 10,
-//       ),
-//       child: Column(
-//         children: <Widget>[
-//           Image.network('${MyConstant().domain}/${productModels[index].image}'),
-//           GestureDetector(
-//             onTap: () {
-//               print(index);
-//             },
-//             child: Container(
-//               padding: EdgeInsets.all(20 / 2),
-//               decoration: BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.only(
-//                   bottomLeft: Radius.circular(10),
-//                   bottomRight: Radius.circular(10),
-//                 ),
-//                 boxShadow: [
-//                   BoxShadow(
-//                     offset: Offset(0, 10),
-//                     blurRadius: 50,
-//                     color: Colors.grey.withOpacity(0.23),
-//                   ),
-//                 ],
-//               ),
-//               child: Row(
-//                 children: <Widget>[
-//                   RichText(
-//                     text: TextSpan(
-//                       children: [
-//                         TextSpan(
-//                           text: "${productModels[index].nameproduct}\n"
-//                               .toUpperCase(),
-//                           style: Theme.of(context)
-//                               .textTheme
-//                               .button!
-//                               .copyWith(fontSize: 20),
-//                         ),
-//                         TextSpan(
-//                           text: "${productModels[index].detail}",
-//                           style: TextStyle(
-//                             color: Colors.black.withOpacity(0.5),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   Spacer(),
-//                   Text(
-//                     '${productModels[index].price} \บาท',
-//                     style: Theme.of(context)
-//                         .textTheme
-//                         .button!
-//                         .copyWith(color: Colors.red, fontSize: 20),
-//                   )
-//                 ],
-//               ),
-//             ),
-//           )
-//         ],
-//       ),
-//     );
-//   }
+  Widget showRecomView(int index) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 10,
+        bottom: 10,
+      ),
+      child: GestureDetector(
+        onTap: () {
+          print(productModels[index].nameproduct);
+        },
+        child: Column(
+          children: <Widget>[
+            Image.network(
+                '${MyConstant().domain}/${productModels[index].image}'),
+            GestureDetector(
+              child: Container(
+                padding: EdgeInsets.all(10 / 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 10),
+                      blurRadius: 50,
+                      color: Colors.grey.withOpacity(0.23),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "${productModels[index].nameproduct}\n"
+                                .toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .button!
+                                .copyWith(fontSize: 20),
+                          ),
+                          TextSpan(
+                            text: "${productModels[index].detail}",
+                            style: TextStyle(
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      '${productModels[index].price} \บาท',
+                      style: Theme.of(context)
+                          .textTheme
+                          .button!
+                          .copyWith(color: Colors.red, fontSize: 20),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 Widget _buildSectiontitle(String title, [Function()? onTap]) {
@@ -337,7 +388,7 @@ Widget _buildSectiontitle(String title, [Function()? onTap]) {
           onTap: onTap,
           child: Icon(
             Icons.keyboard_arrow_right,
-            color: Colors.indigo,
+            color: Colors.blue,
             size: 30,
           ),
         ),
