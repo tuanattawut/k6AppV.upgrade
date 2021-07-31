@@ -3,7 +3,7 @@ import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/info_user.dart';
 import 'package:k6_app/screens/User/noti_user.dart';
 import 'package:k6_app/screens/User/product_user.dart';
-import 'package:k6_app/widget/User/promote_user.dart';
+import 'package:k6_app/screens/User/promote_user.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({required this.usermodel});

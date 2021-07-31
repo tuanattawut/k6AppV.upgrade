@@ -42,7 +42,8 @@ class _PromoteUserState extends State<PromoteUser> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           image: DecorationImage(
-            image: NetworkImage(''),
+            image: NetworkImage(
+                'https://img.wongnai.com/p/1920x0/2019/09/20/ea870d3e5599444ba5c5fce3f1e09607.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -57,7 +58,7 @@ class _PromoteUserState extends State<PromoteUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.5 - 35,
           child: Text(
-            '_model.name',
+            'เส้นเล็กแห้ง',
             style: MyStyle().mainTitle,
           ),
         ),
@@ -65,20 +66,20 @@ class _PromoteUserState extends State<PromoteUser> {
     );
   }
 
-  Widget showDetail(int index) {
-    String string = '_model.descriptions';
-    if (string.length > 100) {
-      string = string.substring(0, 99);
-      string = '$string ...';
-    }
-    return Text(
-      string,
-      style: TextStyle(
-        fontSize: 16,
-        fontStyle: FontStyle.italic,
-      ),
-    );
-  }
+  // Widget showDetail(int index) {
+  //   String string = '_model.descriptions';
+  //   if (string.length > 100) {
+  //     string = string.substring(0, 99);
+  //     string = '$string ...';
+  //   }
+  //   return Text(
+  //     string,
+  //     style: TextStyle(
+  //       fontSize: 16,
+  //       fontStyle: FontStyle.italic,
+  //     ),
+  //   );
+  // }
 
   Widget showText(int index) {
     return Container(
@@ -89,10 +90,9 @@ class _PromoteUserState extends State<PromoteUser> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           showName(index),
-          showDetail(index),
           Text(
-            '{_model.price} ฿',
-            style: TextStyle(fontSize: 18, color: Colors.red),
+            '฿300',
+            style: TextStyle(fontSize: 25, color: Colors.red),
           )
         ],
       ),
@@ -107,11 +107,26 @@ class _PromoteUserState extends State<PromoteUser> {
         // );
         // Navigator.of(context).push(route);
       },
-      child: Row(
-        children: <Widget>[
-          showImage(index),
-          showText(index),
-        ],
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 5,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 10),
+              blurRadius: 50,
+              color: Colors.grey.withOpacity(0.23),
+            ),
+          ],
+        ),
+        child: Row(
+          children: <Widget>[
+            showText(index),
+            showImage(index),
+          ],
+        ),
       ),
     );
   }

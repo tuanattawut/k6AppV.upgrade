@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/promote_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
+import 'package:k6_app/screens/User/showallproduct.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -22,11 +24,10 @@ class _ProductListUserState extends State<ProductListUser> {
   UserModel? userModel;
   bool? loadStatus = true;
   bool? status = true;
-
   String? name, id;
-
   List dataId = [];
   List dataName = [];
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +118,7 @@ class _ProductListUserState extends State<ProductListUser> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             MakeBanner(),
-            _buildSectiontitle('สินค้าแนะนำ', () {
+            _buildSectiontitle('หมวดหมู่', () {
               final snackbar = SnackBar(
                 content: Text("คลิก"),
                 action: SnackBarAction(
@@ -128,7 +129,44 @@ class _ProductListUserState extends State<ProductListUser> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }),
             SizedBox(
-              height: 100,
+              height: 150,
+              child: ListView.builder(
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: 4,
+                itemBuilder: (BuildContext context, int index) => Container(
+                  height: 150,
+                  width: 150,
+                  color: Colors.white,
+                  margin: EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10,
+                  ),
+                  child: Container(
+                    width: 300.0,
+                    height: 300.0,
+                    decoration: new BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            _buildSectiontitle(
+              'สินค้าแนะนำ',
+              () {
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => PromoteUser(),
+                );
+                Navigator.of(context).push(route);
+              },
+            ),
+            SizedBox(
+              height: 250,
               child: ListView.builder(
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
@@ -138,24 +176,30 @@ class _ProductListUserState extends State<ProductListUser> {
                     showListView(index),
               ),
             ),
-            _buildSectiontitle('สินค้าทั้งหมด', () {
-              final snackbar = SnackBar(
-                content: Text("คลิก"),
-                action: SnackBarAction(
-                  label: "ok",
-                  onPressed: () {},
-                ),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-            }),
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: productModels.length,
-              itemBuilder: (BuildContext buildContext, int index) {
-                return showRecomView(index);
+            _buildSectiontitle(
+              'สินค้าทั้งหมด',
+              () {
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => ProductAll(),
+                );
+                Navigator.of(context).push(route);
               },
             ),
+            loadStatus!
+                ? MyStyle().showProgress()
+                : GridView.count(
+                    childAspectRatio: MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height / 1.2),
+                    crossAxisCount: 2,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: List.generate(
+                      productModels.length,
+                      (index) {
+                        return showAllview(index);
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
@@ -199,176 +243,209 @@ class _ProductListUserState extends State<ProductListUser> {
     );
   }
 
-  Widget showImage(int index) {
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      width: MediaQuery.of(context).size.width * 0.5,
-      height: MediaQuery.of(context).size.width * 0.5,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          image: DecorationImage(
-            image: NetworkImage(
-                '${MyConstant().domain}/${productModels[index].image}'),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget showImage(int index) {
+  //   return Container(
+  //     padding: EdgeInsets.all(20.0),
+  //     width: MediaQuery.of(context).size.width * 0.5,
+  //     height: MediaQuery.of(context).size.width * 0.5,
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(20.0),
+  //         image: DecorationImage(
+  //           image: NetworkImage(
+  //               '${MyConstant().domain}/${productModels[index].image}'),
+  //           fit: BoxFit.cover,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget showName(int index) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width * 0.5 - 35,
-          child: Text(
-            '${productModels[index].nameproduct}',
-            style: MyStyle().mainTitle,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget showName(int index) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.end,
+  //     children: <Widget>[
+  //       Container(
+  //         width: MediaQuery.of(context).size.width * 0.5 - 35,
+  //         child: Text(
+  //           '${productModels[index].nameproduct}',
+  //           style: MyStyle().mainTitle,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget showDetail(int index) {
-    String string = '${productModels[index].detail}';
-    if (string.length > 100) {
-      string = string.substring(0, 99);
-      string = '$string ...';
-    }
-    return Text(
-      string,
-      style: TextStyle(
-        fontSize: 16,
-      ),
-    );
-  }
+  // Widget showDetail(int index) {
+  // String string = '${productModels[index].detail}';
+  // if (string.length > 100) {
+  //   string = string.substring(0, 99);
+  //   string = '$string ...';
+  // }
+  //   return Text(
+  //     string,
+  //     style: TextStyle(
+  //       fontSize: 16,
+  //     ),
+  //   );
+  // }
 
-  Widget showText(int index) {
-    return Container(
-      padding: EdgeInsets.only(right: 10),
-      width: MediaQuery.of(context).size.width * 0.5,
-      height: MediaQuery.of(context).size.width * 0.5,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          showName(index),
-          showDetail(index),
-          Text(
-            '${productModels[index].price} บาท',
-            style: TextStyle(fontSize: 25, color: Colors.red),
-          )
-        ],
-      ),
-    );
-  }
+  //
 
   Widget showListView(int index) {
-    return GestureDetector(
-      onTap: () {
-        name = productModels[index].nameproduct;
-        id = productModels[index].idProduct;
-        MaterialPageRoute route = MaterialPageRoute(
-          builder: (value) => ShowDetail(
-            productModel: productModels[index],
-          ),
-        );
-        Navigator.of(context).push(route);
-        dataId.add(id);
-        dataName.add(name);
-
-        if (dataName.length < 4) {
-          print(dataName);
-          if (dataName.length == 3) {
-            addData();
-            print(dataId);
-          }
-        } else {
-          dataName.clear();
-          dataId.clear();
-        }
-      },
-      child: Row(
-        children: <Widget>[
-          showImage(index),
-          showText(index),
-        ],
-      ),
-    );
-  }
-
-  Widget showRecomView(int index) {
+    String string = '${productModels[index].nameproduct}';
+    if (string.length > 10) {
+      string = string.substring(0, 10);
+      string = '$string ...';
+    }
     return Container(
-      margin: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 10,
-        bottom: 10,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          print(productModels[index].nameproduct);
-        },
-        child: Column(
-          children: <Widget>[
-            Image.network(
-                '${MyConstant().domain}/${productModels[index].image}'),
-            GestureDetector(
-              child: Container(
-                padding: EdgeInsets.all(10 / 2),
+        margin: EdgeInsets.only(
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10,
+        ),
+        child: GestureDetector(
+            onTap: () {
+              name = productModels[index].nameproduct;
+              id = productModels[index].idProduct;
+              print(name);
+              // MaterialPageRoute route = MaterialPageRoute(
+              //   builder: (value) => ShowDetail(
+              //     productModel: productModels[index],
+              //   ),
+              // );
+              // Navigator.of(context).push(route);
+              // dataId.add(id);
+              // dataName.add(name);
+
+              // if (dataName.length < 4) {
+              //   print(dataName);
+              //   if (dataName.length == 3) {
+              //     addData();
+              //     print(dataId);
+              //   }
+              // } else {
+              //   dataName.clear();
+              //   dataId.clear();
+              // }
+            },
+            child:
+                // Row(
+                //   children: <Widget>[
+                //     showImage(index),
+                //     showText(index),
+                //   ],
+                // ),
+                Column(children: <Widget>[
+              Container(
+                height: 150,
+                width: 150,
+                child: Image.network(
+                  '${MyConstant().domain}/${productModels[index].image}',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(
+                width: 150,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
                   boxShadow: [
                     BoxShadow(
                       offset: Offset(0, 10),
                       blurRadius: 50,
-                      color: Colors.grey.withOpacity(0.23),
+                      color: Colors.blue.withOpacity(0.23),
                     ),
                   ],
                 ),
-                child: Row(
-                  children: <Widget>[
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "${productModels[index].nameproduct}\n"
-                                .toUpperCase(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .button!
-                                .copyWith(fontSize: 20),
-                          ),
-                          TextSpan(
-                            text: "${productModels[index].detail}",
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                          ),
-                        ],
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        string,
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.black, fontSize: 20),
                       ),
-                    ),
-                    Spacer(),
+                      Text(
+                        ' \฿ ${productModels[index].price}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.red, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ])));
+  }
+
+  Widget showAllview(int index) {
+    String string = '${productModels[index].nameproduct}';
+    if (string.length > 10) {
+      string = string.substring(0, 10);
+      string = '$string ...';
+    }
+    return Container(
+      margin: EdgeInsets.only(
+        left: 5,
+        right: 5,
+        top: 5,
+        bottom: 5,
+      ),
+      child: GestureDetector(
+          onTap: () {
+            print(productModels[index].nameproduct);
+          },
+          child: Column(children: <Widget>[
+            Container(
+              height: 200,
+              width: 200,
+              child: Image.network(
+                '${MyConstant().domain}/${productModels[index].image}',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              width: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 10),
+                    blurRadius: 50,
+                    color: Colors.blue.withOpacity(0.23),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      '${productModels[index].price} \บาท',
+                      string,
+                      style: Theme.of(context)
+                          .textTheme
+                          .button!
+                          .copyWith(color: Colors.black, fontSize: 20),
+                    ),
+                    Text(
+                      ' \฿ ${productModels[index].price}',
                       style: Theme.of(context)
                           .textTheme
                           .button!
                           .copyWith(color: Colors.red, fontSize: 20),
-                    )
+                    ),
                   ],
                 ),
               ),
             )
-          ],
-        ),
-      ),
+          ])),
     );
   }
 }
@@ -386,10 +463,15 @@ Widget _buildSectiontitle(String title, [Function()? onTap]) {
                 fontSize: 20)),
         InkWell(
           onTap: onTap,
-          child: Icon(
-            Icons.keyboard_arrow_right,
-            color: Colors.blue,
-            size: 30,
+          child: Row(
+            children: [
+              Text('ดูเพิ่มเติม'),
+              Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.blue,
+                size: 30,
+              ),
+            ],
           ),
         ),
       ],
