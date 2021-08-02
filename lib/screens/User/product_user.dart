@@ -63,6 +63,7 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
+//เพิ่มข้อมูลการคลิก
   Future<Null> addData() async {
     String iduser = userModel!.idUser;
 
@@ -129,33 +130,30 @@ class _ProductListUserState extends State<ProductListUser> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }),
             SizedBox(
-              height: 150,
-              child: ListView.builder(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (BuildContext context, int index) => Container(
-                  height: 150,
-                  width: 150,
-                  color: Colors.white,
-                  margin: EdgeInsets.only(
-                    left: 10,
-                    right: 10,
-                    top: 10,
-                    bottom: 10,
+                height: 150,
+                child: GridView.count(
+                  crossAxisCount: 5,
+                  children: List.generate(
+                    8,
+                    (index) {
+                      return GestureDetector(
+                          onTap: () => print('คลิก $index'),
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                child: Icon(Icons.backpack),
+                              ),
+                              Text(
+                                'หมวดหมู่$index',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ));
+                    },
                   ),
-                  child: Container(
-                    width: 300.0,
-                    height: 300.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                )),
             _buildSectiontitle(
               'สินค้าแนะนำ',
               () {
@@ -174,6 +172,25 @@ class _ProductListUserState extends State<ProductListUser> {
                 itemCount: productModels.length,
                 itemBuilder: (BuildContext context, int index) =>
                     showListView(index),
+              ),
+            ),
+            _buildSectiontitle(
+              'ดูล่าสุด',
+              () {
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => PromoteUser(),
+                );
+                Navigator.of(context).push(route);
+              },
+            ),
+            SizedBox(
+              height: 250,
+              child: ListView.builder(
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: 3,
+                itemBuilder: (BuildContext context, int index) => Container(),
               ),
             ),
             _buildSectiontitle(
@@ -203,94 +220,8 @@ class _ProductListUserState extends State<ProductListUser> {
           ],
         ),
       ),
-
-      //  loadStatus!
-      //     ? MyStyle().showProgress()
-      //     : SingleChildScrollView(
-      //         child: Column(
-      //           children: <Widget>[
-      //             Container(
-      //               width: double.infinity,
-      //               child: Column(
-      //                 crossAxisAlignment: CrossAxisAlignment.start,
-      //                 children: <Widget>[
-      //                   MakeBanner(),
-      //                   MyStyle().mySizebox(),
-      // _buildSectiontitle('สินค้าทั้งหมด', () {
-      //   final snackbar = SnackBar(
-      //     content: Text("คลิก"),
-      //     action: SnackBarAction(
-      //       label: "ok",
-      //       onPressed: () {},
-      //     ),
-      //   );
-      //   ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      // }),
-      // ListView.builder(
-      //   physics: NeverScrollableScrollPhysics(),
-      //   shrinkWrap: true,
-      //   itemCount: productModels.length,
-      //   itemBuilder: (BuildContext buildContext, int index) {
-      //     return showRecomView(index);
-      //   },
-      // ),
-      //                 ],
-      //               ),
-      //             )
-      //           ],
-      //         ),
-      //       ),
     );
   }
-
-  // Widget showImage(int index) {
-  //   return Container(
-  //     padding: EdgeInsets.all(20.0),
-  //     width: MediaQuery.of(context).size.width * 0.5,
-  //     height: MediaQuery.of(context).size.width * 0.5,
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(20.0),
-  //         image: DecorationImage(
-  //           image: NetworkImage(
-  //               '${MyConstant().domain}/${productModels[index].image}'),
-  //           fit: BoxFit.cover,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget showName(int index) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.end,
-  //     children: <Widget>[
-  //       Container(
-  //         width: MediaQuery.of(context).size.width * 0.5 - 35,
-  //         child: Text(
-  //           '${productModels[index].nameproduct}',
-  //           style: MyStyle().mainTitle,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget showDetail(int index) {
-  // String string = '${productModels[index].detail}';
-  // if (string.length > 100) {
-  //   string = string.substring(0, 99);
-  //   string = '$string ...';
-  // }
-  //   return Text(
-  //     string,
-  //     style: TextStyle(
-  //       fontSize: 16,
-  //     ),
-  //   );
-  // }
-
-  //
 
   Widget showListView(int index) {
     String string = '${productModels[index].nameproduct}';
@@ -330,14 +261,7 @@ class _ProductListUserState extends State<ProductListUser> {
               //   dataId.clear();
               // }
             },
-            child:
-                // Row(
-                //   children: <Widget>[
-                //     showImage(index),
-                //     showText(index),
-                //   ],
-                // ),
-                Column(children: <Widget>[
+            child: Column(children: <Widget>[
               Container(
                 height: 150,
                 width: 150,
@@ -399,7 +323,27 @@ class _ProductListUserState extends State<ProductListUser> {
       ),
       child: GestureDetector(
           onTap: () {
-            print(productModels[index].nameproduct);
+            name = productModels[index].nameproduct;
+            id = productModels[index].idProduct;
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => ShowDetail(
+                productModel: productModels[index],
+              ),
+            );
+            Navigator.of(context).push(route);
+            dataId.add(id);
+            dataName.add(name);
+
+            if (dataName.length < 4) {
+              print('data == >>> $dataName');
+              if (dataName.length == 3) {
+                //  addData();
+                print('data add ===>> $dataId');
+              }
+            } else {
+              dataName.clear();
+              dataId.clear();
+            }
           },
           child: Column(children: <Widget>[
             Container(

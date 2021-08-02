@@ -8,6 +8,8 @@ import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/widget/User/datailshop.dart';
+import 'package:k6_app/widget/User/detailproduct.dart';
 
 class ShowDetail extends StatefulWidget {
   final ProductModel productModel;
@@ -73,23 +75,28 @@ class _ShowDetailState extends State<ShowDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: productModel == null
-              ? Text('รายละเอียด')
-              : Text(productModel!.nameproduct),
-        ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.all(5),
-          child: Column(
-            children: <Widget>[
+    return DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            title: productModel == null
+                ? Text('รายละเอียด')
+                : Text(productModel!.nameproduct),
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: 'สินค้า'),
+                Tab(text: 'ร้าน'),
+                Tab(text: 'แผนที่'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              DetailProduct(productModel: productModel!),
               shopModels == null
-                  ? MyStyle().showLinearProgress()
-                  : sellerModel == null
-                      ? MyStyle().showLinearProgress()
-                      : showDetailProduct(),
-              MyStyle().mySizebox(),
-              MyStyle().mySizebox(),
+                  ? MyStyle().showProgress()
+                  : DetailShop(shopModel: shopModels!),
+              shopModels == null ? MyStyle().showProgress() : showMap(),
             ],
           ),
         ));
