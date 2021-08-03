@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/product_models.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
+import 'package:k6_app/models/product_models.dart';
+
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/promote_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
@@ -24,15 +25,17 @@ class _ProductListUserState extends State<ProductListUser> {
   UserModel? userModel;
   bool? loadStatus = true;
   bool? status = true;
-  String? name, id;
+  String? name, id, idproducts;
   List dataId = [];
   List dataName = [];
-
+  List idproduct = [];
+  List<ProductModel> recentlyModels = [];
   @override
   void initState() {
     super.initState();
     getData();
     userModel = widget.usermodel;
+    getRecently();
   }
 
   Future<Null> getData() async {
@@ -79,6 +82,63 @@ class _ProductListUserState extends State<ProductListUser> {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
       }
     } catch (e) {}
+  }
+
+//เก็บข้อมูลการกดเข้าดู
+  Future<Null> addRecently() async {
+    String iduser = userModel!.idUser;
+
+    String url =
+        '${MyConstant().domain}/projectk6/addRecently.php?isAdd=true&id_user=$iduser&id_product=$id';
+
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> getRecently() async {
+    String api =
+        '${MyConstant().domain}/projectk6/getDataRecently.php?isAdd=true&id_user=1';
+
+    await Dio().get(api).then((value) {
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          idproduct.add(item);
+          setState(() {
+            idproduct.map((list) {
+              idproducts = list['id_product'];
+            }).toList();
+            print(idproducts);
+            getdataRecently();
+          });
+        }
+      } else {}
+    });
+  }
+
+  Future<Null> getdataRecently() async {
+    String api =
+        '${MyConstant().domain}/projectk6/getProductWhereid.php?isAdd=true&id_product=$idproducts';
+
+    print(api);
+    await Dio().get(api).then((value) {
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          ProductModel recentlyModel = ProductModel.fromMap(item);
+          setState(() {
+            recentlyModels.add(recentlyModel);
+          });
+        }
+      } else {
+        print('Error RRRRRRRRRRRRRRRRRRRRRRR');
+      }
+    });
   }
 
   SearchBar? searchBar;
@@ -177,10 +237,7 @@ class _ProductListUserState extends State<ProductListUser> {
             _buildSectiontitle(
               'ดูล่าสุด',
               () {
-                MaterialPageRoute route = MaterialPageRoute(
-                  builder: (value) => PromoteUser(),
-                );
-                Navigator.of(context).push(route);
+                getRecently();
               },
             ),
             SizedBox(
@@ -189,8 +246,9 @@ class _ProductListUserState extends State<ProductListUser> {
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) => Container(),
+                itemCount: recentlyModels.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    showRecentlyView(index),
               ),
             ),
             _buildSectiontitle(
@@ -223,6 +281,90 @@ class _ProductListUserState extends State<ProductListUser> {
     );
   }
 
+  Widget showRecentlyView(int index) {
+    String string = '${recentlyModels[index].nameproduct}';
+    if (string.length > 10) {
+      string = string.substring(0, 10);
+      string = '$string ...';
+    }
+    return Container(
+        margin: EdgeInsets.only(
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10,
+        ),
+        child: GestureDetector(
+            onTap: () {
+              print(string);
+
+              // MaterialPageRoute route = MaterialPageRoute(
+              //   builder: (value) => ShowDetail(
+              //     productModel: productModels[index],
+              //   ),
+              // );
+              // Navigator.of(context).push(route);
+              // dataId.add(id);
+              // dataName.add(name);
+
+              // if (dataName.length < 4) {
+              //   print(dataName);
+              //   if (dataName.length == 3) {
+              //     addData();
+              //     print(dataId);
+              //   }
+              // } else {
+              //   dataName.clear();
+              //   dataId.clear();
+              // }
+            },
+            child: Column(children: <Widget>[
+              Container(
+                height: 150,
+                width: 150,
+                child: Image.network(
+                  '${MyConstant().domain}/${recentlyModels[index].image}',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(
+                width: 150,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 10),
+                      blurRadius: 50,
+                      color: Colors.blue.withOpacity(0.23),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        string,
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.black, fontSize: 20),
+                      ),
+                      Text(
+                        ' \฿ ${recentlyModels[index].price}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.red, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ])));
+  }
+
   Widget showListView(int index) {
     String string = '${productModels[index].nameproduct}';
     if (string.length > 10) {
@@ -241,6 +383,7 @@ class _ProductListUserState extends State<ProductListUser> {
               name = productModels[index].nameproduct;
               id = productModels[index].idProduct;
               print(name);
+
               // MaterialPageRoute route = MaterialPageRoute(
               //   builder: (value) => ShowDetail(
               //     productModel: productModels[index],
@@ -325,12 +468,14 @@ class _ProductListUserState extends State<ProductListUser> {
           onTap: () {
             name = productModels[index].nameproduct;
             id = productModels[index].idProduct;
+            addRecently();
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
               ),
             );
             Navigator.of(context).push(route);
+
             dataId.add(id);
             dataName.add(name);
 
