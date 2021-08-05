@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
+import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/product_models.dart';
 
 import 'package:k6_app/models/user_models.dart';
@@ -30,14 +32,19 @@ class _ProductListUserState extends State<ProductListUser> {
   List dataName = [];
   List idproduct = [];
   List<ProductModel> recentlyModels = [];
+
+  List<CategoryModel> categoryList = [];
+
   @override
   void initState() {
     super.initState();
-    getData();
     userModel = widget.usermodel;
-    getRecently();
+    // getData();
+    //getRecently();
+    getCategory();
   }
 
+//เรียกข้อมูลสินค้าทั้งหมด
   Future<Null> getData() async {
     if (productModels.length != 0) {
       loadStatus = true;
@@ -102,9 +109,11 @@ class _ProductListUserState extends State<ProductListUser> {
     } catch (e) {}
   }
 
+//เรียกข้อมูลการดูล่าสุด
   Future<Null> getRecently() async {
+    String iduser = userModel!.idUser;
     String api =
-        '${MyConstant().domain}/projectk6/getDataRecently.php?isAdd=true&id_user=1';
+        '${MyConstant().domain}/projectk6/getDataRecently.php?isAdd=true&id_user=$iduser';
 
     await Dio().get(api).then((value) {
       if (value.toString() != 'null') {
@@ -122,6 +131,7 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
+//เก็บข้อมูลการดูล่าสุด
   Future<Null> getdataRecently() async {
     String api =
         '${MyConstant().domain}/projectk6/getProductWhereid.php?isAdd=true&id_product=$idproducts';
@@ -138,6 +148,23 @@ class _ProductListUserState extends State<ProductListUser> {
       } else {
         print('Error RRRRRRRRRRRRRRRRRRRRRRR');
       }
+    });
+  }
+
+  Future<Null> getCategory() async {
+    String api = '${MyConstant().domain}/projectk6/getCategory.php';
+
+    await Dio().get(api).then((value) {
+      print(value);
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          CategoryModel categoryModel = CategoryModel.fromMap(item);
+          setState(() {
+            categoryList.add(categoryModel);
+            print(categoryList);
+          });
+        }
+      } else {}
     });
   }
 
@@ -190,30 +217,17 @@ class _ProductListUserState extends State<ProductListUser> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
             }),
             SizedBox(
-                height: 150,
-                child: GridView.count(
-                  crossAxisCount: 5,
-                  children: List.generate(
-                    8,
-                    (index) {
-                      return GestureDetector(
-                          onTap: () => print('คลิก $index'),
-                          child: Column(
-                            children: <Widget>[
-                              Expanded(
-                                child: Icon(Icons.backpack),
-                              ),
-                              Text(
-                                'หมวดหมู่$index',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ));
-                    },
-                  ),
-                )),
+              height: 180,
+              child: GridView.count(
+                crossAxisCount: 5,
+                children: List.generate(
+                  categoryList.length,
+                  (index) {
+                    return showCategory(index);
+                  },
+                ),
+              ),
+            ),
             _buildSectiontitle(
               'สินค้าแนะนำ',
               () {
@@ -231,7 +245,8 @@ class _ProductListUserState extends State<ProductListUser> {
                 scrollDirection: Axis.horizontal,
                 itemCount: productModels.length,
                 itemBuilder: (BuildContext context, int index) =>
-                    showListView(index),
+                    Text('TEST TEST'),
+                //showListView(index),
               ),
             ),
             _buildSectiontitle(
@@ -279,6 +294,30 @@ class _ProductListUserState extends State<ProductListUser> {
         ),
       ),
     );
+  }
+
+  Widget showCategory(int index) {
+    String string = '${categoryList[index].namecategory}';
+    if (string.length > 10) {
+      string = string.substring(0, 10);
+      string = '$string...';
+    }
+
+    return GestureDetector(
+        onTap: () => print('คลิก > ${categoryList[index].idcategory}'),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(),
+            ),
+            Text(
+              string,
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget showRecentlyView(int index) {

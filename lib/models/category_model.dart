@@ -27,7 +27,7 @@ class CategoryModel {
 
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
     return CategoryModel(
-      idcategory: map['idcategory'],
+      idcategory: map['id_category'],
       namecategory: map['namecategory'],
     );
   }

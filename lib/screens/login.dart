@@ -191,10 +191,10 @@ class _LoginPageState extends State<LoginPage> {
   Future<Null> checkAuthen() async {
     String url =
         '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
-    //print('url ===>> $url');
+    //  print('url ===>> $url');
     try {
       Response response = await Dio().get(url);
-      // print('res = $response');
+      //print('res = $response');
 
       var result = json.decode(response.data);
       //  print('result = $result');
