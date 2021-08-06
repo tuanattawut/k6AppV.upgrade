@@ -14,6 +14,7 @@ import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:k6_app/widget/User/banner.dart';
+import 'package:k6_app/widget/User/categoryproduct.dart';
 
 class ProductListUser extends StatefulWidget {
   ProductListUser({required this.usermodel});
@@ -39,8 +40,8 @@ class _ProductListUserState extends State<ProductListUser> {
   void initState() {
     super.initState();
     userModel = widget.usermodel;
-    // getData();
-    //getRecently();
+    getData();
+    getRecently();
     getCategory();
   }
 
@@ -206,16 +207,7 @@ class _ProductListUserState extends State<ProductListUser> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             MakeBanner(),
-            _buildSectiontitle('หมวดหมู่', () {
-              final snackbar = SnackBar(
-                content: Text("คลิก"),
-                action: SnackBarAction(
-                  label: "ok",
-                  onPressed: () {},
-                ),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-            }),
+            _buildSectiontitle('หมวดหมู่', () {}),
             SizedBox(
               height: 180,
               child: GridView.count(
@@ -244,16 +236,13 @@ class _ProductListUserState extends State<ProductListUser> {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: productModels.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    Text('TEST TEST'),
+                itemBuilder: (BuildContext context, int index) => Text('TEST'),
                 //showListView(index),
               ),
             ),
             _buildSectiontitle(
               'ดูล่าสุด',
-              () {
-                getRecently();
-              },
+              () {},
             ),
             SizedBox(
               height: 250,
@@ -304,11 +293,21 @@ class _ProductListUserState extends State<ProductListUser> {
     }
 
     return GestureDetector(
-        onTap: () => print('คลิก > ${categoryList[index].idcategory}'),
+        onTap: () {
+          MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) =>
+                  CategoryProduct(categoryModel: categoryList[index]));
+          Navigator.of(context).push(route);
+        },
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Container(),
+              child: Container(
+                child: Icon(
+                  Icons.shopping_bag,
+                  size: 30,
+                ),
+              ),
             ),
             Text(
               string,
@@ -504,10 +503,10 @@ class _ProductListUserState extends State<ProductListUser> {
         bottom: 5,
       ),
       child: GestureDetector(
-          onTap: () {
+          onTap: () async {
             name = productModels[index].nameproduct;
             id = productModels[index].idProduct;
-            addRecently();
+            // addRecently();
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
@@ -515,19 +514,19 @@ class _ProductListUserState extends State<ProductListUser> {
             );
             Navigator.of(context).push(route);
 
-            dataId.add(id);
-            dataName.add(name);
+            // dataId.add(id);
+            // dataName.add(name);
 
-            if (dataName.length < 4) {
-              print('data == >>> $dataName');
-              if (dataName.length == 3) {
-                //  addData();
-                print('data add ===>> $dataId');
-              }
-            } else {
-              dataName.clear();
-              dataId.clear();
-            }
+            // if (dataName.length < 4) {
+            //   print('data == >>> $dataName');
+            //   if (dataName.length == 3) {
+            //     //  addData();
+            //     print('data add ===>> $dataId');
+            //   }
+            // } else {
+            //   dataName.clear();
+            //   dataId.clear();
+            // }
           },
           child: Column(children: <Widget>[
             Container(

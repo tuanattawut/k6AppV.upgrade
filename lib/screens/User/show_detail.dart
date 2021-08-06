@@ -96,7 +96,12 @@ class _ShowDetailState extends State<ShowDetail> {
               shopModels == null
                   ? MyStyle().showProgress()
                   : DetailShop(shopModel: shopModels!),
-              shopModels == null ? MyStyle().showProgress() : showMap(),
+              shopModels == null
+                  ? MyStyle().showProgress()
+                  : Padding(
+                      padding: EdgeInsets.all(30),
+                      child: showMap(),
+                    ),
             ],
           ),
         ));

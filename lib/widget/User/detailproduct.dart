@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -19,15 +20,16 @@ class _DetailProductState extends State<DetailProduct> {
   List<ProductModel> productModels = [];
   bool? loadStatus = true;
   bool? status = true;
-  String? idshop;
-  String? name, id;
+  String? name, id, idshop;
+  CategoryModel? category;
   @override
   void initState() {
     super.initState();
     setState(() {
       productModel = widget.productModel;
-      //print('url ==> ${productModel?.image}');
+      // print('มั่วไหม ==> ${productModel?.idCategory}');
       readProduct();
+      getCategory();
     });
   }
 
@@ -64,6 +66,24 @@ class _DetailProductState extends State<DetailProduct> {
           status = false;
         });
       }
+    });
+  }
+
+  Future<Null> getCategory() async {
+    String idcategory = productModel!.idCategory;
+    String api =
+        '${MyConstant().domain}/projectk6/getCategoryWhereid.php?isAdd=true&id_category=$idcategory';
+
+    await Dio().get(api).then((value) {
+      print(value);
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          CategoryModel categoryModel = CategoryModel.fromMap(item);
+          setState(() {
+            category = categoryModel;
+          });
+        }
+      } else {}
     });
   }
 
@@ -136,6 +156,21 @@ class _DetailProductState extends State<DetailProduct> {
                     ),
                   ),
                 ),
+              ],
+            ),
+            MyStyle().mySizebox(),
+            Row(
+              children: [
+                MyStyle().showTitleH2('ประเภทสินค้า:  '),
+                category == null
+                    ? Text('.. .')
+                    : Text(
+                        category!.namecategory as String,
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.black, fontSize: 16),
+                      ),
               ],
             ),
             MyStyle().mySizebox(),
