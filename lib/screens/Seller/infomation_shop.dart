@@ -35,7 +35,7 @@ class _InformationShopState extends State<InformationShop> {
     Response response = await Dio().get(url);
 
     var result = json.decode(response.data);
-    print('result = $result');
+    // print('result = $result');
 
     if (result != null) {
       for (var map in result) {

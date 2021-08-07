@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/product_models.dart';
-
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/promote_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
@@ -83,7 +81,7 @@ class _ProductListUserState extends State<ProductListUser> {
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      // print('res = $response');
 
       if (response.toString() == 'true') {
       } else {
@@ -124,7 +122,7 @@ class _ProductListUserState extends State<ProductListUser> {
             idproduct.map((list) {
               idproducts = list['id_product'];
             }).toList();
-            print(idproducts);
+            // print(idproducts);
             getdataRecently();
           });
         }
@@ -156,13 +154,13 @@ class _ProductListUserState extends State<ProductListUser> {
     String api = '${MyConstant().domain}/projectk6/getCategory.php';
 
     await Dio().get(api).then((value) {
-      print(value);
+      //print(value);
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           CategoryModel categoryModel = CategoryModel.fromMap(item);
           setState(() {
             categoryList.add(categoryModel);
-            print(categoryList);
+            // print(categoryList);
           });
         }
       } else {}
@@ -241,7 +239,7 @@ class _ProductListUserState extends State<ProductListUser> {
               ),
             ),
             _buildSectiontitle(
-              'ดูล่าสุด',
+              'ดูอีกครั้ง',
               () {},
             ),
             SizedBox(
