@@ -7,6 +7,7 @@ import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/promote_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
+import 'package:k6_app/screens/User/showallcategory.dart';
 import 'package:k6_app/screens/User/showallproduct.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -205,78 +206,109 @@ class _ProductListUserState extends State<ProductListUser> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             MakeBanner(),
-            _buildSectiontitle('หมวดหมู่', () {}),
-            SizedBox(
-              height: 180,
-              child: GridView.count(
-                crossAxisCount: 5,
-                children: List.generate(
-                  categoryList.length,
-                  (index) {
-                    return showCategory(index);
-                  },
+            Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ),
-            ),
-            _buildSectiontitle(
-              'สินค้าแนะนำ',
-              () {
-                MaterialPageRoute route = MaterialPageRoute(
-                  builder: (value) => PromoteUser(),
-                );
-                Navigator.of(context).push(route);
-              },
-            ),
-            SizedBox(
-              height: 250,
-              child: ListView.builder(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: productModels.length,
-                itemBuilder: (BuildContext context, int index) => Text('TEST'),
-                //showListView(index),
-              ),
-            ),
-            _buildSectiontitle(
-              'ดูอีกครั้ง',
-              () {},
-            ),
-            SizedBox(
-              height: 250,
-              child: ListView.builder(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: recentlyModels.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    showRecentlyView(index),
-              ),
-            ),
-            _buildSectiontitle(
-              'สินค้าทั้งหมด',
-              () {
-                MaterialPageRoute route = MaterialPageRoute(
-                  builder: (value) => ProductAll(),
-                );
-                Navigator.of(context).push(route);
-              },
-            ),
-            loadStatus!
-                ? MyStyle().showProgress()
-                : GridView.count(
-                    childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height / 1.2),
-                    crossAxisCount: 2,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: List.generate(
-                      productModels.length,
-                      (index) {
-                        return showAllview(index);
-                      },
+                child: Column(children: [
+                  _buildSectiontitle(
+                    'หมวดหมู่',
+                    () {
+                      MaterialPageRoute route = MaterialPageRoute(
+                        builder: (value) => ShowallCategory(),
+                      );
+                      Navigator.of(context).push(route);
+                    },
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      children: List.generate(
+                        categoryList.length,
+                        (index) => showCategory(index),
+                      ),
                     ),
                   ),
+                ])),
+            Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(children: [
+                  _buildSectiontitle(
+                    'สินค้าแนะนำ',
+                    () {
+                      MaterialPageRoute route = MaterialPageRoute(
+                        builder: (value) => PromoteUser(),
+                      );
+                      Navigator.of(context).push(route);
+                    },
+                  ),
+                  SizedBox(
+                    height: 250,
+                    child: ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: productModels.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          Text('TEST'),
+                      //showListView(index),
+                    ),
+                  ),
+                ])),
+            Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(children: [
+                  _buildSectiontitle(
+                    'ดูอีกครั้ง',
+                    () {},
+                  ),
+                  SizedBox(
+                    height: 250,
+                    child: ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: recentlyModels.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          showRecentlyView(index),
+                    ),
+                  ),
+                ])),
+            Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(children: [
+                  _buildSectiontitle(
+                    'สินค้าทั้งหมด',
+                    () {
+                      MaterialPageRoute route = MaterialPageRoute(
+                        builder: (value) => ProductAll(),
+                      );
+                      Navigator.of(context).push(route);
+                    },
+                  ),
+                  loadStatus!
+                      ? MyStyle().showProgress()
+                      : GridView.count(
+                          childAspectRatio: MediaQuery.of(context).size.width /
+                              (MediaQuery.of(context).size.height / 1.2),
+                          crossAxisCount: 2,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: List.generate(
+                            productModels.length,
+                            (index) {
+                              return showAllview(index);
+                            },
+                          ),
+                        ),
+                ])),
           ],
         ),
       ),
@@ -290,31 +322,48 @@ class _ProductListUserState extends State<ProductListUser> {
       string = '$string...';
     }
 
-    return GestureDetector(
-        onTap: () {
-          MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) =>
-                  CategoryProduct(categoryModel: categoryList[index]));
-          Navigator.of(context).push(route);
-        },
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Icon(
-                  Icons.shopping_bag,
-                  size: 30,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(30.0),
+          bottomLeft: Radius.circular(30.0),
+        ),
+      ),
+      margin: EdgeInsets.only(
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10,
+      ),
+      child: GestureDetector(
+          onTap: () {
+            MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) =>
+                    CategoryProduct(categoryModel: categoryList[index]));
+            Navigator.of(context).push(route);
+          },
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 50,
+                width: 50,
+                child: Image.network(
+                  '${MyConstant().domain}/${categoryList[index].image}',
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
-            Text(
-              string,
-              style: TextStyle(
-                fontSize: 14,
+              Container(
+                padding: EdgeInsets.only(top: 5),
+                child: Text(
+                  string,
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
   }
 
   Widget showRecentlyView(int index) {
@@ -371,7 +420,7 @@ class _ProductListUserState extends State<ProductListUser> {
                     BoxShadow(
                       offset: Offset(0, 10),
                       blurRadius: 50,
-                      color: Colors.blue.withOpacity(0.23),
+                      color: Colors.grey.withOpacity(0.2),
                     ),
                   ],
                 ),
@@ -450,17 +499,17 @@ class _ProductListUserState extends State<ProductListUser> {
                 ),
               ),
               Container(
-                width: 150,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
                       offset: Offset(0, 10),
                       blurRadius: 50,
-                      color: Colors.blue.withOpacity(0.23),
+                      color: Colors.grey.withOpacity(0.2),
                     ),
                   ],
                 ),
+                width: 150,
                 child: Padding(
                   padding: EdgeInsets.all(5),
                   child: Column(
@@ -543,7 +592,7 @@ class _ProductListUserState extends State<ProductListUser> {
                   BoxShadow(
                     offset: Offset(0, 10),
                     blurRadius: 50,
-                    color: Colors.blue.withOpacity(0.23),
+                    color: Colors.grey.withOpacity(0.2),
                   ),
                 ],
               ),

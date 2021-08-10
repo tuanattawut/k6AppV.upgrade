@@ -3,18 +3,22 @@ import 'dart:convert';
 class CategoryModel {
   String? idcategory;
   String? namecategory;
+  String? image;
   CategoryModel({
     this.idcategory,
     this.namecategory,
+    this.image,
   });
 
   CategoryModel copyWith({
     String? idcategory,
     String? namecategory,
+    String? image,
   }) {
     return CategoryModel(
       idcategory: idcategory ?? this.idcategory,
       namecategory: namecategory ?? this.namecategory,
+      image: image ?? this.image,
     );
   }
 
@@ -22,6 +26,7 @@ class CategoryModel {
     return {
       'idcategory': idcategory,
       'namecategory': namecategory,
+      'image': image,
     };
   }
 
@@ -29,6 +34,7 @@ class CategoryModel {
     return CategoryModel(
       idcategory: map['id_category'],
       namecategory: map['namecategory'],
+      image: map['image'],
     );
   }
 
@@ -39,7 +45,7 @@ class CategoryModel {
 
   @override
   String toString() =>
-      'CategoryModel(idcategory: $idcategory, namecategory: $namecategory)';
+      'CategoryModel(idcategory: $idcategory, namecategory: $namecategory, image: $image)';
 
   @override
   bool operator ==(Object other) {
@@ -47,9 +53,11 @@ class CategoryModel {
 
     return other is CategoryModel &&
         other.idcategory == idcategory &&
-        other.namecategory == namecategory;
+        other.namecategory == namecategory &&
+        other.image == image;
   }
 
   @override
-  int get hashCode => idcategory.hashCode ^ namecategory.hashCode;
+  int get hashCode =>
+      idcategory.hashCode ^ namecategory.hashCode ^ image.hashCode;
 }

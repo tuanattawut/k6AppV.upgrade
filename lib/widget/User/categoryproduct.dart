@@ -23,11 +23,12 @@ class _CategoryProductState extends State<CategoryProduct> {
     super.initState();
     categoryModels = widget.categoryModel;
     getProduct();
+    print(categoryModels!.idcategory);
   }
 
   Future<Null> getProduct() async {
     idcategory = categoryModels?.idcategory;
-    //print(idcategory);
+    // print(idcategory);
 
     String api =
         '${MyConstant().domain}/projectk6/getProductWhereidCategory.php?isAdd=true&id_category=$idcategory';
@@ -152,7 +153,7 @@ class _CategoryProductState extends State<CategoryProduct> {
                   BoxShadow(
                     offset: Offset(0, 10),
                     blurRadius: 50,
-                    color: Colors.blue.withOpacity(0.23),
+                    color: Colors.grey.withOpacity(0.2),
                   ),
                 ],
               ),

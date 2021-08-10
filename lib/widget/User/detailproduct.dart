@@ -242,7 +242,7 @@ class _DetailProductState extends State<DetailProduct> {
                     BoxShadow(
                       offset: Offset(0, 10),
                       blurRadius: 50,
-                      color: Colors.blue.withOpacity(0.23),
+                      color: Colors.grey.withOpacity(0.2),
                     ),
                   ],
                 ),
