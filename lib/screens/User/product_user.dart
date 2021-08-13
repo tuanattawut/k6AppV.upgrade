@@ -27,6 +27,7 @@ class _ProductListUserState extends State<ProductListUser> {
   UserModel? userModel;
   bool? loadStatus = true;
   bool? status = true;
+  bool? loadC = true;
   String? name, id, idproducts;
   List dataId = [];
   List dataName = [];
@@ -127,7 +128,10 @@ class _ProductListUserState extends State<ProductListUser> {
             getdataRecently();
           });
         }
-      } else {}
+      } else {
+        print('Error getRecently');
+        CircularProgressIndicator();
+      }
     });
   }
 
@@ -136,7 +140,7 @@ class _ProductListUserState extends State<ProductListUser> {
     String api =
         '${MyConstant().domain}/projectk6/getProductWhereid.php?isAdd=true&id_product=$idproducts';
 
-    print(api);
+    // print(api);
     await Dio().get(api).then((value) {
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
@@ -146,16 +150,25 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        print('Error RRRRRRRRRRRRRRRRRRRRRRR');
+        print('Error getdataRecently');
+        CircularProgressIndicator();
       }
     });
   }
 
   Future<Null> getCategory() async {
+    if (categoryList.length != 0) {
+      loadC = true;
+      categoryList.clear();
+    }
+
     String api = '${MyConstant().domain}/projectk6/getCategory.php';
 
     await Dio().get(api).then((value) {
       //print(value);
+      setState(() {
+        loadC = false;
+      });
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           CategoryModel categoryModel = CategoryModel.fromMap(item);
@@ -164,7 +177,10 @@ class _ProductListUserState extends State<ProductListUser> {
             // print(categoryList);
           });
         }
-      } else {}
+      } else {
+        print('Error getCategory');
+        CircularProgressIndicator();
+      }
     });
   }
 
@@ -222,13 +238,15 @@ class _ProductListUserState extends State<ProductListUser> {
                   ),
                   SizedBox(
                     height: 200,
-                    child: GridView.count(
-                      crossAxisCount: 4,
-                      children: List.generate(
-                        categoryList.length,
-                        (index) => showCategory(index),
-                      ),
-                    ),
+                    child: loadC!
+                        ? MyStyle().showProgress()
+                        : GridView.count(
+                            crossAxisCount: 4,
+                            children: List.generate(
+                              8,
+                              (index) => showCategory(index),
+                            ),
+                          ),
                   ),
                 ])),
             Card(
@@ -316,12 +334,6 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
   Widget showCategory(int index) {
-    String string = '${categoryList[index].namecategory}';
-    if (string.length > 10) {
-      string = string.substring(0, 10);
-      string = '$string...';
-    }
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -329,12 +341,7 @@ class _ProductListUserState extends State<ProductListUser> {
           bottomLeft: Radius.circular(30.0),
         ),
       ),
-      margin: EdgeInsets.only(
-        left: 10,
-        right: 10,
-        top: 10,
-        bottom: 10,
-      ),
+      margin: EdgeInsets.symmetric(horizontal: 5),
       child: GestureDetector(
           onTap: () {
             MaterialPageRoute route = MaterialPageRoute(
@@ -355,7 +362,7 @@ class _ProductListUserState extends State<ProductListUser> {
               Container(
                 padding: EdgeInsets.only(top: 5),
                 child: Text(
-                  string,
+                  categoryList[index].namecategory as String,
                   style: TextStyle(
                     fontSize: 14,
                   ),
