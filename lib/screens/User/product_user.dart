@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
@@ -14,6 +13,7 @@ import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:k6_app/widget/User/banner.dart';
 import 'package:k6_app/widget/User/categoryproduct.dart';
+import 'package:k6_app/widget/User/showsearch.dart';
 
 class ProductListUser extends StatefulWidget {
   ProductListUser({required this.usermodel});
@@ -184,39 +184,24 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
-  SearchBar? searchBar;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-        title: Center(child: Text('หน้าหลัก')),
-        actions: [searchBar!.getSearchAction(context)]);
-  }
-
-  void onSubmitted(String value) {
-    setState(() => ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('คุณพิมพ์ว่า $value'))));
-  }
-
-  _ProductListUserState() {
-    searchBar = SearchBar(
-        inBar: false,
-        buildDefaultAppBar: buildAppBar,
-        setState: setState,
-        onSubmitted: onSubmitted,
-        onCleared: () {
-          print("เครีย");
-        },
-        onClosed: () {
-          print("ปิด");
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: searchBar!.build(context),
-      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Center(child: Text('หน้าแรก')),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowSearch(),
+              );
+              Navigator.of(context).push(route);
+            },
+          )
+        ],
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
