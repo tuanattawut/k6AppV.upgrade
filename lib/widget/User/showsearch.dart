@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/utility/my_constant.dart';
 
 class ShowSearch extends StatefulWidget {
   @override
@@ -16,15 +20,58 @@ class _ShowSearchState extends State<ShowSearch> {
     super.dispose();
   }
 
+  List<ProductModel> productModels = [];
+  List<String>? product = [];
+  bool? loadStatus = true;
+  bool? status = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<Null> getData() async {
+    if (productModels.length != 0) {
+      loadStatus = true;
+      status = true;
+      productModels.clear();
+    }
+
+    String api = '${MyConstant().domain}/projectk6/getProduct.php';
+
+    await Dio().get(api).then((value) {
+      setState(() {
+        loadStatus = false;
+      });
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          ProductModel productModel = ProductModel.fromMap(item);
+          setState(() {
+            productModels.add(productModel);
+            product = productModels
+                .map((productModels) => productModels.nameproduct)
+                .toList();
+          });
+        }
+      } else {
+        setState(() {
+          status = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.blue.shade300,
+            backgroundColor: Colors.blue,
             title: Container(
               decoration: BoxDecoration(
-                  color: Colors.blue.shade200,
-                  borderRadius: BorderRadius.circular(20)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: TextField(
                 controller: _textEditingController,
                 focusNode: _textFocusNode,
@@ -35,14 +82,17 @@ class _ShowSearchState extends State<ShowSearch> {
                     enabledBorder: InputBorder.none,
                     errorBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
-                    hintText: 'Search here',
+                    hintText: 'ค้นหา',
                     contentPadding: EdgeInsets.all(8)),
                 onChanged: (value) {
                   setState(() {
-                    foodListSearch = foodList
+                    print(foodListSearch);
+                    print('Search $product');
+                    foodListSearch = product!
                         .where(
                             (element) => element.contains(value.toLowerCase()))
                         .toList();
+
                     if (_textEditingController!.text.isNotEmpty &&
                         foodListSearch!.length == 0) {
                       print('foodListSearch length ${foodListSearch!.length}');
@@ -70,7 +120,7 @@ class _ShowSearchState extends State<ShowSearch> {
                         child: Text(
                           'No results found,\nPlease try different keyword',
                           style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w600),
+                              fontSize: 20, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -80,21 +130,21 @@ class _ShowSearchState extends State<ShowSearch> {
             : ListView.builder(
                 itemCount: _textEditingController!.text.isNotEmpty
                     ? foodListSearch!.length
-                    : foodList.length,
+                    : productModels.length,
                 itemBuilder: (ctx, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
                         CircleAvatar(
-                          child: Icon(Icons.food_bank),
+                          child: Icon(Icons.search),
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         Text(_textEditingController!.text.isNotEmpty
                             ? foodListSearch![index]
-                            : foodList[index]),
+                            : productModels[index].nameproduct),
                       ],
                     ),
                   );
