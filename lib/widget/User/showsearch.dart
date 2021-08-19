@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_style.dart';
 
 class ShowSearch extends StatefulWidget {
   @override
@@ -65,125 +67,87 @@ class _ShowSearchState extends State<ShowSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Colors.blue,
-            title: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TextField(
-                controller: _textEditingController,
-                focusNode: _textFocusNode,
-                cursorColor: Colors.black,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintText: 'ค้นหา',
-                    contentPadding: EdgeInsets.all(8)),
-                onChanged: (value) {
-                  setState(() {
-                    print(foodListSearch);
-                    print('Search $product');
-                    foodListSearch = product!
-                        .where(
-                            (element) => element.contains(value.toLowerCase()))
-                        .toList();
+      appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextField(
+              controller: _textEditingController,
+              focusNode: _textFocusNode,
+              cursorColor: Colors.black,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  hintText: 'ค้นหา',
+                  contentPadding: EdgeInsets.all(8)),
+              onChanged: (value) {
+                setState(() {
+                  print(foodListSearch);
+                  print('Search $product');
+                  foodListSearch = product!
+                      .where((element) => element.contains(value.toLowerCase()))
+                      .toList();
 
-                    if (_textEditingController!.text.isNotEmpty &&
-                        foodListSearch!.length == 0) {
-                      print('foodListSearch length ${foodListSearch!.length}');
-                    }
-                  });
-                },
-              ),
-            )),
-        body: _textEditingController!.text.isNotEmpty &&
-                foodListSearch!.length == 0
-            ? Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.search_off,
-                          size: 160,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'No results found,\nPlease try different keyword',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : ListView.builder(
-                itemCount: _textEditingController!.text.isNotEmpty
-                    ? foodListSearch!.length
-                    : productModels.length,
-                itemBuilder: (ctx, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
+                  if (_textEditingController!.text.isNotEmpty &&
+                      foodListSearch!.length == 0) {
+                    print('foodListSearch length ${foodListSearch!.length}');
+                  }
+                });
+              },
+            ),
+          )),
+      body: loadStatus!
+          ? MyStyle().showProgress()
+          : _textEditingController!.text.isNotEmpty &&
+                  foodListSearch!.length == 0
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Column(
                       children: [
-                        CircleAvatar(
-                          child: Icon(Icons.search),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.search_off,
+                            size: 50,
+                          ),
                         ),
-                        SizedBox(
-                          width: 10,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'ไม่พบสิ่งที่คุณค้นหา,\nลองเปลี่ยนคำค้นหา',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
+                          ),
                         ),
-                        Text(_textEditingController!.text.isNotEmpty
-                            ? foodListSearch![index]
-                            : productModels[index].nameproduct),
                       ],
                     ),
-                  );
-                }));
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: _textEditingController!.text.isNotEmpty
+                      ? foodListSearch!.length
+                      : 0,
+                  itemBuilder: (BuildContext buildContext, int index) {
+                    return ListTile(
+                      onTap: () {
+                        MaterialPageRoute route = MaterialPageRoute(
+                          builder: (value) =>
+                              ShowDetail(productModel: productModels[index]),
+                        );
+                        Navigator.of(context).push(route);
+                      },
+                      title: Text(_textEditingController!.text.isNotEmpty
+                          ? foodListSearch![index]
+                          : ' ${productModels[index].nameproduct}'),
+                    );
+                  }),
+    );
   }
-
-  List<String> foodList = [
-    'Orange',
-    'Berries',
-    'Lemons',
-    'Apples',
-    'Mangoes',
-    'Dates',
-    'Avocados',
-    'Black Beans',
-    'Chickpeas',
-    'Pinto beans',
-    'White Beans',
-    'Green lentils',
-    'Split Peas',
-    'Rice',
-    'Oats',
-    'Quinoa',
-    'Pasta',
-    'Sparkling water',
-    'Coconut water',
-    'Herbal tea',
-    'Kombucha',
-    'Almonds',
-    'Peannuts',
-    'Chia seeds',
-    'Flax seeds',
-    'Canned tomatoes',
-    'Olive oil',
-    'Broccoli',
-    'Onions',
-    'Garlic',
-    'Carots',
-    'Leafy greens',
-    'Meat',
-  ];
 }
