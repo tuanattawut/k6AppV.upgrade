@@ -30,7 +30,7 @@ class _ShowSearchState extends State<ShowSearch> {
   @override
   void initState() {
     super.initState();
-    getData();
+    //getData();
   }
 
   Future<Null> getData() async {
@@ -88,66 +88,67 @@ class _ShowSearchState extends State<ShowSearch> {
                   contentPadding: EdgeInsets.all(8)),
               onChanged: (value) {
                 setState(() {
-                  print(foodListSearch);
-                  print('Search $product');
-                  foodListSearch = product!
-                      .where((element) => element.contains(value.toLowerCase()))
-                      .toList();
+                  value = value.toLowerCase();
+                  //  print(foodListSearch);
+                  print('Search $value');
+                  // foodListSearch = product!
+                  //     .where((element) => element.contains(value.toLowerCase()))
+                  //     .toList();
 
-                  if (_textEditingController!.text.isNotEmpty &&
-                      foodListSearch!.length == 0) {
-                    print('foodListSearch length ${foodListSearch!.length}');
-                  }
+                  // if (_textEditingController!.text.isNotEmpty &&
+                  //     foodListSearch!.length == 0) {
+                  //   print('foodListSearch length ${foodListSearch!.length}');
+                  // }
                 });
               },
             ),
           )),
-      body: loadStatus!
-          ? MyStyle().showProgress()
-          : _textEditingController!.text.isNotEmpty &&
-                  foodListSearch!.length == 0
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.search_off,
-                            size: 50,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'ไม่พบสิ่งที่คุณค้นหา,\nลองเปลี่ยนคำค้นหา',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: _textEditingController!.text.isNotEmpty
-                      ? foodListSearch!.length
-                      : 0,
-                  itemBuilder: (BuildContext buildContext, int index) {
-                    return ListTile(
-                      onTap: () {
-                        MaterialPageRoute route = MaterialPageRoute(
-                          builder: (value) =>
-                              ShowDetail(productModel: productModels[index]),
-                        );
-                        Navigator.of(context).push(route);
-                      },
-                      title: Text(_textEditingController!.text.isNotEmpty
-                          ? foodListSearch![index]
-                          : ' ${productModels[index].nameproduct}'),
-                    );
-                  }),
+      // body: loadStatus!
+      //     ? MyStyle().showProgress()
+      //     : _textEditingController!.text.isNotEmpty &&
+      //             foodListSearch!.length == 0
+      //         ? Center(
+      //             child: Padding(
+      //               padding: const EdgeInsets.all(18.0),
+      //               child: Column(
+      //                 children: [
+      //                   Padding(
+      //                     padding: const EdgeInsets.all(8.0),
+      //                     child: Icon(
+      //                       Icons.search_off,
+      //                       size: 50,
+      //                     ),
+      //                   ),
+      //                   Padding(
+      //                     padding: const EdgeInsets.all(8.0),
+      //                     child: Text(
+      //                       'ไม่พบสิ่งที่คุณค้นหา,\nลองเปลี่ยนคำค้นหา',
+      //                       style: TextStyle(
+      //                           fontSize: 20, fontWeight: FontWeight.w600),
+      //                     ),
+      //                   ),
+      //                 ],
+      //               ),
+      //             ),
+      //           )
+      //         : ListView.builder(
+      //             itemCount: _textEditingController!.text.isNotEmpty
+      //                 ? foodListSearch!.length
+      //                 : product!.length,
+      //             itemBuilder: (BuildContext buildContext, int index) {
+      //               return ListTile(
+      //                 onTap: () {
+      //                   // MaterialPageRoute route = MaterialPageRoute(
+      //                   //   builder: (value) =>
+      //                   //       ShowDetail(productModel: productModels[index]),
+      //                   // );
+      //                   // Navigator.of(context).push(route);
+      //                 },
+      //                 title: Text(_textEditingController!.text.isNotEmpty
+      //                     ? foodListSearch![index]
+      //                     : ' ${productModels[index].nameproduct}'),
+      //               );
+      //             }),
     );
   }
 }
