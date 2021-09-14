@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:k6_app/utility/my_constant.dart';
 
 class SearchBar extends StatefulWidget {
   @override
@@ -14,8 +15,7 @@ class _SearchBar extends State {
   bool? searching, error;
   var data;
   String? query;
-  String dataurl =
-      "http://4bb4-101-109-131-111.jp.ngrok.io/projectk6/search_suggestion.php";
+  String dataurl = "${MyConstant().domain}/projectk6/search_suggestion.php";
   // do not use http://localhost/ , Android emulator do not recognize localhost
   // insted use your local ip address or your live URL
   // hit "ipconfig" on Windows or "ip a" on Linux to get IP Address
@@ -69,6 +69,7 @@ class _SearchBar extends State {
                 onPressed: () {
                   setState(() {
                     searching = true;
+                    print('5555555');
                   });
                 }), // search icon button
 
@@ -120,7 +121,6 @@ class _SearchBar extends State {
                       suggestion.name,
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -137,7 +137,7 @@ class _SearchBar extends State {
       style: TextStyle(color: Colors.white, fontSize: 18),
       decoration: InputDecoration(
         hintStyle: TextStyle(color: Colors.white, fontSize: 18),
-        hintText: "Search Peoples",
+        hintText: "ค้นหา",
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 2),
         ), //under line border, set OutlineInputBorder() for all side border
@@ -148,6 +148,7 @@ class _SearchBar extends State {
       onChanged: (value) {
         query = value; //update the value of query
         getSuggestion(); //start to get suggestion
+        print(query);
       },
     ));
   }
