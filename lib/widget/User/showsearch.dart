@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:http/http.dart' as http;
+import 'package:k6_app/widget/User/searchproduct.dart';
 
 class ShowSearch extends StatefulWidget {
   @override
@@ -32,7 +32,6 @@ class _ShowSearchState extends State<ShowSearch> {
       setState(() {
         data = json.decode(res.body);
         //update data value and UI
-        print(data);
       });
     } else {
       //there is error
@@ -110,7 +109,13 @@ class _ShowSearchState extends State<ShowSearch> {
       children: suggestionlist.map((suggestion) {
         return InkResponse(
             onTap: () {
-              //when tapped on suggestion
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => SearchProduct(
+                  idproduct: suggestion.id,
+                ),
+              );
+              Navigator.of(context).push(route);
+
               print(suggestion.id); //pint student id
             },
             child: SizedBox(
