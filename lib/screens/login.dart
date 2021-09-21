@@ -131,6 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                 password!.length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
+              showLoaderDialog(context);
               checkAuthen();
             }
           }
@@ -198,6 +199,7 @@ class _LoginPageState extends State<LoginPage> {
 
       var result = json.decode(response.data);
       //  print('result = $result');
+      Navigator.pop(context);
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
@@ -219,7 +221,26 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       normalDialog(context, 'ผิดพลาด');
-      print('Have e Error ===>> ${e.toString()}');
+      // print('Have e Error ===>> ${e.toString()}');
     }
   }
+}
+
+showLoaderDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(
+            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
