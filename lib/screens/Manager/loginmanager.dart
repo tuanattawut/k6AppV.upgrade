@@ -117,6 +117,7 @@ class _LoginManagerState extends State<LoginManager> {
                 password!.length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
+              showLoaderDialog(context);
               checkAuthen();
             }
           }
@@ -126,13 +127,14 @@ class _LoginManagerState extends State<LoginManager> {
   Future<Null> checkAuthen() async {
     String url =
         '${MyConstant().domain}/projectk6/getManaWhereMana.php?isAdd=true&email=$email';
-    print('url ===>> $url');
+    // print('url ===>> $url');
     try {
+      Navigator.pop(context);
       Response response = await Dio().get(url);
-      print('res = $response');
+      //  print('res = $response');
 
       var result = json.decode(response.data);
-      print('result = $result');
+      // print('result = $result');
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
@@ -151,7 +153,26 @@ class _LoginManagerState extends State<LoginManager> {
       }
     } catch (e) {
       normalDialog(context, 'ผิดพลาด');
-      print('Have e Error ===>> ${e.toString()}');
+      //print('Have e Error ===>> ${e.toString()}');
     }
   }
+}
+
+showLoaderDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(
+            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

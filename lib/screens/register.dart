@@ -162,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      //print('res = $response');
 
       if (response.toString() == 'true') {
         Navigator.pop(context);

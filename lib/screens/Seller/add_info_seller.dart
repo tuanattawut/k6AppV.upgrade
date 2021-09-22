@@ -198,6 +198,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
+          showLoaderDialog(context);
           uploadImage();
         }
       },
@@ -235,8 +236,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
-
+      // print('res = $response');
+      Navigator.pop(context);
       if (response.toString() == 'true') {
         Navigator.pop(context);
       } else {
@@ -244,4 +245,23 @@ class _AddInfoShopState extends State<AddInfoShop> {
       }
     } catch (e) {}
   }
+}
+
+showLoaderDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(
+            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

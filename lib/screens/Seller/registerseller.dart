@@ -136,6 +136,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
         } else if (file == null) {
           normalDialog(context, 'โปรดใส่รูปภาพ');
         } else {
+          showLoaderDialog(context);
           uploadImage();
         }
       },
@@ -147,10 +148,10 @@ class _RegisterSellerState extends State<RegisterSeller> {
     int i = random.nextInt(1000000);
 
     String nameImage = 'seller$i.jpg';
-    print('nameImage = $nameImage, pathImage = ${file!.path}');
+    //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveseller.php';
-
+    Navigator.pop(context);
     try {
       Map<String, dynamic> map = Map();
       map['file'] =
@@ -356,4 +357,23 @@ class _RegisterSellerState extends State<RegisterSeller> {
       ),
     );
   }
+}
+
+showLoaderDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(
+            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

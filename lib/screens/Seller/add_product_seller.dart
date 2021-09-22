@@ -43,7 +43,7 @@ class _AddProductState extends State<AddProduct> {
       }
     });
 
-    print(categoryItemList);
+    // print(categoryItemList);
   }
 
   @override
@@ -115,6 +115,7 @@ class _AddProductState extends State<AddProduct> {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
           uploadImage();
+          showLoaderDialog(context);
           // addProduct();
         }
       },
@@ -125,11 +126,12 @@ class _AddProductState extends State<AddProduct> {
     Random random = Random();
     int i = random.nextInt(1000000);
     String nameImage = 'product$i.jpg';
-    print('nameImage = $nameImage, pathImage = ${file!.path}');
+    //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveproduct.php';
 
     try {
+      Navigator.pop(context);
       Map<String, dynamic> map = Map();
       map['file'] =
           await MultipartFile.fromFile(file!.path, filename: nameImage);
@@ -247,4 +249,23 @@ class _AddProductState extends State<AddProduct> {
       ),
     );
   }
+}
+
+showLoaderDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(
+            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
