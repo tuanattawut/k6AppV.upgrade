@@ -14,6 +14,7 @@ class ProductModel {
   String price;
   String detail;
   String image;
+  String regdate;
   ProductModel({
     required this.idProduct,
     required this.idShop,
@@ -22,6 +23,7 @@ class ProductModel {
     required this.price,
     required this.detail,
     required this.image,
+    required this.regdate,
   });
 
   ProductModel copyWith({
@@ -32,6 +34,7 @@ class ProductModel {
     String? price,
     String? detail,
     String? image,
+    String? regdate,
   }) {
     return ProductModel(
       idProduct: idProduct ?? this.idProduct,
@@ -41,6 +44,7 @@ class ProductModel {
       price: price ?? this.price,
       detail: detail ?? this.detail,
       image: image ?? this.image,
+      regdate: regdate ?? this.regdate,
     );
   }
 
@@ -53,6 +57,7 @@ class ProductModel {
       'price': price,
       'detail': detail,
       'image': image,
+      'regdate': regdate,
     };
   }
 
@@ -65,6 +70,7 @@ class ProductModel {
       price: map['price'],
       detail: map['detail'],
       image: map['image'],
+      regdate: map['regdate'],
     );
   }
 
@@ -75,7 +81,7 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(idProduct: $idProduct, idShop: $idShop, idCategory: $idCategory, nameproduct: $nameproduct, price: $price, detail: $detail, image: $image)';
+    return 'ProductModel(idProduct: $idProduct, idShop: $idShop, idCategory: $idCategory, nameproduct: $nameproduct, price: $price, detail: $detail, image: $image,regdate:$regdate)';
   }
 
   @override
@@ -89,7 +95,8 @@ class ProductModel {
         other.nameproduct == nameproduct &&
         other.price == price &&
         other.detail == detail &&
-        other.image == image;
+        other.image == image &&
+        other.regdate == regdate;
   }
 
   @override
@@ -100,6 +107,7 @@ class ProductModel {
         nameproduct.hashCode ^
         price.hashCode ^
         detail.hashCode ^
-        image.hashCode;
+        image.hashCode ^
+        regdate.hashCode;
   }
 }

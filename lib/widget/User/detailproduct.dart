@@ -185,6 +185,17 @@ class _DetailProductState extends State<DetailProduct> {
                 fontSize: 18,
               ),
             ),
+            Row(
+              children: [
+                MyStyle().showTitleH2('วันที่โพสต์:  '),
+                Text(
+                  productModel!.regdate,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
           ]));
 
   Widget showListView(int index) {

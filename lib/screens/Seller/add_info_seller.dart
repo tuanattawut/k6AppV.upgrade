@@ -198,7 +198,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
-          showLoaderDialog(context);
+          showLoade(context);
           uploadImage();
         }
       },
@@ -209,7 +209,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
     Random random = Random();
     int i = random.nextInt(1000000);
     String nameImage = 'shop$i.jpg';
-    print('nameImage = $nameImage, pathImage = ${file!.path}');
+    //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveshop.php';
 
@@ -220,9 +220,9 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
-        print('Response ===>>> $value');
+        // print('Response ===>>> $value');
         image = '/projectk6/Image/shop/$nameImage';
-        print('urlImage = $image');
+        //  print('urlImage = $image');
         addSHOP();
       });
     } catch (e) {}
@@ -245,23 +245,4 @@ class _AddInfoShopState extends State<AddInfoShop> {
       }
     } catch (e) {}
   }
-}
-
-showLoaderDialog(BuildContext context) {
-  AlertDialog alert = AlertDialog(
-    content: new Row(
-      children: [
-        CircularProgressIndicator(),
-        Container(
-            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
-      ],
-    ),
-  );
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

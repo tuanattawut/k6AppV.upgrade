@@ -112,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
         } else if (file == null) {
           normalDialog(context, 'โปรดใส่รูปภาพ');
         } else {
-          showLoaderDialog(context);
+          showLoade(context);
           uploadImage();
         }
       },
@@ -124,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
     int i = random.nextInt(100000);
 
     String nameImage = 'avatar$i.jpg';
-    print('nameImage = $nameImage, pathImage = ${file?.path}');
+    //print('nameImage = $nameImage, pathImage = ${file?.path}');
 
     String url = '${MyConstant().domain}/projectk6/saveimage.php';
 
@@ -135,9 +135,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
-        print('Response ===>>> $value');
+        // print('Response ===>>> $value');
         image = '/projectk6/Image/avatar/$nameImage';
-        print('urlImage = $image');
+        // print('urlImage = $image');
         checkUser();
       });
     } catch (e) {}
@@ -299,23 +299,4 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-}
-
-showLoaderDialog(BuildContext context) {
-  AlertDialog alert = AlertDialog(
-    content: new Row(
-      children: [
-        CircularProgressIndicator(),
-        Container(
-            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
-      ],
-    ),
-  );
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

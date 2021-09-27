@@ -109,7 +109,7 @@ class _LoginManagerState extends State<LoginManager> {
         child: Text('ล็อกอิน'),
         onPressed: () async {
           if (this._formstate.currentState!.validate()) {
-            print('email =====> $email\npassword =====> $password');
+            //print('email =====> $email\npassword =====> $password');
             if (email == null ||
                 email!.isEmpty ||
                 password == null ||
@@ -117,7 +117,7 @@ class _LoginManagerState extends State<LoginManager> {
                 password!.length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
-              showLoaderDialog(context);
+              showLoade(context);
               checkAuthen();
             }
           }
@@ -129,11 +129,11 @@ class _LoginManagerState extends State<LoginManager> {
         '${MyConstant().domain}/projectk6/getManaWhereMana.php?isAdd=true&email=$email';
     // print('url ===>> $url');
     try {
-      Navigator.pop(context);
       Response response = await Dio().get(url);
       //  print('res = $response');
 
       var result = json.decode(response.data);
+      Navigator.pop(context);
       // print('result = $result');
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
@@ -144,7 +144,6 @@ class _LoginManagerState extends State<LoginManager> {
             MaterialPageRoute route =
                 MaterialPageRoute(builder: (value) => Homemanager());
             Navigator.of(context).push(route);
-
             break;
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
@@ -156,23 +155,4 @@ class _LoginManagerState extends State<LoginManager> {
       //print('Have e Error ===>> ${e.toString()}');
     }
   }
-}
-
-showLoaderDialog(BuildContext context) {
-  AlertDialog alert = AlertDialog(
-    content: new Row(
-      children: [
-        CircularProgressIndicator(),
-        Container(
-            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
-      ],
-    ),
-  );
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

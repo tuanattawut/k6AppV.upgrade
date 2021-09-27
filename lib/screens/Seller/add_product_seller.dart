@@ -115,7 +115,7 @@ class _AddProductState extends State<AddProduct> {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
           uploadImage();
-          showLoaderDialog(context);
+          showLoade(context);
           // addProduct();
         }
       },
@@ -154,7 +154,7 @@ class _AddProductState extends State<AddProduct> {
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      //print('res = $response');
 
       if (response.toString() == 'true') {
         Navigator.pop(context);
@@ -249,23 +249,4 @@ class _AddProductState extends State<AddProduct> {
       ),
     );
   }
-}
-
-showLoaderDialog(BuildContext context) {
-  AlertDialog alert = AlertDialog(
-    content: new Row(
-      children: [
-        CircularProgressIndicator(),
-        Container(
-            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
-      ],
-    ),
-  );
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

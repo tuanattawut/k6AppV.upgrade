@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                 password!.length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
-              showLoaderDialog(context);
+              showLoade(context);
               checkAuthen();
             }
           }
@@ -226,21 +226,21 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-showLoaderDialog(BuildContext context) {
-  AlertDialog alert = AlertDialog(
-    content: new Row(
-      children: [
-        CircularProgressIndicator(),
-        Container(
-            margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
-      ],
-    ),
-  );
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
+// showLoaderDialog(BuildContext context) {
+//   AlertDialog alert = AlertDialog(
+//     content: new Row(
+//       children: [
+//         CircularProgressIndicator(),
+//         Container(
+//             margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
+//       ],
+//     ),
+//   );
+//   showDialog(
+//     barrierDismissible: false,
+//     context: context,
+//     builder: (BuildContext context) {
+//       return alert;
+//     },
+//   );
+// }
