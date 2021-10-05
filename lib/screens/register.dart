@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:k6_app/utility/enc-dec.dart';
 
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -99,8 +100,8 @@ class _RegisterPageState extends State<RegisterPage> {
             name!.isEmpty ||
             lastname == null ||
             lastname!.isEmpty ||
-            password == null ||
-            password!.isEmpty ||
+            generateMd5(password!) == null ||
+            generateMd5(password!).isEmpty ||
             phone == null ||
             phone!.isEmpty ||
             phone!.length != 10 ||
@@ -148,6 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
         '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
+      Navigator.pop(context);
       if (response.toString() == 'null') {
         register();
       } else {
@@ -157,15 +159,18 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<Null> register() async {
+    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/projectk6/addUser.php?isAdd=true&name=$name&lastname=$lastname&email=$email&password=$password&gender=$gender&phone=$phone&image=$image';
+        '${MyConstant().domain}/projectk6/addUser.php?isAdd=true&name=$name&lastname=$lastname&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&image=$image';
 
     try {
       Response response = await Dio().get(url);
       //print('res = $response');
 
       if (response.toString() == 'true') {
-        Navigator.pop(context);
+        normalDialog(context, 'สมัครสำเร็จ');
+
+        Navigator.pushNamed(context, '/');
       } else {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }

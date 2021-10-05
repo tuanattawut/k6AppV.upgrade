@@ -5,6 +5,7 @@ import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/Manager/loginmanager.dart';
 import 'package:k6_app/screens/Seller/loginseller.dart';
 import 'package:k6_app/screens/User/main_user.dart';
+import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -122,13 +123,14 @@ class _LoginPageState extends State<LoginPage> {
         child: Text('ล็อกอิน'),
         onPressed: () async {
           if (this._formstate.currentState!.validate()) {
-            print('email =====> $email\npassword =====> $password');
+            print('email ======>  $email');
+            print('Password ======> ' + generateMd5(password!));
             if (email == null ||
                 email!.isEmpty ||
                 !email!.contains('@') ||
-                password == null ||
-                password!.isEmpty ||
-                password!.length < 6) {
+                generateMd5(password!) == null ||
+                generateMd5(password!).isEmpty ||
+                generateMd5(password!).length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
               showLoade(context);
@@ -205,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         for (var map in result) {
           UserModel userModel = UserModel.fromMap(map);
-          if (password == userModel.password) {
+          if (generateMd5(password!) == userModel.password) {
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => Homepage(
                 usermodel: userModel,

@@ -101,7 +101,7 @@ class _ProductListUserState extends State<ProductListUser> {
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      // print('res = $response');
 
       if (response.toString() == 'true') {
       } else {
@@ -129,7 +129,7 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        print('Error getRecently');
+        //print('Error getRecently');
         CircularProgressIndicator();
       }
     });
@@ -150,7 +150,7 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        print('Error getdataRecently');
+        // print('Error getdataRecently');
         CircularProgressIndicator();
       }
     });
@@ -178,7 +178,7 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        print('Error getCategory');
+        //print('Error getCategory');
         CircularProgressIndicator();
       }
     });
@@ -261,27 +261,27 @@ class _ProductListUserState extends State<ProductListUser> {
                     ),
                   ),
                 ])),
-            Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(children: [
-                  _buildSectiontitle(
-                    'ดูอีกครั้ง',
-                    () {},
-                  ),
-                  SizedBox(
-                    height: 250,
-                    child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: recentlyModels.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          showRecentlyView(index),
-                    ),
-                  ),
-                ])),
+            // Card(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(20),
+            //     ),
+            //     child: Column(children: [
+            //       _buildSectiontitle(
+            //         'ดูอีกครั้ง',
+            //         () {},
+            //       ),
+            //       SizedBox(
+            //         height: 250,
+            //         child: ListView.builder(
+            //           physics: ClampingScrollPhysics(),
+            //           shrinkWrap: true,
+            //           scrollDirection: Axis.horizontal,
+            //           itemCount: recentlyModels.length,
+            //           itemBuilder: (BuildContext context, int index) =>
+            //               showRecentlyView(index),
+            //         ),
+            //       ),
+            //     ])),
             Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),

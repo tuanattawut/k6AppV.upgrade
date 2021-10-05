@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -122,8 +123,8 @@ class _RegisterSellerState extends State<RegisterSeller> {
             name!.isEmpty ||
             lastname == null ||
             lastname!.isEmpty ||
-            password == null ||
-            password!.isEmpty ||
+            generateMd5(password!) == null ||
+            generateMd5(password!).isEmpty ||
             phone == null ||
             phone!.isEmpty ||
             idcard == null ||
@@ -159,9 +160,9 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
-        print('Response ===>>> $value');
+        //print('Response ===>>> $value');
         image = '/projectk6/Image/seller/$nameImage';
-        print('urlImage = $image');
+        //print('urlImage = $image');
         checkUser();
       });
     } catch (e) {}
@@ -172,6 +173,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
         '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
+      Navigator.pop(context);
       if (response.toString() == 'null') {
         register();
       } else {
@@ -181,15 +183,18 @@ class _RegisterSellerState extends State<RegisterSeller> {
   }
 
   Future<Null> register() async {
+    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/projectk6/addSeller.php?isAdd=true&name=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$password&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
+        '${MyConstant().domain}/projectk6/addSeller.php?isAdd=true&name=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      // print('res = $response');
 
       if (response.toString() == 'true') {
-        Navigator.pop(context);
+        normalDialog(context, 'สมัครสำเร็จ');
+
+        Navigator.pushNamed(context, '/');
       } else {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }

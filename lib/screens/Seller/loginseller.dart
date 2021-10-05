@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
 import 'package:k6_app/screens/Seller/registerseller.dart';
+import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -85,9 +86,9 @@ class _LoginSellerState extends State<LoginSeller> {
             if (email == null ||
                 email!.isEmpty ||
                 !email!.contains('@') ||
-                password == null ||
-                password!.isEmpty ||
-                password!.length < 6) {
+                generateMd5(password!) == null ||
+                generateMd5(password!).isEmpty ||
+                generateMd5(password!).length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
               showLoade(context);
@@ -159,7 +160,7 @@ class _LoginSellerState extends State<LoginSeller> {
       } else {
         for (var item in json.decode(value.data)) {
           SellerModel sellerModel = SellerModel.fromMap(item);
-          if (password == sellerModel.password) {
+          if (generateMd5(password!) == sellerModel.password) {
             if (sellerModel.status == 'yes') {
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => Homeseller(

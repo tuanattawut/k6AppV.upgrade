@@ -12,7 +12,6 @@ class _ManageSellerState extends State<ManageSeller> {
       appBar: AppBar(
         title: Text('จำนวนร้านค้า'),
       ),
-      backgroundColor: Colors.white70,
       body: Stack(
         children: <Widget>[
           Container(
