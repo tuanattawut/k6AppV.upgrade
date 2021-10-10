@@ -48,8 +48,8 @@ class _InformationUserState extends State<InformationUser> {
             children: [
               Expanded(
                   flex: 1,
-                  child:
-                      _buildCard('ชื่อ', '${userModel?.name ?? 'กำลังโหลด'}')),
+                  child: _buildCard(
+                      'ชื่อ', '${userModel?.firstname ?? 'กำลังโหลด'}')),
               Expanded(
                 flex: 1,
                 child: _buildCard(

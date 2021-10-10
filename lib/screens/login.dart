@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<Null> checkAuthen() async {
     String url =
-        '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/api/getUserEmail.php?isAdd=true&email=$email';
     //  print('url ===>> $url');
     try {
       Response response = await Dio().get(url);
@@ -227,22 +227,3 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 }
-
-// showLoaderDialog(BuildContext context) {
-//   AlertDialog alert = AlertDialog(
-//     content: new Row(
-//       children: [
-//         CircularProgressIndicator(),
-//         Container(
-//             margin: EdgeInsets.only(left: 7), child: Text("กำลังโหลด...")),
-//       ],
-//     ),
-//   );
-//   showDialog(
-//     barrierDismissible: false,
-//     context: context,
-//     builder: (BuildContext context) {
-//       return alert;
-//     },
-//   );
-// }

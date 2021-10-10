@@ -12,75 +12,70 @@ String userModelToJson(List<UserModel> data) =>
 
 class UserModel {
   String idUser;
-  String name;
+  String firstname;
   String lastname;
   String email;
   String password;
   String gender;
   String phone;
   String image;
-  String idfb;
+
   UserModel({
     required this.idUser,
-    required this.name,
+    required this.firstname,
     required this.lastname,
     required this.email,
     required this.password,
     required this.gender,
     required this.phone,
     required this.image,
-    required this.idfb,
   });
 
   UserModel copyWith({
     String? idUser,
-    String? name,
+    String? firstname,
     String? lastname,
     String? email,
     String? password,
     String? gender,
     String? phone,
     String? image,
-    String? idfb,
   }) {
     return UserModel(
       idUser: idUser ?? this.idUser,
-      name: name ?? this.name,
+      firstname: firstname ?? this.firstname,
       lastname: lastname ?? this.lastname,
       email: email ?? this.email,
       password: password ?? this.password,
       gender: gender ?? this.gender,
       phone: phone ?? this.phone,
       image: image ?? this.image,
-      idfb: idfb ?? this.idfb,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'idUser': idUser,
-      'name': name,
+      'firstname': firstname,
       'lastname': lastname,
       'email': email,
       'password': password,
       'gender': gender,
       'phone': phone,
       'image': image,
-      'idfb': idfb,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      idUser: map['id_user'],
-      name: map['name'],
+      idUser: map['idUser'],
+      firstname: map['firstname'],
       lastname: map['lastname'],
       email: map['email'],
       password: map['password'],
       gender: map['gender'],
       phone: map['phone'],
       image: map['image'],
-      idfb: map['idfb'],
     );
   }
 
@@ -91,7 +86,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(idUser: $idUser, name: $name, lastname: $lastname, email: $email, password: $password, gender: $gender, phone: $phone, image: $image, idfb: $idfb)';
+    return 'UserModel(idUser: $idUser, firstname: $firstname, lastname: $lastname, email: $email, password: $password, gender: $gender, phone: $phone, image: $image)';
   }
 
   @override
@@ -100,26 +95,24 @@ class UserModel {
 
     return other is UserModel &&
         other.idUser == idUser &&
-        other.name == name &&
+        other.firstname == firstname &&
         other.lastname == lastname &&
         other.email == email &&
         other.password == password &&
         other.gender == gender &&
         other.phone == phone &&
-        other.image == image &&
-        other.idfb == idfb;
+        other.image == image;
   }
 
   @override
   int get hashCode {
     return idUser.hashCode ^
-        name.hashCode ^
+        firstname.hashCode ^
         lastname.hashCode ^
         email.hashCode ^
         password.hashCode ^
         gender.hashCode ^
         phone.hashCode ^
-        image.hashCode ^
-        idfb.hashCode;
+        image.hashCode;
   }
 }

@@ -124,10 +124,10 @@ class _RegisterPageState extends State<RegisterPage> {
     Random random = Random();
     int i = random.nextInt(100000);
 
-    String nameImage = 'avatar$i.jpg';
+    String nameImage = 'avatar_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file?.path}');
 
-    String url = '${MyConstant().domain}/projectk6/saveimage.php';
+    String url = '${MyConstant().domain}/api/saveimage_user.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -146,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<Null> checkUser() async {
     String url =
-        '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/api/getUserEmail.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
       Navigator.pop(context);
@@ -161,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<Null> register() async {
     String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/projectk6/addUser.php?isAdd=true&name=$name&lastname=$lastname&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&image=$image';
+        '${MyConstant().domain}/api/addUser.php?isAdd=true&firstname=$name&lastname=$lastname&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&image=$image';
 
     try {
       Response response = await Dio().get(url);

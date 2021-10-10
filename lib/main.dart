@@ -23,12 +23,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: '/register',
       routes: {
         '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/homemanager': (context) => Homemanager(),
-        '/dd': (context) => SearchBar(),
       },
     );
   }
