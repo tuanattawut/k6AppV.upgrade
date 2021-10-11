@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:http/http.dart' as http;
+import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/main_user.dart';
+import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -14,7 +17,7 @@ class LoginFacebook extends StatefulWidget {
 }
 
 class _LoginFacebookState extends State<LoginFacebook> {
-  String? name, lastname, email, password, gender, phone, typeuser, image, idfb;
+  String? firstname, lastname, email, password, gender, phone, typeuser, image;
 
   bool isLoggedIn = false;
 
@@ -27,24 +30,24 @@ class _LoginFacebookState extends State<LoginFacebook> {
       this.isLoggedIn = isLoggedIn;
       this.profileData = profileData;
 
-      name = profileData['first_name'];
+      firstname = profileData['first_name'];
       lastname = profileData['last_name'];
       email = profileData['email'];
       image = profileData['picture']['data']['url'];
-      idfb = profileData['id'];
       checkUser();
     });
   }
 
   Future<Null> registerThread() async {
+    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/projectk6/addUser.php?isAdd=true&name=$name&lastname=$lastname&email=$email&password=$password&gender=$gender&phone=$phone&image=$image&idfb=$idfb';
+        '${MyConstant().domain}/api/addUser.php?isAdd=true&firstname=$firstname&lastname=$lastname&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&image=$image';
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
-
-      if (response.toString() == 'true') {
+      //print('res = $response');
+      print(passwordMd5);
+      if (response.toString() == 'ได้') {
         normalDialog(
             context, 'เข้าใช้สำเร็จด้วยชื่อ :\n${profileData['name']} ');
       } else {
@@ -55,18 +58,29 @@ class _LoginFacebookState extends State<LoginFacebook> {
 
   Future<Null> checkUser() async {
     String url =
-        '${MyConstant().domain}/projectk6/getUserWhereUser.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/api/getUserEmail.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
-
+      var result = json.decode(response.data);
       if (response.toString() == 'null') {
         showAddFBDialog();
       } else {
-        Navigator.pushNamed(context, '/homepage');
+        for (var map in result) {
+          UserModel userModel = UserModel.fromMap(map);
+          MaterialPageRoute route = MaterialPageRoute(
+            builder: (value) => Homepage(
+              usermodel: userModel,
+            ),
+          );
+          Navigator.of(context).push(route);
+
+          print(response.toString());
+          // Navigator.pushNamed(context, '/homepage'); break;
+        }
       }
     } catch (e) {
-      normalDialog(context, 'ผิดพลาด');
-      print('Have e Error ===>> ${e.toString()}');
+      normalDialog(context, 'ผิดพลาด : ${e.toString()}');
+      //print('Have e Error ===>> ${e.toString()}');
     }
   }
 
@@ -95,7 +109,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'ชื่อ : $name',
+                        'ชื่อ : $firstname',
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -112,6 +126,10 @@ class _LoginFacebookState extends State<LoginFacebook> {
                         'อีเมล : $email',
                         style: TextStyle(fontSize: 16),
                       ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: buildPasswordField(),
                     ),
                     Padding(
                       padding: EdgeInsets.all(10),
@@ -169,12 +187,18 @@ class _LoginFacebookState extends State<LoginFacebook> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            print('เก็บข้อมูล : $name,$email, $phone, $gender');
+                            // print(
+                            //     'เก็บข้อมูล : $firstname,$email, $phone, $gender ,$password');
 
                             if (phone == null ||
                                 phone!.isEmpty ||
                                 phone!.length != 10) {
                               normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
+                            } else if (password == null ||
+                                password!.isEmpty ||
+                                password!.length < 6) {
+                              normalDialog(context,
+                                  'โปรด กรอกพาสเวิร์ดให้ถูกต้อง\nและมากกว่า 6 ตัวอักษร');
                             } else {
                               registerThread();
                               Navigator.pop(context);
@@ -218,6 +242,23 @@ class _LoginFacebookState extends State<LoginFacebook> {
       text: 'ล็อกอินด้วย Facebook',
       icon: Icons.facebook,
       onPressed: () => initiateFacebookLogin(),
+    );
+  }
+
+  TextFormField buildPasswordField() {
+    return TextFormField(
+      onChanged: (value) => password = value.trim(),
+      validator: (value) {
+        if (value!.length < 6)
+          return 'โปรดกรอกพาสเวิร์ดมากกว่า 6 หลัก';
+        else
+          return null;
+      },
+      obscureText: true,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: 'พาสเวิร์ด',
+      ),
     );
   }
 

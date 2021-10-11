@@ -78,7 +78,7 @@ class _HomesellerState extends State<Homeseller> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("คุณ ${sellerModel?.name} เข้าสู่ระบบ"),
+          title: Text("คุณ ${sellerModel?.firstname} เข้าสู่ระบบ"),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.exit_to_app),

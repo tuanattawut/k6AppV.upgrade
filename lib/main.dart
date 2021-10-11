@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/screens/Manager/main_manager.dart';
 import 'package:k6_app/screens/login.dart';
 import 'package:k6_app/screens/register.dart';
-import 'package:k6_app/widget/User/search.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/register',
+      initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),

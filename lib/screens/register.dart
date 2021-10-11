@@ -124,11 +124,11 @@ class _RegisterPageState extends State<RegisterPage> {
     Random random = Random();
     int i = random.nextInt(100000);
 
-    String nameImage = 'avatar_$i.jpg';
+    String nameImage = 'user_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file?.path}');
 
-    String url = '${MyConstant().domain}/api/saveimage_user.php';
-
+    String url = '${MyConstant().domain}/upload/saveImageUser.php';
+    // print(url);
     try {
       Map<String, dynamic> map = Map();
       map['file'] =
@@ -137,8 +137,8 @@ class _RegisterPageState extends State<RegisterPage> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         // print('Response ===>>> $value');
-        image = '/projectk6/Image/avatar/$nameImage';
-        // print('urlImage = $image');
+        image = '${MyConstant().domain}/upload/user/$nameImage';
+        //print('urlImage = $image');
         checkUser();
       });
     } catch (e) {}

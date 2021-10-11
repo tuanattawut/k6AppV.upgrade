@@ -6,6 +6,7 @@ import 'package:flutter_signin_button/button_builder.dart';
 import 'package:http/http.dart' as http;
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
+import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -42,15 +43,18 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
   }
 
   Future<Null> registerThread() async {
+    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/projectk6/addSeller.php?isAdd=true&name=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$password&gender=$gender&phone=$phone&birthday=$birthday&image=$image&idfb=$idfb';
+        '${MyConstant().domain}/api/addSeller.php?isAdd=true&firstname=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
 
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      // print('res = $response');
 
       if (response.toString() == 'true') {
-        normalDialog(context, 'สมัครสมาชิกสำเร็จ');
+        normalDialog(context, 'สมัครสำเร็จ');
+
+        Navigator.pushNamed(context, '/');
       } else {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }
@@ -59,16 +63,17 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
 
   Future<Null> checkUser() async {
     String url =
-        '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/api/getSellerEmail.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
       var result = json.decode(response.data);
+      print(result);
       if (result == null) {
         showAddFBDialog();
       } else {
         for (var map in result) {
-          SellerModel sellerModel = SellerModel.fromJson(map);
-          if (sellerModel.status == 'yes') {
+          SellerModel sellerModel = SellerModel.fromMap(map);
+          if (sellerModel.role == 'seller') {
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => Homeseller(
                 sellerModel: sellerModel,
@@ -76,7 +81,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
             );
             Navigator.of(context).push(route);
             break;
-          } else if (sellerModel.status == 'no') {
+          } else if (sellerModel.role == 'noseller') {
             normalDialog(
                 context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
           } else {
@@ -87,7 +92,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
       }
     } catch (e) {
       normalDialog(context, 'ผิดพลาด');
-      print('Have e Error ===>> ${e.toString()}');
+      // print('Have e Error ===>> ${e.toString()}');
     }
   }
 
@@ -137,6 +142,10 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                         'อีเมล : $email',
                         style: TextStyle(fontSize: 16),
                       ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: buildPasswordField(),
                     ),
                     Padding(
                       padding: EdgeInsets.all(10),
@@ -222,9 +231,9 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            print(
-                              'เก็บข้อมูล : $name,$email, $phone, $gender,$birthday',
-                            );
+                            // print(
+                            //   'เก็บข้อมูล : $name,$email, $phone, $gender,$birthday',
+                            // );
 
                             if (phone == null ||
                                 phone!.isEmpty ||
@@ -236,6 +245,11 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                                 idcard == null) {
                               normalDialog(
                                   context, 'โปรด กรอกบัตรประชาชนให้ถูกต้อง');
+                            } else if (password!.length != 6 ||
+                                password!.isEmpty ||
+                                password == null) {
+                              normalDialog(
+                                  context, 'โปรด กรอกพาสเวิร์ดให้ถูกต้อง');
                             } else {
                               registerThread();
                               Navigator.pop(context);
@@ -306,6 +320,23 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
     );
   }
 
+  TextFormField buildPasswordField() {
+    return TextFormField(
+      onChanged: (value) => password = value.trim(),
+      validator: (value) {
+        if (value!.length < 6)
+          return 'โปรดกรอกพาสเวิร์ดมากกว่า 6 หลัก';
+        else
+          return null;
+      },
+      obscureText: true,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: 'พาสเวิร์ด',
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SignInButtonBuilder(
@@ -334,7 +365,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}'));
 
         var profile = json.decode(graphResponse.body);
-        print(profile.toString());
+        // print(profile.toString());
 
         onLoginStatusChanged(true, profileData: profile);
 

@@ -81,7 +81,7 @@ class _LoginSellerState extends State<LoginSeller> {
         child: Text('ล็อกอิน'),
         onPressed: () async {
           if (this._formstate.currentState!.validate()) {
-            print('email =====> $email\npassword =====> $password');
+            //print('email =====> $email\npassword =====> $password');
 
             if (email == null ||
                 email!.isEmpty ||
@@ -151,7 +151,7 @@ class _LoginSellerState extends State<LoginSeller> {
 
   Future<Null> checkAuthen() async {
     String url =
-        '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/api/getSellerEmail.php?isAdd=true&email=$email';
     // print('url ===>> $url');
     await Dio().get(url).then((value) async {
       Navigator.pop(context);
@@ -161,7 +161,7 @@ class _LoginSellerState extends State<LoginSeller> {
         for (var item in json.decode(value.data)) {
           SellerModel sellerModel = SellerModel.fromMap(item);
           if (generateMd5(password!) == sellerModel.password) {
-            if (sellerModel.status == 'yes') {
+            if (sellerModel.role == 'seller') {
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => Homeseller(
                   sellerModel: sellerModel,
@@ -169,7 +169,7 @@ class _LoginSellerState extends State<LoginSeller> {
               );
               Navigator.of(context).push(route);
               break;
-            } else if (sellerModel.status == 'no') {
+            } else if (sellerModel.role == 'noseller') {
               normalDialog(
                   context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
             } else {

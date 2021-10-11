@@ -51,7 +51,7 @@ class _DetailApproveState extends State<DetailApprove> {
       appBar: AppBar(
         title: sellerModel == null
             ? Text('รายละเอียด')
-            : Text('รายละเอียดคุณ ${sellerModel!.name}'),
+            : Text('รายละเอียดคุณ ${sellerModel!.firstname}'),
       ),
       body: ListView(
         padding: EdgeInsets.all(10),
@@ -69,7 +69,7 @@ class _DetailApproveState extends State<DetailApprove> {
           Padding(
             padding: EdgeInsets.all(10),
             child: Text(
-              'ชื่อ : ${sellerModel!.name}  '
+              'ชื่อ : ${sellerModel!.firstname}  '
               ' ${sellerModel!.lastname} ',
               style: TextStyle(fontSize: 16),
             ),

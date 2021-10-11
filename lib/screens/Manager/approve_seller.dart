@@ -52,11 +52,13 @@ class _ApproveSellerState extends State<ApproveSeller> {
                 Navigator.of(context).push(route);
               },
               title: Text(
-                sellerModels[index].name + ' ' + sellerModels[index].lastname,
+                sellerModels[index].firstname +
+                    ' ' +
+                    sellerModels[index].lastname,
                 textScaleFactor: 1.5,
               ),
               trailing: Text(
-                sellerModels[index].status == 'yes' ? 'อนุมัติ' : 'ไม่อนุมัติ',
+                sellerModels[index].role == 'seller' ? 'อนุมัติ' : 'ไม่อนุมัติ',
                 textScaleFactor: 1.5,
                 style: TextStyle(color: Colors.red),
               ),

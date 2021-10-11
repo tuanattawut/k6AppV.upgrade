@@ -145,14 +145,15 @@ class _RegisterSellerState extends State<RegisterSeller> {
   }
 
   Future<Null> uploadImage() async {
+    Navigator.pop(context);
     Random random = Random();
     int i = random.nextInt(1000000);
 
-    String nameImage = 'seller$i.jpg';
-    //print('nameImage = $nameImage, pathImage = ${file!.path}');
+    String nameImage = 'seller_$i.jpg';
+    // print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/projectk6/saveseller.php';
-    Navigator.pop(context);
+    String url = '${MyConstant().domain}/upload/saveImageSeller.php';
+    //print(url);
     try {
       Map<String, dynamic> map = Map();
       map['file'] =
@@ -160,9 +161,10 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
-        //print('Response ===>>> $value');
-        image = '/projectk6/Image/seller/$nameImage';
+        //add_info_seller.dart print('Response ===>>> $value');
+        image = '${MyConstant().domain}/upload/seller/$nameImage';
         //print('urlImage = $image');
+        showLoade(context);
         checkUser();
       });
     } catch (e) {}
@@ -170,10 +172,10 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
   Future<Null> checkUser() async {
     String url =
-        '${MyConstant().domain}/projectk6/getSellerWhereSeller.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/api/getSellerEmail.php?isAdd=true&email=$email';
     try {
       Response response = await Dio().get(url);
-      Navigator.pop(context);
+
       if (response.toString() == 'null') {
         register();
       } else {
@@ -185,7 +187,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
   Future<Null> register() async {
     String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/projectk6/addSeller.php?isAdd=true&name=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
+        '${MyConstant().domain}/api/addSeller.php?isAdd=true&firstname=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
 
     try {
       Response response = await Dio().get(url);

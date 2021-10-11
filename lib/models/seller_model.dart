@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class SellerModel {
   final String idSeller;
-  final String name;
+  final String firstname;
   final String lastname;
   final String idcard;
   final String gender;
@@ -11,11 +11,10 @@ class SellerModel {
   final String email;
   final String password;
   final String image;
-  final String idfb;
-  final String status;
+  final String role;
   SellerModel({
     required this.idSeller,
-    required this.name,
+    required this.firstname,
     required this.lastname,
     required this.idcard,
     required this.gender,
@@ -24,13 +23,12 @@ class SellerModel {
     required this.email,
     required this.password,
     required this.image,
-    required this.idfb,
-    required this.status,
+    required this.role,
   });
 
   SellerModel copyWith({
     String? idSeller,
-    String? name,
+    String? firstname,
     String? lastname,
     String? idcard,
     String? gender,
@@ -39,12 +37,11 @@ class SellerModel {
     String? email,
     String? password,
     String? image,
-    String? idfb,
-    String? status,
+    String? role,
   }) {
     return SellerModel(
       idSeller: idSeller ?? this.idSeller,
-      name: name ?? this.name,
+      firstname: firstname ?? this.firstname,
       lastname: lastname ?? this.lastname,
       idcard: idcard ?? this.idcard,
       gender: gender ?? this.gender,
@@ -53,32 +50,30 @@ class SellerModel {
       email: email ?? this.email,
       password: password ?? this.password,
       image: image ?? this.image,
-      idfb: idfb ?? this.idfb,
-      status: status ?? this.status,
+      role: role ?? this.role,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id_seller': idSeller,
-      'name': name,
+      'idSeller': idSeller,
+      'firstname': firstname,
       'lastname': lastname,
       'idcard': idcard,
       'gender': gender,
       'phone': phone,
-      'birthday': birthday,
+      'birthday': birthday.millisecondsSinceEpoch,
       'email': email,
       'password': password,
       'image': image,
-      'idfb': idfb,
-      'status': status,
+      'role': role,
     };
   }
 
   factory SellerModel.fromMap(Map<String, dynamic> map) {
     return SellerModel(
-      idSeller: map['id_seller'],
-      name: map['name'],
+      idSeller: map['idSeller'],
+      firstname: map['firstname'],
       lastname: map['lastname'],
       idcard: map['idcard'],
       gender: map['gender'],
@@ -87,8 +82,7 @@ class SellerModel {
       email: map['email'],
       password: map['password'],
       image: map['image'],
-      idfb: map['idfb'],
-      status: map['status'],
+      role: map['role'],
     );
   }
 
@@ -99,7 +93,7 @@ class SellerModel {
 
   @override
   String toString() {
-    return 'SellerModel(idSeller: $idSeller, name: $name, lastname: $lastname, idcard: $idcard, gender: $gender, phone: $phone,birthday: $birthday, email: $email, password: $password, image: $image, idfb: $idfb, status: $status)';
+    return 'SellerModel(idSeller: $idSeller, firstname: $firstname, lastname: $lastname, idcard: $idcard, gender: $gender, phone: $phone, birthday: $birthday, email: $email, password: $password, image: $image, role: $role)';
   }
 
   @override
@@ -108,7 +102,7 @@ class SellerModel {
 
     return other is SellerModel &&
         other.idSeller == idSeller &&
-        other.name == name &&
+        other.firstname == firstname &&
         other.lastname == lastname &&
         other.idcard == idcard &&
         other.gender == gender &&
@@ -117,14 +111,13 @@ class SellerModel {
         other.email == email &&
         other.password == password &&
         other.image == image &&
-        other.idfb == idfb &&
-        other.status == status;
+        other.role == role;
   }
 
   @override
   int get hashCode {
     return idSeller.hashCode ^
-        name.hashCode ^
+        firstname.hashCode ^
         lastname.hashCode ^
         idcard.hashCode ^
         gender.hashCode ^
@@ -133,7 +126,6 @@ class SellerModel {
         email.hashCode ^
         password.hashCode ^
         image.hashCode ^
-        idfb.hashCode ^
-        status.hashCode;
+        role.hashCode;
   }
 }
