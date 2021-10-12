@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:k6_app/models/covid.dart';
 
 class NotiUser extends StatefulWidget {
   @override
@@ -8,21 +7,19 @@ class NotiUser extends StatefulWidget {
 }
 
 class _NotiUserState extends State<NotiUser> {
-  Covid? dataFromApi;
-
   @override
   void initState() {
     super.initState();
   }
 
-  Future<Null> getData() async {
-    var response =
-        await http.get(Uri.parse('https://covid19.th-stat.com/api/open/today'));
+  // Future<Null> getData() async {
+  //   var response =
+  //       await http.get(Uri.parse('https://covid19.th-stat.com/api/open/today'));
 
-    setState(() {
-      dataFromApi = covidFromJson(response.body);
-    });
-  }
+  //   setState(() {
+  //     dataFromApi = covidFromJson(response.body);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -41,23 +38,19 @@ class _NotiUserState extends State<NotiUser> {
                   children: [
                     ListTile(
                       title: Text('ผู้ติดเชื้อใหม่'),
-                      subtitle:
-                          Text('+ ${dataFromApi?.newConfirmed ?? 'กำลังโหลด'}'),
+                      subtitle: Text('+ ${'dataFromApi?.newConfirmed'}'),
                     ),
                     ListTile(
                       title: Text('หายป่วยกลับบ้าน'),
-                      subtitle:
-                          Text('${dataFromApi?.newRecovered ?? 'กำลังโหลด'}'),
+                      subtitle: Text('${'dataFromApi?.newRecovered'}'),
                     ),
                     ListTile(
                       title: Text('เสียชีวิต'),
-                      subtitle:
-                          Text('${dataFromApi?.newDeaths ?? 'กำลังโหลด'}'),
+                      subtitle: Text('${'dataFromApi?.newDeaths'}'),
                     ),
                     ListTile(
                       title: Text('ข้อมูลวันที่'),
-                      subtitle:
-                          Text('${dataFromApi?.updateDate ?? 'กำลังโหลด'}'),
+                      subtitle: Text('${'dataFromApi?.updateDate'}'),
                     ),
                   ],
                 ),

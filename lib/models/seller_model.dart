@@ -56,7 +56,7 @@ class SellerModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'idSeller': idSeller,
+      'id_seller': idSeller,
       'firstname': firstname,
       'lastname': lastname,
       'idcard': idcard,
@@ -72,7 +72,7 @@ class SellerModel {
 
   factory SellerModel.fromMap(Map<String, dynamic> map) {
     return SellerModel(
-      idSeller: map['idSeller'],
+      idSeller: map['id_seller'],
       firstname: map['firstname'],
       lastname: map['lastname'],
       idcard: map['idcard'],

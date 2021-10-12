@@ -208,10 +208,10 @@ class _AddInfoShopState extends State<AddInfoShop> {
   Future<Null> uploadImage() async {
     Random random = Random();
     int i = random.nextInt(1000000);
-    String nameImage = 'shop$i.jpg';
+    String nameImage = 'shop_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/projectk6/saveshop.php';
+    String url = '${MyConstant().domain}/upload/saveImageShop.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -221,8 +221,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         // print('Response ===>>> $value');
-        image = '/projectk6/Image/shop/$nameImage';
-        //  print('urlImage = $image');
+        image = '${MyConstant().domain}/upload/shop/$nameImage';
+        //print('urlImage = $image');
         addSHOP();
       });
     } catch (e) {}
@@ -232,7 +232,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
     idseller = sellerModel?.idSeller;
 
     String url =
-        '${MyConstant().domain}/projectk6/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&long=$long';
+        '${MyConstant().domain}/api/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&long=$long';
 
     try {
       Response response = await Dio().get(url);

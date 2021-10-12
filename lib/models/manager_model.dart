@@ -4,21 +4,29 @@ class ManagerModel {
   String? idmanager;
   String? email;
   String? password;
+  String? firstname;
+  String? lastname;
   ManagerModel({
     this.idmanager,
     this.email,
     this.password,
+    this.firstname,
+    this.lastname,
   });
 
   ManagerModel copyWith({
     String? idmanager,
     String? email,
     String? password,
+    String? firstname,
+    String? lastname,
   }) {
     return ManagerModel(
       idmanager: idmanager ?? this.idmanager,
       email: email ?? this.email,
       password: password ?? this.password,
+      firstname: firstname ?? this.firstname,
+      lastname: lastname ?? this.lastname,
     );
   }
 
@@ -27,6 +35,8 @@ class ManagerModel {
       'idmanager': idmanager,
       'email': email,
       'password': password,
+      'firstname': firstname,
+      'lastname': lastname,
     };
   }
 
@@ -35,6 +45,8 @@ class ManagerModel {
       idmanager: map['idmanager'],
       email: map['email'],
       password: map['password'],
+      firstname: map['firstname'],
+      lastname: map['lastname'],
     );
   }
 
@@ -44,8 +56,9 @@ class ManagerModel {
       ManagerModel.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'ManagerModel(idmanager: $idmanager, email: $email, password: $password)';
+  String toString() {
+    return 'ManagerModel(idmanager: $idmanager, email: $email, password: $password, firstname: $firstname, lastname: $lastname)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -54,9 +67,17 @@ class ManagerModel {
     return other is ManagerModel &&
         other.idmanager == idmanager &&
         other.email == email &&
-        other.password == password;
+        other.password == password &&
+        other.firstname == firstname &&
+        other.lastname == lastname;
   }
 
   @override
-  int get hashCode => idmanager.hashCode ^ email.hashCode ^ password.hashCode;
+  int get hashCode {
+    return idmanager.hashCode ^
+        email.hashCode ^
+        password.hashCode ^
+        firstname.hashCode ^
+        lastname.hashCode;
+  }
 }

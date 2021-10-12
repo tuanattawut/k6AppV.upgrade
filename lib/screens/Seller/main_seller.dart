@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
@@ -10,7 +9,6 @@ import 'package:k6_app/screens/Seller/infomation_shop.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/widget/Seller/chat_seller.dart';
-
 import 'package:k6_app/screens/Seller/product_list_seller.dart';
 import 'package:k6_app/widget/Seller/rent_seller.dart';
 
@@ -33,14 +31,15 @@ class _HomesellerState extends State<Homeseller> {
   }
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+
   Future<Null> readDataShop() async {
     idseller = sellerModel?.idSeller;
     String url =
-        '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
+        '${MyConstant().domain}/api/getShopfromidSeller.php?isAdd=true&id_seller=$idseller';
     Response response = await Dio().get(url);
 
     var result = json.decode(response.data);
-    print('result = $result');
+    //print('result = $result');
 
     if (result != null) {
       for (var map in result) {

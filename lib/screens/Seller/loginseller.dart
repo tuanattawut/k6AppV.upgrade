@@ -86,9 +86,9 @@ class _LoginSellerState extends State<LoginSeller> {
             if (email == null ||
                 email!.isEmpty ||
                 !email!.contains('@') ||
-                generateMd5(password!) == null ||
-                generateMd5(password!).isEmpty ||
-                generateMd5(password!).length < 6) {
+                password == null ||
+                password!.isEmpty ||
+                password!.length < 6) {
               normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
             } else {
               showLoade(context);
@@ -152,35 +152,42 @@ class _LoginSellerState extends State<LoginSeller> {
   Future<Null> checkAuthen() async {
     String url =
         '${MyConstant().domain}/api/getSellerEmail.php?isAdd=true&email=$email';
-    // print('url ===>> $url');
-    await Dio().get(url).then((value) async {
+    //print('url ===>> $url');
+    try {
+      Response response = await Dio().get(url);
+      var result = json.decode(response.data);
       Navigator.pop(context);
-      if (value.toString() == 'null') {
+      if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
-        for (var item in json.decode(value.data)) {
-          SellerModel sellerModel = SellerModel.fromMap(item);
-          if (generateMd5(password!) == sellerModel.password) {
-            if (sellerModel.role == 'seller') {
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => Homeseller(
-                  sellerModel: sellerModel,
-                ),
-              );
-              Navigator.of(context).push(route);
-              break;
-            } else if (sellerModel.role == 'noseller') {
-              normalDialog(
-                  context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
-            } else {
-              normalDialog(
-                  context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
-            }
-          } else {
-            normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
-          }
+        for (var map in result) {
+          print('===> $map');
+          // SellerModel sellerModel = SellerModel.fromMap(map);
+          // if (generateMd5(password!) == sellerModel.password) {
+          //   if (sellerModel.role == 'seller') {
+          //     print(sellerModel.idSeller);
+          //     MaterialPageRoute route = MaterialPageRoute(
+          //       builder: (value) => Homeseller(
+          //         sellerModel: sellerModel,
+          //       ),
+          //     );
+          //     Navigator.of(context).push(route);
+          //     break;
+          //   } else if (sellerModel.role == 'noseller') {
+          //     normalDialog(
+          //         context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
+          //   } else {
+          //     normalDialog(
+          //         context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
+          //   }
+          // } else {
+          //   normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
+          // }
         }
       }
-    });
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด ${e.toString()}');
+      print('Have e Error ===>> ${e.toString()}');
+    }
   }
 }

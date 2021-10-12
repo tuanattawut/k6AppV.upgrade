@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/manager_model.dart';
 import 'package:k6_app/screens/Manager/main_manager.dart';
+import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -126,7 +127,7 @@ class _LoginManagerState extends State<LoginManager> {
 
   Future<Null> checkAuthen() async {
     String url =
-        '${MyConstant().domain}/projectk6/getManaWhereMana.php?isAdd=true&email=$email';
+        '${MyConstant().domain}/api/getManagerEmail.php?isAdd=true&email=$email';
     // print('url ===>> $url');
     try {
       Response response = await Dio().get(url);
@@ -140,7 +141,7 @@ class _LoginManagerState extends State<LoginManager> {
       } else {
         for (var map in result) {
           ManagerModel managerModel = ManagerModel.fromMap(map);
-          if (password == managerModel.password) {
+          if (generateMd5(password!) == managerModel.password) {
             MaterialPageRoute route =
                 MaterialPageRoute(builder: (value) => Homemanager());
             Navigator.of(context).push(route);
