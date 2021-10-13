@@ -34,7 +34,7 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Future<Null> readCategory() async {
-    String api = '${MyConstant().domain}/projectk6/getCategory.php';
+    String api = '${MyConstant().domain}/api/getCategory.php';
     await Dio().get(api).then((value) {
       for (var item in json.decode(value.data)) {
         setState(() {
@@ -125,13 +125,12 @@ class _AddProductState extends State<AddProduct> {
   Future<Null> uploadImage() async {
     Random random = Random();
     int i = random.nextInt(1000000);
-    String nameImage = 'product$i.jpg';
+    String nameImage = 'product_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/projectk6/saveproduct.php';
+    String url = '${MyConstant().domain}/upload/saveImageProduct.php';
 
     try {
-      Navigator.pop(context);
       Map<String, dynamic> map = Map();
       map['file'] =
           await MultipartFile.fromFile(file!.path, filename: nameImage);
@@ -139,7 +138,7 @@ class _AddProductState extends State<AddProduct> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) async {
         // print('Response ===>>> $value');
-        image = '/projectk6/Image/product/$nameImage';
+        image = '${MyConstant().domain}/upload/product/$nameImage';
         // print('urlImage = $image');
         await addProduct();
       });
@@ -148,9 +147,9 @@ class _AddProductState extends State<AddProduct> {
 
   Future<Null> addProduct() async {
     idshop = shopModel!.idShop;
-
+    Navigator.pop(context);
     String url =
-        '${MyConstant().domain}/projectk6/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$selectedValue&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
+        '${MyConstant().domain}/api/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$selectedValue&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
 
     try {
       Response response = await Dio().get(url);

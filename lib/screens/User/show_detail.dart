@@ -38,14 +38,14 @@ class _ShowDetailState extends State<ShowDetail> {
 
   Future<Null> readShop() async {
     idShop = productModel!.idShop;
-    //print(idShop);
+    //print('==>$idShop');
     String url =
-        '${MyConstant().domain}/projectk6/getShopWhereidShop.php?isAdd=true&id_shop=$idShop';
+        '${MyConstant().domain}/api/getShopfromidShop.php?isAdd=true&id_shop=$idShop';
     Response response = await Dio().get(url);
 
     //print(response);
     var result = json.decode(response.data);
-    print('result = $result');
+    // print('result = $result');
 
     for (var map in result) {
       setState(() {
@@ -56,15 +56,14 @@ class _ShowDetailState extends State<ShowDetail> {
   }
 
   Future<Null> readSeller() async {
-    idSeller = shopModels?.idSeller;
-    print(idSeller);
+    idSeller = shopModels!.idSeller;
     String url =
-        '${MyConstant().domain}/projectk6/getSellerWhereidSeller.php?isAdd=true&id_seller=$idSeller';
+        '${MyConstant().domain}/api/getSellerfromidSeller.php?isAdd=true&id_seller=$idSeller';
     Response response = await Dio().get(url);
 
-    print(response);
+    //print(response);
     var result = json.decode(response.data);
-    print('result = $result');
+    // print('result = $result');
 
     for (var map in result) {
       setState(() {
@@ -112,7 +111,7 @@ class _ShowDetailState extends State<ShowDetail> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/${productModel?.image}',
+          productModel!.image,
           fit: BoxFit.contain,
         ));
   }

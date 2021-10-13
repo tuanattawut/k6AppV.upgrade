@@ -41,7 +41,7 @@ class _ProductListUserState extends State<ProductListUser> {
     super.initState();
     userModel = widget.usermodel;
     getData();
-    getRecently();
+    // getRecently();
     getCategory();
   }
 
@@ -53,7 +53,7 @@ class _ProductListUserState extends State<ProductListUser> {
       productModels.clear();
     }
 
-    String api = '${MyConstant().domain}/projectk6/getProduct.php';
+    String api = '${MyConstant().domain}/api/getProduct.php';
 
     await Dio().get(api).then((value) {
       setState(() {
@@ -79,7 +79,7 @@ class _ProductListUserState extends State<ProductListUser> {
     String iduser = userModel!.idUser;
 
     String url =
-        '${MyConstant().domain}/projectk6/addData.php?isAdd=true&id_user=$iduser&id_product=$dataId&nameproduct=$dataName';
+        '${MyConstant().domain}/api/addData.php?isAdd=true&id_user=$iduser&id_product=$dataId&nameproduct=$dataName';
 
     try {
       Response response = await Dio().get(url);
@@ -97,7 +97,7 @@ class _ProductListUserState extends State<ProductListUser> {
     String iduser = userModel!.idUser;
 
     String url =
-        '${MyConstant().domain}/projectk6/addRecently.php?isAdd=true&id_user=$iduser&id_product=$id';
+        '${MyConstant().domain}/api/addRecently.php?isAdd=true&id_user=$iduser&id_product=$id';
 
     try {
       Response response = await Dio().get(url);
@@ -114,7 +114,7 @@ class _ProductListUserState extends State<ProductListUser> {
   Future<Null> getRecently() async {
     String iduser = userModel!.idUser;
     String api =
-        '${MyConstant().domain}/projectk6/getDataRecently.php?isAdd=true&id_user=$iduser';
+        '${MyConstant().domain}/api/getDataRecently.php?isAdd=true&id_user=$iduser';
 
     await Dio().get(api).then((value) {
       if (value.toString() != 'null') {
@@ -138,7 +138,7 @@ class _ProductListUserState extends State<ProductListUser> {
 //เก็บข้อมูลการดูล่าสุด
   Future<Null> getdataRecently() async {
     String api =
-        '${MyConstant().domain}/projectk6/getProductWhereid.php?isAdd=true&id_product=$idproducts';
+        '${MyConstant().domain}/api/getProductWhereid.php?isAdd=true&id_product=$idproducts';
 
     // print(api);
     await Dio().get(api).then((value) {
@@ -162,7 +162,7 @@ class _ProductListUserState extends State<ProductListUser> {
       categoryList.clear();
     }
 
-    String api = '${MyConstant().domain}/projectk6/getCategory.php';
+    String api = '${MyConstant().domain}/api/getCategory.php';
 
     await Dio().get(api).then((value) {
       //print(value);
@@ -340,7 +340,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 50,
                 width: 50,
                 child: Image.network(
-                  '${MyConstant().domain}/${categoryList[index].image}',
+                  '${MyConstant().domain}/upload/img/${categoryList[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -486,7 +486,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/${productModels[index].image}',
+                  productModels[index].image,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -572,7 +572,7 @@ class _ProductListUserState extends State<ProductListUser> {
               height: 200,
               width: 200,
               child: Image.network(
-                '${MyConstant().domain}/${productModels[index].image}',
+                productModels[index].image,
                 fit: BoxFit.cover,
               ),
             ),

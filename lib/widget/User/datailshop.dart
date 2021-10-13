@@ -32,7 +32,7 @@ class _DetailShopState extends State<DetailShop> {
     idSeller = shopModels?.idSeller;
     print(idSeller);
     String url =
-        '${MyConstant().domain}/projectk6/getSellerWhereidSeller.php?isAdd=true&id_seller=$idSeller';
+        '${MyConstant().domain}/api/getSellerfromidSeller.php?isAdd=true&id_seller=$idSeller';
     Response response = await Dio().get(url);
 
     print(response);
@@ -102,7 +102,7 @@ class _DetailShopState extends State<DetailShop> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/${shopModels?.image}',
+          shopModels!.image,
           fit: BoxFit.contain,
         ));
   }

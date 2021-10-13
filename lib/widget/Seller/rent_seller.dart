@@ -9,10 +9,15 @@ class RentSeller extends StatefulWidget {
 class _RentSellerState extends State<RentSeller> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        showInfoRent(),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('เช่าจองแผงขายสินค้า'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Center(child: showInfoRent()),
+        ],
+      ),
     );
   }
 
@@ -20,8 +25,8 @@ class _RentSellerState extends State<RentSeller> {
         padding: EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
-            MyStyle().showTitleH2('เช่าจองแผงขายสินค้า'),
-            MyStyle().mySizebox(),
+            Text('เช่าจองแผงขายสินค้า\n Coming SOON',
+                style: TextStyle(fontSize: 40)),
           ],
         ),
       );

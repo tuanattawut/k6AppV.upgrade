@@ -36,7 +36,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
     locationService = await Geolocator.isLocationServiceEnabled();
     if (locationService) {
-      print('Service Location Open');
+      // print('Service Location Open');
 
       locationPermission = await Geolocator.checkPermission();
       if (locationPermission == LocationPermission.denied) {
@@ -56,19 +56,19 @@ class _AddInfoShopState extends State<AddInfoShop> {
         }
       }
     } else {
-      print('Service Location Close');
+      // print('Service Location Close');
       alertLocationService(context, 'Location Service ปิดอยู่ ?',
           'กรุณาเปิด Location Service ด้วยคะ');
     }
   }
 
   Future<Null> findLatLng() async {
-    print('findLatLan ==> Work');
+    //print('findLatLan ==> Work');
     Position? position = await findPostion();
     setState(() {
       lat = position!.latitude;
       long = position.longitude;
-      print('lat = $lat, lng = $long');
+      // print('lat = $lat, lng = $long');
     });
   }
 
@@ -219,18 +219,19 @@ class _AddInfoShopState extends State<AddInfoShop> {
           await MultipartFile.fromFile(file!.path, filename: nameImage);
 
       FormData formData = FormData.fromMap(map);
-      await Dio().post(url, data: formData).then((value) {
+      await Dio().post(url, data: formData).then((value) async {
         // print('Response ===>>> $value');
         image = '${MyConstant().domain}/upload/shop/$nameImage';
         //print('urlImage = $image');
-        addSHOP();
+        await addSHOP();
       });
     } catch (e) {}
   }
 
   Future<Null> addSHOP() async {
     idseller = sellerModel?.idSeller;
-
+    print(
+        'idseller = $idseller + nameshop = $nameShop + image = $image + lat = $lat + long = $long');
     String url =
         '${MyConstant().domain}/api/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&long=$long';
 

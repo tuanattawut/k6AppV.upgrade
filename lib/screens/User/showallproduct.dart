@@ -28,7 +28,7 @@ class _ProductAllState extends State<ProductAll> {
       productModels.clear();
     }
 
-    String api = '${MyConstant().domain}/projectk6/getProduct.php';
+    String api = '${MyConstant().domain}/api/getProduct.php';
 
     await Dio().get(api).then((value) {
       setState(() {
@@ -81,8 +81,7 @@ class _ProductAllState extends State<ProductAll> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           image: DecorationImage(
-            image: NetworkImage(
-                '${MyConstant().domain}/${productModels[index].image}'),
+            image: NetworkImage(productModels[index].image),
             fit: BoxFit.cover,
           ),
         ),

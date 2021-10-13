@@ -21,7 +21,7 @@ class _ApproveSellerState extends State<ApproveSeller> {
   }
 
   Future<Null> getData() async {
-    String api = '${MyConstant().domain}/projectk6/getSeller.php';
+    String api = '${MyConstant().domain}/api/getSeller.php';
     await Dio().get(api).then((value) {
       for (var item in json.decode(value.data)) {
         SellerModel sellerModel = SellerModel.fromMap(item);

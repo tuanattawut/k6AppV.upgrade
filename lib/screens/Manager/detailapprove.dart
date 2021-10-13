@@ -22,8 +22,8 @@ class _DetailApproveState extends State<DetailApprove> {
   SellerModel? sellerModel;
   String? _value;
   List<ListItem> _dropdownItems = [
-    ListItem('yes', 'อนุมัติ'),
-    ListItem('no', 'ไม่อนุมัติ'),
+    ListItem('seller', 'อนุมัติ'),
+    ListItem('noseller', 'ไม่อนุมัติ'),
   ];
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _DetailApproveState extends State<DetailApprove> {
     String id = sellermodel.idSeller;
 
     String url =
-        '${MyConstant().domain}/projectk6/editSeller.php?isAdd=true&id_seller=$id&status=$_value';
+        '${MyConstant().domain}/api/editSeller.php?isAdd=true&id_seller=$id&role=$_value';
     await Dio().get(url).then((value) async {
       if (value.toString() == 'true') {
         await normalDialog(context, 'สำเร็จ');
@@ -61,7 +61,7 @@ class _DetailApproveState extends State<DetailApprove> {
             child: CircleAvatar(
               backgroundColor: Colors.transparent,
               backgroundImage: NetworkImage(
-                '${MyConstant().domain}/${sellerModel!.image}',
+                sellerModel!.image,
               ),
               radius: 60,
             ),

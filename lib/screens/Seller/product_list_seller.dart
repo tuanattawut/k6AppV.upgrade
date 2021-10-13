@@ -41,7 +41,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
     idshop = shopModel?.idShop;
 
     String url =
-        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
+        '${MyConstant().domain}/api/getproductIdShop.php?isAdd=true&id_shop=$idshop';
     await Dio().get(url).then((value) {
       setState(() {
         loadStatus = false;
@@ -142,7 +142,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                   width: MediaQuery.of(context).size.width * 0.4,
                   height: MediaQuery.of(context).size.width * 0.4,
                   child: Image.network(
-                    '${MyConstant().domain}/${productModels[index].image}',
+                    productModels[index].image,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -213,7 +213,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                 onPressed: () async {
                   Navigator.pop(context);
                   String url =
-                      '${MyConstant().domain}/projectk6/deleteformid.php?isAdd=true&id_product=${productModel.idProduct}';
+                      '${MyConstant().domain}/api/deletefromIdproduct.php?isAdd=true&id_product=${productModel.idProduct}';
                   await Dio().get(url).then((value) => readProduct());
                 },
                 child: Text('ยืนยัน'),

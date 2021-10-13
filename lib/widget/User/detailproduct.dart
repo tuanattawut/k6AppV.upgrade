@@ -28,7 +28,7 @@ class _DetailProductState extends State<DetailProduct> {
     setState(() {
       productModel = widget.productModel;
       // print('มั่วไหม ==> ${productModel?.idCategory}');
-      readProduct();
+      // readProduct();
       getCategory();
     });
   }
@@ -43,7 +43,7 @@ class _DetailProductState extends State<DetailProduct> {
     idshop = productModel?.idShop;
 
     String url =
-        '${MyConstant().domain}/projectk6/getproductWhereidShop.php?isAdd=true&id_shop=$idshop';
+        '${MyConstant().domain}/api/getproductIdShop.php?isAdd=true&id_shop=$idshop';
     await Dio().get(url).then((value) {
       setState(() {
         loadStatus = false;
@@ -71,11 +71,12 @@ class _DetailProductState extends State<DetailProduct> {
 
   Future<Null> getCategory() async {
     String idcategory = productModel!.idCategory;
+    print(idcategory);
     String api =
-        '${MyConstant().domain}/projectk6/getCategoryWhereid.php?isAdd=true&id_category=$idcategory';
+        '${MyConstant().domain}/api/getCategoryfromidCategory.php?isAdd=true&id_category=$idcategory';
 
     await Dio().get(api).then((value) {
-      print(value);
+      print('===>$value');
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           CategoryModel categoryModel = CategoryModel.fromMap(item);
@@ -124,7 +125,7 @@ class _DetailProductState extends State<DetailProduct> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/${productModel?.image}',
+          productModel!.image,
           fit: BoxFit.contain,
         ));
   }
@@ -241,7 +242,7 @@ class _DetailProductState extends State<DetailProduct> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/${productModels[index].image}',
+                  productModels[index].image,
                   fit: BoxFit.cover,
                 ),
               ),

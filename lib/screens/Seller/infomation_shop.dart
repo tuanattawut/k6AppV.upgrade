@@ -31,7 +31,7 @@ class _InformationShopState extends State<InformationShop> {
     idseller = sellerModel?.idSeller;
 
     String url =
-        '${MyConstant().domain}/projectk6/getSellerwhereSHOP.php?isAdd=true&id_seller=$idseller';
+        '${MyConstant().domain}/api/getShopfromidSeller.php?isAdd=true&id_seller=$idseller';
     Response response = await Dio().get(url);
 
     var result = json.decode(response.data);
@@ -101,7 +101,7 @@ class _InformationShopState extends State<InformationShop> {
             Row(
               children: <Widget>[
                 Text(
-                  'TEST110',
+                  'อยู่ระหว่างทดสอบ v.1',
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -131,11 +131,12 @@ class _InformationShopState extends State<InformationShop> {
       ));
 
   Widget showImage() {
+    print(shopModels?.image);
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/${shopModels?.image}',
+          shopModels!.image,
           fit: BoxFit.contain,
         ));
   }
@@ -143,7 +144,7 @@ class _InformationShopState extends State<InformationShop> {
   Widget showMap() {
     double lat = double.parse('${shopModels?.lat ?? '0'}');
     double long = double.parse('${shopModels?.long ?? '0'}');
-    print('lat = $lat, lng = $long');
+    //print('lat = $lat, lng = $long');
 
     LatLng latLong = LatLng(lat, long);
     CameraPosition position = CameraPosition(target: latLong, zoom: 15.0);
@@ -191,26 +192,4 @@ class _InformationShopState extends State<InformationShop> {
       ],
     );
   }
-
-  // Future<Null> showAddDialog() async {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return StatefulBuilder(
-  //           builder: (context, setState) => SimpleDialog(
-  //             title: ListTile(
-  //               title: Text('ไม่พบข้อมูลร้านค้า \nกรุณาเพิ่มข้อมูลร้านค้า',
-  //                   style: TextStyle(color: Colors.red, fontSize: 20)),
-  //             ),
-  //             children: [
-  //               Column(
-  //                 children: [
-  //                   buildSellerButton(),
-  //                 ],
-  //               )
-  //             ],
-  //           ),
-  //         );
-  //       });
-  // }
 }

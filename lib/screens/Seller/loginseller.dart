@@ -161,28 +161,27 @@ class _LoginSellerState extends State<LoginSeller> {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
         for (var map in result) {
-          print('===> $map');
-          // SellerModel sellerModel = SellerModel.fromMap(map);
-          // if (generateMd5(password!) == sellerModel.password) {
-          //   if (sellerModel.role == 'seller') {
-          //     print(sellerModel.idSeller);
-          //     MaterialPageRoute route = MaterialPageRoute(
-          //       builder: (value) => Homeseller(
-          //         sellerModel: sellerModel,
-          //       ),
-          //     );
-          //     Navigator.of(context).push(route);
-          //     break;
-          //   } else if (sellerModel.role == 'noseller') {
-          //     normalDialog(
-          //         context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
-          //   } else {
-          //     normalDialog(
-          //         context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
-          //   }
-          // } else {
-          //   normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
-          // }
+          SellerModel sellerModel = SellerModel.fromMap(map);
+
+          if (generateMd5(password!) == sellerModel.password) {
+            if (sellerModel.role == 'seller') {
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => Homeseller(
+                  sellerModel: sellerModel,
+                ),
+              );
+              Navigator.of(context).push(route);
+              break;
+            } else if (sellerModel.role == 'noseller') {
+              normalDialog(
+                  context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
+            } else {
+              normalDialog(
+                  context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
+            }
+          } else {
+            normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
+          }
         }
       }
     } catch (e) {

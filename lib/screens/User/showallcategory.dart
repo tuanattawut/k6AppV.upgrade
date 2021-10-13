@@ -19,7 +19,7 @@ class _ShowallCategoryState extends State<ShowallCategory> {
   }
 
   Future<Null> getCategory() async {
-    String api = '${MyConstant().domain}/projectk6/getCategory.php';
+    String api = '${MyConstant().domain}/api/getCategory.php';
 
     await Dio().get(api).then((value) {
       //print(value);
@@ -84,7 +84,7 @@ class _ShowallCategoryState extends State<ShowallCategory> {
                 height: 60,
                 width: 60,
                 child: Image.network(
-                  '${MyConstant().domain}/${categoryList[index].image}',
+                  '${MyConstant().domain}/upload/img/${categoryList[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
