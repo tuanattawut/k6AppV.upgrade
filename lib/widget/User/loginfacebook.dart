@@ -17,7 +17,7 @@ class LoginFacebook extends StatefulWidget {
 }
 
 class _LoginFacebookState extends State<LoginFacebook> {
-  String? firstname, lastname, email, password, gender, phone, typeuser, image;
+  String? firstname, lastname, email, password, gender, phone, image;
 
   bool isLoggedIn = false;
 
@@ -33,7 +33,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
       firstname = profileData['first_name'];
       lastname = profileData['last_name'];
       email = profileData['email'];
-      image = profileData['picture']['data']['url'];
+      image = 'profile.jpg';
       checkUser();
     });
   }
@@ -98,14 +98,15 @@ class _LoginFacebookState extends State<LoginFacebook> {
                         style: MyStyle().mainH2Title),
                   ),
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage('$image'),
-                        radius: 70,
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.all(10),
+                    //   child: CircleAvatar(
+                    //     backgroundColor: Colors.transparent,
+                    //     backgroundImage: NetworkImage(
+                    //         '${MyConstant().domain}/upload/profile/profile.jpg'),
+                    //     radius: 70,
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(

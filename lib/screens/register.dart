@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: ListView(
                 padding: EdgeInsets.all(20.0),
                 children: <Widget>[
-                  groupImage(),
+                  // groupImage(),
                   buildNameField(),
                   buildLastNameField(),
                   buildEmailField(),
@@ -110,11 +110,14 @@ class _RegisterPageState extends State<RegisterPage> {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
         } else if (email == null || email!.isEmpty || !email!.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
-        } else if (file == null) {
-          normalDialog(context, 'โปรดใส่รูปภาพ');
-        } else {
+        }
+        // else if (file == null) {
+        //   normalDialog(context, 'โปรดใส่รูปภาพ');
+        // }
+        else {
           showLoade(context);
-          uploadImage();
+          // uploadImage();
+          checkUser();
         }
       },
     );
@@ -137,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         // print('Response ===>>> $value');
-        image = '${MyConstant().domain}/upload/user/$nameImage';
+        image = '$nameImage';
         //print('urlImage = $image');
         checkUser();
       });

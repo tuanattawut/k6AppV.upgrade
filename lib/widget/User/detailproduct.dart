@@ -71,12 +71,12 @@ class _DetailProductState extends State<DetailProduct> {
 
   Future<Null> getCategory() async {
     String idcategory = productModel!.idCategory;
-    print(idcategory);
+    //print(idcategory);
     String api =
         '${MyConstant().domain}/api/getCategoryfromidCategory.php?isAdd=true&id_category=$idcategory';
 
     await Dio().get(api).then((value) {
-      print('===>$value');
+      //print('===>$value');
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           CategoryModel categoryModel = CategoryModel.fromMap(item);
@@ -102,17 +102,17 @@ class _DetailProductState extends State<DetailProduct> {
                     showDetailProduct(),
                     MyStyle().mySizebox(),
                     _buildSectiontitle('สินค้าจากร้านเดียวกัน', () {}),
-                    SizedBox(
-                      height: 250,
-                      child: ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: productModels.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            showListView(index),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 250,
+                    //   child: ListView.builder(
+                    //     physics: ClampingScrollPhysics(),
+                    //     shrinkWrap: true,
+                    //     scrollDirection: Axis.horizontal,
+                    //     itemCount: productModels.length,
+                    //     itemBuilder: (BuildContext context, int index) =>
+                    //         showListView(index),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -125,7 +125,7 @@ class _DetailProductState extends State<DetailProduct> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          productModel!.image,
+          '${MyConstant().domain}/upload/product/${productModel!.image}',
           fit: BoxFit.contain,
         ));
   }
@@ -190,7 +190,11 @@ class _DetailProductState extends State<DetailProduct> {
               children: [
                 MyStyle().showTitleH2('วันที่โพสต์:  '),
                 Text(
-                  productModel!.regdate,
+                  productModel!.regdate.day.toString() +
+                      ' d  ' +
+                      productModel!.regdate.month.toString() +
+                      '   ' +
+                      productModel!.regdate.year.toString(),
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -242,7 +246,7 @@ class _DetailProductState extends State<DetailProduct> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  productModels[index].image,
+                  '${MyConstant().domain}/upload/product/${productModels[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),

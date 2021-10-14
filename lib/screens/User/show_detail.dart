@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -58,7 +57,7 @@ class _ShowDetailState extends State<ShowDetail> {
   Future<Null> readSeller() async {
     idSeller = shopModels!.idSeller;
     String url =
-        '${MyConstant().domain}/api/getSellerfromidSeller.php?isAdd=true&id_seller=$idSeller';
+        '${MyConstant().domain}/api/getShopfromidSeller.php?isAdd=true&id_seller=$idSeller';
     Response response = await Dio().get(url);
 
     //print(response);
@@ -111,14 +110,14 @@ class _ShowDetailState extends State<ShowDetail> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          productModel!.image,
+          '${MyConstant().domain}/upload/product/${productModel!.image}',
           fit: BoxFit.contain,
         ));
   }
 
   Widget showMap() {
     double lat = double.parse(shopModels!.lat);
-    double long = double.parse(shopModels!.long);
+    double long = double.parse(shopModels!.lng);
     //print('lat = $lat, long = $long');
 
     LatLng latLong = LatLng(lat, long);
@@ -143,7 +142,7 @@ class _ShowDetailState extends State<ShowDetail> {
       Marker(
           markerId: MarkerId('shopID'),
           position: LatLng(
-              double.parse(shopModels!.lat), double.parse(shopModels!.long)),
+              double.parse(shopModels!.lat), double.parse(shopModels!.lng)),
           infoWindow: InfoWindow(
               title: 'ตำแหน่งร้าน', snippet: 'ร้าน :  ${shopModels!.nameshop}'))
     ].toSet();

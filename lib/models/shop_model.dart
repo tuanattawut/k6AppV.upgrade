@@ -13,7 +13,7 @@ class ShopModel {
   String nameshop;
   String image;
   String lat;
-  String long;
+  String lng;
   ShopModel({
     required this.idShop,
     required this.idSeller,
@@ -21,7 +21,7 @@ class ShopModel {
     required this.nameshop,
     required this.image,
     required this.lat,
-    required this.long,
+    required this.lng,
   });
 
   ShopModel copyWith({
@@ -31,7 +31,7 @@ class ShopModel {
     String? nameshop,
     String? image,
     String? lat,
-    String? long,
+    String? lng,
   }) {
     return ShopModel(
       idShop: idShop ?? this.idShop,
@@ -40,7 +40,7 @@ class ShopModel {
       nameshop: nameshop ?? this.nameshop,
       image: image ?? this.image,
       lat: lat ?? this.lat,
-      long: long ?? this.long,
+      lng: lng ?? this.lng,
     );
   }
 
@@ -52,7 +52,7 @@ class ShopModel {
       'nameshop': nameshop,
       'image': image,
       'lat': lat,
-      'long': long,
+      'lng': lng,
     };
   }
 
@@ -64,7 +64,7 @@ class ShopModel {
       nameshop: map['nameshop'],
       image: map['image'],
       lat: map['lat'],
-      long: map['long'],
+      lng: map['lng'],
     );
   }
 
@@ -75,7 +75,7 @@ class ShopModel {
 
   @override
   String toString() {
-    return 'ShopModel(idShop: $idShop, idSeller: $idSeller, idArea: $idArea, nameshop: $nameshop, image: $image, lat: $lat, long: $long)';
+    return 'ShopModel(idShop: $idShop, idSeller: $idSeller, idArea: $idArea, nameshop: $nameshop, image: $image, lat: $lat, long: $lng)';
   }
 
   @override
@@ -89,7 +89,7 @@ class ShopModel {
         other.nameshop == nameshop &&
         other.image == image &&
         other.lat == lat &&
-        other.long == long;
+        other.lng == lng;
   }
 
   @override
@@ -100,6 +100,6 @@ class ShopModel {
         nameshop.hashCode ^
         image.hashCode ^
         lat.hashCode ^
-        long.hashCode;
+        lng.hashCode;
   }
 }

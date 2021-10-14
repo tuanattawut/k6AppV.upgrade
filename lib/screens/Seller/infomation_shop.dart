@@ -143,7 +143,7 @@ class _InformationShopState extends State<InformationShop> {
 
   Widget showMap() {
     double lat = double.parse('${shopModels?.lat ?? '0'}');
-    double long = double.parse('${shopModels?.long ?? '0'}');
+    double long = double.parse('${shopModels?.lng ?? '0'}');
     //print('lat = $lat, lng = $long');
 
     LatLng latLong = LatLng(lat, long);
@@ -166,7 +166,7 @@ class _InformationShopState extends State<InformationShop> {
           markerId: MarkerId('shopID'),
           position: LatLng(
             double.parse('${shopModels?.lat ?? '0'}'),
-            double.parse('${shopModels?.long ?? '0'}'),
+            double.parse('${shopModels?.lng ?? '0'}'),
           ),
           infoWindow: InfoWindow(
               title: 'ตำแหน่งร้าน', snippet: 'ร้าน : ${shopModels?.nameshop}'))

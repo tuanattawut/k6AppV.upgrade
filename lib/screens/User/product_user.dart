@@ -75,86 +75,86 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
 //เพิ่มข้อมูลการคลิก
-  Future<Null> addData() async {
-    String iduser = userModel!.idUser;
+  // Future<Null> addData() async {
+  //   String iduser = userModel!.idUser;
 
-    String url =
-        '${MyConstant().domain}/api/addData.php?isAdd=true&id_user=$iduser&id_product=$dataId&nameproduct=$dataName';
+  //   String url =
+  //       '${MyConstant().domain}/api/addData.php?isAdd=true&id_user=$iduser&id_product=$dataId&nameproduct=$dataName';
 
-    try {
-      Response response = await Dio().get(url);
-      // print('res = $response');
+  //   try {
+  //     Response response = await Dio().get(url);
+  //     // print('res = $response');
 
-      if (response.toString() == 'true') {
-      } else {
-        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
-      }
-    } catch (e) {}
-  }
+  //     if (response.toString() == 'true') {
+  //     } else {
+  //       normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+  //     }
+  //   } catch (e) {}
+  // }
 
 //เก็บข้อมูลการกดเข้าดู
-  Future<Null> addRecently() async {
-    String iduser = userModel!.idUser;
+  // Future<Null> addRecently() async {
+  //   String iduser = userModel!.idUser;
 
-    String url =
-        '${MyConstant().domain}/api/addRecently.php?isAdd=true&id_user=$iduser&id_product=$id';
+  //   String url =
+  //       '${MyConstant().domain}/api/addRecently.php?isAdd=true&id_user=$iduser&id_product=$id';
 
-    try {
-      Response response = await Dio().get(url);
-      // print('res = $response');
+  //   try {
+  //     Response response = await Dio().get(url);
+  //     // print('res = $response');
 
-      if (response.toString() == 'true') {
-      } else {
-        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
-      }
-    } catch (e) {}
-  }
+  //     if (response.toString() == 'true') {
+  //     } else {
+  //       normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+  //     }
+  //   } catch (e) {}
+  // }
 
 //เรียกข้อมูลการดูล่าสุด
-  Future<Null> getRecently() async {
-    String iduser = userModel!.idUser;
-    String api =
-        '${MyConstant().domain}/api/getDataRecently.php?isAdd=true&id_user=$iduser';
+  // Future<Null> getRecently() async {
+  //   String iduser = userModel!.idUser;
+  //   String api =
+  //       '${MyConstant().domain}/api/getDataRecently.php?isAdd=true&id_user=$iduser';
 
-    await Dio().get(api).then((value) {
-      if (value.toString() != 'null') {
-        for (var item in json.decode(value.data)) {
-          idproduct.add(item);
-          setState(() {
-            idproduct.map((list) {
-              idproducts = list['id_product'];
-            }).toList();
-            // print(idproducts);
-            getdataRecently();
-          });
-        }
-      } else {
-        //print('Error getRecently');
-        CircularProgressIndicator();
-      }
-    });
-  }
+  //   await Dio().get(api).then((value) {
+  //     if (value.toString() != 'null') {
+  //       for (var item in json.decode(value.data)) {
+  //         idproduct.add(item);
+  //         setState(() {
+  //           idproduct.map((list) {
+  //             idproducts = list['id_product'];
+  //           }).toList();
+  //           // print(idproducts);
+  //           getdataRecently();
+  //         });
+  //       }
+  //     } else {
+  //       //print('Error getRecently');
+  //       CircularProgressIndicator();
+  //     }
+  //   });
+  // }
 
 //เก็บข้อมูลการดูล่าสุด
-  Future<Null> getdataRecently() async {
-    String api =
-        '${MyConstant().domain}/api/getProductWhereid.php?isAdd=true&id_product=$idproducts';
+  // Future<Null> getdataRecently() async {
+  //   String api =
+  //       '${MyConstant().domain}/api/getProductWhereid.php?isAdd=true&id_product=$idproducts';
 
-    // print(api);
-    await Dio().get(api).then((value) {
-      if (value.toString() != 'null') {
-        for (var item in json.decode(value.data)) {
-          ProductModel recentlyModel = ProductModel.fromMap(item);
-          setState(() {
-            recentlyModels.add(recentlyModel);
-          });
-        }
-      } else {
-        // print('Error getdataRecently');
-        CircularProgressIndicator();
-      }
-    });
-  }
+  //   // print(api);
+  //   await Dio().get(api).then((value) {
+  //     if (value.toString() != 'null') {
+  //       for (var item in json.decode(value.data)) {
+  //         ProductModel recentlyModel = ProductModel.fromMap(item);
+  //         setState(() {
+  //           recentlyModels.add(recentlyModel);
+  //         });
+  //       }
+  //     } else {
+  //       // print('Error getdataRecently');
+  //       CircularProgressIndicator();
+  //     }
+  //   });
+  // }
 
   Future<Null> getCategory() async {
     if (categoryList.length != 0) {
@@ -400,7 +400,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/${recentlyModels[index].image}',
+                  '${MyConstant().domain}/upload/product/${recentlyModels[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -486,7 +486,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  productModels[index].image,
+                  '${MyConstant().domain}/upload/product/productModels[index].image',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -572,7 +572,7 @@ class _ProductListUserState extends State<ProductListUser> {
               height: 200,
               width: 200,
               child: Image.network(
-                productModels[index].image,
+                '${MyConstant().domain}/upload/product/${productModels[index].image}',
                 fit: BoxFit.cover,
               ),
             ),

@@ -14,7 +14,7 @@ class ProductModel {
   String price;
   String detail;
   String image;
-  String regdate;
+  DateTime regdate;
   ProductModel({
     required this.idProduct,
     required this.idShop,
@@ -34,7 +34,7 @@ class ProductModel {
     String? price,
     String? detail,
     String? image,
-    String? regdate,
+    DateTime? regdate,
   }) {
     return ProductModel(
       idProduct: idProduct ?? this.idProduct,
@@ -70,7 +70,7 @@ class ProductModel {
       price: map['price'],
       detail: map['detail'],
       image: map['image'],
-      regdate: map['regdate'],
+      regdate: map['regdate'].toDate(),
     );
   }
 
