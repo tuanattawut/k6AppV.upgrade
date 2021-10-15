@@ -22,29 +22,29 @@ class _DetailShopState extends State<DetailShop> {
   void initState() {
     super.initState();
     setState(() {
-      // shopModels = widget.shopModel;
+      shopModels = widget.shopModel;
       //print('url ==> ${productModel?.image}');
-      //readSeller();
+      readSeller();
     });
   }
 
-  // Future<Null> readSeller() async {
-  //   idSeller = shopModels?.idSeller;
-  //   // print(idSeller);
-  //   String url =
-  //       '${MyConstant().domain}/api/getSellerfromidSeller.php?isAdd=true&id_seller=$idSeller';
-  //   Response response = await Dio().get(url);
+  Future<Null> readSeller() async {
+    idSeller = shopModels?.idSeller;
+    // print(idSeller);
+    String url =
+        '${MyConstant().domain}/api/getSellerfromidSeller.php?isAdd=true&id_seller=$idSeller';
+    Response response = await Dio().get(url);
 
-  //   //print(response);
-  //   var result = json.decode(response.data);
-  //   //print('result = $result');
+    //print(response);
+    var result = json.decode(response.data);
+    //print('result = $result');
 
-  //   for (var map in result) {
-  //     setState(() {
-  //       sellerModel = SellerModel.fromMap(map);
-  //     });
-  //   }
-  // }
+    for (var map in result) {
+      setState(() {
+        sellerModel = SellerModel.fromMap(map);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,41 +56,60 @@ class _DetailShopState extends State<DetailShop> {
                 padding: EdgeInsets.all(8),
                 child:
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                  // Center(
-                  //   child: SizedBox(
-                  //     height: 300,
-                  //     width: 300,
-                  //     child: showImage(),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsets.all(8),
-                  //   child: Row(
-                  //     children: [
-                  //       MyStyle().showTitleH2('ร้าน: '),
-                  //       Text(
-                  //         shopModels!.nameshop,
-                  //         style: TextStyle(
-                  //           fontSize: 18,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsets.all(8),
-                  //   child: Row(
-                  //     children: [
-                  //       MyStyle().showTitleH2('โทร: '),
-                  //       Text(
-                  //         sellerModel!.phone,
-                  //         style: TextStyle(
-                  //           fontSize: 18,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  MyStyle().showTitleH2('รูปผู้ขาย: '),
+                  SizedBox(
+                    height: 300,
+                    width: 300,
+                    child: imageSeller(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        MyStyle().showTitleH2('ชื่อผู้ขาย: '),
+                        Text(
+                          sellerModel!.firstname + '  ' + sellerModel!.lastname,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        MyStyle().showTitleH2('ชื่อร้าน: '),
+                        Text(
+                          shopModels!.nameshop,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        MyStyle().showTitleH2('เบอร์โทรติดต่อ: '),
+                        Text(
+                          sellerModel!.phone,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  MyStyle().showTitleH2('รูปร้าน: '),
+                  SizedBox(
+                    height: 300,
+                    width: 300,
+                    child: showImage(),
+                  ),
                 ]),
               ),
             ),
@@ -103,6 +122,16 @@ class _DetailShopState extends State<DetailShop> {
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
           '${MyConstant().domain}/upload/shop/${shopModels!.image}',
+          fit: BoxFit.contain,
+        ));
+  }
+
+  Widget imageSeller() {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: Image.network(
+          '${MyConstant().domain}/upload/seller/${sellerModel!.image}',
           fit: BoxFit.contain,
         ));
   }

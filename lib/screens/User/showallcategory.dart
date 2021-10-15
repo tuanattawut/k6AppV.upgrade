@@ -84,7 +84,7 @@ class _ShowallCategoryState extends State<ShowallCategory> {
                 height: 60,
                 width: 60,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/img/${categoryList[index].image}',
+                  '${MyConstant().domain}/upload/categorys/${categoryList[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),

@@ -32,7 +32,7 @@ class _SearchProductState extends State<SearchProduct> {
 
   Future<Null> getProduct() async {
     String api =
-        '${MyConstant().domain}/projectk6/getProductWhereid.php?isAdd=true&id_product=$idproduct';
+        '${MyConstant().domain}/api/getproductfromidProduct.php?isAdd=true&id_products=$idproduct';
     //print(api);
     await Dio().get(api).then((value) {
       // print(value);
@@ -123,7 +123,7 @@ class _SearchProductState extends State<SearchProduct> {
               height: 200,
               width: 200,
               child: Image.network(
-                '${MyConstant().domain}/${productModels[index].image}',
+                '${MyConstant().domain}/upload/product/${productModels[index].image}',
                 fit: BoxFit.cover,
               ),
             ),
@@ -152,7 +152,7 @@ class _SearchProductState extends State<SearchProduct> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      ' \฿ ${productModels[index].price}',
+                      ' ${productModels[index].price} \บาท',
                       style: Theme.of(context)
                           .textTheme
                           .button!

@@ -14,7 +14,7 @@ class ProductModel {
   String price;
   String detail;
   String image;
-  DateTime regdate;
+  String regdate;
   ProductModel({
     required this.idProduct,
     required this.idShop,
@@ -34,7 +34,7 @@ class ProductModel {
     String? price,
     String? detail,
     String? image,
-    DateTime? regdate,
+    String? regdate,
   }) {
     return ProductModel(
       idProduct: idProduct ?? this.idProduct,
@@ -63,14 +63,14 @@ class ProductModel {
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      idProduct: map['id_product'],
+      idProduct: map['id_products'],
       idShop: map['id_shop'],
       idCategory: map['id_category'],
       nameproduct: map['nameproduct'],
       price: map['price'],
       detail: map['detail'],
       image: map['image'],
-      regdate: map['regdate'].toDate(),
+      regdate: map['regdate'],
     );
   }
 

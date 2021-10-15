@@ -23,7 +23,7 @@ class _CategoryProductState extends State<CategoryProduct> {
     super.initState();
     categoryModels = widget.categoryModel;
     getProduct();
-    print(categoryModels!.idcategory);
+    //print(categoryModels!.idcategory);
   }
 
   Future<Null> getProduct() async {
@@ -31,7 +31,7 @@ class _CategoryProductState extends State<CategoryProduct> {
     // print(idcategory);
 
     String api =
-        '${MyConstant().domain}/projectk6/getProductWhereidCategory.php?isAdd=true&id_category=$idcategory';
+        '${MyConstant().domain}/api/getproductfromidCategory.php?isAdd=true&id_category=$idcategory';
     Response response = await Dio().get(api);
     var result = json.decode(response.data);
 
@@ -141,7 +141,7 @@ class _CategoryProductState extends State<CategoryProduct> {
               height: 200,
               width: 200,
               child: Image.network(
-                '${MyConstant().domain}/${productModels[index].image}',
+                '${MyConstant().domain}/upload/product/${productModels[index].image}',
                 fit: BoxFit.cover,
               ),
             ),
@@ -170,7 +170,7 @@ class _CategoryProductState extends State<CategoryProduct> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      ' \฿ ${productModels[index].price}',
+                      '\฿ ${productModels[index].price} ',
                       style: Theme.of(context)
                           .textTheme
                           .button!

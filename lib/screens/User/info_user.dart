@@ -42,7 +42,7 @@ class _InformationUserState extends State<InformationUser> {
             ],
           ),
           MyStyle().mySizebox(),
-          showImage(),
+          // showImage(),
           MyStyle().mySizebox(),
           Row(
             children: [
@@ -84,17 +84,17 @@ class _InformationUserState extends State<InformationUser> {
     );
   }
 
-  Widget showImage() {
-    return Center(
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        backgroundImage: NetworkImage(
-          '${MyConstant().domain}/${userModel?.image}',
-        ),
-        radius: 60,
-      ),
-    );
-  }
+  // Widget showImage() {
+  //   return Center(
+  //     child: CircleAvatar(
+  //       backgroundColor: Colors.transparent,
+  //       backgroundImage: NetworkImage(
+  //         '${MyConstant().domain}/${userModel?.image}',
+  //       ),
+  //       radius: 60,
+  //     ),
+  //   );
+  // }
 
   Widget _buildCard(String title, String titleH2) {
     return Card(

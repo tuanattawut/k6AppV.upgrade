@@ -15,7 +15,7 @@ class _SearchBar extends State {
   bool? searching, error;
   var data;
   String? query;
-  String dataurl = "${MyConstant().domain}/projectk6/search_suggestion.php";
+  String dataurl = "${MyConstant().domain}/api/search_suggestion.php";
   // do not use http://localhost/ , Android emulator do not recognize localhost
   // insted use your local ip address or your live URL
   // hit "ipconfig" on Windows or "ip a" on Linux to get IP Address
@@ -62,7 +62,7 @@ class _SearchBar extends State {
                 )
               : Icon(Icons.play_arrow),
           //if searching is true then show arrow back else play arrow
-          title: searching! ? searchField() : Text("My Frieds"),
+          title: searching! ? searchField() : Text("สินค้า"),
           actions: [
             IconButton(
                 icon: Icon(Icons.search),
@@ -85,15 +85,15 @@ class _SearchBar extends State {
                     ? Container(
                         padding: EdgeInsets.all(20),
                         child: searching!
-                            ? Text("Please wait")
-                            : Text("Search any peoples")
+                            ? Text("โปรด รอ")
+                            : Text("ค้นหาสินค้าต่างๆ")
                         //if is searching then show "Please wait"
                         //else show search peopels text
                         )
                     : Container(
                         child: searching!
                             ? showSearchSuggestions()
-                            : Text("Find any Peoples"),
+                            : Text("ค้นหาสินค้าต่างๆ"),
                       )
                 // if data is null or not retrived then
                 // show message, else show suggestion

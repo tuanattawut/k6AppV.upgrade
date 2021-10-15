@@ -248,18 +248,17 @@ class _ProductListUserState extends State<ProductListUser> {
                       Navigator.of(context).push(route);
                     },
                   ),
-                  SizedBox(
-                    height: 250,
-                    child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: productModels.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          Text('TEST'),
-                      //showListView(index),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 250,
+                  //   child: ListView.builder(
+                  //     physics: ClampingScrollPhysics(),
+                  //     shrinkWrap: true,
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemCount: productModels.length,
+                  //     itemBuilder: (BuildContext context, int index) =>
+                  //showListView(index),
+                  //  ),
+                  // ),
                 ])),
             // Card(
             //     shape: RoundedRectangleBorder(
@@ -340,7 +339,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 50,
                 width: 50,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/img/${categoryList[index].image}',
+                  '${MyConstant().domain}/upload/categorys/${categoryList[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),

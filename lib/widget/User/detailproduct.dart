@@ -28,7 +28,7 @@ class _DetailProductState extends State<DetailProduct> {
     setState(() {
       productModel = widget.productModel;
       // print('มั่วไหม ==> ${productModel?.idCategory}');
-      // readProduct();
+      readProduct();
       getCategory();
     });
   }
@@ -102,17 +102,17 @@ class _DetailProductState extends State<DetailProduct> {
                     showDetailProduct(),
                     MyStyle().mySizebox(),
                     _buildSectiontitle('สินค้าจากร้านเดียวกัน', () {}),
-                    // SizedBox(
-                    //   height: 250,
-                    //   child: ListView.builder(
-                    //     physics: ClampingScrollPhysics(),
-                    //     shrinkWrap: true,
-                    //     scrollDirection: Axis.horizontal,
-                    //     itemCount: productModels.length,
-                    //     itemBuilder: (BuildContext context, int index) =>
-                    //         showListView(index),
-                    //   ),
-                    // ),
+                    SizedBox(
+                      height: 250,
+                      child: ListView.builder(
+                        physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: productModels.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            showListView(index),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -150,7 +150,7 @@ class _DetailProductState extends State<DetailProduct> {
                 Container(
                   padding: EdgeInsets.all(25),
                   child: Text(
-                    ' \฿${productModel?.price}',
+                    ' ${productModel?.price}\ บาท',
                     style: TextStyle(
                       fontSize: 25,
                       color: Colors.red,
@@ -190,11 +190,7 @@ class _DetailProductState extends State<DetailProduct> {
               children: [
                 MyStyle().showTitleH2('วันที่โพสต์:  '),
                 Text(
-                  productModel!.regdate.day.toString() +
-                      ' d  ' +
-                      productModel!.regdate.month.toString() +
-                      '   ' +
-                      productModel!.regdate.year.toString(),
+                  productModel!.regdate,
                   style: TextStyle(
                     fontSize: 18,
                   ),

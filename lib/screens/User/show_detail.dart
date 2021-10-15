@@ -57,7 +57,7 @@ class _ShowDetailState extends State<ShowDetail> {
   Future<Null> readSeller() async {
     idSeller = shopModels!.idSeller;
     String url =
-        '${MyConstant().domain}/api/getShopfromidSeller.php?isAdd=true&id_seller=$idSeller';
+        '${MyConstant().domain}/api/getSellerfromidSeller.php?isAdd=true&id_seller=$idSeller';
     Response response = await Dio().get(url);
 
     //print(response);

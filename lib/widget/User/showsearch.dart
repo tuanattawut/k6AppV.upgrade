@@ -13,7 +13,7 @@ class _ShowSearchState extends State<ShowSearch> {
   bool? searching, error;
   var data;
   String? query;
-  String dataurl = "${MyConstant().domain}/projectk6/search_suggestion.php";
+  String dataurl = "${MyConstant().domain}/api/search_suggestion.php";
 
   @override
   void initState() {
@@ -116,7 +116,7 @@ class _ShowSearchState extends State<ShowSearch> {
               );
               Navigator.of(context).push(route);
 
-              print(suggestion.id); //pint student id
+              print(' id ==> ${suggestion.id}'); //pint student id
             },
             child: SizedBox(
                 width: double.infinity, //make 100% width
@@ -164,7 +164,7 @@ class SearchSuggestion {
 
   factory SearchSuggestion.fromJSON(Map<String, dynamic> json) {
     return SearchSuggestion(
-      id: json["id_product"],
+      id: json["id_products"],
       name: json["nameproduct"],
     );
   }
