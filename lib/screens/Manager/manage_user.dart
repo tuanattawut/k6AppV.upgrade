@@ -24,7 +24,6 @@ class _ManageUserState extends State<ManageUser> {
       appBar: AppBar(
         title: Text('จัดการผู้ใช้'),
       ),
-      backgroundColor: Colors.white70,
       body: Stack(
         children: <Widget>[
           Container(

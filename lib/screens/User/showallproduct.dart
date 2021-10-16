@@ -81,7 +81,8 @@ class _ProductAllState extends State<ProductAll> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           image: DecorationImage(
-            image: NetworkImage(productModels[index].image),
+            image: NetworkImage(
+                '${MyConstant().domain}/upload/product/${productModels[index].image}'),
             fit: BoxFit.cover,
           ),
         ),

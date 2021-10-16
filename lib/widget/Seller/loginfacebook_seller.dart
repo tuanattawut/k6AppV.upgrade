@@ -35,9 +35,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
       lastname = profileData['last_name'];
       email = profileData['email'];
 
-      image = profileData['picture']['data']['url'];
-      idfb = profileData['id'];
-
+      image = 'profile.jpg';
       checkUser();
     });
   }
@@ -83,10 +81,10 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
             break;
           } else if (sellerModel.role == 'noseller') {
             normalDialog(
-                context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
+                context, 'บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากผู้จัดการ');
           } else {
             normalDialog(
-                context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
+                context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
           }
         }
       }
@@ -110,14 +108,14 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                         style: MyStyle().mainH2Title),
                   ),
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage('$image'),
-                        radius: 70,
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.all(10),
+                    //   child: CircleAvatar(
+                    //     backgroundColor: Colors.transparent,
+                    //     backgroundImage: NetworkImage('$image'),
+                    //     radius: 70,
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(

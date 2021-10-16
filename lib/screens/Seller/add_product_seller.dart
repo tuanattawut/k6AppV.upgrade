@@ -138,7 +138,7 @@ class _AddProductState extends State<AddProduct> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) async {
         // print('Response ===>>> $value');
-        image = '${MyConstant().domain}/upload/product/$nameImage';
+        image = '$nameImage';
         // print('urlImage = $image');
         await addProduct();
       });

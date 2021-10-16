@@ -142,7 +142,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                   width: MediaQuery.of(context).size.width * 0.4,
                   height: MediaQuery.of(context).size.width * 0.4,
                   child: Image.network(
-                    productModels[index].image,
+                    '${MyConstant().domain}/upload/product/${productModels[index].image}',
                     fit: BoxFit.cover,
                   ),
                 ),

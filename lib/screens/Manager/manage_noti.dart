@@ -14,7 +14,6 @@ class _ManagePromotionState extends State<ManagePromotion> {
         appBar: AppBar(
           title: Text('จัดการแจ้งเตือน'),
         ),
-        backgroundColor: Colors.white70,
         body: Stack(
           children: <Widget>[
             ListView.builder(

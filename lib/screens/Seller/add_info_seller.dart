@@ -19,10 +19,10 @@ class AddInfoShop extends StatefulWidget {
 
 class _AddInfoShopState extends State<AddInfoShop> {
   SellerModel? sellerModel;
-  double? lat, long;
+  double? lat, lng;
   String? nameShop, image, idseller;
   File? file;
-
+  List<Marker> myMarker = [];
   @override
   void initState() {
     super.initState();
@@ -67,7 +67,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
     Position? position = await findPostion();
     setState(() {
       lat = position!.latitude;
-      long = position.longitude;
+      lng = position.longitude;
       // print('lat = $lat, lng = $long');
     });
   }
@@ -165,14 +165,14 @@ class _AddInfoShopState extends State<AddInfoShop> {
     } catch (e) {}
   }
 
-  Set<Marker> setMarker() => <Marker>[
-        Marker(
-          markerId: MarkerId('id'),
-          position: LatLng(lat!, long!),
-          infoWindow: InfoWindow(
-              title: 'ร้านของคุณ', snippet: 'Lat = $lat, long = $long'),
-        ),
-      ].toSet();
+  // Set<Marker> setMarker() => <Marker>[
+  //       Marker(
+  //         markerId: MarkerId('id'),
+  //         position: LatLng(lat!, lng!),
+  //         infoWindow: InfoWindow(
+  //             title: 'ร้านของคุณ', snippet: 'Lat = $lat, lng = $lng'),
+  //       ),
+  //     ].toSet();
 
   Widget buildMap() => Container(
         width: double.infinity,
@@ -181,13 +181,27 @@ class _AddInfoShopState extends State<AddInfoShop> {
             ? MyStyle().showProgress()
             : GoogleMap(
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(lat!, long!),
+                  target: LatLng(lat!, lng!),
                   zoom: 16,
                 ),
                 onMapCreated: (controller) {},
-                markers: setMarker(),
+                markers: Set.from(myMarker),
+                onTap: _handleTap,
               ),
       );
+
+  _handleTap(LatLng tappedPoint) {
+    lat = tappedPoint.latitude;
+    lng = tappedPoint.longitude;
+
+    print('Lat = $lat  lng = $lng');
+    setState(() {
+      myMarker = [];
+      myMarker.add(
+        Marker(markerId: MarkerId('mark'), position: tappedPoint),
+      );
+    });
+  }
 
   ElevatedButton saveButton() {
     return ElevatedButton(
@@ -195,9 +209,13 @@ class _AddInfoShopState extends State<AddInfoShop> {
       onPressed: () {
         if (nameShop == null || nameShop!.isEmpty) {
           normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
-        } else if (file == null) {
-          normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
-        } else {
+        }
+
+        // else if (file == null) {
+        //   normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
+        // }
+
+        else {
           showLoade(context);
           uploadImage();
         }
@@ -221,7 +239,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) async {
         // print('Response ===>>> $value');
-        image = '${MyConstant().domain}/upload/shop/$nameImage';
+        image = '$nameImage';
         //print('urlImage = $image');
         await addSHOP();
       });
@@ -231,9 +249,9 @@ class _AddInfoShopState extends State<AddInfoShop> {
   Future<Null> addSHOP() async {
     idseller = sellerModel?.idSeller;
     print(
-        'idseller = $idseller + nameshop = $nameShop + image = $image + lat = $lat + long = $long');
+        'idseller = $idseller + nameshop = $nameShop + image = $image + lat = $lat + lng = $lng');
     String url =
-        '${MyConstant().domain}/api/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&long=$long';
+        '${MyConstant().domain}/api/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&lng=$lng';
 
     try {
       Response response = await Dio().get(url);

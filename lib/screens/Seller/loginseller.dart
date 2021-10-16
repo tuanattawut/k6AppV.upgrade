@@ -162,7 +162,6 @@ class _LoginSellerState extends State<LoginSeller> {
       } else {
         for (var map in result) {
           SellerModel sellerModel = SellerModel.fromMap(map);
-
           if (generateMd5(password!) == sellerModel.password) {
             if (sellerModel.role == 'seller') {
               MaterialPageRoute route = MaterialPageRoute(
@@ -174,10 +173,10 @@ class _LoginSellerState extends State<LoginSeller> {
               break;
             } else if (sellerModel.role == 'noseller') {
               normalDialog(
-                  context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
+                  context, 'บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากผู้จัดการ');
             } else {
               normalDialog(
-                  context, 'บัญชีของคุณอยู่ระหว่างรอการยืนยันจากผู้จัดการ');
+                  context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
             }
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');

@@ -101,7 +101,7 @@ class _InformationShopState extends State<InformationShop> {
             Row(
               children: <Widget>[
                 Text(
-                  'อยู่ระหว่างทดสอบ v.1',
+                  'อยู่ระหว่างทดสอบ',
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -136,18 +136,18 @@ class _InformationShopState extends State<InformationShop> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          shopModels!.image,
+          '${MyConstant().domain}/upload/shop/${shopModels?.image}',
           fit: BoxFit.contain,
         ));
   }
 
   Widget showMap() {
     double lat = double.parse('${shopModels?.lat ?? '0'}');
-    double long = double.parse('${shopModels?.lng ?? '0'}');
+    double lng = double.parse('${shopModels?.lng ?? '0'}');
     //print('lat = $lat, lng = $long');
 
-    LatLng latLong = LatLng(lat, long);
-    CameraPosition position = CameraPosition(target: latLong, zoom: 15.0);
+    LatLng latLng = LatLng(lat, lng);
+    CameraPosition position = CameraPosition(target: latLng, zoom: 15.0);
 
     return Container(
       height: 250,

@@ -45,14 +45,6 @@ class _ManageSellerState extends State<ManageSeller> {
           Radius.circular(15),
         ),
         border: Border.all(color: Colors.white),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            offset: Offset(1, 1),
-            spreadRadius: 1,
-            blurRadius: 1,
-          ),
-        ],
       ),
       padding: EdgeInsets.all(15),
       child: Column(
