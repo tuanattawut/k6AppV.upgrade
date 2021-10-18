@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/category_model.dart';
@@ -11,7 +12,6 @@ import 'package:k6_app/screens/User/showallproduct.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
-import 'package:k6_app/widget/User/banner.dart';
 import 'package:k6_app/widget/User/categoryproduct.dart';
 import 'package:k6_app/widget/User/showsearch.dart';
 
@@ -33,8 +33,10 @@ class _ProductListUserState extends State<ProductListUser> {
   List dataName = [];
   List idproduct = [];
   List<ProductModel> recentlyModels = [];
-
   List<CategoryModel> categoryList = [];
+  List productList = [];
+  List view = [];
+  String? idproductRec, iduserRec;
 
   @override
   void initState() {
@@ -43,6 +45,7 @@ class _ProductListUserState extends State<ProductListUser> {
     getData();
     // getRecently();
     getCategory();
+    getPromotion();
   }
 
 //เรียกข้อมูลสินค้าทั้งหมด
@@ -61,16 +64,34 @@ class _ProductListUserState extends State<ProductListUser> {
       });
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
+          productList.add(item);
           ProductModel productModel = ProductModel.fromMap(item);
           setState(() {
             productModels.add(productModel);
+            productList.map((list) {
+              idproductRec = list['id_products'];
+            }).toList();
           });
+          getRecom();
         }
       } else {
         setState(() {
           status = false;
         });
       }
+    });
+  }
+
+  Future<Null> getRecom() async {
+    iduserRec = userModel!.idUser;
+    // print('p_id => $idproductRec');
+    //print('u_id =>$iduserRec');
+
+    String api =
+        '${MyConstant().domain}/api/reC.php?isAdd=true&id_products=$idproductRec&id_user=$iduserRec';
+
+    await Dio().get(api).then((value) {
+      print(value);
     });
   }
 
@@ -206,7 +227,7 @@ class _ProductListUserState extends State<ProductListUser> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            MakeBanner(),
+            banner(context),
             Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -612,6 +633,81 @@ class _ProductListUserState extends State<ProductListUser> {
             )
           ])),
     );
+  }
+
+  Future<Null> getPromotion() async {
+    String api = '${MyConstant().domain}/api/getPromotion.php';
+
+    await Dio().get(api).then((value) {
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          pathImages.add(item);
+          setState(() {
+            pathImages.map((list) {
+              promotion = list['imgUrl'];
+            }).toList();
+          });
+          buildWidgets();
+        }
+      } else {
+        //print('Error getRecently');
+        CircularProgressIndicator();
+      }
+    });
+  }
+
+  int _current = 0;
+  String? promotion;
+  List<Widget> widgets = [];
+  List pathImages = [];
+
+  void buildWidgets() {
+    widgets.add(
+        Image.network('${MyConstant().domain}/upload/promotion/$promotion'));
+    // print(widgets);
+  }
+
+  Widget banner(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          print('คลิก $_current');
+        },
+        child: Column(
+          children: [
+            CarouselSlider(
+              items: widgets,
+              options: CarouselOptions(
+                  autoPlay: true,
+                  autoPlayAnimationDuration: Duration(seconds: 2),
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 1,
+                  pauseAutoPlayOnTouch: true,
+                  height: MediaQuery.of(context).size.width * 0.45,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  }),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: widgets.map((pathImages) {
+                int index = widgets.indexOf(pathImages);
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _current == index
+                        ? Color.fromRGBO(0, 0, 0, 0.9)
+                        : Color.fromRGBO(0, 0, 0, 0.4),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ));
   }
 }
 

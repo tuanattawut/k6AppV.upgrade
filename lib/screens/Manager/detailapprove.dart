@@ -59,11 +59,15 @@ class _DetailApproveState extends State<DetailApprove> {
           Padding(
             padding: EdgeInsets.all(10),
             child: CircleAvatar(
+              radius: 100,
+              child: ClipOval(
+                  child: Image.network(
+                '${MyConstant().domain}/upload/seller/${sellerModel!.image}',
+                width: 150,
+                height: 150,
+                fit: BoxFit.cover,
+              )),
               backgroundColor: Colors.transparent,
-              backgroundImage: NetworkImage(
-                sellerModel!.image,
-              ),
-              radius: 60,
             ),
           ),
           Padding(

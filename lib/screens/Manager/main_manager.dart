@@ -3,7 +3,7 @@ import 'package:k6_app/screens/Manager/approve_seller.dart';
 import 'package:k6_app/screens/Manager/manage_chat.dart';
 import 'package:k6_app/screens/Manager/manage_noti.dart';
 import 'package:k6_app/screens/Manager/manage_rentarea.dart';
-import 'package:k6_app/screens/Manager/manage_seller.dart';
+import 'package:k6_app/screens/Manager/manage_report.dart';
 import 'package:k6_app/screens/Manager/manage_user.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
 
@@ -44,10 +44,10 @@ class _HomemanagerState extends State<Homemanager> {
                 route: ManageUser(),
               ),
               MyMenu(
-                title: 'จำนวนร้านค้า',
+                title: 'รายงานผู้ใช้งาน',
                 icon: Icons.storefront,
-                color: Colors.orange,
-                route: ManageSeller(),
+                color: Colors.red,
+                route: ManageReport(),
               ),
               MyMenu(
                 title: 'เพิ่มแจ้งเตือน',

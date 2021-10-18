@@ -111,9 +111,11 @@ class _AddProductState extends State<AddProduct> {
             detail == null ||
             detail!.isEmpty) {
           normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
-        } else if (file == null) {
-          normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
-        } else {
+        } 
+        // else if (file == null) {
+        //   normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
+        // }
+         else {
           uploadImage();
           showLoade(context);
           // addProduct();
