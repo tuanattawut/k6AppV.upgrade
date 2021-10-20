@@ -31,8 +31,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_facebook_login: ^3.0.0
   image_picker: ^0.8.0+3
-  geolocator: ^7.1.0
-  google_maps_flutter: ^2.0.6
+  geolocator: ^7.7.0
+  google_maps_flutter: ^2.0.11
   dio: ^4.0.0
   http: ^0.13.3
   cached_network_image: ^2.5.1

@@ -35,7 +35,6 @@ class _ProductListUserState extends State<ProductListUser> {
   List<ProductModel> recentlyModels = [];
   List<CategoryModel> categoryList = [];
   List productList = [];
-  List view = [];
   String? idproductRec, iduserRec;
 
   @override
@@ -82,30 +81,93 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
+  var viewList = [];
+  String? pid, vid;
+
   Future<Null> getRecom() async {
     iduserRec = userModel!.idUser;
+
     // print('p_id => $idproductRec');
     //print('u_id =>$iduserRec');
 
     String api =
         '${MyConstant().domain}/api/reC.php?isAdd=true&id_products=$idproductRec&id_user=$iduserRec';
 
+    // final response = await Dio().get(api);
+    // if (response != null && response.data != null) {
+    //   final value = jsonDecode(response.data);
+
+    //   if (value != null) {
+    //     Map<String, dynamic> greatestView = value.fold(
+    //         {},
+    //         (previous, current) => previous['view'] == null
+    //             ? current
+    //             : int.parse(previous['view']!) >= int.parse(current['view']!)
+    //                 ? previous
+    //                 : current);
+    //     print(greatestView);
+    //   }
+    // }
+    //final response = await Dio().get(api);
+    // if (response != null && response.data != null) {
+    //   final value = jsonDecode(response.data);
     await Dio().get(api).then((value) {
-      print(value);
+      if (value.toString() != 'null' && value != 'null') {
+        for (var items in json.decode(value.data)) {
+          //s print(items);
+          setState(() {
+            viewList.add(items);
+          });
+          Map<String, dynamic> greatestView = viewList.fold(
+              {},
+              (previous, current) => previous['view'] == null
+                  ? current
+                  : int.parse(previous['view']!) >= int.parse(current['view']!)
+                      ? previous
+                      : current);
+
+          setState(() {
+            pid = greatestView['id_products'];
+
+            if (pid!.length == 1) {
+              print(pid);
+              getProductRec();
+            }
+          });
+        }
+      }
+    });
+  }
+
+  List<ProductModel> productRecList = [];
+  Future<Null> getProductRec() async {
+    String api =
+        '${MyConstant().domain}/api/getproductfromidProduct.php?isAdd=true&id_products=$pid';
+
+    await Dio().get(api).then((value) {
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          ProductModel productRecLists = ProductModel.fromMap(item);
+          setState(() {
+            productRecList.add(productRecLists);
+            print(productRecList);
+          });
+        }
+      } else {
+        // print('Error getdataRecently');
+        CircularProgressIndicator();
+      }
     });
   }
 
 //เพิ่มข้อมูลการคลิก
   // Future<Null> addData() async {
   //   String iduser = userModel!.idUser;
-
   //   String url =
   //       '${MyConstant().domain}/api/addData.php?isAdd=true&id_user=$iduser&id_product=$dataId&nameproduct=$dataName';
-
   //   try {
   //     Response response = await Dio().get(url);
   //     // print('res = $response');
-
   //     if (response.toString() == 'true') {
   //     } else {
   //       normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
@@ -116,14 +178,11 @@ class _ProductListUserState extends State<ProductListUser> {
 //เก็บข้อมูลการกดเข้าดู
   // Future<Null> addRecently() async {
   //   String iduser = userModel!.idUser;
-
   //   String url =
   //       '${MyConstant().domain}/api/addRecently.php?isAdd=true&id_user=$iduser&id_product=$id';
-
   //   try {
   //     Response response = await Dio().get(url);
   //     // print('res = $response');
-
   //     if (response.toString() == 'true') {
   //     } else {
   //       normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
@@ -136,7 +195,6 @@ class _ProductListUserState extends State<ProductListUser> {
   //   String iduser = userModel!.idUser;
   //   String api =
   //       '${MyConstant().domain}/api/getDataRecently.php?isAdd=true&id_user=$iduser';
-
   //   await Dio().get(api).then((value) {
   //     if (value.toString() != 'null') {
   //       for (var item in json.decode(value.data)) {
@@ -160,7 +218,6 @@ class _ProductListUserState extends State<ProductListUser> {
   // Future<Null> getdataRecently() async {
   //   String api =
   //       '${MyConstant().domain}/api/getProductWhereid.php?isAdd=true&id_product=$idproducts';
-
   //   // print(api);
   //   await Dio().get(api).then((value) {
   //     if (value.toString() != 'null') {
@@ -269,17 +326,17 @@ class _ProductListUserState extends State<ProductListUser> {
                       Navigator.of(context).push(route);
                     },
                   ),
-                  // SizedBox(
-                  //   height: 250,
-                  //   child: ListView.builder(
-                  //     physics: ClampingScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     scrollDirection: Axis.horizontal,
-                  //     itemCount: productModels.length,
-                  //     itemBuilder: (BuildContext context, int index) =>
-                  //showListView(index),
-                  //  ),
-                  // ),
+                  SizedBox(
+                    height: 250,
+                    child: ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: productRecList.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          showListView(index),
+                    ),
+                  ),
                 ])),
             // Card(
             //     shape: RoundedRectangleBorder(
@@ -463,7 +520,7 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
   Widget showListView(int index) {
-    String string = '${productModels[index].nameproduct}';
+    String string = '${productRecList[index].nameproduct}';
     if (string.length > 10) {
       string = string.substring(0, 10);
       string = '$string ...';
@@ -477,9 +534,9 @@ class _ProductListUserState extends State<ProductListUser> {
         ),
         child: GestureDetector(
             onTap: () {
-              name = productModels[index].nameproduct;
-              id = productModels[index].idProduct;
-              print(name);
+              // name = productModels[index].nameproduct;
+              // id = productModels[index].idProduct;
+              // print(name);
 
               // MaterialPageRoute route = MaterialPageRoute(
               //   builder: (value) => ShowDetail(
@@ -506,7 +563,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/product/productModels[index].image',
+                  '${MyConstant().domain}/upload/product/${productRecList[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -535,7 +592,7 @@ class _ProductListUserState extends State<ProductListUser> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        ' \฿ ${productModels[index].price}',
+                        ' \฿ ${productRecList[index].price}',
                         style: Theme.of(context)
                             .textTheme
                             .button!
@@ -693,6 +750,7 @@ class _ProductListUserState extends State<ProductListUser> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: widgets.map((pathImages) {
                 int index = widgets.indexOf(pathImages);
+
                 return Container(
                   width: 8.0,
                   height: 8.0,

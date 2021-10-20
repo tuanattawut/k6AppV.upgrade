@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/utility/my_style.dart';
 
 class RentSeller extends StatefulWidget {
   @override

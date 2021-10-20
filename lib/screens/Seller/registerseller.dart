@@ -162,7 +162,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         //add_info_seller.dart print('Response ===>>> $value');
-        image = '${MyConstant().domain}/upload/seller/$nameImage';
+        image = '$nameImage';
         //print('urlImage = $image');
         showLoade(context);
         checkUser();

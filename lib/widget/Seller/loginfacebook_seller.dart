@@ -65,7 +65,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
     try {
       Response response = await Dio().get(url);
       var result = json.decode(response.data);
-      print(result);
+     // print(result);
       if (result == null) {
         showAddFBDialog();
       } else {
