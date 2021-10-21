@@ -64,11 +64,13 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
   Future<Null> findLatLng() async {
     //print('findLatLan ==> Work');
-    Position? position = await findPostion();
+    // Position? position = await findPostion();
     setState(() {
-      lat = position!.latitude;
-      lng = position.longitude;
-      // print('lat = $lat, lng = $long');
+      // lat = position!.latitude;
+      // lng = position.longitude;
+      //print('lat = $lat, lng = $lng');
+      lat = 14.028483806025148;
+      lng = 100.7294029298289;
     });
   }
 

@@ -28,9 +28,8 @@ class _ProductListUserState extends State<ProductListUser> {
   bool? loadStatus = true;
   bool? status = true;
   bool? loadC = true;
-  String? name, id, idproducts;
-  List dataId = [];
-  List dataName = [];
+  String? name, id, idproducts, clickid;
+
   List idproduct = [];
   List<ProductModel> recentlyModels = [];
   List<CategoryModel> categoryList = [];
@@ -93,50 +92,54 @@ class _ProductListUserState extends State<ProductListUser> {
     String api =
         '${MyConstant().domain}/api/reC.php?isAdd=true&id_products=$idproductRec&id_user=$iduserRec';
 
-    // final response = await Dio().get(api);
-    // if (response != null && response.data != null) {
-    //   final value = jsonDecode(response.data);
+    final response = await Dio().get(api);
+    if (response != null && response.data != null) {
+      final value = jsonDecode(response.data);
 
-    //   if (value != null) {
-    //     Map<String, dynamic> greatestView = value.fold(
-    //         {},
-    //         (previous, current) => previous['view'] == null
-    //             ? current
-    //             : int.parse(previous['view']!) >= int.parse(current['view']!)
-    //                 ? previous
-    //                 : current);
-    //     print(greatestView);
-    //   }
-    // }
-    //final response = await Dio().get(api);
-    // if (response != null && response.data != null) {
-    //   final value = jsonDecode(response.data);
-    await Dio().get(api).then((value) {
-      if (value.toString() != 'null' && value != 'null') {
-        for (var items in json.decode(value.data)) {
-          //s print(items);
-          setState(() {
-            viewList.add(items);
-          });
-          Map<String, dynamic> greatestView = viewList.fold(
-              {},
-              (previous, current) => previous['view'] == null
-                  ? current
-                  : int.parse(previous['view']!) >= int.parse(current['view']!)
-                      ? previous
-                      : current);
-
-          setState(() {
-            pid = greatestView['id_products'];
-
-            if (pid!.length == 1) {
-              print(pid);
-              getProductRec();
-            }
-          });
+      if (value != null) {
+        Map<String, dynamic> greatestView = value.fold(
+            {},
+            (previous, current) => previous['view'] == null
+                ? current
+                : int.parse(previous['view']!) >= int.parse(current['view']!)
+                    ? previous
+                    : current);
+        if (greatestView['id_products'] != null) {
+          pid = greatestView['id_products'] as String;
+          print(greatestView['view']);
+          getProductRec();
+        } else {
+          print('NULL');
         }
       }
-    });
+    }
+
+    // await Dio().get(api).then((value) {
+    //   if (value.toString() != 'null' && value != 'null') {
+    //     for (var items in json.decode(value.data)) {
+    //       //s print(items);
+    //       setState(() {
+    //         viewList.add(items);
+    //       });
+    //       Map<String, dynamic> greatestView = viewList.fold(
+    //           {},
+    //           (previous, current) => previous['view'] == null
+    //               ? current
+    //               : int.parse(previous['view']!) >= int.parse(current['view']!)
+    //                   ? previous
+    //                   : current);
+
+    //       setState(() {
+    //         pid = greatestView['id_products'];
+
+    //         if (pid!.length == 1) {
+    //           print(pid);
+    //           getProductRec();
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
   }
 
   List<ProductModel> productRecList = [];
@@ -150,7 +153,7 @@ class _ProductListUserState extends State<ProductListUser> {
           ProductModel productRecLists = ProductModel.fromMap(item);
           setState(() {
             productRecList.add(productRecLists);
-            print(productRecList);
+            //print(productRecList);
           });
         }
       } else {
@@ -161,19 +164,19 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
 //เพิ่มข้อมูลการคลิก
-  // Future<Null> addData() async {
-  //   String iduser = userModel!.idUser;
-  //   String url =
-  //       '${MyConstant().domain}/api/addData.php?isAdd=true&id_user=$iduser&id_product=$dataId&nameproduct=$dataName';
-  //   try {
-  //     Response response = await Dio().get(url);
-  //     // print('res = $response');
-  //     if (response.toString() == 'true') {
-  //     } else {
-  //       normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
-  //     }
-  //   } catch (e) {}
-  // }
+  Future<Null> addData() async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      // print('res = $response');
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
+  }
 
 //เก็บข้อมูลการกดเข้าดู
   // Future<Null> addRecently() async {
@@ -451,26 +454,6 @@ class _ProductListUserState extends State<ProductListUser> {
         child: GestureDetector(
             onTap: () {
               print(string);
-
-              // MaterialPageRoute route = MaterialPageRoute(
-              //   builder: (value) => ShowDetail(
-              //     productModel: productModels[index],
-              //   ),
-              // );
-              // Navigator.of(context).push(route);
-              // dataId.add(id);
-              // dataName.add(name);
-
-              // if (dataName.length < 4) {
-              //   print(dataName);
-              //   if (dataName.length == 3) {
-              //     addData();
-              //     print(dataId);
-              //   }
-              // } else {
-              //   dataName.clear();
-              //   dataId.clear();
-              // }
             },
             child: Column(children: <Widget>[
               Container(
@@ -534,29 +517,14 @@ class _ProductListUserState extends State<ProductListUser> {
         ),
         child: GestureDetector(
             onTap: () {
-              // name = productModels[index].nameproduct;
-              // id = productModels[index].idProduct;
-              // print(name);
-
-              // MaterialPageRoute route = MaterialPageRoute(
-              //   builder: (value) => ShowDetail(
-              //     productModel: productModels[index],
-              //   ),
-              // );
-              // Navigator.of(context).push(route);
-              // dataId.add(id);
-              // dataName.add(name);
-
-              // if (dataName.length < 4) {
-              //   print(dataName);
-              //   if (dataName.length == 3) {
-              //     addData();
-              //     print(dataId);
-              //   }
-              // } else {
-              //   dataName.clear();
-              //   dataId.clear();
-              // }
+              clickid = productRecList[index].idProduct;
+              addData();
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
+                  productModel: productRecList[index],
+                ),
+              );
+              Navigator.of(context).push(route);
             },
             child: Column(children: <Widget>[
               Container(
@@ -620,8 +588,9 @@ class _ProductListUserState extends State<ProductListUser> {
       ),
       child: GestureDetector(
           onTap: () async {
-            name = productModels[index].nameproduct;
-            id = productModels[index].idProduct;
+            clickid = productModels[index].idProduct;
+            addData();
+            // print(clickid);
             // addRecently();
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
@@ -629,20 +598,6 @@ class _ProductListUserState extends State<ProductListUser> {
               ),
             );
             Navigator.of(context).push(route);
-
-            // dataId.add(id);
-            // dataName.add(name);
-
-            // if (dataName.length < 4) {
-            //   print('data == >>> $dataName');
-            //   if (dataName.length == 3) {
-            //     //  addData();
-            //     print('data add ===>> $dataId');
-            //   }
-            // } else {
-            //   dataName.clear();
-            //   dataId.clear();
-            // }
           },
           child: Column(children: <Widget>[
             Container(
