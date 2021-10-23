@@ -1,16 +1,16 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class SearchProduct extends StatefulWidget {
+  const SearchProduct({required this.idproduct, required this.userModel});
   final idproduct;
-  const SearchProduct({required this.idproduct});
-
+  final UserModel userModel;
   @override
   _SearchProductState createState() => _SearchProductState();
 }
@@ -20,10 +20,12 @@ class _SearchProductState extends State<SearchProduct> {
   bool? loadStatus = true;
   bool? status = true;
   List<ProductModel> productModels = [];
+  UserModel? userModel;
   @override
   void initState() {
     super.initState();
     setState(() {
+      userModel = widget.userModel;
       idproduct = widget.idproduct;
       //print(idproduct);
       getProduct();
@@ -100,6 +102,7 @@ class _SearchProductState extends State<SearchProduct> {
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
+                userModel: userModel!,
               ),
             );
             Navigator.of(context).push(route);

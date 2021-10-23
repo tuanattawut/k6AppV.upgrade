@@ -9,7 +9,7 @@ String productModelToJson(List<ProductModel> data) =>
 class ProductModel {
   String idProduct;
   String idShop;
-  String idCategory;
+  String idSubcategory;
   String nameproduct;
   String price;
   String detail;
@@ -18,7 +18,7 @@ class ProductModel {
   ProductModel({
     required this.idProduct,
     required this.idShop,
-    required this.idCategory,
+    required this.idSubcategory,
     required this.nameproduct,
     required this.price,
     required this.detail,
@@ -29,7 +29,7 @@ class ProductModel {
   ProductModel copyWith({
     String? idProduct,
     String? idShop,
-    String? idCategory,
+    String? idSubcategory,
     String? nameproduct,
     String? price,
     String? detail,
@@ -39,7 +39,7 @@ class ProductModel {
     return ProductModel(
       idProduct: idProduct ?? this.idProduct,
       idShop: idShop ?? this.idShop,
-      idCategory: idCategory ?? this.idCategory,
+      idSubcategory: idSubcategory ?? this.idSubcategory,
       nameproduct: nameproduct ?? this.nameproduct,
       price: price ?? this.price,
       detail: detail ?? this.detail,
@@ -52,7 +52,7 @@ class ProductModel {
     return {
       'idProduct': idProduct,
       'idShop': idShop,
-      'idCategory': idCategory,
+      'idSubcategory': idSubcategory,
       'nameproduct': nameproduct,
       'price': price,
       'detail': detail,
@@ -65,7 +65,7 @@ class ProductModel {
     return ProductModel(
       idProduct: map['id_products'],
       idShop: map['id_shop'],
-      idCategory: map['id_category'],
+      idSubcategory: map['id_subcategory'],
       nameproduct: map['nameproduct'],
       price: map['price'],
       detail: map['detail'],
@@ -81,7 +81,7 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(idProduct: $idProduct, idShop: $idShop, idCategory: $idCategory, nameproduct: $nameproduct, price: $price, detail: $detail, image: $image,regdate:$regdate)';
+    return 'ProductModel(idProduct: $idProduct, idShop: $idShop, idCategory: $idSubcategory, nameproduct: $nameproduct, price: $price, detail: $detail, image: $image,regdate:$regdate)';
   }
 
   @override
@@ -91,7 +91,7 @@ class ProductModel {
     return other is ProductModel &&
         other.idProduct == idProduct &&
         other.idShop == idShop &&
-        other.idCategory == idCategory &&
+        other.idSubcategory == idSubcategory &&
         other.nameproduct == nameproduct &&
         other.price == price &&
         other.detail == detail &&
@@ -103,7 +103,7 @@ class ProductModel {
   int get hashCode {
     return idProduct.hashCode ^
         idShop.hashCode ^
-        idCategory.hashCode ^
+        idSubcategory.hashCode ^
         nameproduct.hashCode ^
         price.hashCode ^
         detail.hashCode ^

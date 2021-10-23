@@ -1,15 +1,18 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/subcategory_model.dart';
+import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class DetailProduct extends StatefulWidget {
   final ProductModel productModel;
-  const DetailProduct({required this.productModel});
+  final UserModel userModel;
+  const DetailProduct({required this.productModel, required this.userModel});
 
   @override
   _DetailProductState createState() => _DetailProductState();
@@ -20,14 +23,15 @@ class _DetailProductState extends State<DetailProduct> {
   List<ProductModel> productModels = [];
   bool? loadStatus = true;
   bool? status = true;
-  String? name, id, idshop;
-  CategoryModel? category;
+  String? name, id, idshop, clickid;
+  SubcategoryModel? category;
+  UserModel? userModel;
   @override
   void initState() {
     super.initState();
     setState(() {
+      userModel = widget.userModel;
       productModel = widget.productModel;
-      // print('มั่วไหม ==> ${productModel?.idCategory}');
       readProduct();
       getCategory();
     });
@@ -70,22 +74,36 @@ class _DetailProductState extends State<DetailProduct> {
   }
 
   Future<Null> getCategory() async {
-    String idcategory = productModel!.idCategory;
+    String idsubcategory = productModel!.idSubcategory;
     //print(idcategory);
     String api =
-        '${MyConstant().domain}/api/getCategoryfromidCategory.php?isAdd=true&id_category=$idcategory';
+        '${MyConstant().domain}/api/getSubcategoryfromidsubcategory.php?isAdd=true&id_subcategory=$idsubcategory';
 
     await Dio().get(api).then((value) {
       //print('===>$value');
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
-          CategoryModel categoryModel = CategoryModel.fromMap(item);
+          SubcategoryModel subcategoryModel = SubcategoryModel.fromMap(item);
           setState(() {
-            category = categoryModel;
+            category = subcategoryModel;
           });
         }
       } else {}
     });
+  }
+
+  Future<Null> addData() async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      // print('res = $response');
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
   }
 
   @override
@@ -103,7 +121,7 @@ class _DetailProductState extends State<DetailProduct> {
                     MyStyle().mySizebox(),
                     _buildSectiontitle('สินค้าจากร้านเดียวกัน', () {}),
                     SizedBox(
-                      height: 250,
+                      height: 260,
                       child: ListView.builder(
                         physics: ClampingScrollPhysics(),
                         shrinkWrap: true,
@@ -166,7 +184,7 @@ class _DetailProductState extends State<DetailProduct> {
                 category == null
                     ? Text('.. .')
                     : Text(
-                        category!.namecategory as String,
+                        category!.namesubcategory as String,
                         style: Theme.of(context)
                             .textTheme
                             .button!
@@ -214,28 +232,16 @@ class _DetailProductState extends State<DetailProduct> {
         ),
         child: GestureDetector(
             onTap: () {
-              name = productModels[index].nameproduct;
-              id = productModels[index].idProduct;
-              print(name);
-              // MaterialPageRoute route = MaterialPageRoute(
-              //   builder: (value) => ShowDetail(
-              //     productModel: productModels[index],
-              //   ),
-              // );
-              // Navigator.of(context).push(route);
-              // dataId.add(id);
-              // dataName.add(name);
+              clickid = productModels[index].idProduct;
+              addData();
 
-              // if (dataName.length < 4) {
-              //   print(dataName);
-              //   if (dataName.length == 3) {
-              //     addData();
-              //     print(dataId);
-              //   }
-              // } else {
-              //   dataName.clear();
-              //   dataId.clear();
-              // }
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
+                  productModel: productModels[index],
+                  userModel: userModel!,
+                ),
+              );
+              Navigator.of(context).push(route);
             },
             child: Column(children: <Widget>[
               Container(
@@ -271,7 +277,7 @@ class _DetailProductState extends State<DetailProduct> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        ' \฿ ${productModel!.price}',
+                        ' \฿ ${productModels[index].price}',
                         style: Theme.of(context)
                             .textTheme
                             .button!

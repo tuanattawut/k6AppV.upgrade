@@ -1,37 +1,42 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/subcategory_model.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class CategoryProduct extends StatefulWidget {
-  CategoryProduct({required this.categoryModel});
-  final CategoryModel categoryModel;
+  CategoryProduct({required this.subcategoryModel, required this.userModel});
+  final SubcategoryModel subcategoryModel;
+  final UserModel userModel;
   @override
   _CategoryProductState createState() => _CategoryProductState();
 }
 
 class _CategoryProductState extends State<CategoryProduct> {
-  CategoryModel? categoryModels;
-  String? idcategory, name, id;
+  SubcategoryModel? subcategoryModels;
+  String? idsubcategory, name, id, clickid;
   List<ProductModel> productModels = [];
   bool? check;
+  UserModel? userModel;
   @override
   void initState() {
     super.initState();
-    categoryModels = widget.categoryModel;
+    userModel = widget.userModel;
+    subcategoryModels = widget.subcategoryModel;
     getProduct();
     //print(categoryModels!.idcategory);
   }
 
   Future<Null> getProduct() async {
-    idcategory = categoryModels?.idcategory;
+    idsubcategory = subcategoryModels?.idsubcategory;
     // print(idcategory);
 
     String api =
-        '${MyConstant().domain}/api/getproductfromidCategory.php?isAdd=true&id_category=$idcategory';
+        '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsubcategory';
     Response response = await Dio().get(api);
     var result = json.decode(response.data);
 
@@ -51,14 +56,28 @@ class _CategoryProductState extends State<CategoryProduct> {
     }
   }
 
+  Future<Null> addData() async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      // print('res = $response');
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-            child: categoryModels == null
+            child: subcategoryModels == null
                 ? Text('หมวดหมู่')
-                : Text(categoryModels!.namecategory as String)),
+                : Text(subcategoryModels!.namesubcategory as String)),
       ),
       body: check == false
           ? showNotProduct()
@@ -112,29 +131,15 @@ class _CategoryProductState extends State<CategoryProduct> {
       ),
       child: GestureDetector(
           onTap: () async {
-            name = productModels[index].nameproduct;
-            id = productModels[index].idProduct;
-            // addRecently();
+            clickid = productModels[index].idProduct;
+            addData();
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
+                userModel: userModel!,
               ),
             );
             Navigator.of(context).push(route);
-
-            // dataId.add(id);
-            // dataName.add(name);
-
-            // if (dataName.length < 4) {
-            //   print('data == >>> $dataName');
-            //   if (dataName.length == 3) {
-            //     //  addData();
-            //     print('data add ===>> $dataId');
-            //   }
-            // } else {
-            //   dataName.clear();
-            //   dataId.clear();
-            // }
           },
           child: Column(children: <Widget>[
             Container(

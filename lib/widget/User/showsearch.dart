@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:k6_app/widget/User/searchproduct.dart';
 
 class ShowSearch extends StatefulWidget {
+  const ShowSearch({required this.userModel});
+  final UserModel userModel;
   @override
   State createState() => _ShowSearchState();
 }
@@ -14,13 +17,14 @@ class _ShowSearchState extends State<ShowSearch> {
   var data;
   String? query;
   String dataurl = "${MyConstant().domain}/api/search_suggestion.php";
-
+  UserModel? userModel;
   @override
   void initState() {
     searching = false;
     error = false;
     query = "";
     super.initState();
+    userModel = widget.userModel;
   }
 
   void getSuggestion() async {
@@ -112,6 +116,7 @@ class _ShowSearchState extends State<ShowSearch> {
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => SearchProduct(
                   idproduct: suggestion.id,
+                  userModel: userModel!,
                 ),
               );
               Navigator.of(context).push(route);

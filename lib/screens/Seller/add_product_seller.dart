@@ -21,8 +21,8 @@ class _AddProductState extends State<AddProduct> {
 
   File? file;
   List categoryItemList = [];
-
-  String? selectedValue;
+  List subcategoryItemList = [];
+  String? selectedValue, subValue;
   ShopModel? shopModel;
   String? idshop;
 
@@ -43,7 +43,20 @@ class _AddProductState extends State<AddProduct> {
       }
     });
 
-    // print(categoryItemList);
+    //print(categoryItemList);
+  }
+
+  Future<Null> readsubCategory() async {
+    String api =
+        '${MyConstant().domain}/api/getSubcategoryfromidCategory.php?isAdd=true&id_category=$selectedValue';
+    await Dio().get(api).then((value) {
+      for (var item in json.decode(value.data)) {
+        setState(() {
+          subcategoryItemList.add(item);
+        });
+      }
+    });
+    // print(subcategoryItemList);
   }
 
   @override
@@ -65,6 +78,7 @@ class _AddProductState extends State<AddProduct> {
               nameForm(),
               MyStyle().mySizebox(),
               dropdowncategory(),
+              dropdownsubcategory(),
               detailForm(),
               MyStyle().mySizebox(),
               priceForm(),
@@ -86,13 +100,39 @@ class _AddProductState extends State<AddProduct> {
           value: selectedValue,
           items: categoryItemList.map((list) {
             return DropdownMenuItem(
-              value: list['id_category'],
+              value: list['id_category'].toString(),
               child: Text(list['namecategory']),
             );
           }).toList(),
           onChanged: (value) {
             setState(() {
-              selectedValue = value as String;
+              selectedValue = value.toString();
+              readsubCategory();
+              print(selectedValue);
+              dropdownsubcategory();
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Row dropdownsubcategory() {
+    return Row(
+      children: [
+        DropdownButton(
+          hint: Text('เลือกประเภทสินค้าย่อย'),
+          value: subValue,
+          items: subcategoryItemList.map((sublist) {
+            return DropdownMenuItem(
+              value: sublist['id_subcategory'].toString(),
+              child: Text(sublist['namesubcategory']),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              subValue = newValue;
+              // print(subValue);
             });
           },
         ),
@@ -111,14 +151,13 @@ class _AddProductState extends State<AddProduct> {
             detail == null ||
             detail!.isEmpty) {
           normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
-        } 
-        // else if (file == null) {
-        //   normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
-        // }
-         else {
+        } else if (file == null) {
+          normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
+        } else if (subValue == null) {
+          normalDialog(context, 'โปรดเลือกหมวดหมู่');
+        } else {
           uploadImage();
           showLoade(context);
-          // addProduct();
         }
       },
     );
@@ -151,7 +190,7 @@ class _AddProductState extends State<AddProduct> {
     idshop = shopModel!.idShop;
     Navigator.pop(context);
     String url =
-        '${MyConstant().domain}/api/addProduct.php?isAdd=true&id_shop=$idshop&id_category=$selectedValue&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
+        '${MyConstant().domain}/api/addProduct.php?isAdd=true&id_shop=$idshop&id_subcategory=$subValue&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';
 
     try {
       Response response = await Dio().get(url);

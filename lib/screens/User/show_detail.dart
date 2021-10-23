@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/widget/User/datailshop.dart';
@@ -12,8 +13,9 @@ import 'package:k6_app/widget/User/detailproduct.dart';
 
 class ShowDetail extends StatefulWidget {
   final ProductModel productModel;
+  final UserModel userModel;
 
-  ShowDetail({required this.productModel});
+  ShowDetail({required this.productModel, required this.userModel});
   @override
   _ShowDetailState createState() => _ShowDetailState();
 }
@@ -22,13 +24,14 @@ class _ShowDetailState extends State<ShowDetail> {
   ProductModel? productModel;
   SellerModel? sellerModel;
   ShopModel? shopModels;
-
+  UserModel? userModel;
   String? idShop, idSeller;
 
   @override
   void initState() {
     super.initState();
     setState(() {
+      userModel = widget.userModel;
       productModel = widget.productModel;
       //print('url ==> ${productModel?.image}');
       readShop();
@@ -90,7 +93,10 @@ class _ShowDetailState extends State<ShowDetail> {
           ),
           body: TabBarView(
             children: [
-              DetailProduct(productModel: productModel!),
+              DetailProduct(
+                productModel: productModel!,
+                userModel: userModel!,
+              ),
               shopModels == null
                   ? MyStyle().showProgress()
                   : DetailShop(shopModel: shopModels!),

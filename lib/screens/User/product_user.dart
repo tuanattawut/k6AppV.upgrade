@@ -12,8 +12,8 @@ import 'package:k6_app/screens/User/showallproduct.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
-import 'package:k6_app/widget/User/categoryproduct.dart';
 import 'package:k6_app/widget/User/showsearch.dart';
+import 'package:k6_app/widget/User/subcategory.dart';
 
 class ProductListUser extends StatefulWidget {
   ProductListUser({required this.usermodel});
@@ -275,7 +275,9 @@ class _ProductListUserState extends State<ProductListUser> {
             icon: Icon(Icons.search),
             onPressed: () {
               MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowSearch(),
+                builder: (value) => ShowSearch(
+                  userModel: userModel!,
+                ),
               );
               Navigator.of(context).push(route);
             },
@@ -297,7 +299,9 @@ class _ProductListUserState extends State<ProductListUser> {
                     'หมวดหมู่',
                     () {
                       MaterialPageRoute route = MaterialPageRoute(
-                        builder: (value) => ShowallCategory(),
+                        builder: (value) => ShowallCategory(
+                          userModel: userModel!,
+                        ),
                       );
                       Navigator.of(context).push(route);
                     },
@@ -330,7 +334,7 @@ class _ProductListUserState extends State<ProductListUser> {
                     },
                   ),
                   SizedBox(
-                    height: 250,
+                    height: 260,
                     child: ListView.builder(
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
@@ -410,8 +414,10 @@ class _ProductListUserState extends State<ProductListUser> {
       child: GestureDetector(
           onTap: () {
             MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) =>
-                    CategoryProduct(categoryModel: categoryList[index]));
+                builder: (value) => Subcategory(
+                      categoryModel: categoryList[index],
+                      userModel: userModel!,
+                    ));
             Navigator.of(context).push(route);
           },
           child: Column(
@@ -420,7 +426,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 50,
                 width: 50,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/categorys/${categoryList[index].image}',
+                  '${MyConstant().domain}/upload/categories/${categoryList[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -522,6 +528,7 @@ class _ProductListUserState extends State<ProductListUser> {
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ShowDetail(
                   productModel: productRecList[index],
+                  userModel: userModel!,
                 ),
               );
               Navigator.of(context).push(route);
@@ -595,6 +602,7 @@ class _ProductListUserState extends State<ProductListUser> {
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
+                userModel: userModel!,
               ),
             );
             Navigator.of(context).push(route);

@@ -213,7 +213,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                 onPressed: () async {
                   Navigator.pop(context);
                   String url =
-                      '${MyConstant().domain}/api/deletefromIdproduct.php?isAdd=true&id_product=${productModel.idProduct}';
+                      '${MyConstant().domain}/api/deletefromIdproduct.php?isAdd=true&id_products=${productModel.idProduct}';
                   await Dio().get(url).then((value) => readProduct());
                 },
                 child: Text('ยืนยัน'),
