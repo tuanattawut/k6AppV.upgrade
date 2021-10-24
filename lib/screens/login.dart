@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'ระบบแนะนำสินค้าและร้านค้า',
+                  'ระบบแนะนำสินค้าและร้านค้า ',
                   style: MyStyle().mainTitle,
                 ),
               ],

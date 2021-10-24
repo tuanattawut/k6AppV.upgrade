@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/screens/Manager/main_manager.dart';
-
-import 'package:k6_app/screens/Seller/loginseller.dart';
 import 'package:k6_app/screens/login.dart';
 import 'package:k6_app/screens/register.dart';
 

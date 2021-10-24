@@ -1,15 +1,72 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/show_detail.dart';
+import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class PromoteUser extends StatefulWidget {
+  const PromoteUser({required this.userModel, required this.productModel});
+  final UserModel userModel;
+  final ProductModel productModel;
+
   @override
   _PromoteUserState createState() => _PromoteUserState();
 }
 
 class _PromoteUserState extends State<PromoteUser> {
+  UserModel? userModel;
+  ProductModel? productModel;
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
+  String? clickid;
   @override
   void initState() {
     super.initState();
+    userModel = widget.userModel;
+    productModel = widget.productModel;
+    getProductRecs();
+    // print(productModel!.idSubcategory);
+  }
+
+  Future<Null> addData() async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      // print('res = $response');
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
+  }
+
+  List<ProductModel> productRecList = [];
+  Future<Null> getProductRecs() async {
+    String? idsub = productModel!.idSubcategory;
+    String api =
+        '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
+
+    await Dio().get(api).then((value) {
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          ProductModel productRecLists2 = ProductModel.fromMap(item);
+          setState(() {
+            productRecList.add(productRecLists2);
+            //print(productRecList);
+          });
+        }
+      } else {
+        // print('Error getdataRecently');
+        CircularProgressIndicator();
+      }
+    });
   }
 
   @override
@@ -22,7 +79,7 @@ class _PromoteUserState extends State<PromoteUser> {
         children: [
           Container(
             child: ListView.builder(
-              itemCount: 1,
+              itemCount: productRecList.length,
               itemBuilder: (BuildContext buildContext, int index) {
                 return showListView(index);
               },
@@ -43,7 +100,7 @@ class _PromoteUserState extends State<PromoteUser> {
           borderRadius: BorderRadius.circular(20.0),
           image: DecorationImage(
             image: NetworkImage(
-                'https://img.wongnai.com/p/1920x0/2019/09/20/ea870d3e5599444ba5c5fce3f1e09607.jpg'),
+                '${MyConstant().domain}/upload/product/${productRecList[index].image}'),
             fit: BoxFit.cover,
           ),
         ),
@@ -58,7 +115,7 @@ class _PromoteUserState extends State<PromoteUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.5 - 35,
           child: Text(
-            'เส้นเล็กแห้ง',
+            productRecList[index].nameproduct,
             style: MyStyle().mainTitle,
           ),
         ),
@@ -66,20 +123,20 @@ class _PromoteUserState extends State<PromoteUser> {
     );
   }
 
-  // Widget showDetail(int index) {
-  //   String string = '_model.descriptions';
-  //   if (string.length > 100) {
-  //     string = string.substring(0, 99);
-  //     string = '$string ...';
-  //   }
-  //   return Text(
-  //     string,
-  //     style: TextStyle(
-  //       fontSize: 16,
-  //       fontStyle: FontStyle.italic,
-  //     ),
-  //   );
-  // }
+  Widget showDetail(int index) {
+    String string = productRecList[index].detail;
+    if (string.length > 100) {
+      string = string.substring(0, 99);
+      string = '$string ...';
+    }
+    return Text(
+      string,
+      style: TextStyle(
+        fontSize: 16,
+        fontStyle: FontStyle.italic,
+      ),
+    );
+  }
 
   Widget showText(int index) {
     return Container(
@@ -90,10 +147,14 @@ class _PromoteUserState extends State<PromoteUser> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           showName(index),
+          // showDetail(index),
           Text(
-            '฿300',
-            style: TextStyle(fontSize: 25, color: Colors.red),
-          )
+            f.format(int.parse(productRecList[index].price)),
+            style: Theme.of(context)
+                .textTheme
+                .button!
+                .copyWith(color: Colors.red, fontSize: 20),
+          ),
         ],
       ),
     );
@@ -102,10 +163,17 @@ class _PromoteUserState extends State<PromoteUser> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
-        // MaterialPageRoute route = MaterialPageRoute(
-        //   builder: (value) => ShowDetail(productModel: ,),
-        // );
-        // Navigator.of(context).push(route);
+        clickid = productRecList[index].idProduct;
+        addData();
+        // print(clickid);
+        // addRecently();
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (value) => ShowDetail(
+            productModel: productRecList[index],
+            userModel: userModel!,
+          ),
+        );
+        Navigator.of(context).push(route);
       },
       child: Container(
         margin: EdgeInsets.only(

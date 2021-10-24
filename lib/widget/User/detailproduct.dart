@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/subcategory_model.dart';
 import 'package:k6_app/models/user_models.dart';
@@ -26,6 +27,8 @@ class _DetailProductState extends State<DetailProduct> {
   String? name, id, idshop, clickid;
   SubcategoryModel? category;
   UserModel? userModel;
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
+  final df = new DateFormat('dd-MM-yyyy');
   @override
   void initState() {
     super.initState();
@@ -168,11 +171,11 @@ class _DetailProductState extends State<DetailProduct> {
                 Container(
                   padding: EdgeInsets.all(25),
                   child: Text(
-                    ' ${productModel?.price}\ บาท',
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.red,
-                    ),
+                    f.format(int.parse(productModel!.price)),
+                    style: Theme.of(context)
+                        .textTheme
+                        .button!
+                        .copyWith(color: Colors.red, fontSize: 25),
                   ),
                 ),
               ],
@@ -206,9 +209,9 @@ class _DetailProductState extends State<DetailProduct> {
             ),
             Row(
               children: [
-                MyStyle().showTitleH2('วันที่โพสต์:  '),
+                MyStyle().showTitleH2('วันที่ลงขาย:  '),
                 Text(
-                  productModel!.regdate,
+                  df.format(DateTime.parse(productModel!.regdate)),
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -277,7 +280,7 @@ class _DetailProductState extends State<DetailProduct> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        ' \฿ ${productModels[index].price}',
+                        f.format(int.parse(productModels[index].price)),
                         style: Theme.of(context)
                             .textTheme
                             .button!

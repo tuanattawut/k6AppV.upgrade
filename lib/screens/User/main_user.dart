@@ -3,7 +3,6 @@ import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/info_user.dart';
 import 'package:k6_app/screens/User/noti_user.dart';
 import 'package:k6_app/screens/User/product_user.dart';
-import 'package:k6_app/screens/User/promote_user.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({required this.usermodel});
@@ -21,7 +20,6 @@ class _HomepageState extends State<Homepage> {
     userModel = widget.usermodel;
     _widgetOptions = <Widget>[
       ProductListUser(usermodel: userModel!),
-      PromoteUser(),
       NotiUser(),
       InformationUser(usermodel: userModel!),
     ];
@@ -41,11 +39,11 @@ class _HomepageState extends State<Homepage> {
             activeIcon: Icon(Icons.home),
             label: 'หน้าหลัก',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up_alt_outlined),
-            activeIcon: Icon(Icons.thumb_up),
-            label: 'สินค้าแนะนำ',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.thumb_up_alt_outlined),
+          //   activeIcon: Icon(Icons.thumb_up),
+          //   label: 'สินค้าแนะนำ',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications_outlined),
             activeIcon: Icon(Icons.notifications),

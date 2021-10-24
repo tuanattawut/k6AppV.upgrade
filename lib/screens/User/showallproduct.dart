@@ -2,22 +2,34 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
+import 'package:k6_app/widget/User/showsearch.dart';
 
 class ProductAll extends StatefulWidget {
+  const ProductAll({required this.userModel});
+  final UserModel userModel;
+
   @override
   _ProductAllState createState() => _ProductAllState();
 }
 
 class _ProductAllState extends State<ProductAll> {
+  UserModel? userModel;
   List<ProductModel> productModels = [];
   bool? loadStatus = true;
   bool? status = true;
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
+  String? clickid;
   @override
   void initState() {
     super.initState();
+    userModel = widget.userModel;
     getData();
   }
 
@@ -49,11 +61,39 @@ class _ProductAllState extends State<ProductAll> {
     });
   }
 
+  Future<Null> addData() async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      // print('res = $response');
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('สินค้าทั้งหมด')),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowSearch(
+                  userModel: userModel!,
+                ),
+              );
+              Navigator.of(context).push(route);
+            },
+          )
+        ],
+        centerTitle: true,
       ),
       body: Stack(
         children: [
@@ -108,21 +148,6 @@ class _ProductAllState extends State<ProductAll> {
     );
   }
 
-  // Widget showDetail(int index) {
-  //   String string = '_model.descriptions';
-  //   if (string.length > 100) {
-  //     string = string.substring(0, 99);
-  //     string = '$string ...';
-  //   }
-  //   return Text(
-  //     string,
-  //     style: TextStyle(
-  //       fontSize: 16,
-  //       fontStyle: FontStyle.italic,
-  //     ),
-  //   );
-  // }
-
   Widget showText(int index) {
     return Container(
       padding: EdgeInsets.only(right: 20.0),
@@ -133,12 +158,12 @@ class _ProductAllState extends State<ProductAll> {
         children: <Widget>[
           showName(index),
           Text(
-            ' \฿ ${productModels[index].price}',
+            f.format(int.parse(productModels[index].price)),
             style: Theme.of(context)
                 .textTheme
                 .button!
                 .copyWith(color: Colors.red, fontSize: 20),
-          )
+          ),
         ],
       ),
     );
@@ -147,6 +172,15 @@ class _ProductAllState extends State<ProductAll> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
+        clickid = productModels[index].idProduct;
+        addData();
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (value) => ShowDetail(
+            productModel: productModels[index],
+            userModel: userModel!,
+          ),
+        );
+        Navigator.of(context).push(route);
         print(index);
         // MaterialPageRoute route = MaterialPageRoute(
         //   builder: (value) => ShowDetail(productModel: ,),

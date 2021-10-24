@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class NotiUser extends StatefulWidget {
   @override
@@ -29,33 +28,7 @@ class _NotiUserState extends State<NotiUser> {
         ),
         body: Container(
           child: ListView(
-            children: <Widget>[
-              Card(
-                margin: EdgeInsets.all(20),
-                shadowColor: Colors.red,
-                elevation: 15,
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text('ผู้ติดเชื้อใหม่'),
-                      subtitle: Text('+ ${'dataFromApi?.newConfirmed'}'),
-                    ),
-                    ListTile(
-                      title: Text('หายป่วยกลับบ้าน'),
-                      subtitle: Text('${'dataFromApi?.newRecovered'}'),
-                    ),
-                    ListTile(
-                      title: Text('เสียชีวิต'),
-                      subtitle: Text('${'dataFromApi?.newDeaths'}'),
-                    ),
-                    ListTile(
-                      title: Text('ข้อมูลวันที่'),
-                      subtitle: Text('${'dataFromApi?.updateDate'}'),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            children: <Widget>[],
           ),
         ));
   }

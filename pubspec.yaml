@@ -41,6 +41,8 @@ dependencies:
   pie_chart: ^5.0.0
   flutter_datetime_picker: ^1.5.1
   encrypt: ^5.0.1
+  intl: ^0.16.0
+  
  
   
 

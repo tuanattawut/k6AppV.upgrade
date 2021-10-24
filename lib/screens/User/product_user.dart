@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
@@ -29,19 +30,17 @@ class _ProductListUserState extends State<ProductListUser> {
   bool? status = true;
   bool? loadC = true;
   String? name, id, idproducts, clickid;
-
   List idproduct = [];
-  List<ProductModel> recentlyModels = [];
   List<CategoryModel> categoryList = [];
   List productList = [];
   String? idproductRec, iduserRec;
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
 
   @override
   void initState() {
     super.initState();
     userModel = widget.usermodel;
     getData();
-    // getRecently();
     getCategory();
     getPromotion();
   }
@@ -53,9 +52,7 @@ class _ProductListUserState extends State<ProductListUser> {
       status = true;
       productModels.clear();
     }
-
     String api = '${MyConstant().domain}/api/getProduct.php';
-
     await Dio().get(api).then((value) {
       setState(() {
         loadStatus = false;
@@ -82,7 +79,6 @@ class _ProductListUserState extends State<ProductListUser> {
 
   var viewList = [];
   String? pid, vid;
-
   Future<Null> getRecom() async {
     iduserRec = userModel!.idUser;
 
@@ -106,43 +102,16 @@ class _ProductListUserState extends State<ProductListUser> {
                     : current);
         if (greatestView['id_products'] != null) {
           pid = greatestView['id_products'] as String;
-          print(greatestView['view']);
+          // print(greatestView['view']);
           getProductRec();
         } else {
           print('NULL');
         }
       }
     }
-
-    // await Dio().get(api).then((value) {
-    //   if (value.toString() != 'null' && value != 'null') {
-    //     for (var items in json.decode(value.data)) {
-    //       //s print(items);
-    //       setState(() {
-    //         viewList.add(items);
-    //       });
-    //       Map<String, dynamic> greatestView = viewList.fold(
-    //           {},
-    //           (previous, current) => previous['view'] == null
-    //               ? current
-    //               : int.parse(previous['view']!) >= int.parse(current['view']!)
-    //                   ? previous
-    //                   : current);
-
-    //       setState(() {
-    //         pid = greatestView['id_products'];
-
-    //         if (pid!.length == 1) {
-    //           print(pid);
-    //           getProductRec();
-    //         }
-    //       });
-    //     }
-    //   }
-    // });
   }
 
-  List<ProductModel> productRecList = [];
+  ProductModel? productRecList;
   Future<Null> getProductRec() async {
     String api =
         '${MyConstant().domain}/api/getproductfromidProduct.php?isAdd=true&id_products=$pid';
@@ -152,7 +121,30 @@ class _ProductListUserState extends State<ProductListUser> {
         for (var item in json.decode(value.data)) {
           ProductModel productRecLists = ProductModel.fromMap(item);
           setState(() {
-            productRecList.add(productRecLists);
+            productRecList = productRecLists;
+            // print(productRecList!.idSubcategory);
+            getProductRecs();
+          });
+        }
+      } else {
+        // print('Error getdataRecently');
+        CircularProgressIndicator();
+      }
+    });
+  }
+
+  List<ProductModel> productRecLists = [];
+  Future<Null> getProductRecs() async {
+    String? idsub = productRecList!.idSubcategory;
+    String api =
+        '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
+
+    await Dio().get(api).then((value) {
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          ProductModel productRecLists2 = ProductModel.fromMap(item);
+          setState(() {
+            productRecLists.add(productRecLists2);
             //print(productRecList);
           });
         }
@@ -177,65 +169,6 @@ class _ProductListUserState extends State<ProductListUser> {
       }
     } catch (e) {}
   }
-
-//เก็บข้อมูลการกดเข้าดู
-  // Future<Null> addRecently() async {
-  //   String iduser = userModel!.idUser;
-  //   String url =
-  //       '${MyConstant().domain}/api/addRecently.php?isAdd=true&id_user=$iduser&id_product=$id';
-  //   try {
-  //     Response response = await Dio().get(url);
-  //     // print('res = $response');
-  //     if (response.toString() == 'true') {
-  //     } else {
-  //       normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
-  //     }
-  //   } catch (e) {}
-  // }
-
-//เรียกข้อมูลการดูล่าสุด
-  // Future<Null> getRecently() async {
-  //   String iduser = userModel!.idUser;
-  //   String api =
-  //       '${MyConstant().domain}/api/getDataRecently.php?isAdd=true&id_user=$iduser';
-  //   await Dio().get(api).then((value) {
-  //     if (value.toString() != 'null') {
-  //       for (var item in json.decode(value.data)) {
-  //         idproduct.add(item);
-  //         setState(() {
-  //           idproduct.map((list) {
-  //             idproducts = list['id_product'];
-  //           }).toList();
-  //           // print(idproducts);
-  //           getdataRecently();
-  //         });
-  //       }
-  //     } else {
-  //       //print('Error getRecently');
-  //       CircularProgressIndicator();
-  //     }
-  //   });
-  // }
-
-//เก็บข้อมูลการดูล่าสุด
-  // Future<Null> getdataRecently() async {
-  //   String api =
-  //       '${MyConstant().domain}/api/getProductWhereid.php?isAdd=true&id_product=$idproducts';
-  //   // print(api);
-  //   await Dio().get(api).then((value) {
-  //     if (value.toString() != 'null') {
-  //       for (var item in json.decode(value.data)) {
-  //         ProductModel recentlyModel = ProductModel.fromMap(item);
-  //         setState(() {
-  //           recentlyModels.add(recentlyModel);
-  //         });
-  //       }
-  //     } else {
-  //       // print('Error getdataRecently');
-  //       CircularProgressIndicator();
-  //     }
-  //   });
-  // }
 
   Future<Null> getCategory() async {
     if (categoryList.length != 0) {
@@ -328,7 +261,10 @@ class _ProductListUserState extends State<ProductListUser> {
                     'สินค้าแนะนำ',
                     () {
                       MaterialPageRoute route = MaterialPageRoute(
-                        builder: (value) => PromoteUser(),
+                        builder: (value) => PromoteUser(
+                          userModel: userModel!,
+                          productModel: productRecList!,
+                        ),
                       );
                       Navigator.of(context).push(route);
                     },
@@ -339,33 +275,12 @@ class _ProductListUserState extends State<ProductListUser> {
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      itemCount: productRecList.length,
+                      itemCount: productRecLists.length,
                       itemBuilder: (BuildContext context, int index) =>
                           showListView(index),
                     ),
                   ),
                 ])),
-            // Card(
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(20),
-            //     ),
-            //     child: Column(children: [
-            //       _buildSectiontitle(
-            //         'ดูอีกครั้ง',
-            //         () {},
-            //       ),
-            //       SizedBox(
-            //         height: 250,
-            //         child: ListView.builder(
-            //           physics: ClampingScrollPhysics(),
-            //           shrinkWrap: true,
-            //           scrollDirection: Axis.horizontal,
-            //           itemCount: recentlyModels.length,
-            //           itemBuilder: (BuildContext context, int index) =>
-            //               showRecentlyView(index),
-            //         ),
-            //       ),
-            //     ])),
             Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -375,7 +290,9 @@ class _ProductListUserState extends State<ProductListUser> {
                     'สินค้าทั้งหมด',
                     () {
                       MaterialPageRoute route = MaterialPageRoute(
-                        builder: (value) => ProductAll(),
+                        builder: (value) => ProductAll(
+                          userModel: userModel!,
+                        ),
                       );
                       Navigator.of(context).push(route);
                     },
@@ -389,7 +306,7 @@ class _ProductListUserState extends State<ProductListUser> {
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           children: List.generate(
-                            productModels.length,
+                            10,
                             (index) {
                               return showAllview(index);
                             },
@@ -433,7 +350,7 @@ class _ProductListUserState extends State<ProductListUser> {
               Container(
                 padding: EdgeInsets.only(top: 5),
                 child: Text(
-                  categoryList[index].namecategory as String,
+                  categoryList[index].namecategory.toString(),
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -444,72 +361,8 @@ class _ProductListUserState extends State<ProductListUser> {
     );
   }
 
-  Widget showRecentlyView(int index) {
-    String string = '${recentlyModels[index].nameproduct}';
-    if (string.length > 10) {
-      string = string.substring(0, 10);
-      string = '$string ...';
-    }
-    return Container(
-        margin: EdgeInsets.only(
-          left: 10,
-          right: 10,
-          top: 10,
-          bottom: 10,
-        ),
-        child: GestureDetector(
-            onTap: () {
-              print(string);
-            },
-            child: Column(children: <Widget>[
-              Container(
-                height: 150,
-                width: 150,
-                child: Image.network(
-                  '${MyConstant().domain}/upload/product/${recentlyModels[index].image}',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                width: 150,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 10),
-                      blurRadius: 50,
-                      color: Colors.grey.withOpacity(0.2),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        string,
-                        style: Theme.of(context)
-                            .textTheme
-                            .button!
-                            .copyWith(color: Colors.black, fontSize: 20),
-                      ),
-                      Text(
-                        ' \฿ ${recentlyModels[index].price}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .button!
-                            .copyWith(color: Colors.red, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ])));
-  }
-
   Widget showListView(int index) {
-    String string = '${productRecList[index].nameproduct}';
+    String string = '${productRecLists[index].nameproduct}';
     if (string.length > 10) {
       string = string.substring(0, 10);
       string = '$string ...';
@@ -523,11 +376,11 @@ class _ProductListUserState extends State<ProductListUser> {
         ),
         child: GestureDetector(
             onTap: () {
-              clickid = productRecList[index].idProduct;
+              clickid = productRecLists[index].idProduct;
               addData();
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ShowDetail(
-                  productModel: productRecList[index],
+                  productModel: productRecLists[index],
                   userModel: userModel!,
                 ),
               );
@@ -538,7 +391,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/product/${productRecList[index].image}',
+                  '${MyConstant().domain}/upload/product/${productRecLists[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -567,7 +420,7 @@ class _ProductListUserState extends State<ProductListUser> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        ' \฿ ${productRecList[index].price}',
+                        f.format(int.parse(productRecLists[index].price)),
                         style: Theme.of(context)
                             .textTheme
                             .button!
@@ -598,7 +451,6 @@ class _ProductListUserState extends State<ProductListUser> {
             clickid = productModels[index].idProduct;
             addData();
             // print(clickid);
-            // addRecently();
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
@@ -641,7 +493,7 @@ class _ProductListUserState extends State<ProductListUser> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      ' \฿ ${productModels[index].price}',
+                      f.format(int.parse(productModels[index].price)),
                       style: Theme.of(context)
                           .textTheme
                           .button!
@@ -663,8 +515,8 @@ class _ProductListUserState extends State<ProductListUser> {
         for (var item in json.decode(value.data)) {
           pathImages.add(item);
           setState(() {
-            pathImages.map((list) {
-              promotion = list['imgUrl'];
+            pathImages.map((prolist) {
+              promotion = prolist['imgUrl'];
             }).toList();
           });
           buildWidgets();
