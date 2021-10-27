@@ -77,14 +77,11 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
-  var viewList = [];
   String? pid, vid;
   Future<Null> getRecom() async {
     iduserRec = userModel!.idUser;
-
     // print('p_id => $idproductRec');
     //print('u_id =>$iduserRec');
-
     String api =
         '${MyConstant().domain}/api/reC.php?isAdd=true&id_products=$idproductRec&id_user=$iduserRec';
 
@@ -101,9 +98,9 @@ class _ProductListUserState extends State<ProductListUser> {
                     ? previous
                     : current);
         if (greatestView['id_products'] != null) {
-          pid = greatestView['id_products'] as String;
+          pid = greatestView['id_products'].toString();
           // print(greatestView['view']);
-          getProductRec();
+          return getProductRec();
         } else {
           print('NULL');
         }

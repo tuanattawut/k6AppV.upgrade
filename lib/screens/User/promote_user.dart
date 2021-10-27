@@ -164,9 +164,7 @@ class _PromoteUserState extends State<PromoteUser> {
     return GestureDetector(
       onTap: () {
         clickid = productRecList[index].idProduct;
-        addData();
-        // print(clickid);
-        // addRecently();
+        addData();   
         MaterialPageRoute route = MaterialPageRoute(
           builder: (value) => ShowDetail(
             productModel: productRecList[index],

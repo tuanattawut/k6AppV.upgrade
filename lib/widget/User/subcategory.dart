@@ -50,66 +50,33 @@ class _SubcategoryState extends State<Subcategory> {
       appBar: AppBar(
         title: Text(categoryModels!.namecategory.toString()),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 20, bottom: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 3,
-              children: List.generate(
-                subcategoryItemList.length,
-                (index) => showCategory(index),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget showCategory(int index) {
-    // String string = '${categoryList[index].namecategory}';
-    // if (string.length > 10) {
-    //   string = string.substring(0, 10);
-    //   string = '$string...';
-    // }
-
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      child: GestureDetector(
-          onTap: () {
-            MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => CategoryProduct(
-                      subcategoryModel: subcategoryItemList[index],
-                      userModel: userModel!,
-                    ));
-            Navigator.of(context).push(route);
-          },
-          child: Column(
-            children: <Widget>[
-              // Container(
-              //   height: 60,
-              //   width: 60,
-              //   child: Image.network(
-              //     '${MyConstant().domain}/upload/categories/${subcategoryItemList[index].image}',
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
-              Container(
-                padding: EdgeInsets.only(top: 5),
-                child: Text(
-                  subcategoryItemList[index].namesubcategory.toString(),
-                  style: TextStyle(
-                    fontSize: 16,
+      body: Container(
+        child: ListView.builder(
+            itemCount: subcategoryItemList.length,
+            itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.all(8),
+                  child: ListTile(
+                    onTap: () {
+                      MaterialPageRoute route = MaterialPageRoute(
+                          builder: (value) => CategoryProduct(
+                                subcategoryModel: subcategoryItemList[index],
+                                userModel: userModel!,
+                              ));
+                      Navigator.of(context).push(route);
+                    },
+                    title: Text(
+                      subcategoryItemList[index].namesubcategory.toString(),
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                    ),
                   ),
-                ),
-              ),
-            ],
-          )),
+                )),
+      ),
     );
   }
 }

@@ -110,11 +110,14 @@ class _RegisterPageState extends State<RegisterPage> {
           normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
         } else if (email == null || email!.isEmpty || !email!.contains('@')) {
           normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
-        } else if (file == null) {
-          normalDialog(context, 'โปรดใส่รูปภาพ');
-        } else {
+        }
+        // else if (file == null) {
+        //   normalDialog(context, 'โปรดใส่รูปภาพ');
+        // }
+        else {
           showLoade(context);
-          uploadImage();
+          //uploadImage();
+          checkUser();
         }
       },
     );

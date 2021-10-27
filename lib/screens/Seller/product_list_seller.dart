@@ -6,6 +6,7 @@ import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/screens/Seller/add_product_seller.dart';
+import 'package:k6_app/screens/Seller/edit_product_seller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
@@ -179,7 +180,14 @@ class _ProductListSellerState extends State<ProductListSeller> {
                                 Icons.edit,
                                 color: Colors.green,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                MaterialPageRoute route = MaterialPageRoute(
+                                  builder: (value) => EditProduct(
+                                    productModel: productModels[index],
+                                  ),
+                                );
+                                Navigator.of(context).push(route);
+                              },
                             ),
                             IconButton(
                               icon: Icon(
