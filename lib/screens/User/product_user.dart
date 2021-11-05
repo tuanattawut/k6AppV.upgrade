@@ -403,7 +403,7 @@ class _ProductListUserState extends State<ProductListUser> {
                     ),
                   ],
                 ),
-                width: 150,
+                width: 200,
                 child: Padding(
                   padding: EdgeInsets.all(5),
                   child: Column(

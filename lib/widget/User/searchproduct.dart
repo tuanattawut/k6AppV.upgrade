@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 
 class SearchProduct extends StatefulWidget {
   const SearchProduct({required this.idproduct, required this.userModel});
@@ -16,11 +18,12 @@ class SearchProduct extends StatefulWidget {
 }
 
 class _SearchProductState extends State<SearchProduct> {
-  String? idproduct;
+  String? idproduct, clickid;
   bool? loadStatus = true;
   bool? status = true;
   List<ProductModel> productModels = [];
   UserModel? userModel;
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,20 @@ class _SearchProductState extends State<SearchProduct> {
       //print(idproduct);
       getProduct();
     });
+  }
+
+  Future<Null> addData() async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      // print('res = $response');
+      if (response.toString() == 'true') {
+      } else {
+        normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {}
   }
 
   Future<Null> getProduct() async {
@@ -98,7 +115,8 @@ class _SearchProductState extends State<SearchProduct> {
       ),
       child: GestureDetector(
           onTap: () async {
-            // addRecently();
+            clickid = productModels[index].idProduct;
+            addData();
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
@@ -106,20 +124,6 @@ class _SearchProductState extends State<SearchProduct> {
               ),
             );
             Navigator.of(context).push(route);
-
-            // dataId.add(id);
-            // dataName.add(name);
-
-            // if (dataName.length < 4) {
-            //   print('data == >>> $dataName');
-            //   if (dataName.length == 3) {
-            //     //  addData();
-            //     print('data add ===>> $dataId');
-            //   }
-            // } else {
-            //   dataName.clear();
-            //   dataId.clear();
-            // }
           },
           child: Column(children: <Widget>[
             Container(
@@ -155,7 +159,7 @@ class _SearchProductState extends State<SearchProduct> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      ' ${productModels[index].price} \บาท',
+                      f.format(int.parse(productModels[index].price)),
                       style: Theme.of(context)
                           .textTheme
                           .button!

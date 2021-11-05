@@ -1,40 +1,58 @@
 import 'dart:convert';
 
 class ChatModel {
-  final String manatitle;
-  final String datetime;
+  final String idchat;
   final String message;
+  final String iduser;
+  final String idseller;
+  final String status;
+  final String regdate;
   ChatModel({
-    required this.manatitle,
-    required this.datetime,
+    required this.idchat,
     required this.message,
+    required this.iduser,
+    required this.idseller,
+    required this.status,
+    required this.regdate,
   });
 
   ChatModel copyWith({
-    String? manatitle,
-    String? datetime,
+    String? idchat,
     String? message,
+    String? iduser,
+    String? idseller,
+    String? status,
+    String? regdate,
   }) {
     return ChatModel(
-      manatitle: manatitle ?? this.manatitle,
-      datetime: datetime ?? this.datetime,
+      idchat: idchat ?? this.idchat,
       message: message ?? this.message,
+      iduser: iduser ?? this.iduser,
+      idseller: idseller ?? this.idseller,
+      status: status ?? this.status,
+      regdate: regdate ?? this.regdate,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'manatitle': manatitle,
-      'datetime': datetime,
+      'id_chat': idchat,
       'message': message,
+      'id_user': iduser,
+      'id_seller': idseller,
+      'status': status,
+      'regdate': regdate,
     };
   }
 
   factory ChatModel.fromMap(Map<String, dynamic> map) {
     return ChatModel(
-      manatitle: map['manatitle'],
-      datetime: map['datetime'],
+      idchat: map['id_chat'],
       message: map['message'],
+      iduser: map['id_user'],
+      idseller: map['id_seller'],
+      status: map['status'],
+      regdate: map['regdate'],
     );
   }
 
@@ -44,57 +62,30 @@ class ChatModel {
       ChatModel.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'ChatModel(manatitle: $manatitle, datetime: $datetime, message: $message)';
+  String toString() {
+    return 'ChatModel(id_chat: $idchat, message: $message, id_user: $iduser, id_seller: $idseller, status: $status, regdate: $regdate)';
+  }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is ChatModel &&
-        other.manatitle == manatitle &&
-        other.datetime == datetime &&
-        other.message == message;
+        other.idchat == idchat &&
+        other.message == message &&
+        other.iduser == iduser &&
+        other.idseller == idseller &&
+        other.status == status &&
+        other.regdate == regdate;
   }
 
   @override
-  int get hashCode => manatitle.hashCode ^ datetime.hashCode ^ message.hashCode;
-
-  static final List<ChatModel> dummyData = [
-    ChatModel(
-      manatitle: "อะไรครับเนี่ย",
-      datetime: "2021-05-27  08:15",
-      message: "อยู่ที่ไหนนนนนนนนนนนนนนนนนนนนนนนนน",
-    ),
-    ChatModel(
-      manatitle: "ติดต่อหน่อยงับ",
-      datetime: "2021-05-28  20:18",
-      message: "คุณช่วยฉันได้ไหม",
-    ),
-    ChatModel(
-      manatitle: "เฮลโล่ฮาวอายู",
-      datetime: "2021-05-29  19:22",
-      message: "ห้องน้ำไปทางไหน!",
-    ),
-    ChatModel(
-      manatitle: "สวัสดีครับ 1 ",
-      datetime: "2021-05-30  14:34",
-      message: "ฉันลืมของช่วยหาหน่อย",
-    ),
-    ChatModel(
-      manatitle: "สวัสดีครับ 2 ",
-      datetime: "2021-05-31  11:05",
-      message: "หาเจอยัง",
-    ),
-    ChatModel(
-      manatitle: "สวัสดีครับ 3 ",
-      datetime: "2021-06-01  09:46",
-      message: "หาให้อีกทีเผื่อเจอนะ",
-    ),
-    ChatModel(
-      manatitle: "สวัสดีครับ 4 ",
-      datetime: "2021-06-02  08:15",
-      message: "เจอแล้วครับ ไม่ได้เอาไป",
-    ),
-  ];
+  int get hashCode {
+    return idchat.hashCode ^
+        message.hashCode ^
+        iduser.hashCode ^
+        idseller.hashCode ^
+        status.hashCode ^
+        regdate.hashCode;
+  }
 }

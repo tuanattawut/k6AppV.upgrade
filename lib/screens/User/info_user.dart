@@ -65,7 +65,7 @@ class _InformationUserState extends State<InformationUser> {
           ),
           ElevatedButton.icon(
             label: Text('ติดต่อผู้จัดการ'),
-            icon: Icon(Icons.manage_accounts),
+            icon: Icon(Icons.chat),
             onPressed: () {
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ChatmanaUser(),

@@ -48,9 +48,8 @@ class _ShowChatmanaState extends State<ShowChatmana> {
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: ChatModel.dummyData.length,
+            itemCount: 1,
             itemBuilder: (context, index) {
-              ChatModel _model = ChatModel.dummyData[index];
               return Column(
                 children: <Widget>[
                   Divider(
@@ -59,7 +58,7 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                   GestureDetector(
                     onTap: () {
                       final snackBar = SnackBar(
-                        content: Text('คุณคลิกหัวข้อ ${_model.manatitle}'),
+                        content: Text('คุณคลิกหัวข้อ ${'_model.manatitle'}'),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     },
@@ -70,17 +69,17 @@ class _ShowChatmanaState extends State<ShowChatmana> {
                           flex: 1,
                           child: Center(
                             child: Text(
-                              _model.manatitle,
+                              '_model.manatitle',
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: Center(child: Text(_model.message)),
+                          child: Center(child: Text('_model.message')),
                         ),
                         Expanded(
                           flex: 1,
-                          child: Center(child: Text(_model.datetime)),
+                          child: Center(child: Text('_model.datetime')),
                         ),
                       ],
                     ),

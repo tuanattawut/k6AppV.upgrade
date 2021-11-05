@@ -30,7 +30,7 @@ class _PromoteUserState extends State<PromoteUser> {
     userModel = widget.userModel;
     productModel = widget.productModel;
     getProductRecs();
-    // print(productModel!.idSubcategory);
+    print(productModel!.idSubcategory);
   }
 
   Future<Null> addData() async {

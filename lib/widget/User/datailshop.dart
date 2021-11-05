@@ -3,12 +3,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
+import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/widget/User/chatpage.dart';
 
 class DetailShop extends StatefulWidget {
   final ShopModel shopModel;
-  DetailShop({required this.shopModel});
+  final UserModel userModel;
+  DetailShop({required this.shopModel, required this.userModel});
 
   @override
   _DetailShopState createState() => _DetailShopState();
@@ -18,11 +21,13 @@ class _DetailShopState extends State<DetailShop> {
   ShopModel? shopModels;
   String? idSeller;
   SellerModel? sellerModel;
+  UserModel? userModel;
   @override
   void initState() {
     super.initState();
     setState(() {
       shopModels = widget.shopModel;
+      userModel = widget.userModel;
       //print('url ==> ${productModel?.image}');
       readSeller();
     });
@@ -57,11 +62,7 @@ class _DetailShopState extends State<DetailShop> {
                 child:
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                   MyStyle().showTitleH2('รูปผู้ขาย: '),
-                  SizedBox(
-                    height: 300,
-                    width: 300,
-                    child: imageSeller(),
-                  ),
+                  imageSeller(),
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: Row(
@@ -113,6 +114,18 @@ class _DetailShopState extends State<DetailShop> {
                 ]),
               ),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => ChatPage(
+                    sellerModel: sellerModel!,
+                    userModel: userModel!,
+                  ));
+          Navigator.of(context).push(route);
+        },
+        child: const Icon(Icons.chat),
+        backgroundColor: Colors.blue,
+      ),
     );
   }
 
@@ -127,12 +140,18 @@ class _DetailShopState extends State<DetailShop> {
   }
 
   Widget imageSeller() {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Image.network(
+    return Center(
+      child: CircleAvatar(
+        radius: 100,
+        child: ClipOval(
+            child: Image.network(
           '${MyConstant().domain}/upload/seller/${sellerModel!.image}',
-          fit: BoxFit.contain,
-        ));
+          width: 150,
+          height: 150,
+          fit: BoxFit.cover,
+        )),
+        backgroundColor: Colors.transparent,
+      ),
+    );
   }
 }

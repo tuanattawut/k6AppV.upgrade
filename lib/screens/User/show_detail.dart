@@ -99,7 +99,10 @@ class _ShowDetailState extends State<ShowDetail> {
               ),
               shopModels == null
                   ? MyStyle().showProgress()
-                  : DetailShop(shopModel: shopModels!),
+                  : DetailShop(
+                      shopModel: shopModels!,
+                      userModel: userModel!,
+                    ),
               shopModels == null
                   ? MyStyle().showProgress()
                   : Padding(
