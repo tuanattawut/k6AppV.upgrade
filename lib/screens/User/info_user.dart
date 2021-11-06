@@ -68,7 +68,7 @@ class _InformationUserState extends State<InformationUser> {
             icon: Icon(Icons.chat),
             onPressed: () {
               MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ChatmanaUser(),
+                builder: (value) => ChatmanaUser(usermodel: userModel!),
               );
               Navigator.of(context).push(route);
             },
@@ -119,7 +119,7 @@ class _InformationUserState extends State<InformationUser> {
             ),
             Text(
               titleH2,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),

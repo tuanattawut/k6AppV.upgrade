@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:k6_app/screens/Manager/main_manager.dart';
 import 'package:k6_app/screens/login.dart';
 import 'package:k6_app/screens/register.dart';

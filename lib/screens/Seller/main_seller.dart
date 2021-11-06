@@ -126,7 +126,9 @@ class _HomesellerState extends State<Homeseller> {
                           title: 'แชท',
                           icon: Icons.chat,
                           color: Colors.blue,
-                          route: ChatSeller()),
+                          route: ChatSeller(
+                            sellerModel: sellerModel!,
+                          )),
                     ],
                   ),
                 ),

@@ -2,27 +2,26 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:k6_app/models/chat_models.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
-class ChatPage extends StatefulWidget {
-  ChatPage({required this.userModel, required this.sellerModel});
+class ChatpageSeller extends StatefulWidget {
+  ChatpageSeller({required this.userModel, required this.sellerModel});
   final UserModel userModel;
   final SellerModel sellerModel;
+
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _ChatpageSellerState createState() => _ChatpageSellerState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatpageSellerState extends State<ChatpageSeller> {
   SellerModel? sellerModel;
   UserModel? userModel;
   String? idUser, idSeller, message;
   bool? check;
-  final df = new DateFormat('dd/MM H:mm น.');
   String? date(DateTime tm) {
     DateTime today = new DateTime.now();
     Duration oneDay = new Duration(days: 1);
@@ -154,13 +153,13 @@ class _ChatPageState extends State<ChatPage> {
                               padding: EdgeInsets.only(
                                   left: 14, right: 14, top: 10, bottom: 10),
                               child: Align(
-                                alignment: (chatlist[index].status == 'seller'
+                                alignment: (chatlist[index].status == 'user'
                                     ? Alignment.topLeft
                                     : Alignment.topRight),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: (chatlist[index].status == 'seller'
+                                    color: (chatlist[index].status == 'user'
                                         ? Colors.grey.shade200
                                         : Colors.blue[200]),
                                   ),
@@ -219,7 +218,7 @@ class _ChatPageState extends State<ChatPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                sellerModel!.firstname + '  ' + sellerModel!.lastname,
+                userModel!.firstname + '  ' + userModel!.lastname,
                 style: TextStyle(fontSize: 16),
               ),
             ],
@@ -293,7 +292,7 @@ class _ChatPageState extends State<ChatPage> {
   Future<Null> sendChat() async {
     idSeller = sellerModel!.idSeller;
     idUser = userModel!.idUser;
-    String status = 'user';
+    String status = 'seller';
     String url =
         '${MyConstant().domain}/api/addChat.php?isAdd=true&message=$message&id_user=$idUser&id_seller=$idSeller&status=$status';
 

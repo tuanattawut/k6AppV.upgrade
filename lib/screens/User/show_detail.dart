@@ -132,7 +132,7 @@ class _ShowDetailState extends State<ShowDetail> {
     LatLng latLong = LatLng(lat, long);
     CameraPosition position = CameraPosition(
       target: latLong,
-      zoom: 16,
+      zoom: 18,
     );
 
     return Container(

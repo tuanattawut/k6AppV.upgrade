@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:k6_app/screens/Seller/loginseller.dart';
 import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -161,7 +162,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
-        //add_info_seller.dart print('Response ===>>> $value');
+        //print('Response ===>>> $value');
         image = '$nameImage';
         //print('urlImage = $image');
         showLoade(context);
@@ -195,8 +196,10 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
       if (response.toString() == 'true') {
         normalDialog(context, 'สมัครสำเร็จ');
-
-        Navigator.pushNamed(context, '/');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginSeller()),
+        );
       } else {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }

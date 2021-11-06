@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,7 +34,6 @@ class _EditProductState extends State<EditProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //s floatingActionButton: uploadButton(),
       appBar: AppBar(
         title: Text('แก้ไขสินค้า ${productModel!.nameproduct}'),
       ),
@@ -77,6 +75,29 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
+  // Future<Null> uploadImage() async {
+  //   Random random = Random();
+  //   int i = random.nextInt(1000000);
+  //   String nameImage = 'product_$i.jpg';
+  //   //print('nameImage = $nameImage, pathImage = ${file!.path}');
+
+  //   String url = '${MyConstant().domain}/upload/saveImageProduct.php';
+
+  //   try {
+  //     Map<String, dynamic> map = Map();
+  //     map['file'] =
+  //         await MultipartFile.fromFile(file!.path, filename: nameImage);
+
+  //     FormData formData = FormData.fromMap(map);
+  //     await Dio().post(url, data: formData).then((value) async {
+  //       // print('Response ===>>> $value');
+  //       image = '$nameImage';
+  //       // print('urlImage = $image');
+  //       await editValueOnMySQL();
+  //     });
+  //   } catch (e) {}
+  // }
+
   Future<Null> confirmEdit() async {
     showDialog(
       context: context,
@@ -88,7 +109,7 @@ class _EditProductState extends State<EditProduct> {
               TextButton.icon(
                 onPressed: () {
                   Navigator.pop(context);
-                  //editValueOnMySQL();
+                  editValueOnMySQL();
                 },
                 icon: Icon(
                   Icons.check,
@@ -111,18 +132,18 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
-  // Future<Null> editValueOnMySQL() async {
-  //   String id = foodModel.id;
-  //   String url =
-  //       '${MyConstant().domain}/UngFood/editFoodWhereId.php?isAdd=true&id=$id&NameFood=$name&PathImage=$pathImage&Price=$price&Detail=$detail';
-  //   await Dio().get(url).then((value) {
-  //     if (value.toString() == 'true') {
-  //       Navigator.pop(context);
-  //     } else {
-  //       normalDialog(context, 'กรุณาลองใหม่ มีอะไร ? ผิดพลาด');
-  //     }
-  //   });
-  // }
+  Future<Null> editValueOnMySQL() async {
+    String id = productModel!.idProduct;
+    String url =
+        '${MyConstant().domain}/api/editProduct.php?isAdd=true&nameproduct=$nameProduct&detail=$detail&price=$price&id_products=$id';
+    await Dio().get(url).then((value) {
+      if (value.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'กรุณาลองใหม่ มีอะไร ? ผิดพลาด');
+      }
+    });
+  }
 
   Column groupImage() {
     return Column(
