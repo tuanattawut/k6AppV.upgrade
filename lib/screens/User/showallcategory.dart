@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/widget/User/subcategory.dart';
 
@@ -46,6 +47,15 @@ class _ShowallCategoryState extends State<ShowallCategory> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('หมวดหมู่')),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => Homepage(
+                  usermodel: userModel!,
+                ),
+              ));
+            },
+            icon: Icon(Icons.home)),
       ),
       body: Container(
         child: ListView.builder(

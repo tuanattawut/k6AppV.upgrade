@@ -6,6 +6,7 @@ import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:k6_app/widget/User/chatpage.dart';
 
 class DetailShop extends StatefulWidget {
@@ -19,9 +20,10 @@ class DetailShop extends StatefulWidget {
 
 class _DetailShopState extends State<DetailShop> {
   ShopModel? shopModels;
-  String? idSeller;
+  String? idSeller, idUser, name;
   SellerModel? sellerModel;
   UserModel? userModel;
+
   @override
   void initState() {
     super.initState();
@@ -30,12 +32,14 @@ class _DetailShopState extends State<DetailShop> {
       userModel = widget.userModel;
       //print('url ==> ${productModel?.image}');
       readSeller();
+
+      idSeller = shopModels!.idSeller;
+      idUser = userModel!.idUser;
     });
   }
 
   Future<Null> readSeller() async {
-    idSeller = shopModels?.idSeller;
-    // print(idSeller);
+    idSeller = shopModels!.idSeller;
     String url =
         '${MyConstant().domain}/api/getSellerfromidSeller.php?isAdd=true&id_seller=$idSeller';
     Response response = await Dio().get(url);
@@ -47,6 +51,7 @@ class _DetailShopState extends State<DetailShop> {
     for (var map in result) {
       setState(() {
         sellerModel = SellerModel.fromMap(map);
+        name = sellerModel!.firstname;
       });
     }
   }
@@ -63,6 +68,20 @@ class _DetailShopState extends State<DetailShop> {
                     Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                   MyStyle().showTitleH2('รูปผู้ขาย: '),
                   imageSeller(),
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              checkFollow();
+                            },
+                            icon: Icon(Icons.add),
+                            label: Text('ติดตาม'))
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: Row(
@@ -153,5 +172,34 @@ class _DetailShopState extends State<DetailShop> {
         backgroundColor: Colors.transparent,
       ),
     );
+  }
+
+  Future<Null> checkFollow() async {
+    String url =
+        '${MyConstant().domain}/api/checkfollow.php?isAdd=true&id_user=$idUser&id_seller=$idSeller';
+    try {
+      Response response = await Dio().get(url);
+      if (response.toString() == 'null') {
+        addfollow();
+      } else {
+        normalDialog(context, 'ติดตาม $name อยู่แล้ว');
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> addfollow() async {
+    String url =
+        '${MyConstant().domain}/api/addFollow.php?isAdd=true&id_user=$idUser&id_seller=$idSeller';
+
+    try {
+      Response response = await Dio().get(url);
+      //print('res = $response');
+
+      if (response.toString() == 'true') {
+        normalDialog(context, 'ติดตาม $name แล้ว');
+      } else {
+        normalDialog(context, 'ล้มเหลว ลองอีกครั้ง');
+      }
+    } catch (e) {}
   }
 }

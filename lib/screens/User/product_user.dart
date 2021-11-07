@@ -124,7 +124,6 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        // print('Error getdataRecently');
         CircularProgressIndicator();
       }
     });
@@ -146,7 +145,6 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        // print('Error getdataRecently');
         CircularProgressIndicator();
       }
     });
@@ -189,7 +187,6 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        //print('Error getCategory');
         CircularProgressIndicator();
       }
     });
@@ -204,12 +201,11 @@ class _ProductListUserState extends State<ProductListUser> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowSearch(
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => ShowSearch(
                   userModel: userModel!,
                 ),
-              );
-              Navigator.of(context).push(route);
+              ));
             },
           )
         ],
@@ -228,12 +224,12 @@ class _ProductListUserState extends State<ProductListUser> {
                   _buildSectiontitle(
                     'หมวดหมู่',
                     () {
-                      MaterialPageRoute route = MaterialPageRoute(
-                        builder: (value) => ShowallCategory(
+                      Navigator.of(context)
+                          .pushReplacement(new MaterialPageRoute(
+                        builder: (context) => ShowallCategory(
                           userModel: userModel!,
                         ),
-                      );
-                      Navigator.of(context).push(route);
+                      ));
                     },
                   ),
                   SizedBox(
@@ -257,13 +253,13 @@ class _ProductListUserState extends State<ProductListUser> {
                   _buildSectiontitle(
                     'สินค้าแนะนำ',
                     () {
-                      MaterialPageRoute route = MaterialPageRoute(
-                        builder: (value) => PromoteUser(
+                      Navigator.of(context)
+                          .pushReplacement(new MaterialPageRoute(
+                        builder: (context) => PromoteUser(
                           userModel: userModel!,
                           productModel: productRecList!,
                         ),
-                      );
-                      Navigator.of(context).push(route);
+                      ));
                     },
                   ),
                   SizedBox(
@@ -286,12 +282,12 @@ class _ProductListUserState extends State<ProductListUser> {
                   _buildSectiontitle(
                     'สินค้าทั้งหมด',
                     () {
-                      MaterialPageRoute route = MaterialPageRoute(
-                        builder: (value) => ProductAll(
+                      Navigator.of(context)
+                          .pushReplacement(new MaterialPageRoute(
+                        builder: (context) => ProductAll(
                           userModel: userModel!,
                         ),
-                      );
-                      Navigator.of(context).push(route);
+                      ));
                     },
                   ),
                   loadStatus!
@@ -327,12 +323,11 @@ class _ProductListUserState extends State<ProductListUser> {
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: GestureDetector(
           onTap: () {
-            MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => Subcategory(
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => Subcategory(
                       categoryModel: categoryList[index],
                       userModel: userModel!,
-                    ));
-            Navigator.of(context).push(route);
+                    )));
           },
           child: Column(
             children: <Widget>[
@@ -375,13 +370,12 @@ class _ProductListUserState extends State<ProductListUser> {
             onTap: () {
               clickid = productRecLists[index].idProduct;
               addData();
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowDetail(
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => ShowDetail(
                   productModel: productRecLists[index],
                   userModel: userModel!,
                 ),
-              );
-              Navigator.of(context).push(route);
+              ));
             },
             child: Column(children: <Widget>[
               Container(
@@ -448,13 +442,12 @@ class _ProductListUserState extends State<ProductListUser> {
             clickid = productModels[index].idProduct;
             addData();
             // print(clickid);
-            MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) => ShowDetail(
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => ShowDetail(
                 productModel: productModels[index],
                 userModel: userModel!,
               ),
-            );
-            Navigator.of(context).push(route);
+            ));
           },
           child: Column(children: <Widget>[
             Container(
@@ -519,7 +512,6 @@ class _ProductListUserState extends State<ProductListUser> {
           buildWidgets();
         }
       } else {
-        //print('Error getRecently');
         CircularProgressIndicator();
       }
     });

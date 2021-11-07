@@ -6,6 +6,7 @@ import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/widget/User/datailshop.dart';
@@ -83,6 +84,15 @@ class _ShowDetailState extends State<ShowDetail> {
             title: productModel == null
                 ? Text('รายละเอียด')
                 : Text(productModel!.nameproduct),
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                    builder: (context) => Homepage(
+                      usermodel: userModel!,
+                    ),
+                  ));
+                },
+                icon: Icon(Icons.home)),
             bottom: const TabBar(
               tabs: [
                 Tab(text: 'สินค้า'),

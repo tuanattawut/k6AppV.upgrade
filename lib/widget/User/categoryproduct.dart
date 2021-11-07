@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/subcategory_model.dart';
 import 'package:k6_app/models/user_models.dart';
@@ -22,6 +23,7 @@ class _CategoryProductState extends State<CategoryProduct> {
   List<ProductModel> productModels = [];
   bool? check;
   UserModel? userModel;
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
   @override
   void initState() {
     super.initState();
@@ -133,13 +135,12 @@ class _CategoryProductState extends State<CategoryProduct> {
           onTap: () async {
             clickid = productModels[index].idProduct;
             addData();
-            MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) => ShowDetail(
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => ShowDetail(
                 productModel: productModels[index],
                 userModel: userModel!,
               ),
-            );
-            Navigator.of(context).push(route);
+            ));
           },
           child: Column(children: <Widget>[
             Container(
@@ -175,7 +176,7 @@ class _CategoryProductState extends State<CategoryProduct> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      '\฿ ${productModels[index].price} ',
+                      f.format(int.parse(productModels[index].price)),
                       style: Theme.of(context)
                           .textTheme
                           .button!

@@ -18,7 +18,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formstate = GlobalKey<FormState>();
 
-  String? name, lastname, password, email, phone, gender, image;
+  String? name, lastname, password, email, phone, gender, image = 'profile.jpg';
   File? file;
 
   @override

@@ -217,12 +217,11 @@ class _LoginPageState extends State<LoginPage> {
         for (var map in result) {
           UserModel userModel = UserModel.fromMap(map);
           if (generateMd5(password!) == userModel.password) {
-            MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) => Homepage(
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => Homepage(
                 usermodel: userModel,
               ),
-            );
-            Navigator.of(context).push(route);
+            ));
 
             break;
           } else {

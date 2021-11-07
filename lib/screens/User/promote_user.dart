@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -74,6 +75,15 @@ class _PromoteUserState extends State<PromoteUser> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('สินค้าแนะนำ')),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => Homepage(
+                  usermodel: userModel!,
+                ),
+              ));
+            },
+            icon: Icon(Icons.home)),
       ),
       body: Stack(
         children: [
@@ -164,14 +174,14 @@ class _PromoteUserState extends State<PromoteUser> {
     return GestureDetector(
       onTap: () {
         clickid = productRecList[index].idProduct;
-        addData();   
-        MaterialPageRoute route = MaterialPageRoute(
-          builder: (value) => ShowDetail(
+        addData();
+
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (context) => ShowDetail(
             productModel: productRecList[index],
             userModel: userModel!,
           ),
-        );
-        Navigator.of(context).push(route);
+        ));
       },
       child: Container(
         margin: EdgeInsets.only(

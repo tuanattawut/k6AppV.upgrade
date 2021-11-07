@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -80,6 +81,15 @@ class _ProductAllState extends State<ProductAll> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('สินค้าทั้งหมด')),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => Homepage(
+                  usermodel: userModel!,
+                ),
+              ));
+            },
+            icon: Icon(Icons.home)),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),

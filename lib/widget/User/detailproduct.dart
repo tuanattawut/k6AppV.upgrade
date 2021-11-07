@@ -349,13 +349,12 @@ class _DetailProductState extends State<DetailProduct> {
               clickid = productModels[index].idProduct;
               addData();
 
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowDetail(
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => ShowDetail(
                   productModel: productModels[index],
                   userModel: userModel!,
                 ),
-              );
-              Navigator.of(context).push(route);
+              ));
             },
             child: Column(children: <Widget>[
               Container(
@@ -423,13 +422,12 @@ class _DetailProductState extends State<DetailProduct> {
               clickid = productcateLists[index].idProduct;
               addData();
 
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowDetail(
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => ShowDetail(
                   productModel: productcateLists[index],
                   userModel: userModel!,
                 ),
-              );
-              Navigator.of(context).push(route);
+              ));
             },
             child: Column(children: <Widget>[
               Container(
@@ -490,19 +488,6 @@ Widget _buildSectiontitle(String title, [Function()? onTap]) {
                 color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
-        InkWell(
-          onTap: onTap,
-          child: Row(
-            children: [
-              Text('ดูเพิ่มเติม'),
-              Icon(
-                Icons.keyboard_arrow_right,
-                color: Colors.blue,
-                size: 30,
-              ),
-            ],
-          ),
-        ),
       ],
     ),
   );

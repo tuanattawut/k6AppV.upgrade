@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/subcategory_model.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/widget/User/categoryproduct.dart';
 
@@ -49,6 +50,15 @@ class _SubcategoryState extends State<Subcategory> {
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryModels!.namecategory.toString()),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => Homepage(
+                  usermodel: userModel!,
+                ),
+              ));
+            },
+            icon: Icon(Icons.home)),
       ),
       body: Container(
         child: ListView.builder(

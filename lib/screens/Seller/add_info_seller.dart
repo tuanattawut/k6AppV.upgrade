@@ -102,6 +102,14 @@ class _AddInfoShopState extends State<AddInfoShop> {
                 MyStyle().mySizebox(),
                 nameForm(),
                 MyStyle().mySizebox(),
+                Row(
+                  children: [
+                    Text(
+                      '**เลือกตำแหน่งร้านค้า**',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ],
+                ),
                 buildMap(),
                 MyStyle().mySizebox(),
                 saveButton(),

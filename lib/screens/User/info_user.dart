@@ -76,7 +76,7 @@ class _InformationUserState extends State<InformationUser> {
           ElevatedButton(
             child: Text('ออกจากระบบ'),
             onPressed: () {
-              Navigator.pushNamed(context, '/');
+              confirmExit();
             },
           )
         ],
@@ -123,6 +123,43 @@ class _InformationUserState extends State<InformationUser> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<Null> confirmExit() async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text('คุณต้องการออกจากระบบ ?'),
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/", (Route<dynamic> route) => false);
+                },
+                icon: Icon(
+                  Icons.check,
+                  color: Colors.red,
+                ),
+                label: Text('ออกจากระบบ',
+                    style: TextStyle(
+                      color: Colors.red,
+                    )),
+              ),
+              TextButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.blue,
+                ),
+                label: Text('ยกเลิก'),
+              )
+            ],
+          )
+        ],
       ),
     );
   }
