@@ -182,7 +182,7 @@ class _DetailShopState extends State<DetailShop> {
       if (response.toString() == 'null') {
         addfollow();
       } else {
-        normalDialog(context, 'ติดตาม $name อยู่แล้ว');
+        unfollow();
       }
     } catch (e) {}
   }
@@ -197,6 +197,22 @@ class _DetailShopState extends State<DetailShop> {
 
       if (response.toString() == 'true') {
         normalDialog(context, 'ติดตาม $name แล้ว');
+      } else {
+        normalDialog(context, 'ล้มเหลว ลองอีกครั้ง');
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> unfollow() async {
+    String url =
+        '${MyConstant().domain}/api/unFollow.php?isAdd=true&id_user=$idUser&id_seller=$idSeller';
+
+    try {
+      Response response = await Dio().get(url);
+      //print('res = $response');
+
+      if (response.toString() == 'true') {
+        normalDialog(context, 'ยกเลิกติดตาม $name แล้ว');
       } else {
         normalDialog(context, 'ล้มเหลว ลองอีกครั้ง');
       }

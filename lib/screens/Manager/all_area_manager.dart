@@ -3,23 +3,19 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/area_model.dart';
-import 'package:k6_app/models/seller_model.dart';
-import 'package:k6_app/screens/Seller/areadetail_seller.dart';
+import 'package:k6_app/screens/Manager/detailarea.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
-class RentSeller extends StatefulWidget {
-  RentSeller({required this.sellerModel});
-  final SellerModel sellerModel;
+class Allarea extends StatefulWidget {
   @override
-  _RentSellerState createState() => _RentSellerState();
+  _AllareaState createState() => _AllareaState();
 }
 
-class _RentSellerState extends State<RentSeller> {
-  SellerModel? sellerModel;
+class _AllareaState extends State<Allarea> {
+  @override
   void initState() {
     super.initState();
-    sellerModel = widget.sellerModel;
     readArea();
   }
 
@@ -47,7 +43,7 @@ class _RentSellerState extends State<RentSeller> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('เช่าจองแผงขายสินค้า'),
+        title: Text('แผงทั้งหมด'),
       ),
       body: Stack(
         children: <Widget>[
@@ -56,9 +52,9 @@ class _RentSellerState extends State<RentSeller> {
             itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
                   MaterialPageRoute route = MaterialPageRoute(
-                      builder: (value) => DetailareaSeller(
-                          areaModel: areaList[index],
-                          sellerModel: sellerModel!));
+                      builder: (value) => Detailarea(
+                            areaModel: areaList[index],
+                          ));
                   Navigator.of(context).push(route);
                 },
                 child: Card(

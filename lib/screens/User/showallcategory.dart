@@ -77,7 +77,7 @@ class _ShowallCategoryState extends State<ShowallCategory> {
                       width: 50,
                     ),
                     title: Text(
-                      categoryList[index].namecategory as String,
+                      categoryList[index].namecategory.toString(),
                       style: TextStyle(
                         fontSize: 16,
                       ),

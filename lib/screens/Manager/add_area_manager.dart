@@ -5,29 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
-class AddInfoShop extends StatefulWidget {
-  AddInfoShop({required this.sellerModel});
-  final SellerModel sellerModel;
+class Addarea extends StatefulWidget {
   @override
-  _AddInfoShopState createState() => _AddInfoShopState();
+  _AddareaState createState() => _AddareaState();
 }
 
-class _AddInfoShopState extends State<AddInfoShop> {
-  SellerModel? sellerModel;
-  double? lat, lng;
-  String? nameShop, image, idseller;
+class _AddareaState extends State<Addarea> {
+  String? namearea, image, detail, scale, rentalfee;
   File? file;
   List<Marker> myMarker = [];
+  double? lat, lng;
   @override
   void initState() {
     super.initState();
     checkPermission();
-    sellerModel = widget.sellerModel;
   }
 
   Future<Null> checkPermission() async {
@@ -88,7 +83,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('เพิ่มข้อมูลร้านค้า'),
+          title: Text('เพิ่มแผงขายสินค้า'),
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -98,18 +93,25 @@ class _AddInfoShopState extends State<AddInfoShop> {
             child: Column(
               children: <Widget>[
                 MyStyle().mySizebox(),
-                groupImage(),
-                MyStyle().mySizebox(),
                 nameForm(),
+                MyStyle().mySizebox(),
+                detailForm(),
+                MyStyle().mySizebox(),
+                scaleForm(),
+                MyStyle().mySizebox(),
+                priceForm(),
+                MyStyle().mySizebox(),
+                groupImage(),
                 MyStyle().mySizebox(),
                 Row(
                   children: [
                     Text(
-                      '**เลือกตำแหน่งร้านค้าในแผนที่**',
+                      '**เลือกตำแหน่งแผงในแผนที่**',
                       style: TextStyle(color: Colors.red, fontSize: 12),
                     ),
                   ],
                 ),
+                MyStyle().mySizebox(),
                 buildMap(),
                 MyStyle().mySizebox(),
                 saveButton(),
@@ -122,11 +124,44 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
   TextFormField nameForm() {
     return TextFormField(
-      onChanged: (value) => nameShop = value.trim(),
+      onChanged: (value) => namearea = value.trim(),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        labelText: 'ชื่อร้าน',
+        labelText: 'ชื่อแผงร้านค้า',
+      ),
+    );
+  }
+
+  TextFormField detailForm() {
+    return TextFormField(
+      onChanged: (value) => detail = value.trim(),
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'รายละเอียดแผงร้านค้า',
+      ),
+    );
+  }
+
+  TextFormField scaleForm() {
+    return TextFormField(
+      onChanged: (value) => scale = value.trim(),
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        labelText: 'ขนาดแผงร้านค้า',
+      ),
+    );
+  }
+
+  TextFormField priceForm() {
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      onChanged: (value) => rentalfee = value.trim(),
+      decoration: InputDecoration(
+        labelText: 'ราคาค่าเช่าเเผงร้านค้า :',
+        suffixText: 'บาท',
       ),
     );
   }
@@ -136,10 +171,10 @@ class _AddInfoShopState extends State<AddInfoShop> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 200,
-          height: 200,
+          width: 100,
+          height: 100,
           child: file == null
-              ? Image.asset('images/myshop.png')
+              ? Image.asset('images/stall.png')
               : Image.file(file!),
         ),
         Row(
@@ -186,13 +221,13 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
   Widget buildMap() => Container(
         width: double.infinity,
-        height: 300,
+        height: 200,
         child: lat == null
             ? MyStyle().showProgress()
             : GoogleMap(
                 initialCameraPosition: CameraPosition(
                   target: LatLng(lat!, lng!),
-                  zoom: 16,
+                  zoom: 19,
                 ),
                 onMapCreated: (controller) {},
                 markers: Set.from(myMarker),
@@ -217,7 +252,14 @@ class _AddInfoShopState extends State<AddInfoShop> {
     return ElevatedButton(
       child: Text('บันทึกข้อมูล'),
       onPressed: () {
-        if (nameShop == null || nameShop!.isEmpty) {
+        if (namearea == null ||
+            namearea!.isEmpty ||
+            detail == null ||
+            detail!.isEmpty ||
+            scale == null ||
+            scale!.isEmpty ||
+            rentalfee == null ||
+            rentalfee!.isEmpty) {
           normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
@@ -232,10 +274,10 @@ class _AddInfoShopState extends State<AddInfoShop> {
   Future<Null> uploadImage() async {
     Random random = Random();
     int i = random.nextInt(1000000);
-    String nameImage = 'shop_$i.jpg';
+    String nameImage = 'area_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/upload/saveImageShop.php';
+    String url = '${MyConstant().domain}/upload/saveImageArea.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -253,11 +295,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
   }
 
   Future<Null> addSHOP() async {
-    idseller = sellerModel?.idSeller;
-    print(
-        'idseller = $idseller + nameshop = $nameShop + image = $image + lat = $lat + lng = $lng');
     String url =
-        '${MyConstant().domain}/api/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&lng=$lng';
+        '${MyConstant().domain}/api/addArea.php?isAdd=true&namearea=$namearea&image=$image&detail=$detail&scale=$scale&rentalfee=$rentalfee&lat=$lat&lng=$lng';
 
     try {
       Response response = await Dio().get(url);

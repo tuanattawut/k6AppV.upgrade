@@ -93,19 +93,19 @@ class _InformationShopState extends State<InformationShop> {
                 ),
               ],
             ),
-            Row(
-              children: <Widget>[
-                MyStyle().showTitle('ตำแหน่งแผง'),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  'อยู่ระหว่างทดสอบ',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: <Widget>[
+            //     MyStyle().showTitle('ตำแหน่งแผง'),
+            //   ],
+            // ),
+            // Row(
+            //   children: <Widget>[
+            //     Text(
+            //       'อยู่ระหว่างทดสอบ',
+            //       style: TextStyle(fontSize: 18),
+            //     ),
+            //   ],
+            // ),
             Row(
               children: <Widget>[
                 MyStyle().showTitle('เบอร์โทร'),

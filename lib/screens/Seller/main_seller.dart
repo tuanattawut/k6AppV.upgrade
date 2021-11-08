@@ -119,9 +119,9 @@ class _HomesellerState extends State<Homeseller> {
                           )),
                       MyMenu(
                           title: 'เช่าแผงร้านค้า',
-                          icon: Icons.maps_home_work_outlined,
+                          icon: Icons.store_mall_directory,
                           color: Colors.blue,
-                          route: RentSeller()),
+                          route: RentSeller(sellerModel: sellerModel!)),
                       MyMenu(
                           title: 'แชท',
                           icon: Icons.chat,

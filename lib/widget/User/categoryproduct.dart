@@ -79,7 +79,7 @@ class _CategoryProductState extends State<CategoryProduct> {
         title: Center(
             child: subcategoryModels == null
                 ? Text('หมวดหมู่')
-                : Text(subcategoryModels!.namesubcategory as String)),
+                : Text(subcategoryModels!.namesubcategory.toString())),
       ),
       body: check == false
           ? showNotProduct()

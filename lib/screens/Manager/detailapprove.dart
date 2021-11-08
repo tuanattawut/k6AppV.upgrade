@@ -122,7 +122,9 @@ class _DetailApproveState extends State<DetailApprove> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  confirmDelete();
+                },
                 child: Text('ลบผู้ขายรายนี้'),
               ),
             ],
@@ -154,6 +156,36 @@ class _DetailApproveState extends State<DetailApprove> {
           },
         ),
       ],
+    );
+  }
+
+  Future<Null> confirmDelete() async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text('คุณต้องการลบผู้ขายรายนี้ ?'),
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.check,
+                  color: Colors.red,
+                ),
+                label: Text('ยืนยัน', style: TextStyle(color: Colors.red)),
+              ),
+              TextButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.clear, color: Colors.blue),
+                label: Text('ยกเลิก'),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }
