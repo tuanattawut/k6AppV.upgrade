@@ -93,19 +93,6 @@ class _InformationShopState extends State<InformationShop> {
                 ),
               ],
             ),
-            // Row(
-            //   children: <Widget>[
-            //     MyStyle().showTitle('ตำแหน่งแผง'),
-            //   ],
-            // ),
-            // Row(
-            //   children: <Widget>[
-            //     Text(
-            //       'อยู่ระหว่างทดสอบ',
-            //       style: TextStyle(fontSize: 18),
-            //     ),
-            //   ],
-            // ),
             Row(
               children: <Widget>[
                 MyStyle().showTitle('เบอร์โทร'),
@@ -147,7 +134,7 @@ class _InformationShopState extends State<InformationShop> {
     //print('lat = $lat, lng = $long');
 
     LatLng latLng = LatLng(lat, lng);
-    CameraPosition position = CameraPosition(target: latLng, zoom: 15.0);
+    CameraPosition position = CameraPosition(target: latLng, zoom: 19);
 
     return Container(
       height: 250,

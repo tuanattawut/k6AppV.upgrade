@@ -13,8 +13,8 @@ import 'package:k6_app/screens/User/showallproduct.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
-import 'package:k6_app/widget/User/showsearch.dart';
-import 'package:k6_app/widget/User/subcategory.dart';
+import 'package:k6_app/screens/User/showsearch.dart';
+import 'package:k6_app/screens/User/subcategory.dart';
 
 class ProductListUser extends StatefulWidget {
   ProductListUser({required this.usermodel});
@@ -143,6 +143,7 @@ class _ProductListUserState extends State<ProductListUser> {
             productRecLists.add(productRecLists2);
             //print(productRecList);
           });
+          break;
         }
       } else {
         CircularProgressIndicator();

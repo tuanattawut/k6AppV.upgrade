@@ -22,7 +22,6 @@ class _ChatPageState extends State<ChatPage> {
   UserModel? userModel;
   String? idUser, idSeller, message;
   bool? check;
-  final df = new DateFormat('dd/MM H:mm น.');
   String? date(DateTime tm) {
     DateTime today = new DateTime.now();
     Duration oneDay = new Duration(days: 1);

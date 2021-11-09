@@ -7,7 +7,7 @@ import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
-import 'package:k6_app/widget/User/chatpage.dart';
+import 'package:k6_app/screens/User/chatpage.dart';
 
 class DetailShop extends StatefulWidget {
   final ShopModel shopModel;

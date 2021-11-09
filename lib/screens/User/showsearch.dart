@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:http/http.dart' as http;
-import 'package:k6_app/widget/User/searchproduct.dart';
+import 'package:k6_app/screens/User/searchproduct.dart';
 
 class ShowSearch extends StatefulWidget {
   const ShowSearch({required this.userModel});

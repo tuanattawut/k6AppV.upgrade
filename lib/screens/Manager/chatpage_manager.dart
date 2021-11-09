@@ -1,0 +1,312 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:k6_app/models/chatmanagerseller_model.dart';
+import 'package:k6_app/models/manager_model.dart';
+import 'package:k6_app/models/shop_model.dart';
+import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/normal_dialog.dart';
+
+class ChatpageManager extends StatefulWidget {
+  ChatpageManager({required this.managerModel, required this.shopmodel});
+  final ManagerModel managerModel;
+  final ShopModel shopmodel;
+
+  @override
+  _ChatpageManagerState createState() => _ChatpageManagerState();
+}
+
+class _ChatpageManagerState extends State<ChatpageManager> {
+  ManagerModel? managerModel;
+  ShopModel? shopmodel;
+  String? idManager, idSeller, message;
+
+  bool? check;
+  String? date(DateTime tm) {
+    DateTime today = new DateTime.now();
+    Duration oneDay = new Duration(days: 1);
+    Duration twoDay = new Duration(days: 2);
+    Duration oneWeek = new Duration(days: 7);
+    String? month;
+    switch (tm.month) {
+      case 1:
+        month = "มกราคม";
+        break;
+      case 2:
+        month = "กุมภาพันธ์";
+        break;
+      case 3:
+        month = "มีนาคม";
+        break;
+      case 4:
+        month = "เมษายน";
+        break;
+      case 5:
+        month = "พฤษภาคม";
+        break;
+      case 6:
+        month = "มิถุนายน";
+        break;
+      case 7:
+        month = "กรกฏาคม";
+        break;
+      case 8:
+        month = "สิงหาคม";
+        break;
+      case 9:
+        month = "กันยายน";
+        break;
+      case 10:
+        month = "ตุลาคม";
+        break;
+      case 11:
+        month = "พฤศจิกายน";
+        break;
+      case 12:
+        month = "ธันวาคม";
+        break;
+    }
+
+    Duration difference = today.difference(tm);
+
+    if (difference.compareTo(oneDay) < 1) {
+      return "วันนี้";
+    } else if (difference.compareTo(twoDay) < 1) {
+      return "เมื่อวานนี้";
+    } else if (difference.compareTo(oneWeek) < 1) {
+      switch (tm.weekday) {
+        case 1:
+          return "จันทร์";
+        case 2:
+          return "อังคาร";
+        case 3:
+          return "พุธ";
+        case 4:
+          return "พฤหัสบดี";
+        case 5:
+          return "ศุกร์";
+        case 6:
+          return "เสาร์";
+        case 7:
+          return "อาทิตย์";
+      }
+    } else if (tm.year == today.year) {
+      return '${tm.day} $month ';
+    } else {
+      return '${tm.day} $month ${tm.year}';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      managerModel = widget.managerModel;
+      shopmodel = widget.shopmodel;
+      readChat();
+    });
+  }
+
+  List<ChatmanagersellerModel> chatlist = [];
+  Future<Null> readChat() async {
+    idSeller = shopmodel!.idSeller;
+    idManager = managerModel!.idmanager;
+    String url =
+        '${MyConstant().domain}/api/getChatmanagerseller.php?isAdd=true&id_manager=$idManager&id_seller=$idSeller';
+    Response response = await Dio().get(url);
+    var result = json.decode(response.data);
+    if (result != null) {
+      for (var map in result) {
+        ChatmanagersellerModel chatlists = ChatmanagersellerModel.fromMap(map);
+        setState(() {
+          chatlist.add(chatlists);
+        });
+      }
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+  }
+
+  var _controller = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: buildAppBar(),
+        body: check == false
+            ? showNotMessage()
+            : GestureDetector(
+                onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListView.builder(
+                          itemCount: chatlist.length,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.only(
+                                  left: 14, right: 14, top: 10, bottom: 10),
+                              child: Align(
+                                alignment: (chatlist[index].status == 'seller'
+                                    ? Alignment.topLeft
+                                    : Alignment.topRight),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: (chatlist[index].status == 'seller'
+                                        ? Colors.grey.shade200
+                                        : Colors.blue[200]),
+                                  ),
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        chatlist[index].message,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        date(DateTime.parse(
+                                                chatlist[index].regdate))
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    chatInputField(),
+                  ],
+                )));
+  }
+
+  Widget showNotMessage() {
+    return Column(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+          ),
+        ),
+        chatInputField(),
+      ],
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: Row(
+        children: [
+          BackButton(),
+          SizedBox(width: 20 * 0.75),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                shopmodel!.nameshop,
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget chatInputField() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20 / 2,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 6),
+            blurRadius: 8,
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            SizedBox(width: 20),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20 * 0.75,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: TextFormField(
+                      onChanged: (value) => message,
+                      textInputAction: TextInputAction.done,
+                      controller: _controller,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        hintText: "ส่งข้อความ ...",
+                        border: InputBorder.none,
+                        filled: true,
+                      ),
+                    )),
+                    IconButton(
+                        onPressed: () {
+                          message = _controller.text;
+                          sendChat();
+                        },
+                        icon: Icon(
+                          Icons.send,
+                          color: Colors.blue,
+                        ))
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<Null> sendChat() async {
+    idSeller = shopmodel!.idSeller;
+    idManager = managerModel!.idmanager;
+    String status = 'manager';
+    String url =
+        '${MyConstant().domain}/api/addChatmanager.php?isAdd=true&message=$message&id_manager=$idManager&id_seller=$idSeller&status=$status';
+
+    try {
+      Response response = await Dio().get(url);
+      //print('res = $response');
+
+      if (response.toString() == 'true') {
+        setState(() {
+          Navigator.pop(context);
+        });
+      } else {
+        normalDialog(context, 'ส่งข้อความล้มเหลว ลองอีกครั้ง');
+      }
+    } catch (e) {}
+  }
+}

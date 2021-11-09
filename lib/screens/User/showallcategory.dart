@@ -5,7 +5,7 @@ import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
-import 'package:k6_app/widget/User/subcategory.dart';
+import 'package:k6_app/screens/User/subcategory.dart';
 
 class ShowallCategory extends StatefulWidget {
   ShowallCategory({required this.userModel});

@@ -10,7 +10,7 @@ import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
-import 'package:k6_app/widget/User/showsearch.dart';
+import 'package:k6_app/screens/User/showsearch.dart';
 
 class ProductAll extends StatefulWidget {
   const ProductAll({required this.userModel});

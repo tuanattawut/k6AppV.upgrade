@@ -5,12 +5,13 @@ import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/screens/Seller/add_info_seller.dart';
 import 'package:k6_app/screens/Seller/add_product_seller.dart';
+import 'package:k6_app/screens/Seller/chatmanager_seller.dart';
 import 'package:k6_app/screens/Seller/infomation_shop.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
-import 'package:k6_app/widget/Seller/chat_seller.dart';
+import 'package:k6_app/screens/Seller/chat_seller.dart';
 import 'package:k6_app/screens/Seller/product_list_seller.dart';
-import 'package:k6_app/widget/Seller/rent_seller.dart';
+import 'package:k6_app/screens/Seller/rent_seller.dart';
 
 class Homeseller extends StatefulWidget {
   Homeseller({required this.sellerModel});
@@ -82,7 +83,7 @@ class _HomesellerState extends State<Homeseller> {
             IconButton(
                 icon: Icon(Icons.exit_to_app),
                 onPressed: () {
-                  Navigator.pop(context);
+                  confirmExit();
                 })
           ],
         ),
@@ -123,17 +124,59 @@ class _HomesellerState extends State<Homeseller> {
                           color: Colors.blue,
                           route: RentSeller(sellerModel: sellerModel!)),
                       MyMenu(
-                          title: 'แชท',
+                          title: 'แชทกับผู้ซื้อ',
                           icon: Icons.chat,
                           color: Colors.blue,
                           route: ChatSeller(
                             sellerModel: sellerModel!,
                           )),
+                      MyMenu(
+                          title: 'แชทกับผู้จัดการ',
+                          icon: Icons.chat,
+                          color: Colors.blue,
+                          route: ChatmanagerPage(sellerModel: sellerModel!)),
                     ],
                   ),
                 ),
           onRefresh: refreshList,
         ));
+  }
+
+  Future<Null> confirmExit() async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text('คุณต้องการออกจากระบบ ?'),
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/", (Route<dynamic> route) => false);
+                },
+                icon: Icon(
+                  Icons.check,
+                  color: Colors.red,
+                ),
+                label: Text('ออกจากระบบ',
+                    style: TextStyle(
+                      color: Colors.red,
+                    )),
+              ),
+              TextButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.blue,
+                ),
+                label: Text('ยกเลิก'),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
 

@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/manager_model.dart';
 import 'package:k6_app/screens/Manager/approve_seller.dart';
+import 'package:k6_app/screens/Manager/chat_manager.dart';
 import 'package:k6_app/screens/Manager/manage_chat.dart';
 import 'package:k6_app/screens/Manager/manage_noti.dart';
 import 'package:k6_app/screens/Manager/manage_rentarea.dart';
 import 'package:k6_app/screens/Manager/manage_report.dart';
 import 'package:k6_app/screens/Manager/manage_user.dart';
+import 'package:k6_app/screens/Manager/searchshop_manager.dart';
+import 'package:k6_app/screens/Manager/shownoti_manager.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
 
 class Homemanager extends StatefulWidget {
+  Homemanager({required this.managerModel});
+  final ManagerModel managerModel;
   @override
   _HomemanagerState createState() => _HomemanagerState();
 }
 
 class _HomemanagerState extends State<Homemanager> {
+  ManagerModel? managerModel;
+  @override
+  void initState() {
+    super.initState();
+    managerModel = widget.managerModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +35,7 @@ class _HomemanagerState extends State<Homemanager> {
             IconButton(
                 icon: Icon(Icons.exit_to_app),
                 onPressed: () {
-                  Navigator.pop(context);
+                  confirmExit();
                 })
           ],
         ),
@@ -71,9 +84,60 @@ class _HomemanagerState extends State<Homemanager> {
                   title: 'ข้อความจากผู้ขาย',
                   icon: Icons.chat,
                   color: Colors.blue,
-                  route: {}),
+                  route: ChatManager(
+                    managerModel: managerModel!,
+                  )),
+              MyMenu(
+                title: 'ค้นหาร้าน\nที่ลงทะเบียน',
+                icon: Icons.search,
+                color: Colors.blue,
+                route: SearchShop(),
+              ),
+              MyMenu(
+                title: 'แจ้งเตือน',
+                icon: Icons.notifications,
+                color: Colors.blue,
+                route: ShowNotimanager(),
+              ),
             ],
           ),
         ));
+  }
+
+  Future<Null> confirmExit() async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text('คุณต้องการออกจากระบบ ?'),
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/", (Route<dynamic> route) => false);
+                },
+                icon: Icon(
+                  Icons.check,
+                  color: Colors.red,
+                ),
+                label: Text('ออกจากระบบ',
+                    style: TextStyle(
+                      color: Colors.red,
+                    )),
+              ),
+              TextButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.blue,
+                ),
+                label: Text('ยกเลิก'),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

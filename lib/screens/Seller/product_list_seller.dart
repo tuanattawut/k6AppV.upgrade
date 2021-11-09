@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
@@ -24,7 +25,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
   bool? status = true;
   SellerModel? sellerModel;
   String? idshop, idseller;
-
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
   @override
   void initState() {
     super.initState();
@@ -160,11 +161,11 @@ class _ProductListSellerState extends State<ProductListSeller> {
                           style: MyStyle().mainTitle,
                         ),
                         Text(
-                          '${productModels[index].price} บาท',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                          ),
+                          f.format(int.parse(productModels[index].price)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .button!
+                              .copyWith(color: Colors.red, fontSize: 18),
                         ),
                         Text(
                           productModels[index].detail,

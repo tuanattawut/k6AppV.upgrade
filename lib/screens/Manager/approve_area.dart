@@ -32,8 +32,6 @@ class _ApproveAreaState extends State<ApproveArea> {
           setState(() {
             if (researveAreaModel.idSeller == '0') {
               reserveList.add(researveAreaModel);
-            } else {
-              showContent();
             }
           });
         }

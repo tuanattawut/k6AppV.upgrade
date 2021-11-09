@@ -9,8 +9,8 @@ import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
-import 'package:k6_app/widget/User/datailshop.dart';
-import 'package:k6_app/widget/User/detailproduct.dart';
+import 'package:k6_app/screens/User/datailshop.dart';
+import 'package:k6_app/screens/User/detailproduct.dart';
 
 class ShowDetail extends StatefulWidget {
   final ProductModel productModel;

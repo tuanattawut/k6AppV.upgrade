@@ -164,12 +164,12 @@ class _LoginSellerState extends State<LoginSeller> {
           SellerModel sellerModel = SellerModel.fromMap(map);
           if (generateMd5(password!) == sellerModel.password) {
             if (sellerModel.role == 'seller') {
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => Homeseller(
+              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => Homeseller(
                   sellerModel: sellerModel,
                 ),
-              );
-              Navigator.of(context).push(route);
+              ));
+
               break;
             } else if (sellerModel.role == 'noseller') {
               normalDialog(

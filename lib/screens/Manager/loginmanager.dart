@@ -142,9 +142,11 @@ class _LoginManagerState extends State<LoginManager> {
         for (var map in result) {
           ManagerModel managerModel = ManagerModel.fromMap(map);
           if (generateMd5(password!) == managerModel.password) {
-            MaterialPageRoute route =
-                MaterialPageRoute(builder: (value) => Homemanager());
-            Navigator.of(context).push(route);
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (context) => Homemanager(
+                      managerModel: managerModel,
+                    )));
+
             break;
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');

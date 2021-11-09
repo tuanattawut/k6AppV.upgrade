@@ -2,42 +2,40 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/seller_model.dart';
-import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/models/manager_model.dart';
+import 'package:k6_app/models/shop_model.dart';
+import 'package:k6_app/screens/Manager/Chatpage_manager.dart';
 import 'package:k6_app/utility/my_constant.dart';
-import 'package:k6_app/widget/Seller/chatpage_seller.dart';
 
-class ChatSeller extends StatefulWidget {
-  ChatSeller({required this.sellerModel});
-  final SellerModel sellerModel;
+class ChatManager extends StatefulWidget {
+  ChatManager({required this.managerModel});
+  final ManagerModel managerModel;
 
   @override
-  _ChatSellerState createState() => _ChatSellerState();
+  _ChatManagerState createState() => _ChatManagerState();
 }
 
-class _ChatSellerState extends State<ChatSeller> {
-  SellerModel? sellerModel;
-  String? idUser, idSeller;
-  List<UserModel> userModel = [];
+class _ChatManagerState extends State<ChatManager> {
+  ManagerModel? managerModel;
+  String? idManager;
+  List<ShopModel> shopModel = [];
   @override
   void initState() {
     super.initState();
-    setState(() {
-      sellerModel = widget.sellerModel;
-      getUserchat();
-    });
+    managerModel = widget.managerModel;
+    getShopchat();
   }
 
-  Future<Null> getUserchat() async {
-    idSeller = sellerModel!.idSeller;
+  Future<Null> getShopchat() async {
+    idManager = managerModel!.idmanager;
     String api =
-        '${MyConstant().domain}/api/getUserChat.php?isAdd=true&id_seller=$idSeller';
+        '${MyConstant().domain}/api/getManagerChat.php?isAdd=true&id_manager=$idManager';
     await Dio().get(api).then((value) {
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
-          UserModel userModels = UserModel.fromMap(item);
+          ShopModel shopmodels = ShopModel.fromMap(item);
           setState(() {
-            userModel.add(userModels);
+            shopModel.add(shopmodels);
           });
         }
       }
@@ -48,30 +46,28 @@ class _ChatSellerState extends State<ChatSeller> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('แชท'),
+        title: Text('แชทกับร้านค้า'),
       ),
       body: Container(
         child: ListView.builder(
-            itemCount: userModel.length,
+            itemCount: shopModel.length,
             itemBuilder: (context, index) => Padding(
                   padding: EdgeInsets.all(8),
                   child: ListTile(
                     onTap: () {
                       MaterialPageRoute route = MaterialPageRoute(
-                          builder: (value) => ChatpageSeller(
-                              userModel: userModel[index],
-                              sellerModel: sellerModel!));
+                          builder: (value) => ChatpageManager(
+                              managerModel: managerModel!,
+                              shopmodel: shopModel[index]));
                       Navigator.of(context).push(route);
                     },
                     leading: Image.network(
-                      '${MyConstant().domain}/upload/user/${userModel[index].image}',
+                      '${MyConstant().domain}/upload/shop/${shopModel[index].image}',
                       fit: BoxFit.cover,
                       width: 50,
                     ),
                     title: Text(
-                      userModel[index].firstname +
-                          '  ' +
-                          userModel[index].lastname,
+                      shopModel[index].nameshop,
                       style: TextStyle(
                         fontSize: 16,
                       ),
