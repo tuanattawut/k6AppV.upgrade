@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/screens/User/promotionseller_user.dart';
 
 class NotiUser extends StatefulWidget {
   @override
@@ -11,24 +12,25 @@ class _NotiUserState extends State<NotiUser> {
     super.initState();
   }
 
-  // Future<Null> getData() async {
-  //   var response =
-  //       await http.get(Uri.parse('https://covid19.th-stat.com/api/open/today'));
-
-  //   setState(() {
-  //     dataFromApi = covidFromJson(response.body);
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('ประกาศแจ้งเตือน')),
-        ),
-        body: Container(
-          child: ListView(
-            children: <Widget>[],
+    return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('ประกาศแจ้งเตือน'),
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: 'แจ้งเตือนจากร้านค้า'),
+                Tab(text: 'แจ้งเตือนจากติดตาม'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              PromotionUser(),
+              PromotionUser(),
+            ],
           ),
         ));
   }

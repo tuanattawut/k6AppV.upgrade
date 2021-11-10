@@ -14,15 +14,14 @@ class _ShowNotimanagerState extends State<ShowNotimanager> {
   @override
   void initState() {
     super.initState();
-    getSearch();
+    getNoti();
   }
 
   bool? loadStatus = true;
   bool? status = true;
 
-  LimitshopModel? shopLimit;
   List<LimitshopModel> shopLimitshow = [];
-  Future<Null> getSearch() async {
+  Future<Null> getNoti() async {
     if (shopLimitshow.length != 0) {
       loadStatus = true;
       status = true;
@@ -38,8 +37,10 @@ class _ShowNotimanagerState extends State<ShowNotimanager> {
         for (var item in json.decode(value.data)) {
           LimitshopModel limitshopModel = LimitshopModel.fromMap(item);
           setState(() {
-            shopLimitshow.add(limitshopModel);
-            shopLimit = limitshopModel;
+            if (int.parse(limitshopModel.number.toString()) > 10) {
+              shopLimitshow.add(limitshopModel);
+              print(shopLimitshow);
+            }
           });
         }
       } else {
@@ -56,27 +57,77 @@ class _ShowNotimanagerState extends State<ShowNotimanager> {
       appBar: AppBar(
         title: Center(child: Text('การแจ้งเตือน')),
       ),
-      body: loadStatus!
-          ? showContent()
-          : Column(
-              children: [
-                Center(
-                  child: Text(
-                    'สินค้าประเภท ${shopLimit!.namesubcategory} มีจำนวน : ${shopLimitshow.length} ชิ้น',
-                    style: TextStyle(color: Colors.red, fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
+      body: loadStatus! ? showContent() : shownoti(),
     );
   }
 
   Widget showContent() {
-    return Center(
-      child: Text(
-        'ไม่มีการแจ้งเตือน ...',
-        style: TextStyle(fontSize: 18),
-      ),
-    );
+    return status!
+        ? shownoti()
+        : Center(
+            child: Text(
+              'ไม่มีการแจ้งเตือน ...',
+              style: TextStyle(fontSize: 18),
+            ),
+          );
   }
+
+  Widget shownoti() => ListView.builder(
+      itemCount: shopLimitshow.length,
+      itemBuilder: (context, index) => Padding(
+            padding: EdgeInsets.all(8),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  height: 150,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'แจ้งเตือน!!! ประเภทสินค้าชนิดเดียวกัน',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.black,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'สินค้าประเภท: ${shopLimitshow[index].namesubcategory}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'มีจำนวน: ${shopLimitshow[index].number}  ชิ้น',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text('โปรดตรวจสอบ!!!',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.red)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ));
 }

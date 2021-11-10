@@ -146,7 +146,7 @@ class _LoginManagerState extends State<LoginManager> {
                 builder: (context) => Homemanager(
                       managerModel: managerModel,
                     )));
-
+            addLogin();
             break;
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
@@ -157,5 +157,19 @@ class _LoginManagerState extends State<LoginManager> {
       normalDialog(context, 'ผิดพลาด');
       //print('Have e Error ===>> ${e.toString()}');
     }
+  }
+
+  Future<Null> addLogin() async {
+    String typeuser = 'manager';
+    String url =
+        '${MyConstant().domain}/api/addLogin.php?isAdd=true&typeuser=$typeuser';
+
+    try {
+      Response response = await Dio().get(url);
+      //print('res = $response');
+
+      if (response.toString() == 'true') {
+      } else {}
+    } catch (e) {}
   }
 }

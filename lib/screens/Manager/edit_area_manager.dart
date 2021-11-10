@@ -220,7 +220,7 @@ class _EditareaState extends State<Editarea> {
 
   Future<Null> editValueOnMySQL() async {
     String url =
-        '${MyConstant().domain}api/editArea.php?isAdd=true&namearea=$namearea&image=$image&detail=$detail&scale=$scale&rentalfee=$rentalfee&id_area=$idArea';
+        '${MyConstant().domain}/api/editArea.php?isAdd=true&namearea=$namearea&image=$image&detail=$detail&scale=$scale&rentalfee=$rentalfee&id_area=$idArea';
     await Dio().get(url).then((value) {
       if (value.toString() == 'true') {
         Navigator.pop(context);

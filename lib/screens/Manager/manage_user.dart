@@ -1,97 +1,71 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:pie_chart/pie_chart.dart';
+import 'package:k6_app/models/visit_model.dart';
+import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_style.dart';
 
 class ManageUser extends StatefulWidget {
   @override
   _ManageUserState createState() => _ManageUserState();
 }
 
-Map<String, double> dataMap = {
-  "รายวัน": 2,
-  "รายเดือน": 14,
-  "รายปี": 97,
-};
-List<Color> colorList = [
-  Colors.green,
-  Colors.red,
-  Colors.orange,
-];
-
 class _ManageUserState extends State<ManageUser> {
+  List<VisitModel> visitModel = [];
+  @override
+  void initState() {
+    super.initState();
+    getVisit();
+  }
+
+  Future<Null> getVisit() async {
+    String api = '${MyConstant().domain}/api/getVisit.php';
+
+    await Dio().get(api).then((value) {
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          VisitModel visitModels = VisitModel.fromMap(item);
+          setState(() {
+            visitModel.add(visitModels);
+            print(visitModel);
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('จัดการผู้ใช้'),
       ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 25),
-            child: ListView(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    "จำนวนผู้ใช้งาน",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                          child: PieChart(
-                        dataMap: dataMap,
-                        animationDuration: Duration(milliseconds: 800),
-                        chartLegendSpacing: 32,
-                        chartRadius: MediaQuery.of(context).size.width / 3.2,
-                        colorList: colorList,
-                        initialAngleInDegree: 0,
-                        chartType: ChartType.ring,
-                        ringStrokeWidth: 32,
-                        centerText: "ผู้ใช้งาน",
-                        legendOptions: LegendOptions(
-                          showLegendsInRow: false,
-                          legendPosition: LegendPosition.right,
-                          showLegends: true,
-                          legendShape: BoxShape.circle,
-                          legendTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        chartValuesOptions: ChartValuesOptions(
-                          showChartValueBackground: true,
-                          showChartValues: true,
-                          showChartValuesInPercentage: false,
-                          showChartValuesOutside: false,
-                          decimalPlaces: 1,
-                        ),
-                      )),
-                      Card(
-                        child: _buildGender(
-                            Icons.today, Colors.green, "รายวัน", "2"),
-                      ),
-                      Card(
-                        child: _buildGender(
-                            Icons.today, Colors.red, "รายเดือน", "14"),
-                      ),
-                      Card(
-                        child: _buildGender(
-                            Icons.today, Colors.orange, "รายปี", "97"),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'การใช้งานสมาชิก',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+                fontSize: 24,
+              ),
             ),
-          )
-        ],
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: visitModel.length,
+              itemBuilder: (BuildContext buildContext, int index) {
+                return _buildGender(
+                    Icons.people,
+                    Colors.blue,
+                    visitModel[index].title.toString(),
+                    visitModel[index].visit.toString());
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -123,6 +97,7 @@ class _ManageUserState extends State<ManageUser> {
                 size: 60,
                 color: color,
               ),
+              MyStyle().mySizebox(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

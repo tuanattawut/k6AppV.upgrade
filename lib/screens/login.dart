@@ -67,6 +67,17 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
             LoginFacebook(),
+            Row(children: <Widget>[
+              Expanded(
+                  child: Divider(
+                color: Colors.blue,
+              )),
+              Text(" OR ", style: TextStyle(fontSize: 14, color: Colors.blue)),
+              Expanded(
+                  child: Divider(
+                color: Colors.blue,
+              )),
+            ]),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -222,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                 usermodel: userModel,
               ),
             ));
-
+            addLogin();
             break;
           } else {
             normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
@@ -233,5 +244,19 @@ class _LoginPageState extends State<LoginPage> {
       normalDialog(context, 'ผิดพลาด');
       // print('Have e Error ===>> ${e.toString()}');
     }
+  }
+
+  Future<Null> addLogin() async {
+    String typeuser = 'user';
+    String url =
+        '${MyConstant().domain}/api/addLogin.php?isAdd=true&typeuser=$typeuser';
+
+    try {
+      Response response = await Dio().get(url);
+      //print('res = $response');
+
+      if (response.toString() == 'true') {
+      } else {}
+    } catch (e) {}
   }
 }

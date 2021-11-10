@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/manager_model.dart';
+import 'package:k6_app/screens/Manager/approve_promotionseller.dart';
 import 'package:k6_app/screens/Manager/approve_seller.dart';
 import 'package:k6_app/screens/Manager/chat_manager.dart';
 import 'package:k6_app/screens/Manager/manage_chat.dart';
@@ -98,6 +99,12 @@ class _HomemanagerState extends State<Homemanager> {
                 icon: Icons.notifications,
                 color: Colors.blue,
                 route: ShowNotimanager(),
+              ),
+              MyMenu(
+                title: 'อนุมัติโปรโมชั่น\nร้านค้า',
+                icon: Icons.approval,
+                color: Colors.blue,
+                route: ApprovePromotion(),
               ),
             ],
           ),

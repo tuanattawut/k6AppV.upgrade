@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/shop_model.dart';
+import 'package:k6_app/screens/Manager/editshop_manager.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 
@@ -36,9 +37,8 @@ class _DetailshopSearchState extends State<DetailshopSearch> {
   Widget showListInfoShop() => Padding(
       padding: EdgeInsets.all(10),
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(5),
-        child: Column(
-          children: <Widget>[
+          padding: EdgeInsets.all(5),
+          child: Column(children: <Widget>[
             Row(
               children: <Widget>[
                 MyStyle().showTitle('รูปร้าน'),
@@ -66,9 +66,33 @@ class _DetailshopSearchState extends State<DetailshopSearch> {
               ],
             ),
             showMap(),
-          ],
-        ),
-      ));
+            MyStyle().mySizebox(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.green,
+                  ),
+                  onPressed: () {
+                    MaterialPageRoute route = MaterialPageRoute(
+                      builder: (value) => EditShopSearch(
+                        shopModel: shopModel!,
+                      ),
+                    );
+                    Navigator.of(context).push(route);
+                  },
+                ),
+                IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                    onPressed: () => {}),
+              ],
+            ),
+          ])));
 
   Widget showImage() {
     print(shopModel?.image);

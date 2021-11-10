@@ -63,9 +63,6 @@ class _PromoteUserState extends State<PromoteUser> {
             //print(productRecList);
           });
         }
-      } else {
-        // print('Error getdataRecently');
-        CircularProgressIndicator();
       }
     });
   }

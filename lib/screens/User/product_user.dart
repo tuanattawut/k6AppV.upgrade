@@ -29,11 +29,9 @@ class _ProductListUserState extends State<ProductListUser> {
   bool? loadStatus = true;
   bool? status = true;
   bool? loadC = true;
-  String? name, id, idproducts, clickid;
-  List idproduct = [];
+  String? name, id, idproducts, clickid, idUser;
   List<CategoryModel> categoryList = [];
-  List productList = [];
-  String? idproductRec, iduserRec;
+
   var f = NumberFormat.currency(locale: "THB", symbol: "฿");
 
   @override
@@ -43,6 +41,8 @@ class _ProductListUserState extends State<ProductListUser> {
     getData();
     getCategory();
     getPromotion();
+    idUser = userModel!.idUser;
+    getRecom();
   }
 
 //เรียกข้อมูลสินค้าทั้งหมด
@@ -59,15 +59,10 @@ class _ProductListUserState extends State<ProductListUser> {
       });
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
-          productList.add(item);
           ProductModel productModel = ProductModel.fromMap(item);
           setState(() {
             productModels.add(productModel);
-            productList.map((list) {
-              idproductRec = list['id_products'];
-            }).toList();
           });
-          getRecom();
         }
       } else {
         setState(() {
@@ -77,54 +72,68 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
-  String? pid, vid;
-  Future<Null> getRecom() async {
-    iduserRec = userModel!.idUser;
-    // print('p_id => $idproductRec');
-    //print('u_id =>$iduserRec');
-    String api =
-        '${MyConstant().domain}/api/reC.php?isAdd=true&id_products=$idproductRec&id_user=$iduserRec';
+  //String? pid, vid;
+  // Future<Null> getRecom() async {
+  //   iduserRec = userModel!.idUser;
+  //   // print('p_id => $idproductRec');
+  //   //print('u_id =>$iduserRec');
+  //   String api =
+  //       '${MyConstant().domain}/api/reC.php?isAdd=true&id_products=$idproductRec&id_user=$iduserRec';
+  //   final response = await Dio().get(api);
+  //   if (response != null && response.data != null) {
+  //     final value = jsonDecode(response.data);
+  //     if (value != null) {
+  //       Map<String, dynamic> greatestView = value.fold(
+  //           {},
+  //           (previous, current) => previous['view'] == null
+  //               ? current
+  //               : int.parse(previous['view']!) >= int.parse(current['view']!)
+  //                   ? previous
+  //                   : current);
+  //       if (greatestView['id_products'] != null) {
+  //         pid = greatestView['id_products'].toString();
+  //         // print(greatestView['view']);
+  //         return getProductRec();
+  //       } else {
+  //         print('NULL');
+  //       }
+  //     }
+  //   }
+  // }
 
-    final response = await Dio().get(api);
-    if (response != null && response.data != null) {
-      final value = jsonDecode(response.data);
+  // ProductModel? productRecList;
+  // Future<Null> getProductRec() async {
+  //   String api =
+  //       '${MyConstant().domain}/api/getproductfromidProduct.php?isAdd=true&id_products=$pid';
 
-      if (value != null) {
-        Map<String, dynamic> greatestView = value.fold(
-            {},
-            (previous, current) => previous['view'] == null
-                ? current
-                : int.parse(previous['view']!) >= int.parse(current['view']!)
-                    ? previous
-                    : current);
-        if (greatestView['id_products'] != null) {
-          pid = greatestView['id_products'].toString();
-          // print(greatestView['view']);
-          return getProductRec();
-        } else {
-          print('NULL');
-        }
-      }
-    }
-  }
-
+  //   await Dio().get(api).then((value) {
+  //     if (value.toString() != 'null') {
+  //       for (var item in json.decode(value.data)) {
+  //         ProductModel productRecLists = ProductModel.fromMap(item);
+  //         setState(() {
+  //           productRecList = productRecLists;
+  //           // print(productRecList!.idSubcategory);
+  //           getProductRecs();
+  //         });
+  //       }
+  //     } else {
+  //       CircularProgressIndicator();
+  //     }
+  //   });
+  // }
   ProductModel? productRecList;
-  Future<Null> getProductRec() async {
+  Future<Null> getRecom() async {
     String api =
-        '${MyConstant().domain}/api/getproductfromidProduct.php?isAdd=true&id_products=$pid';
-
+        '${MyConstant().domain}/api/reC.php?isAdd=true&id_user=$idUser';
     await Dio().get(api).then((value) {
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
-          ProductModel productRecLists = ProductModel.fromMap(item);
           setState(() {
-            productRecList = productRecLists;
-            // print(productRecList!.idSubcategory);
+            productRecList = ProductModel.fromMap(item);
+
             getProductRecs();
           });
         }
-      } else {
-        CircularProgressIndicator();
       }
     });
   }
@@ -141,12 +150,9 @@ class _ProductListUserState extends State<ProductListUser> {
           ProductModel productRecLists2 = ProductModel.fromMap(item);
           setState(() {
             productRecLists.add(productRecLists2);
-            //print(productRecList);
+            print(productRecLists2);
           });
-          break;
         }
-      } else {
-        CircularProgressIndicator();
       }
     });
   }

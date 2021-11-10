@@ -5,8 +5,10 @@ import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/screens/Seller/add_info_seller.dart';
 import 'package:k6_app/screens/Seller/add_product_seller.dart';
+import 'package:k6_app/screens/Seller/add_promotion_seller.dart';
 import 'package:k6_app/screens/Seller/chatmanager_seller.dart';
 import 'package:k6_app/screens/Seller/infomation_shop.dart';
+import 'package:k6_app/screens/Seller/promotionseller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/screens/Seller/chat_seller.dart';
@@ -135,6 +137,20 @@ class _HomesellerState extends State<Homeseller> {
                           icon: Icons.chat,
                           color: Colors.blue,
                           route: ChatmanagerPage(sellerModel: sellerModel!)),
+                      MyMenu(
+                        title: 'เพิ่มโปรโมชั่น',
+                        icon: Icons.add,
+                        color: Colors.blue,
+                        route: AddPromotionSeller(
+                          sellerModel: sellerModel!,
+                        ),
+                      ),
+                      MyMenu(
+                        title: 'ดูโปรโมชั่นที่เพิ่ม',
+                        icon: Icons.sell,
+                        color: Colors.blue,
+                        route: PromotionSeller(sellerModel: sellerModel!),
+                      ),
                     ],
                   ),
                 ),

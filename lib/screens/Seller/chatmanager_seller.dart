@@ -7,6 +7,7 @@ import 'package:k6_app/models/chat_models.dart';
 import 'package:k6_app/models/manager_model.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 
 class ChatmanagerPage extends StatefulWidget {
@@ -106,14 +107,25 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
     });
   }
 
+  bool? loadStatus = true;
+  bool? status = true;
+
   List<ChatModel> chatlist = [];
   Future<Null> readChat() async {
+    if (chatlist.length != 0) {
+      loadStatus = true;
+      status = true;
+      chatlist.clear();
+    }
     idSeller = sellerModel!.idSeller;
     idmanager = '1';
     String url =
         '${MyConstant().domain}/api/getChatmanagerseller.php?isAdd=true&id_manager=$idmanager&id_seller=$idSeller';
     Response response = await Dio().get(url);
     var result = json.decode(response.data);
+    setState(() {
+      loadStatus = false;
+    });
     if (result != null) {
       for (var map in result) {
         ChatModel chatlists = ChatModel.fromMap(map);
@@ -123,7 +135,7 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
       }
     } else {
       setState(() {
-        check = false;
+        status = false;
       });
     }
   }
@@ -133,78 +145,75 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: buildAppBar(),
-        body: check == false
-            ? showNotMessage()
-            : GestureDetector(
-                onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-                behavior: HitTestBehavior.opaque,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Padding(
+        body: GestureDetector(
+            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+            behavior: HitTestBehavior.opaque,
+            child: Column(
+              children: [
+                Expanded(
+                    child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ListView.builder(
-                          itemCount: chatlist.length,
-                          shrinkWrap: true,
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: EdgeInsets.only(
-                                  left: 14, right: 14, top: 10, bottom: 10),
-                              child: Align(
-                                alignment: (chatlist[index].status == 'manager'
-                                    ? Alignment.topLeft
-                                    : Alignment.topRight),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: (chatlist[index].status == 'manager'
-                                        ? Colors.grey.shade200
-                                        : Colors.blue[200]),
-                                  ),
-                                  padding: EdgeInsets.all(16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        chatlist[index].message,
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      Text(
-                                        date(DateTime.parse(
-                                                chatlist[index].regdate))
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    chatInputField(),
-                  ],
-                )));
+                        child: loadStatus!
+                            ? MyStyle().showProgress()
+                            : showNotMessage())),
+                chatInputField(),
+              ],
+            )));
   }
 
   Widget showNotMessage() {
-    return Column(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-        ),
-        chatInputField(),
-      ],
-    );
+    return status!
+        ? chat()
+        : Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                ),
+              ),
+            ],
+          );
   }
+
+  Widget chat() => ListView.builder(
+        itemCount: chatlist.length,
+        shrinkWrap: true,
+        padding: EdgeInsets.only(top: 10, bottom: 10),
+        itemBuilder: (context, index) {
+          return Container(
+            padding: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+            child: Align(
+              alignment: (chatlist[index].status == 'manager'
+                  ? Alignment.topLeft
+                  : Alignment.topRight),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: (chatlist[index].status == 'manager'
+                      ? Colors.grey.shade200
+                      : Colors.blue[200]),
+                ),
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      chatlist[index].message,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      date(DateTime.parse(chatlist[index].regdate)).toString(),
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
 
   AppBar buildAppBar() {
     return AppBar(
@@ -301,7 +310,7 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
 
       if (response.toString() == 'true') {
         setState(() {
-          Navigator.pop(context);
+          sendChat();
         });
       } else {
         normalDialog(context, 'ส่งข้อความล้มเหลว ลองอีกครั้ง');

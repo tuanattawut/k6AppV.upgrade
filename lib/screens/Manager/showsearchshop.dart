@@ -61,47 +61,49 @@ class _ShowsearchShopState extends State<ShowsearchShop> {
       appBar: AppBar(
         title: Center(child: Text('ผลการค้นหา')),
       ),
-      body: loadStatus!
-          ? showContent()
-          : Container(
-              child: ListView.builder(
-                  itemCount: shopList.length,
-                  itemBuilder: (context, index) => Padding(
-                        padding: EdgeInsets.all(8),
-                        child: ListTile(
-                          onTap: () {
-                            MaterialPageRoute route = MaterialPageRoute(
-                                builder: (value) => DetailshopSearch(
-                                    shopModel: shopList[index]));
-                            Navigator.of(context).push(route);
-                          },
-                          leading: Image.network(
-                            '${MyConstant().domain}/upload/shop/${shopList[index].image}',
-                            fit: BoxFit.cover,
-                            width: 50,
-                          ),
-                          title: Text(
-                            shopList[index].nameshop,
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.navigate_next,
-                            size: 14,
-                          ),
-                        ),
-                      )),
-            ),
+      body: loadStatus! ? showContent() : showListSearch(),
     );
   }
 
   Widget showContent() {
-    return Center(
-      child: Text(
-        'ไม่พบการค้นหา ...',
-        style: TextStyle(fontSize: 18),
-      ),
-    );
+    return status!
+        ? showListSearch()
+        : Center(
+            child: Text(
+              'ไม่พบการค้นหา ...',
+              style: TextStyle(fontSize: 18),
+            ),
+          );
   }
+
+  Widget showListSearch() => Container(
+        child: ListView.builder(
+            itemCount: shopList.length,
+            itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.all(8),
+                  child: ListTile(
+                    onTap: () {
+                      MaterialPageRoute route = MaterialPageRoute(
+                          builder: (value) =>
+                              DetailshopSearch(shopModel: shopList[index]));
+                      Navigator.of(context).push(route);
+                    },
+                    leading: Image.network(
+                      '${MyConstant().domain}/upload/shop/${shopList[index].image}',
+                      fit: BoxFit.cover,
+                      width: 50,
+                    ),
+                    title: Text(
+                      shopList[index].nameshop,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.navigate_next,
+                      size: 14,
+                    ),
+                  ),
+                )),
+      );
 }
