@@ -76,50 +76,55 @@ class _ProductAllState extends State<ProductAll> {
     } catch (e) {}
   }
 
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      getData();
+    });
+
+    return null;
+  }
+
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('สินค้าทั้งหมด')),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => Homepage(
-                  usermodel: userModel!,
-                ),
-              ));
-            },
-            icon: Icon(Icons.home)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowSearch(
-                  userModel: userModel!,
-                ),
-              );
-              Navigator.of(context).push(route);
-            },
-          )
-        ],
-        centerTitle: true,
-      ),
-      body: Stack(
-        children: [
-          loadStatus!
-              ? MyStyle().showProgress()
-              : Container(
-                  child: ListView.builder(
-                    itemCount: productModels.length,
-                    itemBuilder: (BuildContext buildContext, int index) {
-                      return showListView(index);
-                    },
+        appBar: AppBar(
+          title: Center(child: Text('สินค้าทั้งหมด')),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => ShowSearch(
+                    userModel: userModel!,
                   ),
-                ),
-        ],
-      ),
-    );
+                );
+                Navigator.of(context).push(route);
+              },
+            )
+          ],
+          centerTitle: true,
+        ),
+        body: RefreshIndicator(
+          child: Stack(
+            children: [
+              loadStatus!
+                  ? MyStyle().showProgress()
+                  : Container(
+                      child: ListView.builder(
+                        itemCount: productModels.length,
+                        itemBuilder: (BuildContext buildContext, int index) {
+                          return showListView(index);
+                        },
+                      ),
+                    ),
+            ],
+          ),
+          onRefresh: refreshList,
+        ));
   }
 
   Widget showImage(int index) {
@@ -191,11 +196,6 @@ class _ProductAllState extends State<ProductAll> {
           ),
         );
         Navigator.of(context).push(route);
-        print(index);
-        // MaterialPageRoute route = MaterialPageRoute(
-        //   builder: (value) => ShowDetail(productModel: ,),
-        // );
-        // Navigator.of(context).push(route);
       },
       child: Container(
         margin: EdgeInsets.only(

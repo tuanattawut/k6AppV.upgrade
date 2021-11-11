@@ -200,9 +200,6 @@ class _DetailProductState extends State<DetailProduct> {
             //print(productRecList);
           });
         }
-      } else {
-        // print('Error getdataRecently');
-        CircularProgressIndicator();
       }
     });
   }
@@ -348,13 +345,13 @@ class _DetailProductState extends State<DetailProduct> {
             onTap: () {
               clickid = productModels[index].idProduct;
               addData();
-
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => ShowDetail(
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
                   productModel: productModels[index],
                   userModel: userModel!,
                 ),
-              ));
+              );
+              Navigator.of(context).push(route);
             },
             child: Column(children: <Widget>[
               Container(
@@ -422,12 +419,13 @@ class _DetailProductState extends State<DetailProduct> {
               clickid = productcateLists[index].idProduct;
               addData();
 
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => ShowDetail(
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
                   productModel: productcateLists[index],
                   userModel: userModel!,
                 ),
-              ));
+              );
+              Navigator.of(context).push(route);
             },
             child: Column(children: <Widget>[
               Container(

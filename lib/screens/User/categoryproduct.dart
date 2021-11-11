@@ -135,12 +135,13 @@ class _CategoryProductState extends State<CategoryProduct> {
           onTap: () async {
             clickid = productModels[index].idProduct;
             addData();
-            Navigator.of(context).pushReplacement(new MaterialPageRoute(
-              builder: (context) => ShowDetail(
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => ShowDetail(
                 productModel: productModels[index],
                 userModel: userModel!,
               ),
-            ));
+            );
+            Navigator.of(context).push(route);
           },
           child: Column(children: <Widget>[
             Container(

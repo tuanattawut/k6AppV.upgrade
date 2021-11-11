@@ -282,6 +282,7 @@ class _ChatPageState extends State<ChatPage> {
                     IconButton(
                         onPressed: () {
                           message = _controller.text;
+                          showSend(context);
                           sendChat();
                         },
                         icon: Icon(
@@ -310,7 +311,9 @@ class _ChatPageState extends State<ChatPage> {
       //print('res = $response');
 
       if (response.toString() == 'true') {
+        Navigator.pop(context);
         setState(() {
+          _controller.clear();
           readChat();
         });
       } else {

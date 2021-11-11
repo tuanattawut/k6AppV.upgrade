@@ -282,6 +282,7 @@ class _ChatpageManagerState extends State<ChatpageManager> {
                         onPressed: () {
                           message = _controller.text;
                           sendChat();
+                          showSend(context);
                         },
                         icon: Icon(
                           Icons.send,
@@ -309,7 +310,9 @@ class _ChatpageManagerState extends State<ChatpageManager> {
       //print('res = $response');
 
       if (response.toString() == 'true') {
+        Navigator.pop(context);
         setState(() {
+          _controller.clear();
           readChat();
         });
       } else {

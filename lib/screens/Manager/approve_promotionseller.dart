@@ -107,7 +107,7 @@ class _ApprovePromotionState extends State<ApprovePromotion> {
                     Navigator.of(context).push(route);
                   },
                   leading: Image.network(
-                    '${MyConstant().domain}/upload/promotion/${promotionlist[index].image}',
+                    '${MyConstant().domain}/upload/promotionseller/${promotionlist[index].image}',
                     fit: BoxFit.cover,
                     width: 50,
                   ),

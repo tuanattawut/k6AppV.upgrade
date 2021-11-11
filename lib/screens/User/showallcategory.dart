@@ -47,15 +47,6 @@ class _ShowallCategoryState extends State<ShowallCategory> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('หมวดหมู่')),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => Homepage(
-                  usermodel: userModel!,
-                ),
-              ));
-            },
-            icon: Icon(Icons.home)),
       ),
       body: Container(
         child: ListView.builder(

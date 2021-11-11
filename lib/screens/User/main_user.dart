@@ -20,7 +20,7 @@ class _HomepageState extends State<Homepage> {
     userModel = widget.usermodel;
     _widgetOptions = <Widget>[
       ProductListUser(usermodel: userModel!),
-      NotiUser(),
+      NotiUser(userModel: userModel!),
       InformationUser(usermodel: userModel!),
     ];
   }

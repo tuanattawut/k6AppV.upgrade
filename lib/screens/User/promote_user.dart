@@ -25,13 +25,15 @@ class _PromoteUserState extends State<PromoteUser> {
   ProductModel? productModel;
   var f = NumberFormat.currency(locale: "THB", symbol: "฿");
   String? clickid;
+  bool? loadStatus = true;
+  bool? status = true;
   @override
   void initState() {
     super.initState();
     userModel = widget.userModel;
     productModel = widget.productModel;
     getProductRecs();
-    print(productModel!.idSubcategory);
+    //print(productModel!.idSubcategory);
   }
 
   Future<Null> addData() async {
@@ -50,11 +52,19 @@ class _PromoteUserState extends State<PromoteUser> {
 
   List<ProductModel> productRecList = [];
   Future<Null> getProductRecs() async {
+    if (productRecList.length != 0) {
+      loadStatus = true;
+      status = true;
+      productRecList.clear();
+    }
     String? idsub = productModel!.idSubcategory;
     String api =
         '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
 
     await Dio().get(api).then((value) {
+      setState(() {
+        loadStatus = false;
+      });
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           ProductModel productRecLists2 = ProductModel.fromMap(item);
@@ -63,6 +73,10 @@ class _PromoteUserState extends State<PromoteUser> {
             //print(productRecList);
           });
         }
+      } else {
+        setState(() {
+          status = false;
+        });
       }
     });
   }
@@ -70,32 +84,39 @@ class _PromoteUserState extends State<PromoteUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('สินค้าแนะนำ')),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => Homepage(
-                  usermodel: userModel!,
+        appBar: AppBar(
+          title: Center(child: Text('สินค้าแนะนำ')),
+        ),
+        body: RefreshIndicator(
+          child: loadStatus!
+              ? MyStyle().showProgress()
+              : Stack(
+                  children: [
+                    Container(
+                      child: ListView.builder(
+                        itemCount: productRecList.length,
+                        itemBuilder: (BuildContext buildContext, int index) {
+                          return showListView(index);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ));
-            },
-            icon: Icon(Icons.home)),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            child: ListView.builder(
-              itemCount: productRecList.length,
-              itemBuilder: (BuildContext buildContext, int index) {
-                return showListView(index);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+          onRefresh: refreshList,
+        ));
   }
+
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      getProductRecs();
+    });
+
+    return null;
+  }
+
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   Widget showImage(int index) {
     return Container(
@@ -173,12 +194,13 @@ class _PromoteUserState extends State<PromoteUser> {
         clickid = productRecList[index].idProduct;
         addData();
 
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(
-          builder: (context) => ShowDetail(
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (value) => ShowDetail(
             productModel: productRecList[index],
             userModel: userModel!,
           ),
-        ));
+        );
+        Navigator.of(context).push(route);
       },
       child: Container(
         margin: EdgeInsets.only(

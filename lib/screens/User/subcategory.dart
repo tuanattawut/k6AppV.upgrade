@@ -50,15 +50,6 @@ class _SubcategoryState extends State<Subcategory> {
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryModels!.namecategory.toString()),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => Homepage(
-                  usermodel: userModel!,
-                ),
-              ));
-            },
-            icon: Icon(Icons.home)),
       ),
       body: Container(
         child: ListView.builder(

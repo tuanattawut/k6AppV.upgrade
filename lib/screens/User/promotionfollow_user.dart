@@ -82,13 +82,10 @@ class _PromotionFollowState extends State<PromotionFollow> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('โปรโมชั่นจากร้านค้า')),
-        ),
         body: RefreshIndicator(
-          child: loadStatus! ? MyStyle().showProgress() : showContent(),
-          onRefresh: refreshList,
-        ));
+      child: loadStatus! ? MyStyle().showProgress() : showContent(),
+      onRefresh: refreshList,
+    ));
   }
 
   Widget showContent() {
@@ -96,7 +93,7 @@ class _PromotionFollowState extends State<PromotionFollow> {
         ? showApprove()
         : Center(
             child: Text(
-              'ไม่มีแจ้งเตือนขณะนี้',
+              'ไม่มีแจ้งเตือนจากร้านที่ติดตาม',
               style: TextStyle(fontSize: 18),
             ),
           );
@@ -115,7 +112,7 @@ class _PromotionFollowState extends State<PromotionFollow> {
                     Navigator.of(context).push(route);
                   },
                   leading: Image.network(
-                    '${MyConstant().domain}/upload/promotion/${promotionlist[index].image}',
+                    '${MyConstant().domain}/upload/promotionseller/${promotionlist[index].image}',
                     fit: BoxFit.cover,
                     width: 50,
                   ),

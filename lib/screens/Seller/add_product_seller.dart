@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
@@ -217,6 +218,9 @@ class _AddProductState extends State<AddProduct> {
     return TextFormField(
       keyboardType: TextInputType.number,
       onChanged: (value) => price = value.trim(),
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly
+      ],
       decoration: InputDecoration(
         labelText: 'ราคาสินค้า :',
         suffixText: 'บาท',

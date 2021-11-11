@@ -84,15 +84,6 @@ class _ShowDetailState extends State<ShowDetail> {
             title: productModel == null
                 ? Text('รายละเอียด')
                 : Text(productModel!.nameproduct),
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                    builder: (context) => Homepage(
-                      usermodel: userModel!,
-                    ),
-                  ));
-                },
-                icon: Icon(Icons.home)),
             bottom: const TabBar(
               tabs: [
                 Tab(text: 'สินค้า'),

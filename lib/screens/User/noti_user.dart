@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/promotionfollow_user.dart';
 import 'package:k6_app/screens/User/promotionseller_user.dart';
 
 class NotiUser extends StatefulWidget {
+  NotiUser({required this.userModel});
+  final UserModel userModel;
   @override
   _NotiUserState createState() => _NotiUserState();
 }
 
 class _NotiUserState extends State<NotiUser> {
+  UserModel? userModel;
   @override
   void initState() {
     super.initState();
+    userModel = widget.userModel;
   }
 
   @override
@@ -29,7 +35,7 @@ class _NotiUserState extends State<NotiUser> {
           body: TabBarView(
             children: [
               PromotionUser(),
-              PromotionUser(),
+              PromotionFollow(userModel: userModel!),
             ],
           ),
         ));

@@ -13,12 +13,13 @@ class DetailPromotionseller extends StatefulWidget {
 
 class _DetailPromotionsellerState extends State<DetailPromotionseller> {
   PromotionsellerModel? promotionlist;
-  String? idPro, status = 'yes';
+  String? idPro, status = 'yes', nameshop;
   @override
   void initState() {
     super.initState();
     promotionlist = widget.promotionsellerModel;
     idPro = promotionlist!.idPromotionseller;
+    nameshop = promotionlist!.nameshop;
   }
 
   String? date(DateTime tm) {
@@ -117,6 +118,18 @@ class _DetailPromotionsellerState extends State<DetailPromotionseller> {
               MyStyle().mySizebox(),
               Row(
                 children: [
+                  MyStyle().showTitleH2('จากร้าน:  '),
+                  Text(
+                    nameshop.toString(),
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              MyStyle().mySizebox(),
+              Row(
+                children: [
                   MyStyle().showTitleH2('วันที่ลง:  '),
                   Text(
                     date(DateTime.parse(promotionlist!.regdate.toString()))
@@ -137,7 +150,7 @@ class _DetailPromotionsellerState extends State<DetailPromotionseller> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/promotion/${promotionlist?.image}',
+          '${MyConstant().domain}/upload/promotionseller/${promotionlist?.image}',
           fit: BoxFit.contain,
         ));
   }

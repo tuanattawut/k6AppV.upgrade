@@ -72,55 +72,6 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
-  //String? pid, vid;
-  // Future<Null> getRecom() async {
-  //   iduserRec = userModel!.idUser;
-  //   // print('p_id => $idproductRec');
-  //   //print('u_id =>$iduserRec');
-  //   String api =
-  //       '${MyConstant().domain}/api/reC.php?isAdd=true&id_products=$idproductRec&id_user=$iduserRec';
-  //   final response = await Dio().get(api);
-  //   if (response != null && response.data != null) {
-  //     final value = jsonDecode(response.data);
-  //     if (value != null) {
-  //       Map<String, dynamic> greatestView = value.fold(
-  //           {},
-  //           (previous, current) => previous['view'] == null
-  //               ? current
-  //               : int.parse(previous['view']!) >= int.parse(current['view']!)
-  //                   ? previous
-  //                   : current);
-  //       if (greatestView['id_products'] != null) {
-  //         pid = greatestView['id_products'].toString();
-  //         // print(greatestView['view']);
-  //         return getProductRec();
-  //       } else {
-  //         print('NULL');
-  //       }
-  //     }
-  //   }
-  // }
-
-  // ProductModel? productRecList;
-  // Future<Null> getProductRec() async {
-  //   String api =
-  //       '${MyConstant().domain}/api/getproductfromidProduct.php?isAdd=true&id_products=$pid';
-
-  //   await Dio().get(api).then((value) {
-  //     if (value.toString() != 'null') {
-  //       for (var item in json.decode(value.data)) {
-  //         ProductModel productRecLists = ProductModel.fromMap(item);
-  //         setState(() {
-  //           productRecList = productRecLists;
-  //           // print(productRecList!.idSubcategory);
-  //           getProductRecs();
-  //         });
-  //       }
-  //     } else {
-  //       CircularProgressIndicator();
-  //     }
-  //   });
-  // }
   ProductModel? productRecList;
   Future<Null> getRecom() async {
     String api =
@@ -138,21 +89,35 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
+  bool? loadStatusREC = true;
+  bool? statusREC = true;
   List<ProductModel> productRecLists = [];
   Future<Null> getProductRecs() async {
+    if (productRecLists.length != 0) {
+      loadStatusREC = true;
+      statusREC = true;
+      productRecLists.clear();
+    }
     String? idsub = productRecList!.idSubcategory;
     String api =
         '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
 
     await Dio().get(api).then((value) {
+      setState(() {
+        loadStatusREC = false;
+      });
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           ProductModel productRecLists2 = ProductModel.fromMap(item);
           setState(() {
             productRecLists.add(productRecLists2);
-            print(productRecLists2);
+            // print(productRecLists2);
           });
         }
+      } else {
+        setState(() {
+          statusREC = false;
+        });
       }
     });
   }
@@ -193,130 +158,148 @@ class _ProductListUserState extends State<ProductListUser> {
             // print(categoryList);
           });
         }
-      } else {
-        CircularProgressIndicator();
       }
     });
   }
 
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      getProductRecs();
+      getData();
+    });
+
+    return null;
+  }
+
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('หน้าแรก')),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => ShowSearch(
-                  userModel: userModel!,
-                ),
-              ));
-            },
-          )
-        ],
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            banner(context),
-            Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(children: [
-                  _buildSectiontitle(
-                    'หมวดหมู่',
-                    () {
-                      Navigator.of(context)
-                          .pushReplacement(new MaterialPageRoute(
-                        builder: (context) => ShowallCategory(
-                          userModel: userModel!,
-                        ),
-                      ));
-                    },
+        appBar: AppBar(
+          title: Center(child: Text('หน้าแรก')),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => ShowSearch(
+                    userModel: userModel!,
                   ),
-                  SizedBox(
-                    height: 200,
-                    child: loadC!
-                        ? MyStyle().showProgress()
-                        : GridView.count(
-                            crossAxisCount: 4,
-                            children: List.generate(
-                              8,
-                              (index) => showCategory(index),
-                            ),
-                          ),
-                  ),
-                ])),
-            Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(children: [
-                  _buildSectiontitle(
-                    'สินค้าแนะนำ',
-                    () {
-                      Navigator.of(context)
-                          .pushReplacement(new MaterialPageRoute(
-                        builder: (context) => PromoteUser(
-                          userModel: userModel!,
-                          productModel: productRecList!,
-                        ),
-                      ));
-                    },
-                  ),
-                  SizedBox(
-                    height: 260,
-                    child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: productRecLists.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          showListView(index),
-                    ),
-                  ),
-                ])),
-            Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(children: [
-                  _buildSectiontitle(
-                    'สินค้าทั้งหมด',
-                    () {
-                      Navigator.of(context)
-                          .pushReplacement(new MaterialPageRoute(
-                        builder: (context) => ProductAll(
-                          userModel: userModel!,
-                        ),
-                      ));
-                    },
-                  ),
-                  loadStatus!
-                      ? MyStyle().showProgress()
-                      : GridView.count(
-                          childAspectRatio: MediaQuery.of(context).size.width /
-                              (MediaQuery.of(context).size.height / 1.2),
-                          crossAxisCount: 2,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          children: List.generate(
-                            10,
-                            (index) {
-                              return showAllview(index);
-                            },
-                          ),
-                        ),
-                ])),
+                );
+                Navigator.of(context).push(route);
+              },
+            )
           ],
+          centerTitle: true,
         ),
-      ),
-    );
+        body: RefreshIndicator(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                banner(context),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(children: [
+                      _buildSectiontitle(
+                        'หมวดหมู่',
+                        () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (value) => ShowallCategory(
+                              userModel: userModel!,
+                            ),
+                          );
+                          Navigator.of(context).push(route);
+                        },
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: loadC!
+                            ? MyStyle().showProgress()
+                            : GridView.count(
+                                crossAxisCount: 4,
+                                children: List.generate(
+                                  8,
+                                  (index) => showCategory(index),
+                                ),
+                              ),
+                      ),
+                    ])),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(children: [
+                      _buildSectiontitle(
+                        'สินค้าแนะนำ',
+                        () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (value) => PromoteUser(
+                              userModel: userModel!,
+                              productModel: productRecList!,
+                            ),
+                          );
+                          Navigator.of(context).push(route);
+                        },
+                      ),
+                      SizedBox(
+                        height: 260,
+                        child: loadStatusREC!
+                            ? MyStyle().showProgress()
+                            : ListView.builder(
+                                physics: ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: productRecLists.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        showListView(index),
+                              ),
+                      ),
+                    ])),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(children: [
+                      _buildSectiontitle(
+                        'สินค้าทั้งหมด',
+                        () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (value) => ProductAll(
+                              userModel: userModel!,
+                            ),
+                          );
+                          Navigator.of(context).push(route);
+                        },
+                      ),
+                      loadStatus!
+                          ? MyStyle().showProgress()
+                          : GridView.count(
+                              childAspectRatio: MediaQuery.of(context)
+                                      .size
+                                      .width /
+                                  (MediaQuery.of(context).size.height / 1.2),
+                              crossAxisCount: 2,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: List.generate(
+                                10,
+                                (index) {
+                                  return showAllview(index);
+                                },
+                              ),
+                            ),
+                    ])),
+              ],
+            ),
+          ),
+          onRefresh: refreshList,
+        ));
   }
 
   Widget showCategory(int index) {
@@ -330,11 +313,12 @@ class _ProductListUserState extends State<ProductListUser> {
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => Subcategory(
+            MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => Subcategory(
                       categoryModel: categoryList[index],
                       userModel: userModel!,
-                    )));
+                    ));
+            Navigator.of(context).push(route);
           },
           child: Column(
             children: <Widget>[
@@ -377,12 +361,13 @@ class _ProductListUserState extends State<ProductListUser> {
             onTap: () {
               clickid = productRecLists[index].idProduct;
               addData();
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => ShowDetail(
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
                   productModel: productRecLists[index],
                   userModel: userModel!,
                 ),
-              ));
+              );
+              Navigator.of(context).push(route);
             },
             child: Column(children: <Widget>[
               Container(
@@ -449,12 +434,13 @@ class _ProductListUserState extends State<ProductListUser> {
             clickid = productModels[index].idProduct;
             addData();
             // print(clickid);
-            Navigator.of(context).pushReplacement(new MaterialPageRoute(
-              builder: (context) => ShowDetail(
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => ShowDetail(
                 productModel: productModels[index],
                 userModel: userModel!,
               ),
-            ));
+            );
+            Navigator.of(context).push(route);
           },
           child: Column(children: <Widget>[
             Container(
@@ -518,8 +504,6 @@ class _ProductListUserState extends State<ProductListUser> {
           });
           buildWidgets();
         }
-      } else {
-        CircularProgressIndicator();
       }
     });
   }
@@ -532,13 +516,13 @@ class _ProductListUserState extends State<ProductListUser> {
   void buildWidgets() {
     widgets.add(
         Image.network('${MyConstant().domain}/upload/promotion/$promotion'));
-    // print(widgets);
+    //print(widgets);
   }
 
   Widget banner(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          print('คลิก $_current');
+          // print('คลิก $_current');
         },
         child: Column(
           children: [

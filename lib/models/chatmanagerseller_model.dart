@@ -7,6 +7,7 @@ class ChatmanagersellerModel {
   final String idseller;
   final String status;
   final String regdate;
+
   ChatmanagersellerModel({
     required this.idchatmanager,
     required this.message,

@@ -60,7 +60,7 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
     String nameImage = 'Promotion_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/upload/savePromotion.php';
+    String url = '${MyConstant().domain}/upload/saveImagePromotionseller.php';
 
     try {
       Map<String, dynamic> map = Map();

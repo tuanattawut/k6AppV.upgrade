@@ -7,6 +7,7 @@ class PromotionsellerModel {
   String? image;
   String? status;
   String? regdate;
+  String? nameshop;
   PromotionsellerModel({
     this.idPromotionseller,
     this.idSeller,
@@ -14,6 +15,7 @@ class PromotionsellerModel {
     this.image,
     this.status,
     this.regdate,
+    this.nameshop,
   });
 
   PromotionsellerModel copyWith({
@@ -23,6 +25,7 @@ class PromotionsellerModel {
     String? image,
     String? status,
     String? regdate,
+    String? nameshop,
   }) {
     return PromotionsellerModel(
       idPromotionseller: idPromotionseller ?? this.idPromotionseller,
@@ -31,6 +34,7 @@ class PromotionsellerModel {
       image: image ?? this.image,
       status: status ?? this.status,
       regdate: regdate ?? this.regdate,
+      nameshop: nameshop ?? this.nameshop,
     );
   }
 
@@ -42,6 +46,7 @@ class PromotionsellerModel {
       'image': image,
       'status': status,
       'regdate': regdate,
+      'nameshop': nameshop,
     };
   }
 
@@ -55,6 +60,7 @@ class PromotionsellerModel {
       image: map['image'] != null ? map['image'] : null,
       status: map['status'] != null ? map['status'] : null,
       regdate: map['regdate'] != null ? map['regdate'] : null,
+      nameshop: map['nameshop'] != null ? map['nameshop'] : null,
     );
   }
 
@@ -65,7 +71,7 @@ class PromotionsellerModel {
 
   @override
   String toString() {
-    return 'PromotionsellerModel(idPromotionseller: $idPromotionseller, idSeller: $idSeller, detailpromotion: $detailpromotion, image: $image, status: $status, regdate: $regdate)';
+    return 'PromotionsellerModel(idPromotionseller: $idPromotionseller, idSeller: $idSeller, detailpromotion: $detailpromotion, image: $image, status: $status, regdate: $regdate,nameshop: $nameshop)';
   }
 
   @override
@@ -78,7 +84,8 @@ class PromotionsellerModel {
         other.detailpromotion == detailpromotion &&
         other.image == image &&
         other.status == status &&
-        other.regdate == regdate;
+        other.regdate == regdate &&
+        other.nameshop == nameshop;
   }
 
   @override
@@ -88,6 +95,7 @@ class PromotionsellerModel {
         detailpromotion.hashCode ^
         image.hashCode ^
         status.hashCode ^
-        regdate.hashCode;
+        regdate.hashCode ^
+        nameshop.hashCode;
   }
 }
