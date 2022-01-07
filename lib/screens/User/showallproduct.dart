@@ -173,7 +173,7 @@ class _ProductAllState extends State<ProductAll> {
         children: <Widget>[
           showName(index),
           Text(
-            f.format(int.parse(productModels[index].price)),
+            f.format(double.parse(productModels[index].price)),
             style: Theme.of(context)
                 .textTheme
                 .button!

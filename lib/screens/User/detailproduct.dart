@@ -278,7 +278,7 @@ class _DetailProductState extends State<DetailProduct> {
                 Container(
                   padding: EdgeInsets.all(25),
                   child: Text(
-                    f.format(int.parse(productModel!.price)),
+                    f.format(double.parse(productModel!.price)),
                     style: Theme.of(context)
                         .textTheme
                         .button!
@@ -387,7 +387,7 @@ class _DetailProductState extends State<DetailProduct> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        f.format(int.parse(productModels[index].price)),
+                        f.format(double.parse(productModels[index].price)),
                         style: Theme.of(context)
                             .textTheme
                             .button!
@@ -461,7 +461,7 @@ class _DetailProductState extends State<DetailProduct> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        f.format(int.parse(productcateLists[index].price)),
+                        f.format(double.parse(productcateLists[index].price)),
                         style: Theme.of(context)
                             .textTheme
                             .button!

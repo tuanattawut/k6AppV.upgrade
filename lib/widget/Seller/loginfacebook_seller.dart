@@ -24,13 +24,14 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
 
   var profileData;
 
-  var facebookLogin = FacebookLogin();
+  static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   void onLoginStatusChanged(bool isLoggedIn, {profileData}) {
     setState(() {
       this.isLoggedIn = isLoggedIn;
       this.profileData = profileData;
 
+      print(profileData);
       name = profileData['first_name'];
       lastname = profileData['last_name'];
       email = profileData['email'];
@@ -65,7 +66,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
     try {
       Response response = await Dio().get(url);
       var result = json.decode(response.data);
-     // print(result);
+      // print(result);
       if (result == null) {
         showAddFBDialog();
       } else {
@@ -346,13 +347,14 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
   }
 
   void initiateFacebookLogin() async {
-    var facebookLoginResult =
-        await facebookLogin.logIn(['email', 'public_profile']);
+    final FacebookLoginResult facebookLoginResult =
+        await facebookSignIn.logIn(['email']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
         onLoginStatusChanged(false);
-        print('การล็อกอินเออเร่อ');
+        facebookSignIn.logOut();
+        print('การล็อกอินเออเร่อ ${facebookLoginResult.errorMessage}');
         break;
       case FacebookLoginStatus.cancelledByUser:
         onLoginStatusChanged(false);
@@ -363,7 +365,6 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}'));
 
         var profile = json.decode(graphResponse.body);
-        // print(profile.toString());
 
         onLoginStatusChanged(true, profileData: profile);
 

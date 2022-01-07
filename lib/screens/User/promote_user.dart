@@ -177,7 +177,7 @@ class _PromoteUserState extends State<PromoteUser> {
           showName(index),
           // showDetail(index),
           Text(
-            f.format(int.parse(productRecList[index].price)),
+            f.format(double.parse(productRecList[index].price)),
             style: Theme.of(context)
                 .textTheme
                 .button!

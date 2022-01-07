@@ -78,7 +78,7 @@ class _DetailShopState extends State<DetailShop> {
                               checkFollow();
                             },
                             icon: Icon(Icons.add),
-                            label: Text('ติดตาม'))
+                            label: Text('ติดตาม')),
                       ],
                     ),
                   ),

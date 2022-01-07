@@ -309,9 +309,8 @@ class _ChatpageSellerState extends State<ChatpageSeller> {
     try {
       Response response = await Dio().get(url);
       //print('res = $response');
-
+      Navigator.pop(context);
       if (response.toString() == 'true') {
-        Navigator.pop(context);
         setState(() {
           _controller.clear();
           readChat();

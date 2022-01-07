@@ -23,7 +23,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
 
   var profileData;
 
-  var facebookLogin = FacebookLogin();
+  static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   void onLoginStatusChanged(bool isLoggedIn, {profileData}) {
     setState(() {
@@ -264,13 +264,14 @@ class _LoginFacebookState extends State<LoginFacebook> {
   }
 
   void initiateFacebookLogin() async {
-    var facebookLoginResult =
-        await facebookLogin.logIn(['email', 'public_profile']);
+    final FacebookLoginResult facebookLoginResult =
+        await facebookSignIn.logIn(['email']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
         onLoginStatusChanged(false);
         print('การล็อกอินเออเร่อ');
+        facebookSignIn.logOut();
         break;
       case FacebookLoginStatus.cancelledByUser:
         onLoginStatusChanged(false);
@@ -287,10 +288,10 @@ class _LoginFacebookState extends State<LoginFacebook> {
 
         break;
     }
-    // _logout() async {
-    //   await facebookLogin.logOut();
-    //   onLoginStatusChanged(false);
-    //   print("Logged out");
-    // }
+    _logout() async {
+      await facebookSignIn.logOut();
+      onLoginStatusChanged(false);
+      print("Logged out");
+    }
   }
 }

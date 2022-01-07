@@ -159,7 +159,7 @@ class _SearchProductState extends State<SearchProduct> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      f.format(int.parse(productModels[index].price)),
+                      f.format(double.parse(productModels[index].price)),
                       style: Theme.of(context)
                           .textTheme
                           .button!
