@@ -9,12 +9,10 @@ class MyStyle {
 
   TextStyle mainTitle = TextStyle(
     fontSize: 20,
-    fontWeight: FontWeight.bold,
   );
 
   TextStyle mainH2Title = TextStyle(
     fontSize: 18,
-    fontWeight: FontWeight.bold,
   );
 
   SizedBox mySizebox() => SizedBox(
@@ -26,7 +24,6 @@ class MyStyle {
         title,
         style: TextStyle(
           fontSize: 20,
-          fontWeight: FontWeight.bold,
         ),
       );
 
@@ -34,7 +31,6 @@ class MyStyle {
         title,
         style: TextStyle(
           fontSize: 18,
-          fontWeight: FontWeight.bold,
         ),
       );
 
@@ -42,7 +38,6 @@ class MyStyle {
         title,
         style: TextStyle(
           fontSize: 16.0,
-          fontWeight: FontWeight.bold,
         ),
       );
 

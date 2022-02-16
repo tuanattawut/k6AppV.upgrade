@@ -41,10 +41,8 @@ class _LoginSellerState extends State<LoginSeller> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'สำหรับผู้ขายล็อกอิน',
-                      style: MyStyle().mainTitle,
-                    ),
+                    Text('สำหรับผู้ขายล็อกอิน',
+                        style: TextStyle(fontSize: 20, color: Colors.blue)),
                   ],
                 ),
                 MyStyle().mySizebox(),
@@ -125,7 +123,10 @@ class _LoginSellerState extends State<LoginSeller> {
                 ),
         ),
         labelText: 'พาสเวิร์ด',
-        icon: Icon(Icons.lock),
+        icon: Icon(
+          Icons.lock,
+          color: Colors.blue,
+        ),
       ),
     );
   }
@@ -143,7 +144,10 @@ class _LoginSellerState extends State<LoginSeller> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'อีเมล',
-        icon: Icon(Icons.email),
+        icon: Icon(
+          Icons.email,
+          color: Colors.blue,
+        ),
         hintText: 'x@x.com',
       ),
     );
@@ -169,7 +173,7 @@ class _LoginSellerState extends State<LoginSeller> {
                   sellerModel: sellerModel,
                 ),
               ));
-addLogin();
+              addLogin();
               break;
             } else if (sellerModel.role == 'noseller') {
               normalDialog(
@@ -189,13 +193,12 @@ addLogin();
     }
   }
 
-
-   Future<Null> addLogin() async {
+  Future<Null> addLogin() async {
     String typeuser = 'seller';
     String url =
         '${MyConstant().domain}/api/addLogin.php?isAdd=true&typeuser=$typeuser';
 
-   try {
+    try {
       Response response = await Dio().get(url);
       //print('res = $response');
 

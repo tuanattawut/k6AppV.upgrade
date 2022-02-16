@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:k6_app/utility/enc-dec.dart';
-
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -25,7 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("สมัครสมาชิก", style: TextStyle(color: Colors.white)),
+          title: Text("สมัครสมาชิก"),
         ),
         body: Form(
             key: _formstate,
@@ -92,35 +90,49 @@ class _RegisterPageState extends State<RegisterPage> {
             )));
   }
 
-  ElevatedButton buildRegisterButton() {
-    return ElevatedButton(
-      child: Text('สมัครสมาชิก'),
-      onPressed: () async {
-        if (this._formstate.currentState!.validate()) if (name == null ||
-            name!.isEmpty ||
-            lastname == null ||
-            lastname!.isEmpty ||
-            generateMd5(password!) == null ||
-            generateMd5(password!).isEmpty ||
-            phone == null ||
-            phone!.isEmpty ||
-            phone!.length != 10 ||
-            gender == null ||
-            gender!.isEmpty) {
-          normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
-        } else if (email == null || email!.isEmpty || !email!.contains('@')) {
-          normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
-        }
-        // else if (file == null) {
-        //   normalDialog(context, 'โปรดใส่รูปภาพ');
-        // }
-        else {
-          showLoade(context);
-          //uploadImage();
-          checkUser();
-        }
-      },
-    );
+  Container buildRegisterButton() {
+    return Container(
+        margin: const EdgeInsets.all(15),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)],
+            begin: FractionalOffset.centerLeft,
+            end: FractionalOffset.centerRight,
+          ),
+        ),
+        child: TextButton(
+          child: const Text(
+            'สมัครสมาชิก',
+            style: TextStyle(fontSize: 16, color: Colors.white),
+          ),
+          onPressed: () async {
+            if (this._formstate.currentState!.validate()) if (name == null ||
+                name!.isEmpty ||
+                lastname == null ||
+                lastname!.isEmpty ||
+                generateMd5(password!) == null ||
+                generateMd5(password!).isEmpty ||
+                phone == null ||
+                phone!.isEmpty ||
+                phone!.length != 10 ||
+                gender == null ||
+                gender!.isEmpty) {
+              normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
+            } else if (email == null ||
+                email!.isEmpty ||
+                !email!.contains('@')) {
+              normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
+            }
+            // else if (file == null) {
+            //   normalDialog(context, 'โปรดใส่รูปภาพ');
+            // }
+            else {
+              showLoade(context);
+              //uploadImage();
+              checkUser();
+            }
+          },
+        ));
   }
 
   Future<Null> uploadImage() async {
