@@ -26,7 +26,7 @@ class _EditPromotionState extends State<EditPromotion> {
   void initState() {
     super.initState();
     promotionModel = widget.promotionModel;
-    idPromotion = promotionModel!.idPromotion;
+    idPromotion = promotionModel!.id;
   }
 
   @override
@@ -145,7 +145,7 @@ class _EditPromotionState extends State<EditPromotion> {
           height: 200,
           child: file == null
               ? Image.network(
-                  '${MyConstant().domain}/upload/promotion/${promotionModel!.imgUrl}',
+                  '${MyConstant().domain}/upload/promotion/${promotionModel!.image}',
                   fit: BoxFit.cover,
                 )
               : Image.file(file!),

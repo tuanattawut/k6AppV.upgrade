@@ -55,7 +55,7 @@ class _ManagePromotionState extends State<ManagePromotion> {
                       Navigator.of(context).push(route);
                     },
                     leading: Image.network(
-                      '${MyConstant().domain}/upload/promotion/${promotionList[index].imgUrl}',
+                      '${MyConstant().domain}/images/promotionweb/${promotionList[index].image}',
                       fit: BoxFit.cover,
                       width: 50,
                     ),

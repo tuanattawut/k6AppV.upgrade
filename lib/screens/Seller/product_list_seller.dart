@@ -161,14 +161,15 @@ class _ProductListSellerState extends State<ProductListSeller> {
                           style: MyStyle().mainTitle,
                         ),
                         Text(
-                          f.format(double.parse(productModels[index].price)),
+                          f.format(double.parse(
+                              productModels[index].price.toString())),
                           style: Theme.of(context)
                               .textTheme
                               .button!
                               .copyWith(color: Colors.red, fontSize: 18),
                         ),
                         Text(
-                          productModels[index].detail,
+                          productModels[index].detail.toString(),
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -222,7 +223,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
                 onPressed: () async {
                   Navigator.pop(context);
                   String url =
-                      '${MyConstant().domain}/api/deletefromIdproduct.php?isAdd=true&id_products=${productModel.idProduct}';
+                      '${MyConstant().domain}/api/deletefromIdproduct.php?isAdd=true&id_products=${productModel.id}';
                   await Dio().get(url).then((value) => readProduct());
                 },
                 child: Text('ยืนยัน'),

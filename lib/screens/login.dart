@@ -25,71 +25,73 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Form(
-      key: _formstate,
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        behavior: HitTestBehavior.opaque,
-        child: ListView(
-          padding: EdgeInsets.all(20.0),
-          children: <Widget>[
-            MyStyle().mySizebox(),
-            SizedBox(
-              height: 150,
-            ),
-            //MyStyle().showLogo(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('ระบบแนะนำสินค้าและร้านค้า ',
-                    style: TextStyle(fontSize: 20, color: Colors.blue)),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('ตลาดเคหะคลองหก ',
-                    style: TextStyle(fontSize: 20, color: Colors.blue)),
-              ],
-            ),
-            MyStyle().mySizebox(),
-            buildEmailField(),
-            buildPasswordField(),
-            MyStyle().mySizebox(),
-            buildLoginButton(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const Text('ยังไม่ได้เป็นสมาชิก?'),
-                buildRegisterButton(context),
-              ],
-            ),
+      body: Form(
+        key: _formstate,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: ListView(
+            padding: EdgeInsets.all(20.0),
+            children: <Widget>[
+              MyStyle().mySizebox(),
+              SizedBox(
+                height: 150,
+              ),
+              //MyStyle().showLogo(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('ระบบแนะนำสินค้าและร้านค้า ',
+                      style: TextStyle(fontSize: 20, color: Colors.blue)),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('ตลาดเคหะคลองหก ',
+                      style: TextStyle(fontSize: 20, color: Colors.blue)),
+                ],
+              ),
+              MyStyle().mySizebox(),
+              buildEmailField(),
+              buildPasswordField(),
+              MyStyle().mySizebox(),
+              buildLoginButton(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text('ยังไม่ได้เป็นสมาชิก?'),
+                  buildRegisterButton(context),
+                ],
+              ),
 
-            LoginFacebook(),
-            Row(children: const [
-              Expanded(
-                  child: Divider(
-                color: Colors.blue,
-              )),
-              Text(" OR ", style: TextStyle(fontSize: 14, color: Colors.black)),
-              Expanded(
-                  child: Divider(
-                color: Colors.blue,
-              )),
-            ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                buildsellerButton(),
-                MyStyle().mySizebox(),
-                MyStyle().mySizebox(),
-                managerButton(),
-              ],
-            ),
-          ],
+              LoginFacebook(),
+              Row(children: const [
+                Expanded(
+                    child: Divider(
+                  color: Colors.blue,
+                )),
+                Text(" OR ",
+                    style: TextStyle(fontSize: 14, color: Colors.black)),
+                Expanded(
+                    child: Divider(
+                  color: Colors.blue,
+                )),
+              ]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  buildsellerButton(),
+                  MyStyle().mySizebox(),
+                  MyStyle().mySizebox(),
+                  managerButton(),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Expanded managerButton() {
@@ -137,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Container buildLoginButton() {
     return Container(
+        height: 40,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)],

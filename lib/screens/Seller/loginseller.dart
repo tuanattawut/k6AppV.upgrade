@@ -6,6 +6,7 @@ import 'package:k6_app/screens/Seller/main_seller.dart';
 import 'package:k6_app/screens/Seller/registerseller.dart';
 import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_outlinebutton.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:k6_app/widget/Seller/loginfacebook_seller.dart';
@@ -50,17 +51,40 @@ class _LoginSellerState extends State<LoginSeller> {
                 buildPasswordField(),
                 MyStyle().mySizebox(),
                 buildLoginButton(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    buildRegisterButton(context),
-                  ],
-                ),
+                MyStyle().mySizebox(),
                 LoginFacebookSeller(),
+
+                Row(children: const [
+                  Expanded(
+                      child: Divider(
+                    color: Colors.blue,
+                  )),
+                  Text(" OR ",
+                      style: TextStyle(fontSize: 14, color: Colors.black)),
+                  Expanded(
+                      child: Divider(
+                    color: Colors.blue,
+                  )),
+                ]),
+
+                buildRegisterSeller(context),
               ],
             ),
           ),
         ));
+  }
+
+  MyOutlinedButton buildRegisterSeller(BuildContext context) {
+    return MyOutlinedButton(
+      onPressed: () async {
+        MaterialPageRoute route =
+            MaterialPageRoute(builder: (value) => RegisterSeller());
+        Navigator.of(context).push(route);
+      },
+      gradient: const LinearGradient(
+          colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)]),
+      child: const Text('สมัครขายสินค้า'),
+    );
   }
 
   TextButton buildRegisterButton(BuildContext context) {
@@ -74,26 +98,39 @@ class _LoginSellerState extends State<LoginSeller> {
     );
   }
 
-  ElevatedButton buildLoginButton() {
-    return ElevatedButton(
-        child: Text('ล็อกอิน'),
-        onPressed: () async {
-          if (this._formstate.currentState!.validate()) {
-            //print('email =====> $email\npassword =====> $password');
+  Container buildLoginButton() {
+    return Container(
+      height: 40,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)],
+          begin: FractionalOffset.centerLeft,
+          end: FractionalOffset.centerRight,
+        ),
+      ),
+      child: TextButton(
+          child: const Text(
+            'เข้าสู่ระบบ',
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          onPressed: () async {
+            if (this._formstate.currentState!.validate()) {
+              //print('email =====> $email\npassword =====> $password');
 
-            if (email == null ||
-                email!.isEmpty ||
-                !email!.contains('@') ||
-                password == null ||
-                password!.isEmpty ||
-                password!.length < 6) {
-              normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
-            } else {
-              showLoade(context);
-              checkAuthen();
+              if (email == null ||
+                  email!.isEmpty ||
+                  !email!.contains('@') ||
+                  password == null ||
+                  password!.isEmpty ||
+                  password!.length < 6) {
+                normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
+              } else {
+                showLoade(context);
+                checkAuthen();
+              }
             }
-          }
-        });
+          }),
+    );
   }
 
   TextFormField buildPasswordField() {

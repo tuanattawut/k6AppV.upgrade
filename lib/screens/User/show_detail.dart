@@ -83,7 +83,7 @@ class _ShowDetailState extends State<ShowDetail> {
           appBar: AppBar(
             title: productModel == null
                 ? Text('รายละเอียด')
-                : Text(productModel!.nameproduct),
+                : Text(productModel!.nameproduct.toString()),
             bottom: const TabBar(
               tabs: [
                 Tab(text: 'สินค้า'),
@@ -120,7 +120,7 @@ class _ShowDetailState extends State<ShowDetail> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/product/${productModel!.image}',
+          '${MyConstant().domain}/images/products_seller/${productModel!.image}',
           fit: BoxFit.contain,
         ));
   }
@@ -166,7 +166,7 @@ class _ShowDetailState extends State<ShowDetail> {
             showImage(),
             MyStyle().mySizebox(),
             Text(
-              productModel!.nameproduct,
+              productModel!.nameproduct.toString(),
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -194,7 +194,7 @@ class _ShowDetailState extends State<ShowDetail> {
               ],
             ),
             Text(
-              productModel!.detail,
+              productModel!.detail.toString(),
               style: TextStyle(
                 fontSize: 18,
               ),

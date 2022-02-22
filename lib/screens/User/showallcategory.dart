@@ -63,7 +63,7 @@ class _ShowallCategoryState extends State<ShowallCategory> {
                       Navigator.of(context).push(route);
                     },
                     leading: Image.network(
-                      '${MyConstant().domain}/upload/categories/${categoryList[index].image}',
+                      '${MyConstant().domain}/images/categories/${categoryList[index].image}',
                       fit: BoxFit.cover,
                       width: 50,
                     ),

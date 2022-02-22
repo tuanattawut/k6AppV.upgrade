@@ -240,7 +240,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
   Widget build(BuildContext context) {
     return SignInButtonBuilder(
       backgroundColor: Colors.indigo,
-      text: 'ล็อกอินด้วย Facebook',
+      text: 'เข้าสู่ระบบด้วย Facebook',
       icon: Icons.facebook,
       onPressed: () => initiateFacebookLogin(),
     );

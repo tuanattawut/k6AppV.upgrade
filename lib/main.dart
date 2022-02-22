@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/screens/login.dart';
 import 'package:k6_app/screens/register.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,9 +22,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      home: new SplashScreen(
+          seconds: 4,
+          navigateAfterSeconds: LoginPage(),
+          title: new Text('ยินดีต้อนรับ',
+              style: TextStyle(color: Colors.blue, fontSize: 30)),
+          image: new Image.asset('images/logo.png'),
+          backgroundColor: Colors.white,
+          styleTextUnderTheLoader: new TextStyle(),
+          photoSize: 50,
+          loaderColor: Colors.blue),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(),
+        //'/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
       },
     );

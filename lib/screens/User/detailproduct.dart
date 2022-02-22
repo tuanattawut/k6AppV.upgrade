@@ -29,7 +29,7 @@ class _DetailProductState extends State<DetailProduct> {
   UserModel? userModel;
   var f = NumberFormat.currency(locale: "THB", symbol: "฿");
   final df = new DateFormat('dd-MM-yyyy');
-  String? date(DateTime tm) {
+  dynamic date(DateTime tm) {
     DateTime today = new DateTime.now();
     Duration oneDay = new Duration(days: 1);
     Duration twoDay = new Duration(days: 2);
@@ -153,7 +153,7 @@ class _DetailProductState extends State<DetailProduct> {
   }
 
   Future<Null> getCategory() async {
-    String idsubcategory = productModel!.idSubcategory;
+    String idsubcategory = productModel!.idSubcategory.toString();
     //print(idcategory);
     String api =
         '${MyConstant().domain}/api/getSubcategoryfromidsubcategory.php?isAdd=true&id_subcategory=$idsubcategory';
@@ -253,7 +253,7 @@ class _DetailProductState extends State<DetailProduct> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/product/${productModel!.image}',
+          '${MyConstant().domain}/images/products_seller/${productModel!.image}',
           fit: BoxFit.contain,
         ));
   }
@@ -266,7 +266,7 @@ class _DetailProductState extends State<DetailProduct> {
             showImage(),
             MyStyle().mySizebox(),
             Text(
-              productModel!.nameproduct,
+              productModel!.nameproduct.toString(),
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -278,7 +278,7 @@ class _DetailProductState extends State<DetailProduct> {
                 Container(
                   padding: EdgeInsets.all(25),
                   child: Text(
-                    f.format(double.parse(productModel!.price)),
+                    f.format(double.parse(productModel!.price.toString())),
                     style: Theme.of(context)
                         .textTheme
                         .button!
@@ -309,7 +309,7 @@ class _DetailProductState extends State<DetailProduct> {
               ],
             ),
             Text(
-              productModel!.detail,
+              productModel!.detail.toString(),
               style: TextStyle(
                 fontSize: 18,
               ),
@@ -318,7 +318,8 @@ class _DetailProductState extends State<DetailProduct> {
               children: [
                 MyStyle().showTitleH2('วันที่ลงขาย:  '),
                 Text(
-                  date(DateTime.parse(productModel!.regdate)).toString(),
+                  date(DateTime.parse(productModel!.createdAt.toString()))
+                      .toString(),
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -343,7 +344,7 @@ class _DetailProductState extends State<DetailProduct> {
         ),
         child: GestureDetector(
             onTap: () {
-              clickid = productModels[index].idProduct;
+              clickid = productModels[index].id;
               addData();
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ShowDetail(
@@ -358,7 +359,7 @@ class _DetailProductState extends State<DetailProduct> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/product/${productModels[index].image}',
+                  '${MyConstant().domain}/images/products_seller/${productModels[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -387,7 +388,8 @@ class _DetailProductState extends State<DetailProduct> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        f.format(double.parse(productModels[index].price)),
+                        f.format(double.parse(
+                            productModels[index].price.toString())),
                         style: Theme.of(context)
                             .textTheme
                             .button!
@@ -416,7 +418,7 @@ class _DetailProductState extends State<DetailProduct> {
         ),
         child: GestureDetector(
             onTap: () {
-              clickid = productcateLists[index].idProduct;
+              clickid = productcateLists[index].id;
               addData();
 
               MaterialPageRoute route = MaterialPageRoute(
@@ -432,7 +434,7 @@ class _DetailProductState extends State<DetailProduct> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/product/${productcateLists[index].image}',
+                  '${MyConstant().domain}/images/products_seller/${productcateLists[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -461,7 +463,8 @@ class _DetailProductState extends State<DetailProduct> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        f.format(double.parse(productcateLists[index].price)),
+                        f.format(double.parse(
+                            productcateLists[index].price.toString())),
                         style: Theme.of(context)
                             .textTheme
                             .button!

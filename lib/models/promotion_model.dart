@@ -1,40 +1,46 @@
 import 'dart:convert';
 
 class PromotionModel {
-  String idPromotion;
-  String imgUrl;
-  String regdate;
+  String? id;
+  String? image;
+  String? createdAt;
+  String? updatedAt;
   PromotionModel({
-    required this.idPromotion,
-    required this.imgUrl,
-    required this.regdate,
+    this.id,
+    this.image,
+    this.createdAt,
+    this.updatedAt,
   });
 
   PromotionModel copyWith({
-    String? idPromotion,
-    String? imgUrl,
-    String? regdate,
+    String? id,
+    String? image,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return PromotionModel(
-      idPromotion: idPromotion ?? this.idPromotion,
-      imgUrl: imgUrl ?? this.imgUrl,
-      regdate: regdate ?? this.regdate,
+      id: id ?? this.id,
+      image: image ?? this.image,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id_promotion': idPromotion,
-      'imgUrl': imgUrl,
-      'regdate': regdate,
+      'id': id,
+      'image': image,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 
   factory PromotionModel.fromMap(Map<String, dynamic> map) {
     return PromotionModel(
-      idPromotion: map['id_promotion'],
-      imgUrl: map['imgUrl'],
-      regdate: map['regdate'],
+      id: map['id'],
+      image: map['image'],
+      createdAt: map['createdAt'],
+      updatedAt: map['updatedAt'],
     );
   }
 
@@ -44,19 +50,26 @@ class PromotionModel {
       PromotionModel.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'PromotionModel(idPromotion: $idPromotion, imgUrl: $imgUrl, regdate: $regdate)';
+  String toString() {
+    return 'PromotionModel(id: $id, image: $image, createdAt: $createdAt, updatedAt: $updatedAt)';
+  }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is PromotionModel &&
-        other.idPromotion == idPromotion &&
-        other.imgUrl == imgUrl &&
-        other.regdate == regdate;
+        other.id == id &&
+        other.image == image &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
-  int get hashCode => idPromotion.hashCode ^ imgUrl.hashCode ^ regdate.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        image.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode;
+  }
 }

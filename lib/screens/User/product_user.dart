@@ -26,9 +26,7 @@ class ProductListUser extends StatefulWidget {
 class _ProductListUserState extends State<ProductListUser> {
   List<ProductModel> productModels = [];
   UserModel? userModel;
-  bool? loadStatus = true;
-  bool? status = true;
-  bool? loadC = true;
+
   String? name, id, idproducts, clickid, idUser;
   List<CategoryModel> categoryList = [];
 
@@ -42,9 +40,11 @@ class _ProductListUserState extends State<ProductListUser> {
     getCategory();
     getPromotion();
     idUser = userModel!.idUser;
-    getRecom();
+    //getRecom();
   }
 
+  bool? loadStatus = true;
+  bool? status = true;
 //เรียกข้อมูลสินค้าทั้งหมด
   Future<Null> getData() async {
     if (productModels.length != 0) {
@@ -134,12 +134,18 @@ class _ProductListUserState extends State<ProductListUser> {
       } else {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      ///
+    }
   }
+
+  bool? loadCate = true;
+  bool? statusCate = true;
 
   Future<Null> getCategory() async {
     if (categoryList.length != 0) {
-      loadC = true;
+      loadCate = true;
+      statusCate = true;
       categoryList.clear();
     }
 
@@ -148,7 +154,7 @@ class _ProductListUserState extends State<ProductListUser> {
     await Dio().get(api).then((value) {
       //print(value);
       setState(() {
-        loadC = false;
+        loadCate = false;
       });
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
@@ -158,6 +164,10 @@ class _ProductListUserState extends State<ProductListUser> {
             // print(categoryList);
           });
         }
+      } else {
+        setState(() {
+          statusCate = false;
+        });
       }
     });
   }
@@ -218,7 +228,7 @@ class _ProductListUserState extends State<ProductListUser> {
                       ),
                       SizedBox(
                         height: 200,
-                        child: loadC!
+                        child: loadCate!
                             ? MyStyle().showProgress()
                             : GridView.count(
                                 crossAxisCount: 4,
@@ -246,20 +256,20 @@ class _ProductListUserState extends State<ProductListUser> {
                           Navigator.of(context).push(route);
                         },
                       ),
-                      SizedBox(
-                        height: 260,
-                        child: loadStatusREC!
-                            ? MyStyle().showProgress()
-                            : ListView.builder(
-                                physics: ClampingScrollPhysics(),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: productRecLists.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) =>
-                                        showListView(index),
-                              ),
-                      ),
+                      // SizedBox(
+                      //   height: 260,
+                      //   child: loadStatusREC!
+                      //       ? MyStyle().showProgress()
+                      //       : ListView.builder(
+                      //           physics: ClampingScrollPhysics(),
+                      //           shrinkWrap: true,
+                      //           scrollDirection: Axis.horizontal,
+                      //           itemCount: productRecLists.length,
+                      //           itemBuilder:
+                      //               (BuildContext context, int index) =>
+                      //                   showListView(index),
+                      //         ),
+                      // ),
                     ])),
                 Card(
                     shape: RoundedRectangleBorder(
@@ -288,7 +298,7 @@ class _ProductListUserState extends State<ProductListUser> {
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               children: List.generate(
-                                10,
+                                productModels.length,
                                 (index) {
                                   return showAllview(index);
                                 },
@@ -322,16 +332,15 @@ class _ProductListUserState extends State<ProductListUser> {
           },
           child: Column(
             children: <Widget>[
-              Container(
+              SizedBox(
                 height: 50,
                 width: 50,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/categories/${categoryList[index].image}',
+                  '${MyConstant().domain}/images/categories/${categoryList[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 5),
                 child: Text(
                   categoryList[index].namecategory.toString(),
                   style: TextStyle(
@@ -359,7 +368,7 @@ class _ProductListUserState extends State<ProductListUser> {
         ),
         child: GestureDetector(
             onTap: () {
-              clickid = productRecLists[index].idProduct;
+              clickid = productRecLists[index].id;
               addData();
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ShowDetail(
@@ -374,7 +383,7 @@ class _ProductListUserState extends State<ProductListUser> {
                 height: 150,
                 width: 150,
                 child: Image.network(
-                  '${MyConstant().domain}/upload/product/${productRecLists[index].image}',
+                  '${MyConstant().domain}/images/products_seller/${productRecLists[index].image}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -403,7 +412,8 @@ class _ProductListUserState extends State<ProductListUser> {
                             .copyWith(color: Colors.black, fontSize: 20),
                       ),
                       Text(
-                        f.format(double.parse(productRecLists[index].price)),
+                        f.format(double.parse(
+                            productRecLists[index].price.toString())),
                         style: Theme.of(context)
                             .textTheme
                             .button!
@@ -431,9 +441,11 @@ class _ProductListUserState extends State<ProductListUser> {
       ),
       child: GestureDetector(
           onTap: () async {
-            clickid = productModels[index].idProduct;
-            addData();
+            clickid = productModels[index].id;
+            //addData();
             // print(clickid);
+            String view = productModels[index].view.toString();
+            print(view);
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
                 productModel: productModels[index],
@@ -447,7 +459,7 @@ class _ProductListUserState extends State<ProductListUser> {
               height: 200,
               width: 200,
               child: Image.network(
-                '${MyConstant().domain}/upload/product/${productModels[index].image}',
+                '${MyConstant().domain}/images/products_seller/${productModels[index].image}',
                 fit: BoxFit.cover,
               ),
             ),
@@ -476,7 +488,8 @@ class _ProductListUserState extends State<ProductListUser> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      f.format(double.parse(productModels[index].price)),
+                      f.format(
+                          double.parse(productModels[index].price.toString())),
                       style: Theme.of(context)
                           .textTheme
                           .button!
@@ -499,7 +512,7 @@ class _ProductListUserState extends State<ProductListUser> {
           pathImages.add(item);
           setState(() {
             pathImages.map((prolist) {
-              promotion = prolist['imgUrl'];
+              promotion = prolist['image'];
             }).toList();
           });
           buildWidgets();
@@ -515,7 +528,7 @@ class _ProductListUserState extends State<ProductListUser> {
 
   void buildWidgets() {
     widgets.add(
-        Image.network('${MyConstant().domain}/upload/promotion/$promotion'));
+        Image.network('${MyConstant().domain}/images/promotionweb/$promotion'));
     //print(widgets);
   }
 

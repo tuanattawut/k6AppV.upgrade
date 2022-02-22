@@ -32,7 +32,7 @@ class _SubcategoryState extends State<Subcategory> {
 
   Future<Null> readsubCategory() async {
     String api =
-        '${MyConstant().domain}/api/getSubcategoryfromidCategory.php?isAdd=true&id_category=${categoryModels!.idcategory}';
+        '${MyConstant().domain}/api/getSubcategoryfromidCategory.php?isAdd=true&id_category=${categoryModels!.id}';
     await Dio().get(api).then((value) {
       for (var item in json.decode(value.data)) {
         SubcategoryModel subcategoryModel = SubcategoryModel.fromMap(item);

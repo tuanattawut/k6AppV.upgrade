@@ -137,7 +137,7 @@ class _ProductAllState extends State<ProductAll> {
           borderRadius: BorderRadius.circular(20.0),
           image: DecorationImage(
             image: NetworkImage(
-                '${MyConstant().domain}/upload/product/${productModels[index].image}'),
+                '${MyConstant().domain}/images/products_seller/${productModels[index].image}'),
             fit: BoxFit.cover,
           ),
         ),
@@ -173,7 +173,7 @@ class _ProductAllState extends State<ProductAll> {
         children: <Widget>[
           showName(index),
           Text(
-            f.format(double.parse(productModels[index].price)),
+            f.format(double.parse(productModels[index].price.toString())),
             style: Theme.of(context)
                 .textTheme
                 .button!
@@ -187,7 +187,7 @@ class _ProductAllState extends State<ProductAll> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
-        clickid = productModels[index].idProduct;
+        clickid = productModels[index].id;
         addData();
         MaterialPageRoute route = MaterialPageRoute(
           builder: (value) => ShowDetail(
@@ -213,8 +213,8 @@ class _ProductAllState extends State<ProductAll> {
         ),
         child: Row(
           children: <Widget>[
-            showText(index),
             showImage(index),
+            showText(index),
           ],
         ),
       ),

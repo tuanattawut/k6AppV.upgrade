@@ -143,7 +143,7 @@ class _PromoteUserState extends State<PromoteUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.5 - 35,
           child: Text(
-            productRecList[index].nameproduct,
+            productRecList[index].nameproduct.toString(),
             style: MyStyle().mainTitle,
           ),
         ),
@@ -152,7 +152,7 @@ class _PromoteUserState extends State<PromoteUser> {
   }
 
   Widget showDetail(int index) {
-    String string = productRecList[index].detail;
+    String string = productRecList[index].detail.toString();
     if (string.length > 100) {
       string = string.substring(0, 99);
       string = '$string ...';
@@ -177,7 +177,7 @@ class _PromoteUserState extends State<PromoteUser> {
           showName(index),
           // showDetail(index),
           Text(
-            f.format(double.parse(productRecList[index].price)),
+            f.format(double.parse(productRecList[index].price.toString())),
             style: Theme.of(context)
                 .textTheme
                 .button!
@@ -191,7 +191,7 @@ class _PromoteUserState extends State<PromoteUser> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
-        clickid = productRecList[index].idProduct;
+        clickid = productRecList[index].id;
         addData();
 
         MaterialPageRoute route = MaterialPageRoute(

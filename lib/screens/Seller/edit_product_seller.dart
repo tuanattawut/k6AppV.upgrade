@@ -133,7 +133,7 @@ class _EditProductState extends State<EditProduct> {
   }
 
   Future<Null> editValueOnMySQL() async {
-    String id = productModel!.idProduct;
+    String id = productModel!.id.toString();
     String url =
         '${MyConstant().domain}/api/editProduct.php?isAdd=true&nameproduct=$nameProduct&detail=$detail&price=$price&id_products=$id';
     await Dio().get(url).then((value) {

@@ -37,10 +37,8 @@ class _LoginManagerState extends State<LoginManager> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'สำหรับผู้จัดการล็อกอิน',
-                      style: MyStyle().mainTitle,
-                    ),
+                    Text('สำหรับผู้จัดการล็อกอิน',
+                        style: TextStyle(fontSize: 20, color: Colors.blue)),
                   ],
                 ),
                 MyStyle().mySizebox(),
@@ -67,7 +65,10 @@ class _LoginManagerState extends State<LoginManager> {
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: 'อีเมล',
-        icon: Icon(Icons.email),
+        icon: Icon(
+          Icons.email,
+          color: Colors.blue,
+        ),
         hintText: 'x@x.com',
       ),
     );
@@ -100,29 +101,44 @@ class _LoginManagerState extends State<LoginManager> {
                 ),
         ),
         labelText: 'พาสเวิร์ด',
-        icon: Icon(Icons.lock),
+        icon: Icon(
+          Icons.lock,
+          color: Colors.blue,
+        ),
       ),
     );
   }
 
-  ElevatedButton buildLoginButton() {
-    return ElevatedButton(
-        child: Text('ล็อกอิน'),
-        onPressed: () async {
-          if (this._formstate.currentState!.validate()) {
-            //print('email =====> $email\npassword =====> $password');
-            if (email == null ||
-                email!.isEmpty ||
-                password == null ||
-                password!.isEmpty ||
-                password!.length < 6) {
-              normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
-            } else {
-              showLoade(context);
-              checkAuthen();
-            }
-          }
-        });
+  Container buildLoginButton() {
+    return Container(
+        height: 40,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)],
+            begin: FractionalOffset.centerLeft,
+            end: FractionalOffset.centerRight,
+          ),
+        ),
+        child: TextButton(
+            child: const Text(
+              'เข้าสู่ระบบ',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            onPressed: () async {
+              if (this._formstate.currentState!.validate()) {
+                //print('email =====> $email\npassword =====> $password');
+                if (email == null ||
+                    email!.isEmpty ||
+                    password == null ||
+                    password!.isEmpty ||
+                    password!.length < 6) {
+                  normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
+                } else {
+                  showLoade(context);
+                  checkAuthen();
+                }
+              }
+            }));
   }
 
   Future<Null> checkAuthen() async {

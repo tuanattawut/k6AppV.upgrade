@@ -54,36 +54,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: RadioListTile(
-                              value: 'ชาย',
-                              groupValue: gender,
-                              onChanged: (value) {
-                                setState(() {
-                                  gender = value as String?;
-                                });
-                              },
-                              title: Text("ชาย"),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: RadioListTile(
-                              value: 'หญิง',
-                              groupValue: gender,
-                              onChanged: (value) {
-                                setState(() {
-                                  gender = value as String?;
-                                });
-                              },
-                              title: Text("หญิง"),
-                            ),
-                          ),
-                        ],
-                      ),
+                      buildGender(),
                     ],
                   ),
                   buildPhoneField(),
@@ -116,33 +87,80 @@ class _RegisterSellerState extends State<RegisterSeller> {
             )));
   }
 
-  ElevatedButton buildRegisterButton() {
-    return ElevatedButton(
-      child: Text('สมัครสมาชิก'),
-      onPressed: () async {
-        if (this._formstate.currentState!.validate()) if (name == null ||
-            name!.isEmpty ||
-            lastname == null ||
-            lastname!.isEmpty ||
-            generateMd5(password!) == null ||
-            generateMd5(password!).isEmpty ||
-            phone == null ||
-            phone!.isEmpty ||
-            idcard == null ||
-            idcard!.isEmpty ||
-            gender == null ||
-            gender!.isEmpty) {
-          normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
-        } else if (email == null || email!.isEmpty || !email!.contains('@')) {
-          normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
-        } else if (file == null) {
-          normalDialog(context, 'โปรดใส่รูปภาพ');
-        } else {
-          showLoade(context);
-          uploadImage();
-        }
-      },
+  Row buildGender() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: RadioListTile(
+            value: 'ชาย',
+            groupValue: gender,
+            onChanged: (value) {
+              setState(() {
+                gender = value as String?;
+              });
+            },
+            title: Text("ชาย"),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: RadioListTile(
+            value: 'หญิง',
+            groupValue: gender,
+            onChanged: (value) {
+              setState(() {
+                gender = value as String?;
+              });
+            },
+            title: Text("หญิง"),
+          ),
+        ),
+      ],
     );
+  }
+
+  Container buildRegisterButton() {
+    return Container(
+        height: 40,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)],
+            begin: FractionalOffset.centerLeft,
+            end: FractionalOffset.centerRight,
+          ),
+        ),
+        child: TextButton(
+          child: const Text(
+            'สมัครเป็นผู้ขาย',
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          onPressed: () async {
+            if (this._formstate.currentState!.validate()) if (name == null ||
+                name!.isEmpty ||
+                lastname == null ||
+                lastname!.isEmpty ||
+                generateMd5(password!) == null ||
+                generateMd5(password!).isEmpty ||
+                phone == null ||
+                phone!.isEmpty ||
+                idcard == null ||
+                idcard!.isEmpty ||
+                gender == null ||
+                gender!.isEmpty) {
+              normalDialog(context, 'มีช่องว่าง กรุณากรอกทุกช่อง ');
+            } else if (email == null ||
+                email!.isEmpty ||
+                !email!.contains('@')) {
+              normalDialog(context, 'กรอกอีเมลไม่ถูกต้อง');
+            } else if (file == null) {
+              normalDialog(context, 'โปรดใส่รูปภาพ');
+            } else {
+              showLoade(context);
+              uploadImage();
+            }
+          },
+        ));
   }
 
   Future<Null> uploadImage() async {
@@ -153,7 +171,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
     String nameImage = 'seller_$i.jpg';
     // print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/upload/saveImageSeller.php';
+    String url = '${MyConstant().domain}/images/saveImageSeller.php';
     //print(url);
     try {
       Map<String, dynamic> map = Map();
@@ -162,13 +180,15 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
-        //print('Response ===>>> $value');
+        //  print('Response ===>>> $value');
         image = '$nameImage';
-        //print('urlImage = $image');
-        showLoade(context);
+        print('urlImage = $image');
+        // showLoade(context);
         checkUser();
       });
-    } catch (e) {}
+    } catch (e) {
+      //no lo go
+    }
   }
 
   Future<Null> checkUser() async {
@@ -192,7 +212,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
     try {
       Response response = await Dio().get(url);
-      // print('res = $response');
+      print('res = $response');
 
       if (response.toString() == 'true') {
         normalDialog(context, 'สมัครสำเร็จ');
@@ -210,20 +230,24 @@ class _RegisterSellerState extends State<RegisterSeller> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Container(
-          width: 150,
-          child:
-              file == null ? Image.asset('images/user.png') : Image.file(file!),
+        SizedBox(
+          width: 120,
+          child: file == null
+              ? Image.asset(
+                  'images/user.png',
+                  color: Colors.blue,
+                )
+              : Image.file(file!),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.camera),
               onPressed: () => chooseImage(ImageSource.camera),
               label: Text('ถ่ายภาพ'),
             ),
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.image),
               onPressed: () => chooseImage(ImageSource.gallery),
               label: Text('เลือกจากคลัง'),

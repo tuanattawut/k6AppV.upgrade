@@ -7,70 +7,83 @@ String productModelToJson(List<ProductModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ProductModel {
-  String idProduct;
-  String idShop;
-  String idSubcategory;
-  String nameproduct;
-  String price;
-  String detail;
-  String image;
-  String regdate;
+  String? id;
+  String? idShop;
+  String? nameproduct;
+  String? detail;
+  String? idSubcategory;
+  String? price;
+  String? image;
+  String? view;
+  String? createdAt;
+  String? updatedAt;
+
   ProductModel({
-    required this.idProduct,
+    this.id,
     required this.idShop,
-    required this.idSubcategory,
     required this.nameproduct,
-    required this.price,
     required this.detail,
+    required this.idSubcategory,
+    required this.price,
     required this.image,
-    required this.regdate,
+    this.view,
+    this.createdAt,
+    this.updatedAt,
   });
 
   ProductModel copyWith({
-    String? idProduct,
+    String? id,
     String? idShop,
-    String? idSubcategory,
     String? nameproduct,
-    String? price,
     String? detail,
+    String? idSubcategory,
+    String? price,
     String? image,
-    String? regdate,
+    String? view,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return ProductModel(
-      idProduct: idProduct ?? this.idProduct,
+      id: id ?? this.id,
       idShop: idShop ?? this.idShop,
-      idSubcategory: idSubcategory ?? this.idSubcategory,
       nameproduct: nameproduct ?? this.nameproduct,
-      price: price ?? this.price,
       detail: detail ?? this.detail,
+      idSubcategory: idSubcategory ?? this.idSubcategory,
+      price: price ?? this.price,
       image: image ?? this.image,
-      regdate: regdate ?? this.regdate,
+      view: view ?? this.view,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'idProduct': idProduct,
+      'id': id,
       'idShop': idShop,
-      'idSubcategory': idSubcategory,
       'nameproduct': nameproduct,
-      'price': price,
       'detail': detail,
+      'idSubcategory': idSubcategory,
+      'price': price,
       'image': image,
-      'regdate': regdate,
+      'view': view,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      idProduct: map['id_products'],
-      idShop: map['id_shop'],
-      idSubcategory: map['id_subcategory'],
+      id: map['id'],
+      idShop: map['idShop'],
       nameproduct: map['nameproduct'],
-      price: map['price'],
       detail: map['detail'],
+      idSubcategory: map['idSubcategory'],
+      price: map['price'],
       image: map['image'],
-      regdate: map['regdate'],
+      view: map['view'],
+      createdAt: map['createdAt'],
+      updatedAt: map['updatedAt'],
     );
   }
 
@@ -81,7 +94,7 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(idProduct: $idProduct, idShop: $idShop, idCategory: $idSubcategory, nameproduct: $nameproduct, price: $price, detail: $detail, image: $image,regdate:$regdate)';
+    return 'ProductModel(id: $id, idShop: $idShop, nameproduct: $nameproduct, detail: $detail, idSubcategory: $idSubcategory, price: $price, image: $image, view: $view, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -89,25 +102,29 @@ class ProductModel {
     if (identical(this, other)) return true;
 
     return other is ProductModel &&
-        other.idProduct == idProduct &&
+        other.id == id &&
         other.idShop == idShop &&
-        other.idSubcategory == idSubcategory &&
         other.nameproduct == nameproduct &&
-        other.price == price &&
         other.detail == detail &&
+        other.idSubcategory == idSubcategory &&
+        other.price == price &&
         other.image == image &&
-        other.regdate == regdate;
+        other.view == view &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
-    return idProduct.hashCode ^
+    return id.hashCode ^
         idShop.hashCode ^
-        idSubcategory.hashCode ^
         nameproduct.hashCode ^
-        price.hashCode ^
         detail.hashCode ^
+        idSubcategory.hashCode ^
+        price.hashCode ^
         image.hashCode ^
-        regdate.hashCode;
+        view.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode;
   }
 }

@@ -115,7 +115,7 @@ class _SearchProductState extends State<SearchProduct> {
       ),
       child: GestureDetector(
           onTap: () async {
-            clickid = productModels[index].idProduct;
+            clickid = productModels[index].id;
             addData();
             MaterialPageRoute route = MaterialPageRoute(
               builder: (value) => ShowDetail(
@@ -159,7 +159,8 @@ class _SearchProductState extends State<SearchProduct> {
                           .copyWith(color: Colors.black, fontSize: 20),
                     ),
                     Text(
-                      f.format(double.parse(productModels[index].price)),
+                      f.format(
+                          double.parse(productModels[index].price.toString())),
                       style: Theme.of(context)
                           .textTheme
                           .button!
