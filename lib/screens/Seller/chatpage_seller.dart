@@ -23,7 +23,7 @@ class _ChatpageSellerState extends State<ChatpageSeller> {
   UserModel? userModel;
   String? idUser, idSeller, message;
   bool? check;
-  String? date(DateTime tm) {
+  dynamic date(DateTime tm) {
     DateTime today = new DateTime.now();
     Duration oneDay = new Duration(days: 1);
     Duration twoDay = new Duration(days: 2);

@@ -67,7 +67,7 @@ class _ChatManagerState extends State<ChatManager> {
                       width: 50,
                     ),
                     title: Text(
-                      shopModel[index].nameshop,
+                      shopModel[index].nameshop.toString(),
                       style: TextStyle(
                         fontSize: 16,
                       ),

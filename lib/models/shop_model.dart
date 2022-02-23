@@ -7,64 +7,88 @@ String shopModelToJson(List<ShopModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ShopModel {
-  String idShop;
-  String idSeller;
-  String idArea;
-  String nameshop;
-  String image;
-  String lat;
-  String lng;
+  String? id;
+  String? idSeller;
+  String? idArea;
+  String? nameshop;
+  String? categoryType;
+  String? lat;
+  String? long;
+  String? image;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
   ShopModel({
-    required this.idShop,
+    required this.id,
     required this.idSeller,
     required this.idArea,
     required this.nameshop,
-    required this.image,
+    required this.categoryType,
     required this.lat,
-    required this.lng,
+    required this.long,
+    required this.image,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deletedAt,
   });
 
   ShopModel copyWith({
-    String? idShop,
+    String? id,
     String? idSeller,
     String? idArea,
     String? nameshop,
-    String? image,
+    String? categoryType,
     String? lat,
-    String? lng,
+    String? long,
+    String? image,
+    String? createdAt,
+    String? updatedAt,
+    String? deletedAt,
   }) {
     return ShopModel(
-      idShop: idShop ?? this.idShop,
+      id: id ?? this.id,
       idSeller: idSeller ?? this.idSeller,
       idArea: idArea ?? this.idArea,
       nameshop: nameshop ?? this.nameshop,
-      image: image ?? this.image,
+      categoryType: categoryType ?? this.categoryType,
       lat: lat ?? this.lat,
-      lng: lng ?? this.lng,
+      long: long ?? this.long,
+      image: image ?? this.image,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'idShop': idShop,
-      'idSeller': idSeller,
-      'idArea': idArea,
+      'id': id,
+      'id_seller': idSeller,
+      'id_area': idArea,
       'nameshop': nameshop,
-      'image': image,
+      'categoryType': categoryType,
       'lat': lat,
-      'lng': lng,
+      'long': long,
+      'image': image,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'deleted_at': deletedAt,
     };
   }
 
   factory ShopModel.fromMap(Map<String, dynamic> map) {
     return ShopModel(
-      idShop: map['id_shop'],
+      id: map['id'],
       idSeller: map['id_seller'],
       idArea: map['id_area'],
       nameshop: map['nameshop'],
-      image: map['image'],
+      categoryType: map['categoryType'],
       lat: map['lat'],
-      lng: map['lng'],
+      long: map['long'],
+      image: map['image'],
+      createdAt: map['created_at'],
+      updatedAt: map['updated_at'],
+      deletedAt: map['deleted_at'],
     );
   }
 
@@ -75,7 +99,7 @@ class ShopModel {
 
   @override
   String toString() {
-    return 'ShopModel(idShop: $idShop, idSeller: $idSeller, idArea: $idArea, nameshop: $nameshop, image: $image, lat: $lat, long: $lng)';
+    return 'ShopModel(id: $id, idSeller: $idSeller, idArea: $idArea, nameshop: $nameshop, categoryType: $categoryType, lat: $lat, long: $long, image: $image, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
 
   @override
@@ -83,23 +107,31 @@ class ShopModel {
     if (identical(this, other)) return true;
 
     return other is ShopModel &&
-        other.idShop == idShop &&
+        other.id == id &&
         other.idSeller == idSeller &&
         other.idArea == idArea &&
         other.nameshop == nameshop &&
-        other.image == image &&
+        other.categoryType == categoryType &&
         other.lat == lat &&
-        other.lng == lng;
+        other.long == long &&
+        other.image == image &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.deletedAt == deletedAt;
   }
 
   @override
   int get hashCode {
-    return idShop.hashCode ^
+    return id.hashCode ^
         idSeller.hashCode ^
         idArea.hashCode ^
         nameshop.hashCode ^
-        image.hashCode ^
+        categoryType.hashCode ^
         lat.hashCode ^
-        lng.hashCode;
+        long.hashCode ^
+        image.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode ^
+        deletedAt.hashCode;
   }
 }

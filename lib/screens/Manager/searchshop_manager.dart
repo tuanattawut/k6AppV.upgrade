@@ -1,10 +1,6 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:k6_app/models/shop_model.dart';
+
 import 'package:k6_app/screens/Manager/showsearchshop.dart';
-import 'package:k6_app/utility/my_constant.dart';
 
 class SearchShop extends StatefulWidget {
   @override

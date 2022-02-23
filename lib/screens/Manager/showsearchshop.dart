@@ -94,7 +94,7 @@ class _ShowsearchShopState extends State<ShowsearchShop> {
                       width: 50,
                     ),
                     title: Text(
-                      shopList[index].nameshop,
+                      shopList[index].nameshop.toString(),
                       style: TextStyle(
                         fontSize: 16,
                       ),

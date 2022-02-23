@@ -188,7 +188,7 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Future<Null> addProduct() async {
-    idshop = shopModel!.idShop;
+    idshop = shopModel!.id;
     Navigator.pop(context);
     String url =
         '${MyConstant().domain}/api/addProduct.php?isAdd=true&id_shop=$idshop&id_subcategory=$subValue&nameproduct=$nameProduct&detail=$detail&price=$price&image=$image';

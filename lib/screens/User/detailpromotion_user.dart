@@ -22,7 +22,7 @@ class _DetailPromotionsellerState extends State<DetailPromotionseller> {
     nameshop = promotionlist!.nameshop;
   }
 
-  String? date(DateTime tm) {
+  dynamic date(DateTime tm) {
     DateTime today = new DateTime.now();
     Duration oneDay = new Duration(days: 1);
     Duration twoDay = new Duration(days: 2);

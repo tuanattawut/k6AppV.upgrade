@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/area_model.dart';
 import 'package:k6_app/models/seller_model.dart';
-import 'package:k6_app/screens/Manager/edit_area_manager.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';

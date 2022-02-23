@@ -6,7 +6,7 @@ import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/models/user_models.dart';
-import 'package:k6_app/screens/User/main_user.dart';
+
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/screens/User/datailshop.dart';
@@ -109,7 +109,7 @@ class _ShowDetailState extends State<ShowDetail> {
                   : Padding(
                       padding: EdgeInsets.all(30),
                       child: showMap(),
-                    ),
+                    )
             ],
           ),
         ));
@@ -126,9 +126,9 @@ class _ShowDetailState extends State<ShowDetail> {
   }
 
   Widget showMap() {
-    double lat = double.parse(shopModels!.lat);
-    double long = double.parse(shopModels!.lng);
-    //print('lat = $lat, long = $long');
+    double lat = double.parse(shopModels!.lat.toString());
+    double long = double.parse(shopModels!.long.toString());
+    print('lat = $lat, long = $long');
 
     LatLng latLong = LatLng(lat, long);
     CameraPosition position = CameraPosition(
@@ -137,8 +137,9 @@ class _ShowDetailState extends State<ShowDetail> {
     );
 
     return Container(
-      height: 250,
+      height: 150,
       child: GoogleMap(
+        myLocationEnabled: true,
         initialCameraPosition: position,
         mapType: MapType.normal,
         onMapCreated: (controller) {},
@@ -151,8 +152,8 @@ class _ShowDetailState extends State<ShowDetail> {
     return <Marker>[
       Marker(
           markerId: MarkerId('shopID'),
-          position: LatLng(
-              double.parse(shopModels!.lat), double.parse(shopModels!.lng)),
+          position: LatLng(double.parse(shopModels!.lat.toString()),
+              double.parse(shopModels!.long.toString())),
           infoWindow: InfoWindow(
               title: 'ตำแหน่งร้าน', snippet: 'ร้าน :  ${shopModels!.nameshop}'))
     ].toSet();
@@ -209,7 +210,7 @@ class _ShowDetailState extends State<ShowDetail> {
                       children: [
                         MyStyle().showTitleH2('ร้าน: '),
                         Text(
-                          shopModels!.nameshop,
+                          shopModels!.nameshop.toString(),
                           style: TextStyle(
                             fontSize: 18,
                           ),

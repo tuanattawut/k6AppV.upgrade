@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:http/http.dart' as http;
 import 'package:k6_app/models/user_models.dart';
@@ -10,6 +9,7 @@ import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginFacebook extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
 
   var profileData;
 
-  static final FacebookLogin facebookSignIn = new FacebookLogin();
+  // static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   void onLoginStatusChanged(bool isLoggedIn, {profileData}) {
     setState(() {
@@ -264,34 +264,45 @@ class _LoginFacebookState extends State<LoginFacebook> {
   }
 
   void initiateFacebookLogin() async {
-    final FacebookLoginResult facebookLoginResult =
-        await facebookSignIn.logIn(['email']);
-
-    switch (facebookLoginResult.status) {
-      case FacebookLoginStatus.error:
-        onLoginStatusChanged(false);
-        print('การล็อกอินเออเร่อ');
-        facebookSignIn.logOut();
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        onLoginStatusChanged(false);
-        print('การล็อกอินถูกยกเลิกโดยผู้ใช้');
-        break;
-      case FacebookLoginStatus.loggedIn:
-        var graphResponse = await http.get(Uri.parse(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}'));
-
-        var profile = json.decode(graphResponse.body);
-        print(profile.toString());
-
-        onLoginStatusChanged(true, profileData: profile);
-
-        break;
-    }
-    _logout() async {
-      await facebookSignIn.logOut();
-      onLoginStatusChanged(false);
-      print("Logged out");
+    final LoginResult result = await FacebookAuth.instance.login();
+    if (result.status == LoginStatus.success) {
+      // you are logged
+      final AccessToken accessToken = result.accessToken!;
+    } else {
+      print(result.status);
+      print(result.message);
     }
   }
+
+  // void initiateFacebookLogin() async {
+
+  //   final FacebookLoginResult facebookLoginResult =
+  //       await facebookSignIn.logIn(['email']);
+
+  //   switch (facebookLoginResult.status) {
+  //     case FacebookLoginStatus.error:
+  //       onLoginStatusChanged(false);
+  //       print('การล็อกอินเออเร่อ');
+  //       facebookSignIn.logOut();
+  //       break;
+  //     case FacebookLoginStatus.cancelledByUser:
+  //       onLoginStatusChanged(false);
+  //       print('การล็อกอินถูกยกเลิกโดยผู้ใช้');
+  //       break;
+  //     case FacebookLoginStatus.loggedIn:
+  //       var graphResponse = await http.get(Uri.parse(
+  //           'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}'));
+
+  //       var profile = json.decode(graphResponse.body);
+  //       print(profile.toString());
+
+  //       onLoginStatusChanged(true, profileData: profile);
+
+  //       break;
+  //   }
+  // _logout() async {
+  //   await facebookSignIn.logOut();
+  //   onLoginStatusChanged(false);
+  //   print("Logged out");
+  // }
 }

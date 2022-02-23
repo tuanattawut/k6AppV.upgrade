@@ -60,30 +60,30 @@ class ProductModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'idShop': idShop,
+      'id_shop': idShop,
       'nameproduct': nameproduct,
       'detail': detail,
-      'idSubcategory': idSubcategory,
+      'id_subcategory': idSubcategory,
       'price': price,
       'image': image,
       'view': view,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
     };
   }
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
       id: map['id'],
-      idShop: map['idShop'],
+      idShop: map['id_shop'],
       nameproduct: map['nameproduct'],
       detail: map['detail'],
-      idSubcategory: map['idSubcategory'],
+      idSubcategory: map['id_subcategory'],
       price: map['price'],
       image: map['image'],
       view: map['view'],
-      createdAt: map['createdAt'],
-      updatedAt: map['updatedAt'],
+      createdAt: map['created_at'],
+      updatedAt: map['updated_at'],
     );
   }
 

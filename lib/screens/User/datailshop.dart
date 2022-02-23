@@ -102,7 +102,7 @@ class _DetailShopState extends State<DetailShop> {
                       children: [
                         MyStyle().showTitleH2('ชื่อร้าน: '),
                         Text(
-                          shopModels!.nameshop,
+                          shopModels!.nameshop.toString(),
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -153,7 +153,7 @@ class _DetailShopState extends State<DetailShop> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/shop/${shopModels!.image}',
+          '${MyConstant().domain}/images/shops_seller/${shopModels!.image}',
           fit: BoxFit.contain,
         ));
   }
@@ -164,7 +164,7 @@ class _DetailShopState extends State<DetailShop> {
         radius: 100,
         child: ClipOval(
             child: Image.network(
-          '${MyConstant().domain}/upload/seller/${sellerModel!.image}',
+          '${MyConstant().domain}/images/profileseller/${sellerModel!.image}',
           width: 150,
           height: 150,
           fit: BoxFit.cover,

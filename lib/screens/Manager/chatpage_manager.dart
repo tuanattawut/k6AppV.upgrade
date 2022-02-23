@@ -23,7 +23,7 @@ class _ChatpageManagerState extends State<ChatpageManager> {
   String? idManager, idSeller, message;
 
   bool? check;
-  String? date(DateTime tm) {
+  dynamic date(DateTime tm) {
     DateTime today = new DateTime.now();
     Duration oneDay = new Duration(days: 1);
     Duration twoDay = new Duration(days: 2);
@@ -226,7 +226,7 @@ class _ChatpageManagerState extends State<ChatpageManager> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                shopmodel!.nameshop,
+                shopmodel!.nameshop.toString(),
                 style: TextStyle(fontSize: 16),
               ),
             ],

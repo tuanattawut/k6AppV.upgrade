@@ -88,7 +88,7 @@ class _InformationShopState extends State<InformationShop> {
             Row(
               children: <Widget>[
                 Text(
-                  shopModels!.nameshop,
+                  shopModels!.nameshop.toString(),
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -130,7 +130,7 @@ class _InformationShopState extends State<InformationShop> {
 
   Widget showMap() {
     double lat = double.parse('${shopModels?.lat ?? '0'}');
-    double lng = double.parse('${shopModels?.lng ?? '0'}');
+    double lng = double.parse('${shopModels?.long ?? '0'}');
     //print('lat = $lat, lng = $long');
 
     LatLng latLng = LatLng(lat, lng);
@@ -153,7 +153,7 @@ class _InformationShopState extends State<InformationShop> {
           markerId: MarkerId('shopID'),
           position: LatLng(
             double.parse('${shopModels?.lat ?? '0'}'),
-            double.parse('${shopModels?.lng ?? '0'}'),
+            double.parse('${shopModels?.long ?? '0'}'),
           ),
           infoWindow: InfoWindow(
               title: 'ตำแหน่งร้าน', snippet: 'ร้าน : ${shopModels?.nameshop}'))

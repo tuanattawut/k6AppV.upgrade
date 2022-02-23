@@ -21,7 +21,7 @@ class _EditShopSearchState extends State<EditShopSearch> {
     super.initState();
     shopModel = widget.shopModel;
     nameShop = shopModel!.nameshop;
-    idShop = shopModel!.idShop;
+    idShop = shopModel!.id;
   }
 
   @override

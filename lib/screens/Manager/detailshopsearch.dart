@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:k6_app/models/shop_model.dart';
@@ -54,7 +52,7 @@ class _DetailshopSearchState extends State<DetailshopSearch> {
             Row(
               children: <Widget>[
                 Text(
-                  shopModel!.nameshop,
+                  shopModel!.nameshop.toString(),
                   style: TextStyle(fontSize: 18),
                 ),
               ],
@@ -107,7 +105,7 @@ class _DetailshopSearchState extends State<DetailshopSearch> {
 
   Widget showMap() {
     double lat = double.parse('${shopModel?.lat ?? '0'}');
-    double lng = double.parse('${shopModel?.lng ?? '0'}');
+    double lng = double.parse('${shopModel?.long ?? '0'}');
     //print('lat = $lat, lng = $long');
 
     LatLng latLng = LatLng(lat, lng);
@@ -130,7 +128,7 @@ class _DetailshopSearchState extends State<DetailshopSearch> {
           markerId: MarkerId('shopID'),
           position: LatLng(
             double.parse('${shopModel?.lat ?? '0'}'),
-            double.parse('${shopModel?.lng ?? '0'}'),
+            double.parse('${shopModel?.long ?? '0'}'),
           ),
           infoWindow: InfoWindow(
               title: 'ตำแหน่งร้าน', snippet: 'ร้าน : ${shopModel?.nameshop}'))

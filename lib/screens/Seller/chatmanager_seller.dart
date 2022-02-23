@@ -1,10 +1,7 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:k6_app/models/chat_models.dart';
-import 'package:k6_app/models/manager_model.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -23,7 +20,7 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
 
   String? idmanager, idSeller, message;
   bool? check;
-  String? date(DateTime tm) {
+  dynamic date(DateTime tm) {
     DateTime today = new DateTime.now();
     Duration oneDay = new Duration(days: 1);
     Duration twoDay = new Duration(days: 2);

@@ -40,7 +40,7 @@ class _ProductListSellerState extends State<ProductListSeller> {
       productModels.clear();
     }
 
-    idshop = shopModel?.idShop;
+    idshop = shopModel?.id;
 
     String url =
         '${MyConstant().domain}/api/getproductIdShop.php?isAdd=true&id_shop=$idshop';
