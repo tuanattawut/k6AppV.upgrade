@@ -33,7 +33,6 @@ dependencies:
   geolocator: ^7.7.0
   google_maps_flutter: ^2.1.1
   dio: ^4.0.0
-  http: ^0.13.3
   cached_network_image: ^2.5.1
   carousel_slider: ^4.0.0
   flutter_signin_button: ^2.0.0

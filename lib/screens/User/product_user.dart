@@ -444,15 +444,16 @@ class _ProductListUserState extends State<ProductListUser> {
             clickid = productModels[index].id;
             //addData();
             // print(clickid);
-            String view = productModels[index].view.toString();
+            var view = int.parse(productModels[index].view.toString());
+            view++;
             print(view);
-            MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) => ShowDetail(
-                productModel: productModels[index],
-                userModel: userModel!,
-              ),
-            );
-            Navigator.of(context).push(route);
+            // MaterialPageRoute route = MaterialPageRoute(
+            //   builder: (value) => ShowDetail(
+            //     productModel: productModels[index],
+            //     userModel: userModel!,
+            //   ),
+            // );
+            // Navigator.of(context).push(route);
           },
           child: Column(children: <Widget>[
             Container(

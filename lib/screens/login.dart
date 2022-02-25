@@ -273,7 +273,11 @@ class _LoginPageState extends State<LoginPage> {
       //print('res = $response');
 
       if (response.toString() == 'true') {
-      } else {}
-    } catch (e) {}
+      } else {
+        //
+      }
+    } catch (e) {
+      //
+    }
   }
 }

@@ -90,7 +90,7 @@ class _InformationUserState extends State<InformationUser> {
         radius: 100,
         child: ClipOval(
             child: Image.network(
-          '${MyConstant().domain}/upload/user/${userModel!.image}',
+          '${MyConstant().domain}/images/user/${userModel!.image}',
           width: 150,
           height: 150,
           fit: BoxFit.cover,

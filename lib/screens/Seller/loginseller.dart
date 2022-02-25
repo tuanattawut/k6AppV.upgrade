@@ -53,7 +53,6 @@ class _LoginSellerState extends State<LoginSeller> {
                 buildLoginButton(),
                 MyStyle().mySizebox(),
                 LoginFacebookSeller(),
-
                 Row(children: const [
                   Expanded(
                       child: Divider(
@@ -66,7 +65,6 @@ class _LoginSellerState extends State<LoginSeller> {
                     color: Colors.blue,
                   )),
                 ]),
-
                 buildRegisterSeller(context),
               ],
             ),
@@ -240,7 +238,11 @@ class _LoginSellerState extends State<LoginSeller> {
       //print('res = $response');
 
       if (response.toString() == 'true') {
-      } else {}
-    } catch (e) {}
+      } else {
+        //
+      }
+    } catch (e) {
+      //
+    }
   }
 }

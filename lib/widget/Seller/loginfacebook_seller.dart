@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/button_builder.dart';
-import 'package:http/http.dart' as http;
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
 import 'package:k6_app/utility/enc-dec.dart';
@@ -16,7 +16,15 @@ class LoginFacebookSeller extends StatefulWidget {
 }
 
 class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
-  String? name, lastname, password, idcard, email, phone, gender, image, idfb;
+  String? firstname,
+      lastname,
+      password,
+      idcard,
+      email,
+      phone,
+      gender,
+      image,
+      idfb;
   DateTime birthday = DateTime.now();
 
   bool isLoggedIn = false;
@@ -30,11 +38,9 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
       this.isLoggedIn = isLoggedIn;
       this.profileData = profileData;
 
-      print(profileData);
-      name = profileData['first_name'];
+      firstname = profileData['first_name'];
       lastname = profileData['last_name'];
       email = profileData['email'];
-
       image = 'profile.jpg';
       checkUser();
     });
@@ -43,7 +49,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
   Future<Null> registerThread() async {
     String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/api/addSeller.php?isAdd=true&firstname=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
+        '${MyConstant().domain}/api/addSeller.php?isAdd=true&firstname=$firstname&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
 
     try {
       Response response = await Dio().get(url);
@@ -119,7 +125,7 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'ชื่อ : $name',
+                        'ชื่อ : $firstname',
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -338,12 +344,40 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
   @override
   Widget build(BuildContext context) {
     return SignInButtonBuilder(
-        backgroundColor: Colors.indigo,
-        text: 'เข้าสู่ระบบด้วย Facebook',
-        icon: Icons.facebook,
-        onPressed: () => {}
-        //initiateFacebookLogin(),
-        );
+      backgroundColor: Colors.indigo,
+      text: 'เข้าสู่ระบบด้วย Facebook',
+      icon: Icons.facebook,
+      onPressed: () => initiateFacebookLogin(),
+    );
+  }
+
+  void initiateFacebookLogin() async {
+    final result = await FacebookAuth.i.login(
+      permissions: [
+        'email',
+        'public_profile',
+        'user_birthday',
+        'user_friends',
+        'user_gender',
+        'user_link'
+      ],
+    );
+
+    if (result.status == LoginStatus.success) {
+      // you are logged
+      final AccessToken accessToken = result.accessToken!;
+      print('นี่คือโทเคน >> ${accessToken.token}');
+      final userData = await FacebookAuth.i.getUserData(
+        fields:
+            "first_name,last_name,email,picture.width(200),birthday,friends,gender,link",
+      );
+      print(userData);
+      onLoginStatusChanged(true, profileData: userData);
+    } else {
+      print(result.status);
+      print(result.message);
+      onLoginStatusChanged(false);
+    }
   }
 
   // void initiateFacebookLogin() async {

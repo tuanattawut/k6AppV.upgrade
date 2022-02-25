@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_builder.dart';
-import 'package:http/http.dart' as http;
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/enc-dec.dart';
@@ -264,13 +263,31 @@ class _LoginFacebookState extends State<LoginFacebook> {
   }
 
   void initiateFacebookLogin() async {
-    final LoginResult result = await FacebookAuth.instance.login();
+    final result = await FacebookAuth.i.login(
+      permissions: [
+        'email',
+        'public_profile',
+        'user_birthday',
+        'user_friends',
+        'user_gender',
+        'user_link'
+      ],
+    );
+
     if (result.status == LoginStatus.success) {
       // you are logged
       final AccessToken accessToken = result.accessToken!;
+      print('นี่คือโทเคน >> ${accessToken.token}');
+      final userData = await FacebookAuth.i.getUserData(
+        fields:
+            "first_name,last_name,email,picture.width(200),birthday,friends,gender,link",
+      );
+      print(userData);
+      onLoginStatusChanged(true, profileData: userData);
     } else {
       print(result.status);
       print(result.message);
+      onLoginStatusChanged(false);
     }
   }
 

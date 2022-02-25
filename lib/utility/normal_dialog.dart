@@ -73,7 +73,7 @@ Future<Null> alertLocationService(
   );
 }
 
-Future<Null>? showLoade(BuildContext context) {
+void showLoade(BuildContext context) {
   AlertDialog alert = AlertDialog(
     content: new Row(
       children: [
@@ -92,7 +92,7 @@ Future<Null>? showLoade(BuildContext context) {
   );
 }
 
-Future<Null>? showSend(BuildContext context) {
+void showSend(BuildContext context) {
   AlertDialog alert = AlertDialog(
     content: new Row(
       children: [
