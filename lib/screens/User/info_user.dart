@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/chatmana_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
@@ -77,11 +78,16 @@ class _InformationUserState extends State<InformationUser> {
             child: Text('ออกจากระบบ'),
             onPressed: () {
               confirmExit();
+              _logOut();
             },
           )
         ],
       ),
     );
+  }
+
+  Future<void> _logOut() async {
+    await FacebookAuth.instance.logOut();
   }
 
   Widget showImage() {
@@ -90,9 +96,9 @@ class _InformationUserState extends State<InformationUser> {
         radius: 100,
         child: ClipOval(
             child: Image.network(
-          '${MyConstant().domain}/images/user/${userModel!.image}',
-          width: 150,
-          height: 150,
+          '${MyConstant().domain}/images/profileuser/${userModel!.image}',
+          width: 80,
+          height: 80,
           fit: BoxFit.cover,
         )),
         backgroundColor: Colors.transparent,

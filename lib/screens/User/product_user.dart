@@ -441,11 +441,13 @@ class _ProductListUserState extends State<ProductListUser> {
       ),
       child: GestureDetector(
           onTap: () async {
-            clickid = productModels[index].id;
-            //addData();
-            // print(clickid);
+            idproducts = productModels[index].id;
             var view = int.parse(productModels[index].view.toString());
             view++;
+            String url =
+                '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$idproducts';
+            await Dio().get(url).then((value) => getData());
+
             print(view);
             // MaterialPageRoute route = MaterialPageRoute(
             //   builder: (value) => ShowDetail(
