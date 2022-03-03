@@ -56,7 +56,7 @@ class _ApproveAreaState extends State<ApproveArea> {
                       Navigator.of(context).push(route);
                     },
                     leading: Image.network(
-                      '${MyConstant().domain}/upload/area/${reserveList[index].image}',
+                      '${MyConstant().domain}/images/areasshop/${reserveList[index].image}',
                       fit: BoxFit.cover,
                       width: 50,
                     ),

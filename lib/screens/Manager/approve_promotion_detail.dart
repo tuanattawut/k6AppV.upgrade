@@ -174,7 +174,7 @@ class _DetailpromotionAproveState extends State<DetailpromotionAprove> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/promotionseller/${promotionlist?.image}',
+          '${MyConstant().domain}/images/promotionseller/${promotionlist?.image}',
           fit: BoxFit.contain,
         ));
   }

@@ -123,7 +123,7 @@ class _InformationShopState extends State<InformationShop> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/shop/${shopModels?.image}',
+          '${MyConstant().domain}/images/shops_seller/${shopModels?.image}',
           fit: BoxFit.contain,
         ));
   }

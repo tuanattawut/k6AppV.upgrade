@@ -65,7 +65,7 @@ class _AllareaState extends State<Allarea> {
                         width: MediaQuery.of(context).size.width * 0.4,
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: Image.network(
-                          '${MyConstant().domain}/upload/area/${areaList[index].image}',
+                          '${MyConstant().domain}/images/areasshop/${areaList[index].image}',
                           fit: BoxFit.cover,
                         ),
                       ),

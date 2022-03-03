@@ -98,7 +98,7 @@ class _DetailshopSearchState extends State<DetailshopSearch> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/shop/${shopModel?.image}',
+          '${MyConstant().domain}/images/areasshop/${shopModel?.image}',
           fit: BoxFit.contain,
         ));
   }

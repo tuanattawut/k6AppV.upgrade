@@ -69,7 +69,9 @@ class _CategoryProductState extends State<CategoryProduct> {
       } else {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      //
+    }
   }
 
   @override
@@ -148,7 +150,7 @@ class _CategoryProductState extends State<CategoryProduct> {
               height: 200,
               width: 200,
               child: Image.network(
-                '${MyConstant().domain}/upload/product/${productModels[index].image}',
+                '${MyConstant().domain}/images/products_seller/${productModels[index].image}',
                 fit: BoxFit.cover,
               ),
             ),

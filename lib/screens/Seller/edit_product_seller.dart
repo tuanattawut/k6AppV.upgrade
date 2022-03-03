@@ -154,7 +154,7 @@ class _EditProductState extends State<EditProduct> {
           height: 200,
           child: file == null
               ? Image.network(
-                  '${MyConstant().domain}/upload/product/$image',
+                  '${MyConstant().domain}/images/products_seller/$image',
                   fit: BoxFit.cover,
                 )
               : Image.file(file!),

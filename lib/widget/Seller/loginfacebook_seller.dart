@@ -57,12 +57,17 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
 
       if (response.toString() == 'true') {
         normalDialog(context, 'สมัครสำเร็จ');
+        print('สมัครสำเร็จ');
 
         Navigator.pushNamed(context, '/');
       } else {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
+        print('สมัครไม่สำเร็จ');
       }
-    } catch (e) {}
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด : $e');
+      print('เกิดเออเร่อ >> $e');
+    }
   }
 
   Future<Null> checkUser() async {

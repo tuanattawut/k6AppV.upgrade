@@ -170,7 +170,7 @@ class _AddProductState extends State<AddProduct> {
     String nameImage = 'product_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/upload/saveImageProduct.php';
+    String url = '${MyConstant().domain}/images/saveImageProduct.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -184,7 +184,9 @@ class _AddProductState extends State<AddProduct> {
         // print('urlImage = $image');
         await addProduct();
       });
-    } catch (e) {}
+    } catch (e) {
+      print('ผิดพลาด {$e}');
+    }
   }
 
   Future<Null> addProduct() async {

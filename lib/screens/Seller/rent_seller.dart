@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/area_model.dart';
@@ -69,7 +68,7 @@ class _RentSellerState extends State<RentSeller> {
                         width: MediaQuery.of(context).size.width * 0.4,
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: Image.network(
-                          '${MyConstant().domain}/upload/area/${areaList[index].image}',
+                          '${MyConstant().domain}/images/areasshop/${areaList[index].image}',
                           fit: BoxFit.cover,
                         ),
                       ),

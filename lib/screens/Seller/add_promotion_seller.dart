@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -60,7 +59,7 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
     String nameImage = 'Promotion_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/upload/saveImagePromotionseller.php';
+    String url = '${MyConstant().domain}/images/saveImagePromotionseller.php';
 
     try {
       Map<String, dynamic> map = Map();

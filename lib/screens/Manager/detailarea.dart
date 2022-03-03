@@ -166,7 +166,7 @@ class _DetailareaState extends State<Detailarea> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/area/${areaModel?.image}',
+          '${MyConstant().domain}/images/areasshop/${areaModel?.image}',
           fit: BoxFit.contain,
         ));
   }

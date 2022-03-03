@@ -136,8 +136,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 200,
-          height: 200,
+          width: 150,
+          height: 150,
           child: file == null
               ? Image.asset('images/myshop.png')
               : Image.file(file!),
@@ -145,12 +145,12 @@ class _AddInfoShopState extends State<AddInfoShop> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.camera),
               onPressed: () => chooseImage(ImageSource.camera),
               label: Text('ถ่ายภาพ'),
             ),
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.image),
               onPressed: () => chooseImage(ImageSource.gallery),
               label: Text('เลือกจากคลัง'),
@@ -172,7 +172,9 @@ class _AddInfoShopState extends State<AddInfoShop> {
       setState(() {
         file = File(object!.path);
       });
-    } catch (e) {}
+    } catch (e) {
+      print('ผิดพลาด >> {$e}');
+    }
   }
 
   // Set<Marker> setMarker() => <Marker>[
@@ -190,6 +192,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
         child: lat == null
             ? MyStyle().showProgress()
             : GoogleMap(
+                myLocationEnabled: true,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(lat!, lng!),
                   zoom: 16,
@@ -235,7 +238,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
     String nameImage = 'shop_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/upload/saveImageShop.php';
+    String url = '${MyConstant().domain}/images/saveImageShop.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -249,7 +252,9 @@ class _AddInfoShopState extends State<AddInfoShop> {
         //print('urlImage = $image');
         await addSHOP();
       });
-    } catch (e) {}
+    } catch (e) {
+      //
+    }
   }
 
   Future<Null> addSHOP() async {
@@ -268,6 +273,8 @@ class _AddInfoShopState extends State<AddInfoShop> {
       } else {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      print('ผิดพลาด {$e}');
+    }
   }
 }

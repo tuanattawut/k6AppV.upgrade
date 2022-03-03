@@ -126,7 +126,7 @@ class _EditareaState extends State<Editarea> {
           height: 100,
           child: file == null
               ? Image.network(
-                  '${MyConstant().domain}/upload/area/$image',
+                  '${MyConstant().domain}/images/areasshop/$image',
                   fit: BoxFit.cover,
                 )
               : Image.file(file!),

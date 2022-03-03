@@ -72,7 +72,7 @@ class _EditPromotionState extends State<EditPromotion> {
     String nameImage = 'Promotion_$i.jpg';
     //print('nameImage = $nameImage, pathImage = ${file!.path}');
 
-    String url = '${MyConstant().domain}/upload/savePromotion.php';
+    String url = '${MyConstant().domain}/images/savePromotion.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -144,7 +144,7 @@ class _EditPromotionState extends State<EditPromotion> {
           height: 200,
           child: file == null
               ? Image.network(
-                  '${MyConstant().domain}/upload/promotion/${promotionModel!.image}',
+                  '${MyConstant().domain}/images/promotionweb/${promotionModel!.image}',
                   fit: BoxFit.cover,
                 )
               : Image.file(file!),

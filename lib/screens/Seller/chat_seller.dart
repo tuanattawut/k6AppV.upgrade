@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
@@ -64,7 +63,7 @@ class _ChatSellerState extends State<ChatSeller> {
                       Navigator.of(context).push(route);
                     },
                     leading: Image.network(
-                      '${MyConstant().domain}/upload/user/${userModel[index].image}',
+                      '${MyConstant().domain}/images/profileuser/${userModel[index].image}',
                       fit: BoxFit.cover,
                       width: 50,
                     ),

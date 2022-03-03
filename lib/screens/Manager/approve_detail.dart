@@ -131,7 +131,7 @@ class _ApproveAreaDetailState extends State<ApproveAreaDetail> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Image.network(
-          '${MyConstant().domain}/upload/area/${researveAreaModel!.image}',
+          '${MyConstant().domain}/images/areasshop/${researveAreaModel!.image}',
           fit: BoxFit.contain,
         ));
   }

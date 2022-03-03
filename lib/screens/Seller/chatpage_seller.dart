@@ -318,6 +318,8 @@ class _ChatpageSellerState extends State<ChatpageSeller> {
       } else {
         normalDialog(context, 'ส่งข้อความล้มเหลว ลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      print('ผิดพลาด {$e}');
+    }
   }
 }

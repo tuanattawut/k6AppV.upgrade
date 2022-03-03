@@ -62,7 +62,7 @@ class _ChatManagerState extends State<ChatManager> {
                       Navigator.of(context).push(route);
                     },
                     leading: Image.network(
-                      '${MyConstant().domain}/upload/shop/${shopModel[index].image}',
+                      '${MyConstant().domain}/images/shops_seller/${shopModel[index].image}',
                       fit: BoxFit.cover,
                       width: 50,
                     ),

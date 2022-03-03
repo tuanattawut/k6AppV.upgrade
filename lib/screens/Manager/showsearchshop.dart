@@ -89,7 +89,7 @@ class _ShowsearchShopState extends State<ShowsearchShop> {
                       Navigator.of(context).push(route);
                     },
                     leading: Image.network(
-                      '${MyConstant().domain}/upload/shop/${shopList[index].image}',
+                      '${MyConstant().domain}/images/areasshop/${shopList[index].image}',
                       fit: BoxFit.cover,
                       width: 50,
                     ),

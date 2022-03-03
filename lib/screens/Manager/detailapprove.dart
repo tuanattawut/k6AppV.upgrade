@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
+import 'package:k6_app/screens/Manager/approve_seller.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -35,7 +36,7 @@ class _DetailApproveState extends State<DetailApprove> {
     String id = sellermodel.idSeller;
 
     String url =
-        '${MyConstant().domain}/api/editSeller.php?isAdd=true&id_seller=$id&role=$_value';
+        '${MyConstant().domain}/api/editSeller.php?isAdd=true&id=$id&role=$_value';
     await Dio().get(url).then((value) async {
       if (value.toString() == 'true') {
         await normalDialog(context, 'สำเร็จ');
@@ -62,7 +63,7 @@ class _DetailApproveState extends State<DetailApprove> {
               radius: 100,
               child: ClipOval(
                   child: Image.network(
-                '${MyConstant().domain}/upload/seller/${sellerModel!.image}',
+                '${MyConstant().domain}/images/profileseller/${sellerModel!.image}',
                 width: 150,
                 height: 150,
                 fit: BoxFit.cover,
