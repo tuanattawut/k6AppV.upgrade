@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
@@ -19,15 +20,31 @@ class AddInfoShop extends StatefulWidget {
 
 class _AddInfoShopState extends State<AddInfoShop> {
   SellerModel? sellerModel;
-  double? lat, lng;
+  double? lat, long;
   String? nameShop, image, idseller;
   File? file;
   List<Marker> myMarker = [];
+  List categoryItemList = [];
+  String? selectedValue;
   @override
   void initState() {
     super.initState();
     checkPermission();
     sellerModel = widget.sellerModel;
+    readCategory();
+  }
+
+  Future<Null> readCategory() async {
+    String api = '${MyConstant().domain}/api/getCategory.php';
+    await Dio().get(api).then((value) {
+      for (var item in json.decode(value.data)) {
+        setState(() {
+          categoryItemList.add(item);
+        });
+      }
+    });
+
+    //print(categoryItemList);
   }
 
   Future<Null> checkPermission() async {
@@ -70,7 +87,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
       // lng = position.longitude;
       //print('lat = $lat, lng = $lng');
       lat = 14.028483806025148;
-      lng = 100.7294029298289;
+      long = 100.7294029298289;
     });
   }
 
@@ -94,13 +111,23 @@ class _AddInfoShopState extends State<AddInfoShop> {
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           behavior: HitTestBehavior.opaque,
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(15),
             child: Column(
               children: <Widget>[
                 MyStyle().mySizebox(),
                 groupImage(),
                 MyStyle().mySizebox(),
                 nameForm(),
+                MyStyle().mySizebox(),
+                Row(
+                  children: [
+                    Text(
+                      'ประเภทร้านค้า',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                dropdowncategory(),
                 MyStyle().mySizebox(),
                 Row(
                   children: [
@@ -118,6 +145,29 @@ class _AddInfoShopState extends State<AddInfoShop> {
             ),
           ),
         ));
+  }
+
+  Row dropdowncategory() {
+    return Row(
+      children: [
+        DropdownButton(
+          hint: Text('เลือกประเภทร้านค้า'),
+          value: selectedValue,
+          items: categoryItemList.map((list) {
+            return DropdownMenuItem(
+              value: list['id'].toString(),
+              child: Text(list['namecategory']),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedValue = value.toString();
+              print(selectedValue);
+            });
+          },
+        ),
+      ],
+    );
   }
 
   TextFormField nameForm() {
@@ -194,7 +244,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
             : GoogleMap(
                 myLocationEnabled: true,
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(lat!, lng!),
+                  target: LatLng(lat!, long!),
                   zoom: 16,
                 ),
                 onMapCreated: (controller) {},
@@ -205,9 +255,9 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
   _handleTap(LatLng tappedPoint) {
     lat = tappedPoint.latitude;
-    lng = tappedPoint.longitude;
+    long = tappedPoint.longitude;
 
-    print('Lat = $lat  lng = $lng');
+    print('Lat = $lat  lng = $long');
     setState(() {
       myMarker = [];
       myMarker.add(
@@ -259,10 +309,10 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
   Future<Null> addSHOP() async {
     idseller = sellerModel?.idSeller;
-    print(
-        'idseller = $idseller + nameshop = $nameShop + image = $image + lat = $lat + lng = $lng');
+    //print(
+    //    'idseller = $idseller + nameshop = $nameShop + image = $image + lat = $lat + lng = $long');
     String url =
-        '${MyConstant().domain}/api/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&lat=$lat&lng=$lng';
+        '${MyConstant().domain}/api/addShop.php?isAdd=true&id_seller=$idseller&nameshop=$nameShop&image=$image&category_type=$selectedValue&lat=$lat&long=$long';
 
     try {
       Response response = await Dio().get(url);

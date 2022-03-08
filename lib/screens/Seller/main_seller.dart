@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/shop_model.dart';
 import 'package:k6_app/screens/Seller/add_info_seller.dart';
@@ -24,7 +25,7 @@ class Homeseller extends StatefulWidget {
 
 class _HomesellerState extends State<Homeseller> {
   SellerModel? sellerModel;
-  String? idseller;
+  String? id;
   ShopModel? shopModels;
   @override
   void initState() {
@@ -36,13 +37,14 @@ class _HomesellerState extends State<Homeseller> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   Future<Null> readDataShop() async {
-    idseller = sellerModel?.idSeller;
+    id = sellerModel?.idSeller;
+    print(id);
     String url =
-        '${MyConstant().domain}/api/getShopfromidSeller.php?isAdd=true&id_seller=$idseller';
+        '${MyConstant().domain}/api/getShopfromidSeller.php?isAdd=true&id_seller=$id';
     Response response = await Dio().get(url);
 
     var result = json.decode(response.data);
-    //print('result = $result');
+    // print('result = $result');
 
     if (result != null) {
       for (var map in result) {
@@ -170,6 +172,7 @@ class _HomesellerState extends State<Homeseller> {
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/", (Route<dynamic> route) => false);
+                  _logOut();
                 },
                 icon: Icon(
                   Icons.check,
@@ -194,6 +197,10 @@ class _HomesellerState extends State<Homeseller> {
       ),
     );
   }
+
+  Future<void> _logOut() async {
+    await FacebookAuth.instance.logOut();
+  }
 }
 
 class MyMenu extends StatelessWidget {
@@ -211,6 +218,9 @@ class MyMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: BeveledRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -218,7 +228,7 @@ class MyMenu extends StatelessWidget {
             MaterialPageRoute(builder: (context) => route),
           );
         },
-        splashColor: Colors.deepPurple,
+        splashColor: Colors.blue,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -228,7 +238,7 @@ class MyMenu extends StatelessWidget {
                 size: 50,
                 color: color,
               ),
-              Text(title, style: TextStyle(fontSize: 20)),
+              Text(title, style: TextStyle(fontSize: 18)),
             ],
           ),
         ),

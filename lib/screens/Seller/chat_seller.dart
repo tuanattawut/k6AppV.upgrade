@@ -18,6 +18,7 @@ class _ChatSellerState extends State<ChatSeller> {
   SellerModel? sellerModel;
   String? idUser, idSeller;
   List<UserModel> userModel = [];
+  bool? check;
   @override
   void initState() {
     super.initState();
@@ -39,6 +40,10 @@ class _ChatSellerState extends State<ChatSeller> {
             userModel.add(userModels);
           });
         }
+      } else {
+        setState(() {
+          check = false;
+        });
       }
     });
   }
@@ -49,38 +54,58 @@ class _ChatSellerState extends State<ChatSeller> {
       appBar: AppBar(
         title: Text('แชท'),
       ),
-      body: Container(
-        child: ListView.builder(
-            itemCount: userModel.length,
-            itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.all(8),
-                  child: ListTile(
-                    onTap: () {
-                      MaterialPageRoute route = MaterialPageRoute(
-                          builder: (value) => ChatpageSeller(
-                              userModel: userModel[index],
-                              sellerModel: sellerModel!));
-                      Navigator.of(context).push(route);
-                    },
-                    leading: Image.network(
-                      '${MyConstant().domain}/images/profileuser/${userModel[index].image}',
-                      fit: BoxFit.cover,
-                      width: 50,
-                    ),
-                    title: Text(
-                      userModel[index].firstname +
-                          '  ' +
-                          userModel[index].lastname,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                    ),
-                  ),
-                )),
+      body: check == false
+          ? showNotProduct()
+          : Container(
+              child: ListView.builder(
+                  itemCount: userModel.length,
+                  itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.all(8),
+                        child: ListTile(
+                          onTap: () {
+                            MaterialPageRoute route = MaterialPageRoute(
+                                builder: (value) => ChatpageSeller(
+                                    userModel: userModel[index],
+                                    sellerModel: sellerModel!));
+                            Navigator.of(context).push(route);
+                          },
+                          leading: Icon(
+                            Icons.person,
+                            size: 30,
+                            color: Colors.blue,
+                          ),
+                          // Image.network(
+                          //   '${MyConstant().domain}/images/profileuser/${userModel[index].image}',
+                          //   fit: BoxFit.cover,
+                          //   width: 50,
+                          // ),
+                          title: Text(
+                            userModel[index].firstname +
+                                '  ' +
+                                userModel[index].lastname,
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 14,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      )),
+            ),
+    );
+  }
+
+  Widget showNotProduct() {
+    return Center(
+      child: Text(
+        'ยังไม่มีแชทในตอนนี้',
+        style: Theme.of(context)
+            .textTheme
+            .button!
+            .copyWith(color: Colors.black, fontSize: 20),
       ),
     );
   }

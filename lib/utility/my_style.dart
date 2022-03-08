@@ -20,9 +20,7 @@ class MyStyle {
 
   Text showTitle(String title) => Text(
         title,
-        style: TextStyle(
-          fontSize: 20,
-        ),
+        style: TextStyle(fontSize: 20, color: Colors.blue),
       );
 
   Text showTitleH2(String title) => Text(

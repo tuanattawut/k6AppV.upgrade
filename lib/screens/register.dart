@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:k6_app/utility/enc-dec.dart';
+import 'package:k6_app/screens/login.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -44,8 +45,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           Text(
                             'เพศ',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.black54),
                           ),
                         ],
                       ),
@@ -110,8 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 name!.isEmpty ||
                 lastname == null ||
                 lastname!.isEmpty ||
-                generateMd5(password!) == null ||
-                generateMd5(password!).isEmpty ||
+                password == null ||
+                password!.isEmpty ||
                 phone == null ||
                 phone!.isEmpty ||
                 phone!.length != 10 ||
@@ -174,22 +173,23 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<Null> register() async {
-    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/api/addUser.php?isAdd=true&firstname=$name&lastname=$lastname&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&image=$image';
+        '${MyConstant().domain}/api/adduser?firstname=$name&lastname=$lastname&phone=$phone&gender=$gender&email=$email&image&password=$password';
 
     try {
       Response response = await Dio().get(url);
-      //print('res = $response');
-
-      if (response.toString() == 'true') {
+      var result = json.decode(response.data);
+      print(result);
+      if (result == true) {
         normalDialog(context, 'สมัครสำเร็จ');
-
-        Navigator.pushNamed(context, '/');
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(builder: (context) => LoginPage()));
       } else {
-        normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
+        normalDialog(context, 'ไม่สามารถ สมัครได้กรุณาลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด ${e.toString()}');
+    }
   }
 
   Column groupImage() {

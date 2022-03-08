@@ -36,12 +36,10 @@ class _CategoryProductState extends State<CategoryProduct> {
   Future<Null> getProduct() async {
     idsubcategory = subcategoryModels?.idsubcategory;
     // print(idcategory);
-
     String api =
         '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsubcategory';
     Response response = await Dio().get(api);
     var result = json.decode(response.data);
-
     if (result != null) {
       for (var map in result) {
         setState(() {

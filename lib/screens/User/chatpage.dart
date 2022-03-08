@@ -197,11 +197,12 @@ class _ChatPageState extends State<ChatPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      chatlist[index].message,
+                      chatlist[index].message.toString(),
                       style: TextStyle(fontSize: 16),
                     ),
                     Text(
-                      date(DateTime.parse(chatlist[index].regdate)).toString(),
+                      date(
+                          DateTime.parse(chatlist[index].createdAt.toString())),
                       style: TextStyle(
                         fontSize: 12,
                       ),

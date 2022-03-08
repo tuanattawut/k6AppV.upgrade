@@ -1,58 +1,64 @@
 import 'dart:convert';
 
 class ChatModel {
-  final String idchat;
-  final String message;
-  final String iduser;
-  final String idseller;
-  final String status;
-  final String regdate;
+  String? id;
+  String? message;
+  String? idManager;
+  String? idSeller;
+  String? status;
+  String? createdAt;
+  String? updatedAt;
   ChatModel({
-    required this.idchat,
-    required this.message,
-    required this.iduser,
-    required this.idseller,
-    required this.status,
-    required this.regdate,
+    this.id,
+    this.message,
+    this.idManager,
+    this.idSeller,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
   });
 
   ChatModel copyWith({
-    String? idchat,
+    String? id,
     String? message,
-    String? iduser,
-    String? idseller,
+    String? idManager,
+    String? idSeller,
     String? status,
-    String? regdate,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return ChatModel(
-      idchat: idchat ?? this.idchat,
+      id: id ?? this.id,
       message: message ?? this.message,
-      iduser: iduser ?? this.iduser,
-      idseller: idseller ?? this.idseller,
+      idManager: idManager ?? this.idManager,
+      idSeller: idSeller ?? this.idSeller,
       status: status ?? this.status,
-      regdate: regdate ?? this.regdate,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id_chat': idchat,
+      'id': id,
       'message': message,
-      'id_user': iduser,
-      'id_seller': idseller,
+      'id_manager': idManager,
+      'id_seller': idSeller,
       'status': status,
-      'regdate': regdate,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
     };
   }
 
   factory ChatModel.fromMap(Map<String, dynamic> map) {
     return ChatModel(
-      idchat: map['id_chat'],
+      id: map['id'],
       message: map['message'],
-      iduser: map['id_user'],
-      idseller: map['id_seller'],
+      idManager: map['id_manager'],
+      idSeller: map['id_seller'],
       status: map['status'],
-      regdate: map['regdate'],
+      createdAt: map['created_at'],
+      updatedAt: map['updated_at'],
     );
   }
 
@@ -63,7 +69,7 @@ class ChatModel {
 
   @override
   String toString() {
-    return 'ChatModel(id_chat: $idchat, message: $message, id_user: $iduser, id_seller: $idseller, status: $status, regdate: $regdate)';
+    return 'ChatModel(id: $id, message: $message, idManager: $idManager, idSeller: $idSeller, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -71,21 +77,23 @@ class ChatModel {
     if (identical(this, other)) return true;
 
     return other is ChatModel &&
-        other.idchat == idchat &&
+        other.id == id &&
         other.message == message &&
-        other.iduser == iduser &&
-        other.idseller == idseller &&
+        other.idManager == idManager &&
+        other.idSeller == idSeller &&
         other.status == status &&
-        other.regdate == regdate;
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
-    return idchat.hashCode ^
+    return id.hashCode ^
         message.hashCode ^
-        iduser.hashCode ^
-        idseller.hashCode ^
+        idManager.hashCode ^
+        idSeller.hashCode ^
         status.hashCode ^
-        regdate.hashCode;
+        createdAt.hashCode ^
+        updatedAt.hashCode;
   }
 }

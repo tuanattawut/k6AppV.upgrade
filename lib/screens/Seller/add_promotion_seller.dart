@@ -73,7 +73,9 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
         // print('urlImage = $image');
         await addPromotion();
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<Null> addPromotion() async {
@@ -82,6 +84,7 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
     await Dio().get(url).then((value) {
       if (value.toString() == 'true') {
         Navigator.pop(context);
+        print('ถึงนี่');
       } else {
         normalDialog(context, 'กรุณาลองใหม่ มีอะไร ? ผิดพลาด');
       }
@@ -93,7 +96,7 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
       child: Text('บันทึกข้อมูล'),
       onPressed: () {
         if (detailpromotion == null || detailpromotion!.isEmpty) {
-          normalDialog(context, 'โปรดกรอกให้ครบทุกช่องด้วย');
+          normalDialog(context, 'โปรดกรอกรายละเอียดโปรโมชัน');
         } else if (file == null) {
           normalDialog(context, 'โปรดเลือกรูปภาพด้วย');
         } else {
@@ -109,8 +112,19 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
       onChanged: (value) => detailpromotion = value.trim(),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
+      maxLines: 5,
       decoration: InputDecoration(
         labelText: 'รายละเอียดโปรโมชั่น',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
       ),
     );
   }
@@ -128,12 +142,12 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.camera),
               onPressed: () => chooseImage(ImageSource.camera),
               label: Text('ถ่ายภาพ'),
             ),
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.image),
               onPressed: () => chooseImage(ImageSource.gallery),
               label: Text('เลือกจากคลัง'),
@@ -155,6 +169,8 @@ class _AddPromotionSellerState extends State<AddPromotionSeller> {
       setState(() {
         file = File(object!.path);
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

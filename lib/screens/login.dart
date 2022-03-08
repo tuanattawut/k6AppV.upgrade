@@ -5,7 +5,6 @@ import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/Manager/loginmanager.dart';
 import 'package:k6_app/screens/Seller/loginseller.dart';
 import 'package:k6_app/screens/User/main_user.dart';
-import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_outlinebutton.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -98,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
     return Expanded(
       flex: 1,
       child: MyOutlinedButton(
-        onPressed: () async {
+        onPressed: () {
           MaterialPageRoute route =
               MaterialPageRoute(builder: (value) => LoginManager());
           Navigator.of(context).push(route);
@@ -114,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
     return Expanded(
       flex: 1,
       child: MyOutlinedButton(
-        onPressed: () async {
+        onPressed: () {
           MaterialPageRoute route =
               MaterialPageRoute(builder: (value) => LoginSeller());
           Navigator.of(context).push(route);
@@ -154,14 +153,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             onPressed: () async {
               if (this._formstate.currentState!.validate()) {
-                print('email ======>  $email');
-                print('Password ======> ' + generateMd5(password!));
+                // print('email ======>  $email');
                 if (email == null ||
                     email!.isEmpty ||
                     !email!.contains('@') ||
-                    generateMd5(password!) == null ||
-                    generateMd5(password!).isEmpty ||
-                    generateMd5(password!).length < 6) {
+                    password == null ||
+                    password!.isEmpty ||
+                    password!.length < 6) {
                   normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
                 } else {
                   showLoade(context);
@@ -242,42 +240,36 @@ class _LoginPageState extends State<LoginPage> {
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
-        for (var map in result) {
-          UserModel userModel = UserModel.fromMap(map);
-          if (generateMd5(password!) == userModel.password) {
-            Navigator.of(context).pushReplacement(new MaterialPageRoute(
-              builder: (context) => Homepage(
-                usermodel: userModel,
-              ),
-            ));
-            addLogin();
-            break;
-          } else {
-            normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
-          }
-        }
+        //print('ทำนี่ 1');
+        addLogin();
       }
     } catch (e) {
-      normalDialog(context, 'ผิดพลาด');
-      // print('Have e Error ===>> ${e.toString()}');
+      normalDialog(context, 'ผิดพลาด ${e.toString()}');
     }
   }
 
   Future<Null> addLogin() async {
-    String typeuser = 'user';
     String url =
-        '${MyConstant().domain}/api/addLogin.php?isAdd=true&typeuser=$typeuser';
+        '${MyConstant().domain}/api/loginuser?email=$email&password=$password';
 
     try {
       Response response = await Dio().get(url);
-      //print('res = $response');
-
-      if (response.toString() == 'true') {
+      var result = json.decode(response.data);
+      print(result);
+      if (result == false) {
+        normalDialog(context, 'พาสเวิร์ดผิด กรุณาลองอีกครั้ง ');
       } else {
-        //
+        for (var map in result) {
+          UserModel userModel = UserModel.fromMap(map);
+          print(userModel.firstname);
+          Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => Homepage(
+                    usermodel: userModel,
+                  )));
+        }
       }
     } catch (e) {
-      //
+      print(e.toString());
     }
   }
 }

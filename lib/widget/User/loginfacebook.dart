@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/main_user.dart';
-import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -32,27 +31,26 @@ class _LoginFacebookState extends State<LoginFacebook> {
       firstname = profileData['first_name'];
       lastname = profileData['last_name'];
       email = profileData['email'];
-      image = 'profile.jpg';
       checkUser();
     });
   }
 
   Future<Null> registerThread() async {
-    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/api/addUser.php?isAdd=true&firstname=$firstname&lastname=$lastname&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&image=$image';
+        '${MyConstant().domain}/api/adduser?firstname=$firstname&lastname=$lastname&phone=$phone&gender=$gender&email=$email&image&password=$password';
 
     try {
       Response response = await Dio().get(url);
       //print('res = $response');
-      print(passwordMd5);
-      if (response.toString() == 'ได้') {
-        normalDialog(
-            context, 'เข้าใช้สำเร็จด้วยชื่อ :\n${profileData['name']} ');
+      var result = json.decode(response.data);
+      if (result == true) {
+        normalDialog(context, 'เข้าใช้สำเร็จด้วยชื่อ :\n$firstname');
       } else {
         normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด ${e.toString()}');
+    }
   }
 
   Future<Null> checkUser() async {
@@ -72,7 +70,6 @@ class _LoginFacebookState extends State<LoginFacebook> {
             ),
           );
           Navigator.of(context).push(route);
-
           print(response.toString());
           // Navigator.pushNamed(context, '/homepage'); break;
         }

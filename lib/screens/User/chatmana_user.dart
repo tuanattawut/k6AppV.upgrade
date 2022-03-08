@@ -107,10 +107,10 @@ class _ChatmanaUserState extends State<ChatmanaUser> {
       decoration: InputDecoration(
         hintText: 'พิมพ์ข้อความของคุณ',
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.deepPurple),
+          borderSide: BorderSide(color: Colors.blue),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.deepPurple),
+          borderSide: BorderSide(color: Colors.blue),
         ),
       ),
     );
@@ -129,9 +129,10 @@ class _ChatmanaUserState extends State<ChatmanaUser> {
     String url =
         '${MyConstant().domain}/api/addReport.php?isAdd=true&id_user=$idUser&message=$message';
 
+    print(idUser);
     try {
       Response response = await Dio().get(url);
-      // print('res = $response');
+      print('res = $response');
 
       if (response.toString() == 'true') {
         // normalDialog(context, 'ส่งสำเร็จ');
@@ -139,6 +140,8 @@ class _ChatmanaUserState extends State<ChatmanaUser> {
       } else {
         normalDialog(context, 'ผิดผลาด กรุณาลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      normalDialog(context, 'ผิดผลาด ${e.toString()}');
+    }
   }
 }

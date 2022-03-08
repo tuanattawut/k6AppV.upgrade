@@ -1,11 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:k6_app/screens/Seller/loginseller.dart';
-import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -43,14 +42,13 @@ class _RegisterSellerState extends State<RegisterSeller> {
                   buildIDcardField(),
                   buildEmailField(),
                   buildPasswordField(),
+                  MyStyle().mySizebox(),
                   Column(
                     children: [
                       Row(
                         children: [
                           Text(
                             'เพศ',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.black54),
                           ),
                         ],
                       ),
@@ -58,14 +56,13 @@ class _RegisterSellerState extends State<RegisterSeller> {
                     ],
                   ),
                   buildPhoneField(),
+                  MyStyle().mySizebox(),
                   Column(
                     children: [
                       Row(
                         children: [
                           Text(
                             'วันเกิด',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.black54),
                           ),
                         ],
                       ),
@@ -140,8 +137,8 @@ class _RegisterSellerState extends State<RegisterSeller> {
                 name!.isEmpty ||
                 lastname == null ||
                 lastname!.isEmpty ||
-                generateMd5(password!) == null ||
-                generateMd5(password!).isEmpty ||
+                password == null ||
+                password!.isEmpty ||
                 phone == null ||
                 phone!.isEmpty ||
                 idcard == null ||
@@ -206,22 +203,20 @@ class _RegisterSellerState extends State<RegisterSeller> {
   }
 
   Future<Null> register() async {
-    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/api/addSeller.php?isAdd=true&firstname=$name&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
-
+        '${MyConstant().domain}/api/addseller?firstname=$name&lastname=$lastname&idcard=$idcard&phone=$phone&gender=$gender&birthday=$birthday&role&email=$email&image=$image&password=$password';
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
-
-      if (response.toString() == 'true') {
+      // print('res = $response');
+      var result = json.decode(response.data);
+      if (result == true) {
         normalDialog(context, 'สมัครสำเร็จ');
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => LoginSeller()),
         );
       } else {
-        normalDialog(context, 'ไม่สามารถ สมัครได้ กรุณาลองอีกครั้ง');
+        normalDialog(context, 'ไม่สามารถสมัครได้ กรุณาลองอีกครั้ง');
       }
     } catch (e) {}
   }

@@ -12,20 +12,21 @@ import 'package:k6_app/utility/normal_dialog.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({required this.shopModel});
+
   final ShopModel shopModel;
+
   @override
   _AddProductState createState() => _AddProductState();
 }
 
 class _AddProductState extends State<AddProduct> {
-  String? nameProduct, price, detail, image, idcategory;
-
-  File? file;
   List categoryItemList = [];
-  List subcategoryItemList = [];
-  String? selectedValue, subValue;
-  ShopModel? shopModel;
+  File? file;
+  String? nameProduct, price, detail, image, idcategory;
   String? idshop;
+  ShopModel? shopModel;
+  String? selectedValue, subValue;
+  List subcategoryItemList = [];
 
   @override
   void initState() {
@@ -37,14 +38,14 @@ class _AddProductState extends State<AddProduct> {
   Future<Null> readCategory() async {
     String api = '${MyConstant().domain}/api/getCategory.php';
     await Dio().get(api).then((value) {
-      for (var item in json.decode(value.data)) {
-        setState(() {
-          categoryItemList.add(item);
-        });
+      if (value.toString() != 'null') {
+        for (var item in json.decode(value.data)) {
+          setState(() {
+            categoryItemList.add(item);
+          });
+        }
       }
     });
-
-    //print(categoryItemList);
   }
 
   Future<Null> readsubCategory() async {
@@ -57,40 +58,6 @@ class _AddProductState extends State<AddProduct> {
         });
       }
     });
-    // print(subcategoryItemList);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('เพิ่มรายการสินค้า'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: Column(
-            children: <Widget>[
-              showTitleFood('รูปสินค้า'),
-              groupImage(),
-              showTitleFood('รายละเอียดสินค้า'),
-              nameForm(),
-              MyStyle().mySizebox(),
-              dropdowncategory(),
-              dropdownsubcategory(),
-              detailForm(),
-              MyStyle().mySizebox(),
-              priceForm(),
-              MyStyle().mySizebox(),
-              saveButton(),
-              MyStyle().mySizebox(),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Row dropdowncategory() {
@@ -101,7 +68,7 @@ class _AddProductState extends State<AddProduct> {
           value: selectedValue,
           items: categoryItemList.map((list) {
             return DropdownMenuItem(
-              value: list['id_category'].toString(),
+              value: list['id'].toString(),
               child: Text(list['namecategory']),
             );
           }).toList(),
@@ -126,7 +93,7 @@ class _AddProductState extends State<AddProduct> {
           value: subValue,
           items: subcategoryItemList.map((sublist) {
             return DropdownMenuItem(
-              value: sublist['id_subcategory'].toString(),
+              value: sublist['id'].toString(),
               child: Text(sublist['namesubcategory']),
             );
           }).toList(),
@@ -204,7 +171,9 @@ class _AddProductState extends State<AddProduct> {
       } else {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      print('erroe >>> $e');
+    }
   }
 
   TextFormField nameForm() {
@@ -212,6 +181,16 @@ class _AddProductState extends State<AddProduct> {
       onChanged: (value) => nameProduct = value.trim(),
       decoration: InputDecoration(
         labelText: 'ชื่อสินค้า :',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
       ),
     );
   }
@@ -226,6 +205,16 @@ class _AddProductState extends State<AddProduct> {
       decoration: InputDecoration(
         labelText: 'ราคาสินค้า :',
         suffixText: 'บาท',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
       ),
     );
   }
@@ -237,6 +226,16 @@ class _AddProductState extends State<AddProduct> {
       maxLines: 3,
       decoration: InputDecoration(
         labelText: 'รายละเอียดสินค้า :',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.blue,
+          ),
+        ),
       ),
     );
   }
@@ -246,8 +245,8 @@ class _AddProductState extends State<AddProduct> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 200,
-          height: 200,
+          width: 150,
+          height: 150,
           child: file == null
               ? Image.asset('images/productmenu.png')
               : Image.file(file!),
@@ -255,12 +254,12 @@ class _AddProductState extends State<AddProduct> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.camera),
               onPressed: () => chooseImage(ImageSource.camera),
               label: Text('ถ่ายภาพ'),
             ),
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.image),
               onPressed: () => chooseImage(ImageSource.gallery),
               label: Text('เลือกจากคลัง'),
@@ -292,6 +291,39 @@ class _AddProductState extends State<AddProduct> {
         children: <Widget>[
           MyStyle().showTitleH2(string),
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('เพิ่มรายการสินค้า'),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: Column(
+            children: <Widget>[
+              showTitleFood('รูปสินค้า'),
+              groupImage(),
+              showTitleFood('รายละเอียดสินค้า'),
+              nameForm(),
+              MyStyle().mySizebox(),
+              dropdowncategory(),
+              dropdownsubcategory(),
+              detailForm(),
+              MyStyle().mySizebox(),
+              priceForm(),
+              MyStyle().mySizebox(),
+              saveButton(),
+              MyStyle().mySizebox(),
+            ],
+          ),
+        ),
       ),
     );
   }

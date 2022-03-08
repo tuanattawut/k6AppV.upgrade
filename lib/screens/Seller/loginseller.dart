@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
 import 'package:k6_app/screens/Seller/registerseller.dart';
-import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_outlinebutton.dart';
 import 'package:k6_app/utility/my_style.dart';
@@ -199,28 +198,29 @@ class _LoginSellerState extends State<LoginSeller> {
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
-        for (var map in result) {
-          SellerModel sellerModel = SellerModel.fromMap(map);
-          if (generateMd5(password!) == sellerModel.password) {
-            if (sellerModel.role == 'seller') {
-              Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => Homeseller(
-                  sellerModel: sellerModel,
-                ),
-              ));
-              addLogin();
-              break;
-            } else if (sellerModel.role == 'noseller') {
-              normalDialog(
-                  context, 'บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากผู้จัดการ');
-            } else {
-              normalDialog(
-                  context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
-            }
-          } else {
-            normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
-          }
-        }
+        // for (var map in result) {
+        //   SellerModel sellerModel = SellerModel.fromMap(map);
+        //   if (password == sellerModel.password) {
+        //     if (sellerModel.role == 'seller') {
+        //       Navigator.of(context).pushReplacement(new MaterialPageRoute(
+        //         builder: (context) => Homeseller(
+        //           sellerModel: sellerModel,
+        //         ),
+        //       ));
+        //       addLogin();
+        //       break;
+        //     } else if (sellerModel.role == 'noseller') {
+        //       normalDialog(
+        //           context, 'บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากผู้จัดการ');
+        //     } else {
+        //       normalDialog(
+        //           context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
+        //     }
+        //   } else {
+        //     normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
+        //   }
+        // }
+        addLogin();
       }
     } catch (e) {
       normalDialog(context, 'ผิดพลาด ${e.toString()}');
@@ -229,20 +229,35 @@ class _LoginSellerState extends State<LoginSeller> {
   }
 
   Future<Null> addLogin() async {
-    String typeuser = 'seller';
     String url =
-        '${MyConstant().domain}/api/addLogin.php?isAdd=true&typeuser=$typeuser';
-
+        '${MyConstant().domain}/api/loginseller?email=$email&password=$password';
     try {
       Response response = await Dio().get(url);
-      //print('res = $response');
-
-      if (response.toString() == 'true') {
+      var result = json.decode(response.data);
+      //print(result);
+      if (result == false) {
+        normalDialog(context, 'พาสเวิร์ดผิด กรุณาลองอีกครั้ง ');
       } else {
-        //
+        for (var map in result) {
+          SellerModel sellerModel = SellerModel.fromMap(map);
+          if (sellerModel.role == 'seller') {
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => Homeseller(
+                sellerModel: sellerModel,
+              ),
+            ));
+            break;
+          } else if (sellerModel.role == 'noseller') {
+            normalDialog(
+                context, 'บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากผู้จัดการ');
+          } else {
+            normalDialog(
+                context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
+          }
+        }
       }
     } catch (e) {
-      //
+      print(e.toString());
     }
   }
 }

@@ -95,7 +95,7 @@ class _PromotionSellerState extends State<PromotionSeller> {
 
   Widget showContent() {
     return status!
-        ? showListFood()
+        ? showListPromotion()
         : Center(
             child: Text(
               'ยังไม่ได้ลงโปรโมชั่น',
@@ -104,7 +104,7 @@ class _PromotionSellerState extends State<PromotionSeller> {
           );
   }
 
-  Widget showListFood() => ListView.builder(
+  Widget showListPromotion() => ListView.builder(
       itemCount: promotionlist.length,
       itemBuilder: (context, index) => Card(
             child: Row(
@@ -114,7 +114,7 @@ class _PromotionSellerState extends State<PromotionSeller> {
                   width: MediaQuery.of(context).size.width * 0.4,
                   height: MediaQuery.of(context).size.width * 0.4,
                   child: Image.network(
-                    '${MyConstant().domain}/upload/promotion/${promotionlist[index].image}',
+                    '${MyConstant().domain}/images/promotionseller/${promotionlist[index].image}',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -149,7 +149,7 @@ class _PromotionSellerState extends State<PromotionSeller> {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: MyStyle().showTitleH2('คุณต้องการลบ?'),
+        title: MyStyle().showTitleH2('คุณต้องการลบ ?'),
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -158,7 +158,10 @@ class _PromotionSellerState extends State<PromotionSeller> {
                 onPressed: () async {
                   Navigator.pop(context);
                 },
-                child: Text('ยืนยัน'),
+                child: Text(
+                  'ยืนยัน',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context),

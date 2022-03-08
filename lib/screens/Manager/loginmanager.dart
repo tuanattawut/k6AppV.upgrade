@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/manager_model.dart';
 import 'package:k6_app/screens/Manager/main_manager.dart';
-import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -157,7 +156,7 @@ class _LoginManagerState extends State<LoginManager> {
       } else {
         for (var map in result) {
           ManagerModel managerModel = ManagerModel.fromMap(map);
-          if (generateMd5(password!) == managerModel.password) {
+          if (password == managerModel.password) {
             Navigator.of(context).pushReplacement(new MaterialPageRoute(
                 builder: (context) => Homemanager(
                       managerModel: managerModel,

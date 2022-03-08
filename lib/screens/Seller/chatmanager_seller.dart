@@ -187,7 +187,7 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: (chatlist[index].status == 'manager'
-                      ? Colors.grey.shade200
+                      ? Color.fromRGBO(238, 238, 238, 1)
                       : Colors.blue[200]),
                 ),
                 padding: EdgeInsets.all(16),
@@ -195,11 +195,13 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      chatlist[index].message,
+                      chatlist[index].message.toString(),
                       style: TextStyle(fontSize: 16),
                     ),
+                    MyStyle().mySizebox(),
                     Text(
-                      date(DateTime.parse(chatlist[index].regdate)).toString(),
+                      date(DateTime.parse(chatlist[index].createdAt.toString()))
+                          .toString(),
                       style: TextStyle(
                         fontSize: 12,
                       ),
@@ -276,10 +278,20 @@ class _ChatmanagerPageState extends State<ChatmanagerPage> {
                       ),
                     )),
                     IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           message = _controller.text;
-                          sendChat();
-                          showSend(context);
+                          //sendChat();
+                          //showSend(context);
+                          idSeller = sellerModel!.idSeller;
+                          idmanager = '1';
+                          String status = 'seller';
+                          String url =
+                              '${MyConstant().domain}/api/addChatmanager.php?isAdd=true&message=$message&id_manager=$idmanager&id_seller=$idSeller&status=$status';
+
+                          await Dio().get(url).then((value) {
+                            _controller.clear();
+                            readChat();
+                          });
                         },
                         icon: Icon(
                           Icons.send,

@@ -132,6 +132,7 @@ class _ChatpageSellerState extends State<ChatpageSeller> {
         ChatModel chatlists = ChatModel.fromMap(map);
         setState(() {
           chatlist.add(chatlists);
+          print(chatlist);
         });
       }
     } else {
@@ -199,11 +200,13 @@ class _ChatpageSellerState extends State<ChatpageSeller> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      chatlist[index].message,
+                      chatlist[index].message.toString(),
                       style: TextStyle(fontSize: 16),
                     ),
+                    MyStyle().mySizebox(),
                     Text(
-                      date(DateTime.parse(chatlist[index].regdate)).toString(),
+                      date(DateTime.parse(chatlist[index].createdAt.toString()))
+                          .toString(),
                       style: TextStyle(
                         fontSize: 12,
                       ),
@@ -280,10 +283,20 @@ class _ChatpageSellerState extends State<ChatpageSeller> {
                       ),
                     )),
                     IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           message = _controller.text;
-                          sendChat();
-                          showSend(context);
+                          // sendChat();
+                          //showSend(context);
+
+                          idSeller = sellerModel!.idSeller;
+                          idUser = userModel!.idUser;
+                          String status = 'seller';
+                          String url =
+                              '${MyConstant().domain}/api/addChat.php?isAdd=true&message=$message&id_user=$idUser&id_seller=$idSeller&status=$status';
+                          await Dio().get(url).then((value) {
+                            _controller.clear();
+                            readChat();
+                          });
                         },
                         icon: Icon(
                           Icons.send,

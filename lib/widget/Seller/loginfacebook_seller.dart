@@ -5,7 +5,6 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
-import 'package:k6_app/utility/enc-dec.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
@@ -47,15 +46,14 @@ class _LoginFacebookSellerState extends State<LoginFacebookSeller> {
   }
 
   Future<Null> registerThread() async {
-    String passwordMd5 = generateMd5(password!);
     String url =
-        '${MyConstant().domain}/api/addSeller.php?isAdd=true&firstname=$firstname&lastname=$lastname&idcard=$idcard&email=$email&password=$passwordMd5&gender=$gender&phone=$phone&birthday=$birthday&image=$image';
+        '/api/addseller?firstname=$firstname&lastname=$lastname&idcard=$idcard&phone=$phone&gender=$gender&birthday=$birthday&role&email=$email&image=$image&password=$password';
 
     try {
       Response response = await Dio().get(url);
       // print('res = $response');
-
-      if (response.toString() == 'true') {
+      var result = json.decode(response.data);
+      if (result == true) {
         normalDialog(context, 'สมัครสำเร็จ');
         print('สมัครสำเร็จ');
 

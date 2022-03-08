@@ -3,6 +3,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/chatmana_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_outlinebutton.dart';
 import 'package:k6_app/utility/my_style.dart';
 
 class InformationUser extends StatefulWidget {
@@ -27,7 +28,7 @@ class _InformationUserState extends State<InformationUser> {
     return Scaffold(
       appBar: AppBar(
           title: Center(
-        child: Text('หน้าโปรไฟล์'),
+        child: Text('หน้าโปรไฟล์ ${userModel?.firstname}'),
       )),
       body: ListView(
         padding: EdgeInsets.all(20.0),
@@ -37,36 +38,31 @@ class _InformationUserState extends State<InformationUser> {
               Icon(
                 Icons.account_circle_rounded,
                 size: 25,
+                color: Colors.blue,
               ),
               MyStyle().mySizebox(),
-              MyStyle().showTitle('ข้อมูลโปรไฟล์'),
-            ],
-          ),
-          MyStyle().mySizebox(),
-          showImage(),
-          MyStyle().mySizebox(),
-          Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: _buildCard(
-                      'ชื่อ', '${userModel?.firstname ?? 'กำลังโหลด'}')),
-              Expanded(
-                flex: 1,
-                child: _buildCard(
-                    'นามสกุล', '${userModel?.lastname ?? 'กำลังโหลด'}'),
+              MyStyle().showTitle(
+                'ข้อมูลโปรไฟล์',
               ),
             ],
           ),
+          // MyStyle().mySizebox(),
+          // showImage(),
+          MyStyle().mySizebox(),
+          _buildCard('ชื่อ', '${userModel?.firstname ?? 'กำลังโหลด'}'),
+          _buildCard('นามสกุล', '${userModel?.lastname ?? 'กำลังโหลด'}'),
           _buildCard('เพศ', '${userModel?.gender ?? 'กำลังโหลด'}'),
           _buildCard('อีเมล', '${userModel?.email ?? 'กำลังโหลด'}'),
           _buildCard('เบอร์โทรศัพท์', '${userModel?.phone ?? 'กำลังโหลด'}'),
           SizedBox(
             height: 30.0,
           ),
-          ElevatedButton.icon(
+          OutlinedButton.icon(
             label: Text('ติดต่อผู้จัดการ'),
             icon: Icon(Icons.chat),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(width: 1.5, color: Colors.blue),
+            ),
             onPressed: () {
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ChatmanaUser(usermodel: userModel!),
@@ -74,12 +70,16 @@ class _InformationUserState extends State<InformationUser> {
               Navigator.of(context).push(route);
             },
           ),
-          ElevatedButton(
-            child: Text('ออกจากระบบ'),
+          MyStyle().mySizebox(),
+          MyOutlinedButton(
+            child: Text(
+              'ออกจากระบบ',
+            ),
             onPressed: () {
               confirmExit();
-              _logOut();
             },
+            gradient: const LinearGradient(
+                colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)]),
           )
         ],
       ),
@@ -109,9 +109,9 @@ class _InformationUserState extends State<InformationUser> {
   Widget _buildCard(String title, String titleH2) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(25),
       ),
-      color: Colors.white38,
+      color: Color.fromARGB(255, 212, 228, 241),
       child: Container(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -123,9 +123,15 @@ class _InformationUserState extends State<InformationUser> {
                 MyStyle().showTitle(title),
               ],
             ),
-            Text(
-              titleH2,
-              style: TextStyle(fontSize: 16),
+            MyStyle().mySizebox(),
+            Row(
+              children: [
+                MyStyle().mySizebox(),
+                Text(
+                  titleH2,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
           ],
         ),
@@ -145,6 +151,7 @@ class _InformationUserState extends State<InformationUser> {
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/", (Route<dynamic> route) => false);
+                  _logOut();
                 },
                 icon: Icon(
                   Icons.check,
