@@ -140,7 +140,7 @@ class _EditPromotionState extends State<EditPromotion> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: 200,
+          width: 400,
           height: 200,
           child: file == null
               ? Image.network(
@@ -152,12 +152,12 @@ class _EditPromotionState extends State<EditPromotion> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.camera),
               onPressed: () => chooseImage(ImageSource.camera),
               label: Text('ถ่ายภาพ'),
             ),
-            ElevatedButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.image),
               onPressed: () => chooseImage(ImageSource.gallery),
               label: Text('เลือกรูปภาพ'),

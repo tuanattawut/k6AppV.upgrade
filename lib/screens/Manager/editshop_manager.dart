@@ -70,7 +70,7 @@ class _EditShopSearchState extends State<EditShopSearch> {
             width: 200,
             height: 200,
             child: Image.network(
-              '${MyConstant().domain}/images/areasshop/${shopModel?.image}',
+              '${MyConstant().domain}/images/shops_seller/${shopModel?.image}',
               fit: BoxFit.contain,
             )),
       ],

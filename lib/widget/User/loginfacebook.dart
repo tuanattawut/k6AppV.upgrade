@@ -186,16 +186,15 @@ class _LoginFacebookState extends State<LoginFacebook> {
                           onPressed: () {
                             // print(
                             //     'เก็บข้อมูล : $firstname,$email, $phone, $gender ,$password');
-
                             if (phone == null ||
                                 phone!.isEmpty ||
                                 phone!.length != 10) {
                               normalDialog(context, 'โปรด กรอกเบอร์โทรศัพท์');
                             } else if (password == null ||
                                 password!.isEmpty ||
-                                password!.length < 6) {
+                                password!.length < 8) {
                               normalDialog(context,
-                                  'โปรด กรอกพาสเวิร์ดให้ถูกต้อง\nและมากกว่า 6 ตัวอักษร');
+                                  'โปรด กรอกรหัสผ่านให้ถูกต้อง\nและมากกว่า 8 ตัวอักษร');
                             } else {
                               registerThread();
                               Navigator.pop(context);
@@ -246,15 +245,15 @@ class _LoginFacebookState extends State<LoginFacebook> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value!.length < 6)
-          return 'โปรดกรอกพาสเวิร์ดมากกว่า 6 หลัก';
+        if (value!.length < 8)
+          return 'โปรดกรอกรหัสผ่านมากกว่า 8 หลัก';
         else
           return null;
       },
       obscureText: true,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'พาสเวิร์ด',
+        labelText: 'รหัสผ่าน',
       ),
     );
   }

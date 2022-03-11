@@ -17,6 +17,7 @@ class _ApproveAreaState extends State<ApproveArea> {
     reserveArea();
   }
 
+  bool? status = true;
   List<ResearveAreaModel> reserveList = [];
   Future<Null> reserveArea() async {
     String url = '${MyConstant().domain}/api/getReservearea.php';
@@ -25,7 +26,7 @@ class _ApproveAreaState extends State<ApproveArea> {
         // print('value ==>> $value');
 
         var result = json.decode(value.data);
-        //  print('result ==>> $result');
+        // print('result ==>> $result');
 
         for (var map in result) {
           ResearveAreaModel researveAreaModel = ResearveAreaModel.fromMap(map);
@@ -35,6 +36,10 @@ class _ApproveAreaState extends State<ApproveArea> {
             }
           });
         }
+      } else {
+        setState(() {
+          status = false;
+        });
       }
     });
   }
@@ -44,44 +49,50 @@ class _ApproveAreaState extends State<ApproveArea> {
     return Scaffold(
       appBar: AppBar(title: Text('อนุมัติแผง')),
       body: Container(
-        child: ListView.builder(
-            itemCount: reserveList.length,
-            itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.all(8),
-                  child: ListTile(
-                    onTap: () {
-                      MaterialPageRoute route = MaterialPageRoute(
-                          builder: (value) => ApproveAreaDetail(
-                              researveAreaModel: reserveList[index]));
-                      Navigator.of(context).push(route);
-                    },
-                    leading: Image.network(
-                      '${MyConstant().domain}/images/areasshop/${reserveList[index].image}',
-                      fit: BoxFit.cover,
-                      width: 50,
-                    ),
-                    title: Text(
-                      reserveList[index].firstname.toString(),
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                    ),
-                  ),
-                )),
+        child: showContent(),
       ),
     );
   }
 
+  ListView showApprove() {
+    return ListView.builder(
+        itemCount: reserveList.length,
+        itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.all(8),
+              child: ListTile(
+                onTap: () {
+                  MaterialPageRoute route = MaterialPageRoute(
+                      builder: (value) => ApproveAreaDetail(
+                          researveAreaModel: reserveList[index]));
+                  Navigator.of(context).push(route);
+                },
+                leading: Image.network(
+                  '${MyConstant().domain}/images/areasshop/${reserveList[index].image}',
+                  fit: BoxFit.cover,
+                  width: 50,
+                ),
+                title: Text(
+                  reserveList[index].firstname.toString(),
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                ),
+              ),
+            ));
+  }
+
   Widget showContent() {
-    return Center(
-      child: Text(
-        'ไม่มีการเช่าจองขณะนี้',
-        style: TextStyle(fontSize: 18),
-      ),
-    );
+    return status!
+        ? showApprove()
+        : Center(
+            child: Text(
+              'ไม่มีการเช่าจองขณะนี้',
+              style: TextStyle(fontSize: 18),
+            ),
+          );
   }
 }

@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Form(
         key: _formstate,
         child: GestureDetector(
@@ -34,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               MyStyle().mySizebox(),
               SizedBox(
-                height: 150,
+                height: 50,
               ),
               //MyStyle().showLogo(),
               Row(
@@ -63,29 +64,28 @@ class _LoginPageState extends State<LoginPage> {
                   buildRegisterButton(context),
                 ],
               ),
-
               LoginFacebook(),
-              Row(children: const [
-                Expanded(
-                    child: Divider(
-                  color: Colors.blue,
-                )),
-                Text(" OR ",
-                    style: TextStyle(fontSize: 14, color: Colors.black)),
-                Expanded(
-                    child: Divider(
-                  color: Colors.blue,
-                )),
-              ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildsellerButton(),
-                  MyStyle().mySizebox(),
-                  MyStyle().mySizebox(),
-                  managerButton(),
-                ],
-              ),
+              // Row(children: const [
+              //   Expanded(
+              //       child: Divider(
+              //     color: Colors.blue,
+              //   )),
+              //   Text(" OR ",
+              //       style: TextStyle(fontSize: 14, color: Colors.black)),
+              //   Expanded(
+              //       child: Divider(
+              //     color: Colors.blue,
+              //   )),
+              // ]),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     buildsellerButton(),
+              //     MyStyle().mySizebox(),
+              //     MyStyle().mySizebox(),
+              //     managerButton(),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                     !email!.contains('@') ||
                     password == null ||
                     password!.isEmpty ||
-                    password!.length < 6) {
+                    password!.length < 8) {
                   normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
                 } else {
                   showLoade(context);
@@ -173,8 +173,8 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value!.length < 6)
-          return 'โปรดกรอกพาสเวิร์ด 6 ตัวขึ้นไป';
+        if (value!.length < 8)
+          return 'โปรดกรอกรหัสผ่าน 8 ตัวขึ้นไป';
         else
           return null;
       },
@@ -195,11 +195,12 @@ class _LoginPageState extends State<LoginPage> {
                   Icons.remove_red_eye_outlined,
                 ),
         ),
-        labelText: 'พาสเวิร์ด',
+        labelText: 'รหัสผ่าน',
         icon: Icon(
           Icons.lock,
           color: Colors.blue,
         ),
+        hintText: 'ระบุรหัสผ่าน 8 ตัวขึ้นไป',
       ),
     );
   }
@@ -221,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
           Icons.email,
           color: Colors.blue,
         ),
-        hintText: 'x@x.com',
+        hintText: 'ระบุอีเมลของท่าน',
       ),
     );
   }
@@ -240,7 +241,6 @@ class _LoginPageState extends State<LoginPage> {
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
-        //print('ทำนี่ 1');
         addLogin();
       }
     } catch (e) {
@@ -257,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
       var result = json.decode(response.data);
       print(result);
       if (result == false) {
-        normalDialog(context, 'พาสเวิร์ดผิด กรุณาลองอีกครั้ง ');
+        normalDialog(context, 'รหัสผ่านผิด กรุณาลองอีกครั้ง ');
       } else {
         for (var map in result) {
           UserModel userModel = UserModel.fromMap(map);

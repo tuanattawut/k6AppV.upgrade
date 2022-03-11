@@ -57,8 +57,7 @@ class _SearchShopState extends State<SearchShop> {
           labelText: "ค้นหา",
           hintText: "พิมพ์ชื่อร้าน",
           prefixIcon: Icon(Icons.search),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)))),
+          border: OutlineInputBorder()),
     );
   }
 

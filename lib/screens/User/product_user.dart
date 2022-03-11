@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:k6_app/models/category_model.dart';
+import 'package:k6_app/models/clickdata_model.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/promote_user.dart';
@@ -27,7 +28,7 @@ class _ProductListUserState extends State<ProductListUser> {
   List<ProductModel> productModels = [];
   UserModel? userModel;
 
-  String? name, id, idproducts, clickid, idUser;
+  String? name, id, idproducts, idUser;
   List<CategoryModel> categoryList = [];
 
   var f = NumberFormat.currency(locale: "THB", symbol: "฿");
@@ -123,13 +124,13 @@ class _ProductListUserState extends State<ProductListUser> {
   }
 
 //เพิ่มข้อมูลการคลิก
-  Future<Null> addData() async {
+  Future<Null> addData(String clickid) async {
     String iduser = userModel!.idUser;
     String url =
-        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+        '${MyConstant().domain}/api/addactionClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
     try {
       Response response = await Dio().get(url);
-      // print('res = $response');
+      print('res = $response');
       if (response.toString() == 'true') {
       } else {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
@@ -368,8 +369,8 @@ class _ProductListUserState extends State<ProductListUser> {
         ),
         child: GestureDetector(
             onTap: () {
-              clickid = productRecLists[index].id;
-              addData();
+              //clickid = productRecLists[index].id;
+              // addData();
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ShowDetail(
                   productModel: productRecLists[index],
@@ -426,6 +427,55 @@ class _ProductListUserState extends State<ProductListUser> {
             ])));
   }
 
+  ClickdataModel? clickdataModel;
+  Future<Null> checkClickdata(String clickid) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/checkDataclick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    await Dio().get(url).then((value) {
+      print(value.toString());
+      if (value.toString() != 'null') {
+        print('มีข้อมูล');
+        for (var item in json.decode(value.data)) {
+          clickdataModel = ClickdataModel.fromMap(item);
+          print(clickdataModel!.view);
+          var viewdataclick = int.parse((clickdataModel!.view.toString()));
+          viewdataclick++;
+          setState(() {
+            updateViewClick(clickid, viewdataclick.toString());
+          });
+        }
+      } else {
+        print('NO DATA');
+        addClickdata(clickid);
+      }
+    });
+  }
+
+  Future<Null> updateViewClick(String clickid, String view) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/updateViewDataclick.php?isAdd=true&view=$view&id_user=$iduser&id_product=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      print('อัพเดท${response.toString()}');
+    } catch (e) {
+      ///
+    }
+  }
+
+  Future<Null> addClickdata(String clickid) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addDataclick.php?isAdd=true&id_user=$iduser&id_product=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      print('อยู่นี่ ${response.toString()}');
+    } catch (e) {
+      ///
+    }
+  }
+
   Widget showAllview(int index) {
     String string = '${productModels[index].nameproduct}';
     if (string.length > 10) {
@@ -447,8 +497,9 @@ class _ProductListUserState extends State<ProductListUser> {
             String url =
                 '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$idproducts';
             await Dio().get(url).then((value) => getData());
-
             print(view);
+            addData(idproducts.toString());
+            checkClickdata(idproducts.toString());
             // MaterialPageRoute route = MaterialPageRoute(
             //   builder: (value) => ShowDetail(
             //     productModel: productModels[index],

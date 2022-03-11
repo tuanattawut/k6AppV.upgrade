@@ -68,7 +68,7 @@ class _LoginManagerState extends State<LoginManager> {
           Icons.email,
           color: Colors.blue,
         ),
-        hintText: 'x@x.com',
+        hintText: 'ระบุอีเมลของท่าน',
       ),
     );
   }
@@ -77,8 +77,8 @@ class _LoginManagerState extends State<LoginManager> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value!.length < 6)
-          return 'โปรดกรอกพาสเวิร์ด 6 ตัวขึ้นไป';
+        if (value!.length < 8)
+          return 'โปรดกรอกรหัสผ่าน 8 ตัวขึ้นไป';
         else
           return null;
       },
@@ -99,11 +99,12 @@ class _LoginManagerState extends State<LoginManager> {
                   Icons.remove_red_eye_outlined,
                 ),
         ),
-        labelText: 'พาสเวิร์ด',
+        labelText: 'รหัสผ่าน',
         icon: Icon(
           Icons.lock,
           color: Colors.blue,
         ),
+        hintText: 'ระบุรหัสผ่าน 8 ตัวขึ้นไป',
       ),
     );
   }
@@ -130,7 +131,7 @@ class _LoginManagerState extends State<LoginManager> {
                     email!.isEmpty ||
                     password == null ||
                     password!.isEmpty ||
-                    password!.length < 6) {
+                    password!.length < 8) {
                   normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
                 } else {
                   showLoade(context);
@@ -154,19 +155,7 @@ class _LoginManagerState extends State<LoginManager> {
       if (result == null) {
         normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
       } else {
-        for (var map in result) {
-          ManagerModel managerModel = ManagerModel.fromMap(map);
-          if (password == managerModel.password) {
-            Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (context) => Homemanager(
-                      managerModel: managerModel,
-                    )));
-            addLogin();
-            break;
-          } else {
-            normalDialog(context, 'พาสเวิร์ดผิด กรุณา ลองอีกครั้ง ');
-          }
-        }
+        addLogin();
       }
     } catch (e) {
       normalDialog(context, 'ผิดพลาด');
@@ -175,16 +164,25 @@ class _LoginManagerState extends State<LoginManager> {
   }
 
   Future<Null> addLogin() async {
-    String typeuser = 'manager';
     String url =
-        '${MyConstant().domain}/api/addLogin.php?isAdd=true&typeuser=$typeuser';
-
+        '${MyConstant().domain}/api/loginmanager?email=$email&password=$password';
     try {
       Response response = await Dio().get(url);
-      //print('res = $response');
-
-      if (response.toString() == 'true') {
-      } else {}
-    } catch (e) {}
+      var result = json.decode(response.data);
+      print(result);
+      if (result == false) {
+        normalDialog(context, 'รหัสผ่านผิด กรุณาลองอีกครั้ง ');
+      } else {
+        for (var map in result) {
+          ManagerModel managerModel = ManagerModel.fromMap(map);
+          Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => Homemanager(
+                    managerModel: managerModel,
+                  )));
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

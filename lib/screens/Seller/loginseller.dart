@@ -51,7 +51,7 @@ class _LoginSellerState extends State<LoginSeller> {
                 MyStyle().mySizebox(),
                 buildLoginButton(),
                 MyStyle().mySizebox(),
-                LoginFacebookSeller(),
+                LoginFacebookSeller(), MyStyle().mySizebox(),
                 Row(children: const [
                   Expanded(
                       child: Divider(
@@ -64,6 +64,7 @@ class _LoginSellerState extends State<LoginSeller> {
                     color: Colors.blue,
                   )),
                 ]),
+                MyStyle().mySizebox(),
                 buildRegisterSeller(context),
               ],
             ),
@@ -119,7 +120,7 @@ class _LoginSellerState extends State<LoginSeller> {
                   !email!.contains('@') ||
                   password == null ||
                   password!.isEmpty ||
-                  password!.length < 6) {
+                  password!.length < 8) {
                 normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
               } else {
                 showLoade(context);
@@ -134,8 +135,8 @@ class _LoginSellerState extends State<LoginSeller> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value!.length < 6)
-          return 'โปรดกรอกพาสเวิร์ด 6 ตัวขึ้นไป';
+        if (value!.length < 8)
+          return 'โปรดกรอกรหัสผ่าน 8 ตัวขึ้นไป';
         else
           return null;
       },
@@ -156,11 +157,12 @@ class _LoginSellerState extends State<LoginSeller> {
                   Icons.remove_red_eye_outlined,
                 ),
         ),
-        labelText: 'พาสเวิร์ด',
+        labelText: 'รหัสผ่าน',
         icon: Icon(
           Icons.lock,
           color: Colors.blue,
         ),
+        hintText: 'ระบุรหัสผ่าน 8 ตัวขึ้นไป',
       ),
     );
   }
@@ -182,7 +184,7 @@ class _LoginSellerState extends State<LoginSeller> {
           Icons.email,
           color: Colors.blue,
         ),
-        hintText: 'x@x.com',
+        hintText: 'ระบุอีเมลของท่าน',
       ),
     );
   }
@@ -236,7 +238,7 @@ class _LoginSellerState extends State<LoginSeller> {
       var result = json.decode(response.data);
       //print(result);
       if (result == false) {
-        normalDialog(context, 'พาสเวิร์ดผิด กรุณาลองอีกครั้ง ');
+        normalDialog(context, 'รหัสผ่านผิด กรุณาลองอีกครั้ง ');
       } else {
         for (var map in result) {
           SellerModel sellerModel = SellerModel.fromMap(map);

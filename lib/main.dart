@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:k6_app/screens/login.dart';
+import 'package:k6_app/screens/choose.dart';
 import 'package:k6_app/screens/register.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -21,14 +21,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Kanit',
       ),
       home: new SplashScreen(
           seconds: 4,
-          navigateAfterSeconds: LoginPage(),
+          navigateAfterSeconds: ChooseType(),
           title: new Text('ยินดีต้อนรับ',
               style: TextStyle(color: Colors.blue, fontSize: 30)),
           image: new Image.asset('images/logo.png'),
-          backgroundColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 204, 255, 230),
           styleTextUnderTheLoader: new TextStyle(),
           photoSize: 50,
           loaderColor: Colors.blue),

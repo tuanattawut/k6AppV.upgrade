@@ -238,15 +238,15 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       onChanged: (value) => password = value.trim(),
       validator: (value) {
-        if (value!.length < 6)
-          return 'โปรดกรอกพาสเวิร์ดมากกว่า 6 หลัก';
+        if (value!.length < 8)
+          return 'โปรดกรอกรหัสผ่านมากกว่า 8 หลัก';
         else
           return null;
       },
       obscureText: true,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: 'พาสเวิร์ด',
+        labelText: 'รหัสผ่าน',
       ),
     );
   }
