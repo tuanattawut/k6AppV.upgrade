@@ -279,10 +279,19 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     )),
                     IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           message = _controller.text;
-                          showSend(context);
-                          sendChat();
+                          //showSend(context);
+                          //sendChat();
+                          idSeller = sellerModel!.idSeller;
+                          idUser = userModel!.idUser;
+                          String status = 'user';
+                          String url =
+                              '${MyConstant().domain}/api/addChat.php?isAdd=true&message=$message&id_user=$idUser&id_seller=$idSeller&status=$status';
+                          await Dio().get(url).then((value) {
+                            _controller.clear();
+                            readChat();
+                          });
                         },
                         icon: Icon(
                           Icons.send,

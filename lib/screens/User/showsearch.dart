@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:k6_app/models/clickdata_model.dart';
+import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/utility/my_constant.dart';
-import 'package:http/http.dart' as http;
-import 'package:k6_app/screens/User/searchproduct.dart';
 
 class ShowSearch extends StatefulWidget {
   const ShowSearch({required this.userModel});
@@ -13,36 +16,53 @@ class ShowSearch extends StatefulWidget {
 }
 
 class _ShowSearchState extends State<ShowSearch> {
+  TextEditingController editingController = TextEditingController();
   bool? searching, error;
   var data;
   String? query;
   String dataurl = "${MyConstant().domain}/api/search_suggestion.php";
   UserModel? userModel;
+
+  var f = NumberFormat.currency(locale: "THB", symbol: "฿");
   @override
   void initState() {
     searching = false;
-    error = false;
-    query = "";
     super.initState();
     userModel = widget.userModel;
   }
 
-  void getSuggestion() async {
-    //get suggestion function
-    var res = await http
-        .post(Uri.parse(dataurl + "?query=" + Uri.encodeComponent(query!)));
-    //in query there might be unwant character so, we encode the query to url
-    if (res.statusCode == 200) {
-      setState(() {
-        data = json.decode(res.body);
-        //update data value and UI
-      });
-    } else {
-      //there is error
-      setState(() {
-        error = true;
-      });
+  bool? loadStatus = true;
+  bool? status = true;
+  List<ProductModel> productList = [];
+  Future<Null> getSearch() async {
+    if (productList.length != 0) {
+      loadStatus = true;
+      status = true;
+      productList.clear();
     }
+    String api =
+        '${MyConstant().domain}/api/search_product.php?isAdd=true&nameproduct=${editingController.text}';
+
+    await Dio().get(api).then((value) {
+      setState(() {
+        loadStatus = false;
+      });
+      if (value.toString() != 'null') {
+        print(value.toString());
+        for (var item in json.decode(value.data)) {
+          ProductModel productModel = ProductModel.fromMap(item);
+          setState(() {
+            productList.add(productModel);
+          });
+          break;
+        }
+      } else {
+        setState(() {
+          status = false;
+          loadStatus = true;
+        });
+      }
+    });
   }
 
   @override
@@ -55,7 +75,6 @@ class _ShowSearchState extends State<ShowSearch> {
                   onPressed: () {
                     setState(() {
                       searching = false;
-                      //set not searching on back button press
                     });
                   },
                 )
@@ -67,110 +86,214 @@ class _ShowSearchState extends State<ShowSearch> {
                     });
                   },
                 ),
-          //if searching is true then show arrow back else play arrow
-          title: searching! ? searchField() : Text("ค้นหา"),
+          title: searchField(),
           actions: [
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
                   setState(() {
                     searching = true;
-                    print('5555555');
+                    print(editingController.text);
+                    if (editingController.text.isNotEmpty) {
+                      getSearch();
+                      editingController.clear();
+                    }
                   });
-                }), // search icon button
-
-            //add more icons here
+                }),
           ],
         ),
-        body: SingleChildScrollView(
-            child: Container(
-                alignment: Alignment.center,
-                child: data == null
-                    ? Container(
-                        padding: EdgeInsets.all(20),
-                        child: searching!
-                            ? Text("โปรดรอสักครู่")
-                            : Text("กรุณาพิมพ์ค้นหา")
-                        //if is searching then show "Please wait"
-                        //else show search peopels text
-                        )
-                    : Container(
-                        child: searching!
-                            ? showSearchSuggestions()
-                            : Text("กรุณาพิมพ์ค้นหา"),
-                      )
-                // if data is null or not retrived then
-                // show message, else show suggestion
-                )));
-  }
-
-  Widget showSearchSuggestions() {
-    List suggestionlist = List.from(data["data"].map((i) {
-      return SearchSuggestion.fromJSON(i);
-    }));
-    //serilizing json data inside model list.
-    return Column(
-      children: suggestionlist.map((suggestion) {
-        return InkResponse(
-            onTap: () {
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => SearchProduct(
-                  idproduct: suggestion.id,
-                  userModel: userModel!,
-                ),
-              );
-              Navigator.of(context).push(route);
-
-              print(' id ==> ${suggestion.id}'); //pint student id
-            },
-            child: SizedBox(
-                width: double.infinity, //make 100% width
-                child: Card(
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    child: Text(
-                      suggestion.name,
-                    ),
-                  ),
-                )));
-      }).toList(),
-    );
+        body: showContent());
   }
 
   Widget searchField() {
-    //search input field
     return Container(
         child: TextField(
+      controller: editingController,
       autofocus: true,
       style: TextStyle(color: Colors.white, fontSize: 18),
       decoration: InputDecoration(
         hintStyle: TextStyle(color: Colors.white, fontSize: 18),
-        hintText: "ค้นหา",
+        hintText: "พิมพ์คำค้นหา",
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 2),
-        ), //under line border, set OutlineInputBorder() for all side border
+        ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 2),
-        ), // focused border color
-      ), //decoration for search input field
-      onChanged: (value) {
-        query = value; //update the value of query
-        getSuggestion(); //start to get suggestion
-        print(query);
-      },
+        ),
+      ),
     ));
   }
-}
 
-//serarch suggestion data model to serialize JSON data
-class SearchSuggestion {
-  String? id, name;
-  SearchSuggestion({this.id, this.name});
+  Widget showContent() {
+    return Center(
+      child: loadStatus!
+          ? Text(
+              'ไม่พบการค้นหา ...',
+              style: TextStyle(fontSize: 18),
+            )
+          : GridView.count(
+              childAspectRatio: MediaQuery.of(context).size.width /
+                  (MediaQuery.of(context).size.height / 1.2),
+              crossAxisCount: 2,
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children: List.generate(
+                productList.length,
+                (index) {
+                  return showAllview(index);
+                },
+              ),
+            ),
+    );
+  }
 
-  factory SearchSuggestion.fromJSON(Map<String, dynamic> json) {
-    return SearchSuggestion(
-      id: json["id_products"],
-      name: json["nameproduct"],
+  String? clickid;
+
+  Future<Null> addData(String clickid) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addactionClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+      if (response.toString() == 'true') {
+      } else {
+        // normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
+      }
+    } catch (e) {
+      ///
+    }
+  }
+
+  ClickdataModel? clickdataModel;
+  Future<Null> checkClickdata(String clickid) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/checkDataclick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    await Dio().get(url).then((value) {
+      print(value.toString());
+      if (value.toString() != 'null') {
+        print('DATA');
+        for (var item in json.decode(value.data)) {
+          clickdataModel = ClickdataModel.fromMap(item);
+          print(clickdataModel!.view);
+          var viewdataclick = int.parse((clickdataModel!.view.toString()));
+          viewdataclick++;
+          setState(() {
+            updateViewClick(clickid, viewdataclick.toString());
+          });
+        }
+      } else {
+        print('NO DATA');
+        addClickdata(clickid);
+      }
+    });
+  }
+
+  Future<Null> addClickdata(String clickid) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addDataclick.php?isAdd=true&id_user=$iduser&id_product=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      print('อยู่นี่ ${response.toString()}');
+    } catch (e) {
+      ///
+    }
+  }
+
+  Future<Null> updateViewClick(String clickid, String view) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/updateViewDataclick.php?isAdd=true&view=$view&id_user=$iduser&id_product=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      print('อัพเดท${response.toString()}');
+    } catch (e) {
+      ///
+    }
+  }
+
+  Widget showAllview(int index) {
+    String string = '${productList[index].nameproduct}';
+    if (string.length > 10) {
+      string = string.substring(0, 10);
+      string = '$string ...';
+    }
+    return Container(
+      margin: EdgeInsets.only(
+        left: 5,
+        right: 5,
+        top: 5,
+        bottom: 5,
+      ),
+      child: GestureDetector(
+          onTap: () async {
+            clickid = productList[index].id;
+            var view = int.parse(productList[index].view.toString());
+            view++;
+            String url =
+                '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
+            await Dio().get(url).then((value) {
+              print(value);
+            });
+            print('view ปัจจุบัน = $view');
+            addData(clickid.toString());
+            checkClickdata(clickid.toString());
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => ShowDetail(
+                productModel: productList[index],
+                userModel: userModel!,
+              ),
+            );
+            Navigator.of(context).push(route);
+          },
+          child: Column(children: <Widget>[
+            Container(
+              height: 200,
+              width: 200,
+              child: Image.network(
+                '${MyConstant().domain}/images/products_seller/${productList[index].image}',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              width: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 10),
+                    blurRadius: 50,
+                    color: Colors.grey.withOpacity(0.2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      string,
+                      style: Theme.of(context)
+                          .textTheme
+                          .button!
+                          .copyWith(color: Colors.black, fontSize: 20),
+                    ),
+                    Text(
+                      f.format(
+                          double.parse(productList[index].price.toString())),
+                      style: Theme.of(context)
+                          .textTheme
+                          .button!
+                          .copyWith(color: Colors.red, fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ])),
     );
   }
 }

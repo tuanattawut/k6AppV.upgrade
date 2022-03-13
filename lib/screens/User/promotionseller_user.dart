@@ -30,7 +30,6 @@ class _PromotionUserState extends State<PromotionUser> {
       status = true;
       promotionlist.clear();
     }
-
     String url = '${MyConstant().domain}/api/getAllpromotionseller.php';
     await Dio().get(url).then((value) {
       setState(() {

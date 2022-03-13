@@ -177,24 +177,22 @@ class _DetailShopState extends State<DetailShop> {
   Future<Null> checkFollow() async {
     String url =
         '${MyConstant().domain}/api/checkfollow.php?isAdd=true&id_user=$idUser&id_seller=$idSeller';
-    try {
-      Response response = await Dio().get(url);
-      if (response.toString() == 'null') {
-        addfollow();
-      } else {
-        unfollow();
-      }
-    } catch (e) {}
+
+    Response response = await Dio().get(url);
+    print(response.toString());
+    if (response.toString() == 'null') {
+      addfollow();
+    } else {
+      unfollow();
+    }
   }
 
   Future<Null> addfollow() async {
     String url =
         '${MyConstant().domain}/api/addFollow.php?isAdd=true&id_user=$idUser&id_seller=$idSeller';
-
     try {
       Response response = await Dio().get(url);
       //print('res = $response');
-
       if (response.toString() == 'true') {
         normalDialog(context, 'ติดตาม $name แล้ว');
       } else {

@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:k6_app/models/category_model.dart';
 import 'package:k6_app/models/clickdata_model.dart';
 import 'package:k6_app/models/product_models.dart';
+import 'package:k6_app/models/promotionseller_model.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/detailpromotion_user.dart';
 import 'package:k6_app/screens/User/promote_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/screens/User/showallcategory.dart';
@@ -37,11 +39,12 @@ class _ProductListUserState extends State<ProductListUser> {
   void initState() {
     super.initState();
     userModel = widget.usermodel;
-    getData();
+    //getData();
     getCategory();
     getPromotion();
     idUser = userModel!.idUser;
-    //getRecom();
+    getRecom();
+    readPromotion();
   }
 
   bool? loadStatus = true;
@@ -78,14 +81,26 @@ class _ProductListUserState extends State<ProductListUser> {
     String api =
         '${MyConstant().domain}/api/reC.php?isAdd=true&id_user=$idUser';
     await Dio().get(api).then((value) {
+      print(value.toString());
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           setState(() {
             productRecList = ProductModel.fromMap(item);
-
             getProductRecs();
           });
+          break;
         }
+      } else if (value.toString() == 'null') {
+        String api = '${MyConstant().domain}/api/reCAll.php?isAdd=true';
+        Dio().get(api).then((value) async {
+          for (var item in json.decode(value.data)) {
+            setState(() {
+              productRecList = ProductModel.fromMap(item);
+              getProductRecs();
+            });
+            break;
+          }
+        });
       }
     });
   }
@@ -112,7 +127,7 @@ class _ProductListUserState extends State<ProductListUser> {
           ProductModel productRecLists2 = ProductModel.fromMap(item);
           setState(() {
             productRecLists.add(productRecLists2);
-            // print(productRecLists2);
+            // print('ได้ข้อมูล คือ $productRecLists');
           });
         }
       } else {
@@ -142,16 +157,13 @@ class _ProductListUserState extends State<ProductListUser> {
 
   bool? loadCate = true;
   bool? statusCate = true;
-
   Future<Null> getCategory() async {
     if (categoryList.length != 0) {
       loadCate = true;
       statusCate = true;
       categoryList.clear();
     }
-
     String api = '${MyConstant().domain}/api/getCategory.php';
-
     await Dio().get(api).then((value) {
       //print(value);
       setState(() {
@@ -168,6 +180,41 @@ class _ProductListUserState extends State<ProductListUser> {
       } else {
         setState(() {
           statusCate = false;
+        });
+      }
+    });
+  }
+
+  bool? loadPro = true;
+  bool? statusPro = true;
+  List<PromotionsellerModel> promotionlist = [];
+  Future<Null> readPromotion() async {
+    if (promotionlist.length != 0) {
+      loadPro = true;
+      statusPro = true;
+      promotionlist.clear();
+    }
+    String url = '${MyConstant().domain}/api/getAllpromotionseller.php';
+    await Dio().get(url).then((value) {
+      setState(() {
+        loadPro = false;
+      });
+      if (value.toString() != 'null') {
+        // print('value ==>> $value');
+        var result = json.decode(value.data);
+        //  print('result ==>> $result');
+        for (var map in result) {
+          PromotionsellerModel promotionsellerModel =
+              PromotionsellerModel.fromMap(map);
+          setState(() {
+            if (promotionsellerModel.status == 'yes') {
+              promotionlist.add(promotionsellerModel);
+            }
+          });
+        }
+      } else {
+        setState(() {
+          statusPro = false;
         });
       }
     });
@@ -240,6 +287,69 @@ class _ProductListUserState extends State<ProductListUser> {
                               ),
                       ),
                     ])),
+                // Card(
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(20),
+                //     ),
+                //     child: Column(children: [
+                //       _buildSectiontitle(
+                //         'สินค้าแนะนำ',
+                //         () {
+                //           MaterialPageRoute route = MaterialPageRoute(
+                //             builder: (value) => PromoteUser(
+                //               userModel: userModel!,
+                //               productModel: productRecList!,
+                //             ),
+                //           );
+                //           Navigator.of(context).push(route);
+                //         },
+                //       ),
+                // SizedBox(
+                //   height: 260,
+                //   child: loadStatusREC!
+                //       ? MyStyle().showProgress()
+                //       : ListView.builder(
+                //           physics: ClampingScrollPhysics(),
+                //           shrinkWrap: true,
+                //           scrollDirection: Axis.horizontal,
+                //           itemCount: productRecLists.length,
+                //           itemBuilder:
+                //               (BuildContext context, int index) =>
+                //                   showListView(index),
+                //         ),
+                // ),
+                //   ])),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(children: [
+                      _buildSectiontitle(
+                        'โปรโมชันร้านค้า',
+                        () {
+                          // MaterialPageRoute route = MaterialPageRoute(
+                          //   builder: (value) => ProductAll(
+                          //     userModel: userModel!,
+                          //   ),
+                          // );
+                          // Navigator.of(context).push(route);
+                        },
+                      ),
+                      SizedBox(
+                        height: 250,
+                        child: loadPro!
+                            ? MyStyle().showProgress()
+                            : ListView.builder(
+                                physics: ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: promotionlist.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        showProView(index),
+                              ),
+                      ),
+                    ])),
                 Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -249,38 +359,6 @@ class _ProductListUserState extends State<ProductListUser> {
                         'สินค้าแนะนำ',
                         () {
                           MaterialPageRoute route = MaterialPageRoute(
-                            builder: (value) => PromoteUser(
-                              userModel: userModel!,
-                              productModel: productRecList!,
-                            ),
-                          );
-                          Navigator.of(context).push(route);
-                        },
-                      ),
-                      // SizedBox(
-                      //   height: 260,
-                      //   child: loadStatusREC!
-                      //       ? MyStyle().showProgress()
-                      //       : ListView.builder(
-                      //           physics: ClampingScrollPhysics(),
-                      //           shrinkWrap: true,
-                      //           scrollDirection: Axis.horizontal,
-                      //           itemCount: productRecLists.length,
-                      //           itemBuilder:
-                      //               (BuildContext context, int index) =>
-                      //                   showListView(index),
-                      //         ),
-                      // ),
-                    ])),
-                Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(children: [
-                      _buildSectiontitle(
-                        'สินค้าทั้งหมด',
-                        () {
-                          MaterialPageRoute route = MaterialPageRoute(
                             builder: (value) => ProductAll(
                               userModel: userModel!,
                             ),
@@ -288,7 +366,7 @@ class _ProductListUserState extends State<ProductListUser> {
                           Navigator.of(context).push(route);
                         },
                       ),
-                      loadStatus!
+                      loadStatusREC!
                           ? MyStyle().showProgress()
                           : GridView.count(
                               childAspectRatio: MediaQuery.of(context)
@@ -299,9 +377,9 @@ class _ProductListUserState extends State<ProductListUser> {
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               children: List.generate(
-                                productModels.length,
+                                productRecLists.length,
                                 (index) {
-                                  return showAllview(index);
+                                  return showListView(index);
                                 },
                               ),
                             ),
@@ -368,9 +446,16 @@ class _ProductListUserState extends State<ProductListUser> {
           bottom: 10,
         ),
         child: GestureDetector(
-            onTap: () {
-              //clickid = productRecLists[index].id;
-              // addData();
+            onTap: () async {
+              idproducts = productRecLists[index].id;
+              var view = int.parse(productModels[index].view.toString());
+              view++;
+              String url =
+                  '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$idproducts';
+              await Dio().get(url).then((value) => getRecom());
+              print(view);
+              addData(idproducts.toString());
+              checkClickdata(idproducts.toString());
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (value) => ShowDetail(
                   productModel: productRecLists[index],
@@ -476,85 +561,159 @@ class _ProductListUserState extends State<ProductListUser> {
     }
   }
 
-  Widget showAllview(int index) {
-    String string = '${productModels[index].nameproduct}';
+  // Widget showAllview(int index) {
+  //   String string = '${productModels[index].nameproduct}';
+  //   if (string.length > 10) {
+  //     string = string.substring(0, 10);
+  //     string = '$string ...';
+  //   }
+  //   return Container(
+  //     margin: EdgeInsets.only(
+  //       left: 5,
+  //       right: 5,
+  //       top: 5,
+  //       bottom: 5,
+  //     ),
+  //     child: GestureDetector(
+  //         onTap: () async {
+  //           idproducts = productModels[index].id;
+  //           var view = int.parse(productModels[index].view.toString());
+  //           view++;
+  //           String url =
+  //               '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$idproducts';
+  //           await Dio().get(url).then((value) => getData());
+  //           print(view);
+  //           addData(idproducts.toString());
+  //           checkClickdata(idproducts.toString());
+  //           MaterialPageRoute route = MaterialPageRoute(
+  //             builder: (value) => ShowDetail(
+  //               productModel: productModels[index],
+  //               userModel: userModel!,
+  //             ),
+  //           );
+  //           Navigator.of(context).push(route);
+  //         },
+  //         child: Column(children: <Widget>[
+  //           Container(
+  //             height: 200,
+  //             width: 200,
+  //             child: Image.network(
+  //               '${MyConstant().domain}/images/products_seller/${productModels[index].image}',
+  //               fit: BoxFit.cover,
+  //             ),
+  //           ),
+  //           Container(
+  //             width: 200,
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               boxShadow: [
+  //                 BoxShadow(
+  //                   offset: Offset(0, 10),
+  //                   blurRadius: 50,
+  //                   color: Colors.grey.withOpacity(0.2),
+  //                 ),
+  //               ],
+  //             ),
+  //             child: Padding(
+  //               padding: EdgeInsets.all(5),
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     string,
+  //                     style: Theme.of(context)
+  //                         .textTheme
+  //                         .button!
+  //                         .copyWith(color: Colors.black, fontSize: 20),
+  //                   ),
+  //                   Text(
+  //                     f.format(
+  //                         double.parse(productModels[index].price.toString())),
+  //                     style: Theme.of(context)
+  //                         .textTheme
+  //                         .button!
+  //                         .copyWith(color: Colors.red, fontSize: 20),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           )
+  //         ])),
+  //   );
+  // }
+
+  Widget showProView(int index) {
+    String string = '${promotionlist[index].detailpromotion}';
     if (string.length > 10) {
       string = string.substring(0, 10);
       string = '$string ...';
     }
+
+    String nameshop = '${promotionlist[index].nameshop}';
+    if (nameshop.length > 10) {
+      nameshop = nameshop.substring(0, 10);
+      nameshop = '$nameshop ...';
+    }
+
     return Container(
-      margin: EdgeInsets.only(
-        left: 5,
-        right: 5,
-        top: 5,
-        bottom: 5,
-      ),
-      child: GestureDetector(
-          onTap: () async {
-            idproducts = productModels[index].id;
-            var view = int.parse(productModels[index].view.toString());
-            view++;
-            String url =
-                '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$idproducts';
-            await Dio().get(url).then((value) => getData());
-            print(view);
-            addData(idproducts.toString());
-            checkClickdata(idproducts.toString());
-            // MaterialPageRoute route = MaterialPageRoute(
-            //   builder: (value) => ShowDetail(
-            //     productModel: productModels[index],
-            //     userModel: userModel!,
-            //   ),
-            // );
-            // Navigator.of(context).push(route);
-          },
-          child: Column(children: <Widget>[
-            Container(
-              height: 200,
-              width: 200,
-              child: Image.network(
-                '${MyConstant().domain}/images/products_seller/${productModels[index].image}',
-                fit: BoxFit.cover,
+        margin: EdgeInsets.only(
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10,
+        ),
+        child: GestureDetector(
+            onTap: () {
+              MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => DetailPromotionseller(
+                      promotionsellerModel: promotionlist[index]));
+              Navigator.of(context).push(route);
+            },
+            child: Column(children: <Widget>[
+              Container(
+                height: 150,
+                width: 150,
+                child: Image.network(
+                  '${MyConstant().domain}/images/promotionseller/${promotionlist[index].image}',
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Container(
-              width: 200,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 10),
-                    blurRadius: 50,
-                    color: Colors.grey.withOpacity(0.2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      string,
-                      style: Theme.of(context)
-                          .textTheme
-                          .button!
-                          .copyWith(color: Colors.black, fontSize: 20),
-                    ),
-                    Text(
-                      f.format(
-                          double.parse(productModels[index].price.toString())),
-                      style: Theme.of(context)
-                          .textTheme
-                          .button!
-                          .copyWith(color: Colors.red, fontSize: 20),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 10),
+                      blurRadius: 50,
+                      color: Colors.grey.withOpacity(0.2),
                     ),
                   ],
                 ),
-              ),
-            )
-          ])),
-    );
+                width: 200,
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        string,
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.black, fontSize: 20),
+                      ),
+                      Text(
+                        'ร้าน : $nameshop',
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.red, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ])));
   }
 
   Future<Null> getPromotion() async {

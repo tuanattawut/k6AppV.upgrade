@@ -3,42 +3,43 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/user_models.dart';
-import 'package:k6_app/screens/Seller/chatpage_seller.dart';
+import 'package:k6_app/screens/User/chatpage.dart';
 import 'package:k6_app/utility/my_constant.dart';
 
-class ChatSeller extends StatefulWidget {
-  ChatSeller({required this.sellerModel});
-  final SellerModel sellerModel;
+class AllchatUser extends StatefulWidget {
+  AllchatUser({required this.userModel});
+  final UserModel userModel;
 
   @override
-  _ChatSellerState createState() => _ChatSellerState();
+  State<AllchatUser> createState() => _AllchatUserState();
 }
 
-class _ChatSellerState extends State<ChatSeller> {
-  SellerModel? sellerModel;
+class _AllchatUserState extends State<AllchatUser> {
+  UserModel? userModel;
+
   String? idUser, idSeller;
-  List<UserModel> userModel = [];
+  List<SellerModel> sellerModel = [];
   bool? check;
+
   @override
   void initState() {
     super.initState();
-    setState(() {
-      sellerModel = widget.sellerModel;
-      getUserchat();
-    });
+    userModel = widget.userModel;
+    getSellerchat();
   }
 
-  Future<Null> getUserchat() async {
-    idSeller = sellerModel!.idSeller;
+  Future<Null> getSellerchat() async {
+    idUser = userModel!.idUser;
     String api =
-        '${MyConstant().domain}/api/getUserChat.php?isAdd=true&id_seller=$idSeller';
+        '${MyConstant().domain}/api/getSellerChat.php?isAdd=true&id_user=$idUser';
     await Dio().get(api).then((value) {
       print(value.toString());
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
-          UserModel userModels = UserModel.fromMap(item);
+          SellerModel sellerModels = SellerModel.fromMap(item);
           setState(() {
-            userModel.add(userModels);
+            sellerModel.add(sellerModels);
+            // print(sellerModel);
           });
         }
       } else {
@@ -53,37 +54,38 @@ class _ChatSellerState extends State<ChatSeller> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('แชท'),
+        title: Text('ข้อความ'),
       ),
       body: check == false
           ? showNotProduct()
           : Container(
               child: ListView.builder(
-                  itemCount: userModel.length,
+                  itemCount: sellerModel.length,
                   itemBuilder: (context, index) => Padding(
                         padding: EdgeInsets.all(8),
                         child: ListTile(
                           onTap: () {
                             MaterialPageRoute route = MaterialPageRoute(
-                                builder: (value) => ChatpageSeller(
-                                    userModel: userModel[index],
-                                    sellerModel: sellerModel!));
+                                builder: (value) => ChatPage(
+                                    sellerModel: sellerModel[index],
+                                    userModel: userModel!));
                             Navigator.of(context).push(route);
                           },
-                          leading: Icon(
-                            Icons.person,
-                            size: 30,
-                            color: Colors.blue,
+                          leading:
+                              // Icon(
+                              //   Icons.person,
+                              //   size: 30,
+                              //   color: Colors.blue,
+                              // ),
+                              Image.network(
+                            '${MyConstant().domain}/images/profileseller/${sellerModel[index].image}',
+                            fit: BoxFit.cover,
+                            width: 50,
                           ),
-                          // Image.network(
-                          //   '${MyConstant().domain}/images/profileuser/${userModel[index].image}',
-                          //   fit: BoxFit.cover,
-                          //   width: 50,
-                          // ),
                           title: Text(
-                            userModel[index].firstname +
+                            sellerModel[index].firstname +
                                 '  ' +
-                                userModel[index].lastname,
+                                sellerModel[index].lastname,
                             style: TextStyle(
                               fontSize: 16,
                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/user_models.dart';
+import 'package:k6_app/screens/User/allchatuser.dart';
 import 'package:k6_app/screens/User/info_user.dart';
 import 'package:k6_app/screens/User/noti_user.dart';
 import 'package:k6_app/screens/User/product_user.dart';
@@ -20,6 +21,7 @@ class _HomepageState extends State<Homepage> {
     userModel = widget.usermodel;
     _widgetOptions = <Widget>[
       ProductListUser(usermodel: userModel!),
+      AllchatUser(userModel: userModel!),
       NotiUser(userModel: userModel!),
       InformationUser(usermodel: userModel!),
     ];
@@ -39,11 +41,11 @@ class _HomepageState extends State<Homepage> {
             activeIcon: Icon(Icons.home),
             label: 'หน้าหลัก',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.thumb_up_alt_outlined),
-          //   activeIcon: Icon(Icons.thumb_up),
-          //   label: 'สินค้าแนะนำ',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            activeIcon: Icon(Icons.chat),
+            label: 'ข้อความ',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications_outlined),
             activeIcon: Icon(Icons.notifications),

@@ -66,7 +66,7 @@ class _ShowDetailState extends State<ShowDetail> {
 
     //print(response);
     var result = json.decode(response.data);
-    // print('result = $result');
+    //print('result = $result');
 
     for (var map in result) {
       setState(() {
@@ -128,7 +128,7 @@ class _ShowDetailState extends State<ShowDetail> {
   Widget showMap() {
     double lat = double.parse(shopModels!.lat.toString());
     double long = double.parse(shopModels!.long.toString());
-    print('lat = $lat, long = $long');
+    //print('lat = $lat, long = $long');
 
     LatLng latLong = LatLng(lat, long);
     CameraPosition position = CameraPosition(
