@@ -255,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       Response response = await Dio().get(url);
       var result = json.decode(response.data);
-      print(result);
+      //print(result);
       if (result == false) {
         normalDialog(context, 'รหัสผ่านผิด กรุณาลองอีกครั้ง ');
       } else {

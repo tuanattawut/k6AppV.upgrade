@@ -93,7 +93,16 @@ class _ChatmanaUserState extends State<ChatmanaUser> {
                   MyStyle().mySizebox(),
                   detail(),
                   MyStyle().mySizebox(),
-                  saveButton()
+                  saveButton(),
+                  MyStyle().mySizebox(),
+                  Row(
+                    children: [
+                      Text(
+                        'ติดต่อเร่งด่วน @ Line : .......',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  )
                 ],
               ),
             )));

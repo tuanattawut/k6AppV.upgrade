@@ -17,10 +17,10 @@ class ShowSearch extends StatefulWidget {
 
 class _ShowSearchState extends State<ShowSearch> {
   TextEditingController editingController = TextEditingController();
-  bool? searching, error;
+  bool? searching;
   var data;
   String? query;
-  String dataurl = "${MyConstant().domain}/api/search_suggestion.php";
+
   UserModel? userModel;
 
   var f = NumberFormat.currency(locale: "THB", symbol: "฿");
@@ -48,13 +48,11 @@ class _ShowSearchState extends State<ShowSearch> {
         loadStatus = false;
       });
       if (value.toString() != 'null') {
-        print(value.toString());
         for (var item in json.decode(value.data)) {
           ProductModel productModel = ProductModel.fromMap(item);
           setState(() {
             productList.add(productModel);
           });
-          break;
         }
       } else {
         setState(() {
@@ -131,17 +129,20 @@ class _ShowSearchState extends State<ShowSearch> {
               'ไม่พบการค้นหา ...',
               style: TextStyle(fontSize: 18),
             )
-          : GridView.count(
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height / 1.2),
-              crossAxisCount: 2,
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              children: List.generate(
-                productList.length,
-                (index) {
-                  return showAllview(index);
-                },
+          : Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GridView.count(
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height / 1.2),
+                crossAxisCount: 2,
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                children: List.generate(
+                  productList.length,
+                  (index) {
+                    return showAllview(index);
+                  },
+                ),
               ),
             ),
     );

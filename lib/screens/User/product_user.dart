@@ -9,7 +9,6 @@ import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/promotionseller_model.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/detailpromotion_user.dart';
-import 'package:k6_app/screens/User/promote_user.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
 import 'package:k6_app/screens/User/showallcategory.dart';
 import 'package:k6_app/screens/User/showallproduct.dart';
@@ -30,7 +29,7 @@ class _ProductListUserState extends State<ProductListUser> {
   List<ProductModel> productModels = [];
   UserModel? userModel;
 
-  String? name, id, idproducts, idUser;
+  String? name, id, idproducts, idUser, clickid;
   List<CategoryModel> categoryList = [];
 
   var f = NumberFormat.currency(locale: "THB", symbol: "฿");
@@ -81,7 +80,7 @@ class _ProductListUserState extends State<ProductListUser> {
     String api =
         '${MyConstant().domain}/api/reC.php?isAdd=true&id_user=$idUser';
     await Dio().get(api).then((value) {
-      print(value.toString());
+      //print(value.toString());
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
           setState(() {
@@ -91,43 +90,47 @@ class _ProductListUserState extends State<ProductListUser> {
           break;
         }
       } else if (value.toString() == 'null') {
-        String api = '${MyConstant().domain}/api/reCAll.php?isAdd=true';
-        Dio().get(api).then((value) async {
-          for (var item in json.decode(value.data)) {
-            setState(() {
-              productRecList = ProductModel.fromMap(item);
-              getProductRecs();
-            });
-            break;
-          }
+        //  getRecomALL();
+        //  print('ไม่มีข้อมูลแนะนำ');
+      }
+    });
+  }
+
+  Future<Null> getRecomALL() async {
+    String api = '${MyConstant().domain}/api/reCAll.php?isAdd=true';
+    Dio().get(api).then((value) async {
+      for (var item in json.decode(value.data)) {
+        setState(() {
+          productRecList = ProductModel.fromMap(item);
+          getProductRecs();
         });
+        break;
       }
     });
   }
 
   bool? loadStatusREC = true;
   bool? statusREC = true;
-  List<ProductModel> productRecLists = [];
+  List<ProductModel> allproductRec = [];
   Future<Null> getProductRecs() async {
-    if (productRecLists.length != 0) {
+    if (allproductRec.length != 0) {
       loadStatusREC = true;
       statusREC = true;
-      productRecLists.clear();
+      allproductRec.clear();
     }
     String? idsub = productRecList!.idSubcategory;
     String api =
         '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
-
     await Dio().get(api).then((value) {
       setState(() {
         loadStatusREC = false;
       });
+
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {
-          ProductModel productRecLists2 = ProductModel.fromMap(item);
+          ProductModel productRecLists = ProductModel.fromMap(item);
           setState(() {
-            productRecLists.add(productRecLists2);
-            // print('ได้ข้อมูล คือ $productRecLists');
+            allproductRec.add(productRecLists);
           });
         }
       } else {
@@ -145,7 +148,7 @@ class _ProductListUserState extends State<ProductListUser> {
         '${MyConstant().domain}/api/addactionClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
     try {
       Response response = await Dio().get(url);
-      print('res = $response');
+      // print('res = $response');
       if (response.toString() == 'true') {
       } else {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
@@ -287,38 +290,6 @@ class _ProductListUserState extends State<ProductListUser> {
                               ),
                       ),
                     ])),
-                // Card(
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: Column(children: [
-                //       _buildSectiontitle(
-                //         'สินค้าแนะนำ',
-                //         () {
-                //           MaterialPageRoute route = MaterialPageRoute(
-                //             builder: (value) => PromoteUser(
-                //               userModel: userModel!,
-                //               productModel: productRecList!,
-                //             ),
-                //           );
-                //           Navigator.of(context).push(route);
-                //         },
-                //       ),
-                // SizedBox(
-                //   height: 260,
-                //   child: loadStatusREC!
-                //       ? MyStyle().showProgress()
-                //       : ListView.builder(
-                //           physics: ClampingScrollPhysics(),
-                //           shrinkWrap: true,
-                //           scrollDirection: Axis.horizontal,
-                //           itemCount: productRecLists.length,
-                //           itemBuilder:
-                //               (BuildContext context, int index) =>
-                //                   showListView(index),
-                //         ),
-                // ),
-                //   ])),
                 Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -366,23 +337,21 @@ class _ProductListUserState extends State<ProductListUser> {
                           Navigator.of(context).push(route);
                         },
                       ),
-                      loadStatusREC!
-                          ? MyStyle().showProgress()
-                          : GridView.count(
-                              childAspectRatio: MediaQuery.of(context)
-                                      .size
-                                      .width /
-                                  (MediaQuery.of(context).size.height / 1.2),
-                              crossAxisCount: 2,
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              children: List.generate(
-                                productRecLists.length,
-                                (index) {
-                                  return showListView(index);
-                                },
-                              ),
-                            ),
+                      SizedBox(
+                        height: 250,
+                        child:
+                            //loadStatusREC!
+                            //   ? MyStyle().showProgress()
+                            //    :
+                            ListView.builder(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: allproductRec.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              showRecView(index),
+                        ),
+                      ),
                     ])),
               ],
             ),
@@ -432,84 +401,87 @@ class _ProductListUserState extends State<ProductListUser> {
     );
   }
 
-  Widget showListView(int index) {
-    String string = '${productRecLists[index].nameproduct}';
+  Widget showRecView(int index) {
+    String string = '${allproductRec[index].nameproduct}';
     if (string.length > 10) {
       string = string.substring(0, 10);
       string = '$string ...';
     }
     return Container(
-        margin: EdgeInsets.only(
-          left: 10,
-          right: 10,
-          top: 10,
-          bottom: 10,
-        ),
-        child: GestureDetector(
-            onTap: () async {
-              idproducts = productRecLists[index].id;
-              var view = int.parse(productModels[index].view.toString());
-              view++;
-              String url =
-                  '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$idproducts';
-              await Dio().get(url).then((value) => getRecom());
-              print(view);
-              addData(idproducts.toString());
-              checkClickdata(idproducts.toString());
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowDetail(
-                  productModel: productRecLists[index],
-                  userModel: userModel!,
-                ),
-              );
-              Navigator.of(context).push(route);
-            },
-            child: Column(children: <Widget>[
-              Container(
-                height: 150,
-                width: 150,
-                child: Image.network(
-                  '${MyConstant().domain}/images/products_seller/${productRecLists[index].image}',
-                  fit: BoxFit.cover,
-                ),
+      margin: EdgeInsets.only(
+        left: 5,
+        right: 5,
+        top: 5,
+        bottom: 5,
+      ),
+      child: GestureDetector(
+          onTap: () async {
+            clickid = allproductRec[index].id;
+            var view = int.parse(allproductRec[index].view.toString());
+            view++;
+            String url =
+                '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
+            await Dio().get(url).then((value) {
+              print(value);
+            });
+            print('view ปัจจุบัน = $view');
+            addData(clickid.toString());
+            checkClickdata(clickid.toString());
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (value) => ShowDetail(
+                productModel: allproductRec[index],
+                userModel: userModel!,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 10),
-                      blurRadius: 50,
-                      color: Colors.grey.withOpacity(0.2),
+            );
+            Navigator.of(context).push(route);
+          },
+          child: Column(children: <Widget>[
+            Container(
+              height: 150,
+              width: 150,
+              child: Image.network(
+                '${MyConstant().domain}/images/products_seller/${allproductRec[index].image}',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              width: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 10),
+                    blurRadius: 50,
+                    color: Colors.grey.withOpacity(0.2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      string,
+                      style: Theme.of(context)
+                          .textTheme
+                          .button!
+                          .copyWith(color: Colors.black, fontSize: 20),
+                    ),
+                    Text(
+                      f.format(
+                          double.parse(allproductRec[index].price.toString())),
+                      style: Theme.of(context)
+                          .textTheme
+                          .button!
+                          .copyWith(color: Colors.red, fontSize: 20),
                     ),
                   ],
                 ),
-                width: 200,
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        string,
-                        style: Theme.of(context)
-                            .textTheme
-                            .button!
-                            .copyWith(color: Colors.black, fontSize: 20),
-                      ),
-                      Text(
-                        f.format(double.parse(
-                            productRecLists[index].price.toString())),
-                        style: Theme.of(context)
-                            .textTheme
-                            .button!
-                            .copyWith(color: Colors.red, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ])));
+              ),
+            )
+          ])),
+    );
   }
 
   ClickdataModel? clickdataModel;
@@ -518,12 +490,12 @@ class _ProductListUserState extends State<ProductListUser> {
     String url =
         '${MyConstant().domain}/api/checkDataclick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
     await Dio().get(url).then((value) {
-      print(value.toString());
+      // print(value.toString());
       if (value.toString() != 'null') {
-        print('มีข้อมูล');
+        //  print('มีข้อมูล');
         for (var item in json.decode(value.data)) {
           clickdataModel = ClickdataModel.fromMap(item);
-          print(clickdataModel!.view);
+          //    print(clickdataModel!.view);
           var viewdataclick = int.parse((clickdataModel!.view.toString()));
           viewdataclick++;
           setState(() {
@@ -531,7 +503,7 @@ class _ProductListUserState extends State<ProductListUser> {
           });
         }
       } else {
-        print('NO DATA');
+        //  print('NO DATA');
         addClickdata(clickid);
       }
     });
@@ -560,87 +532,6 @@ class _ProductListUserState extends State<ProductListUser> {
       ///
     }
   }
-
-  // Widget showAllview(int index) {
-  //   String string = '${productModels[index].nameproduct}';
-  //   if (string.length > 10) {
-  //     string = string.substring(0, 10);
-  //     string = '$string ...';
-  //   }
-  //   return Container(
-  //     margin: EdgeInsets.only(
-  //       left: 5,
-  //       right: 5,
-  //       top: 5,
-  //       bottom: 5,
-  //     ),
-  //     child: GestureDetector(
-  //         onTap: () async {
-  //           idproducts = productModels[index].id;
-  //           var view = int.parse(productModels[index].view.toString());
-  //           view++;
-  //           String url =
-  //               '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$idproducts';
-  //           await Dio().get(url).then((value) => getData());
-  //           print(view);
-  //           addData(idproducts.toString());
-  //           checkClickdata(idproducts.toString());
-  //           MaterialPageRoute route = MaterialPageRoute(
-  //             builder: (value) => ShowDetail(
-  //               productModel: productModels[index],
-  //               userModel: userModel!,
-  //             ),
-  //           );
-  //           Navigator.of(context).push(route);
-  //         },
-  //         child: Column(children: <Widget>[
-  //           Container(
-  //             height: 200,
-  //             width: 200,
-  //             child: Image.network(
-  //               '${MyConstant().domain}/images/products_seller/${productModels[index].image}',
-  //               fit: BoxFit.cover,
-  //             ),
-  //           ),
-  //           Container(
-  //             width: 200,
-  //             decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               boxShadow: [
-  //                 BoxShadow(
-  //                   offset: Offset(0, 10),
-  //                   blurRadius: 50,
-  //                   color: Colors.grey.withOpacity(0.2),
-  //                 ),
-  //               ],
-  //             ),
-  //             child: Padding(
-  //               padding: EdgeInsets.all(5),
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Text(
-  //                     string,
-  //                     style: Theme.of(context)
-  //                         .textTheme
-  //                         .button!
-  //                         .copyWith(color: Colors.black, fontSize: 20),
-  //                   ),
-  //                   Text(
-  //                     f.format(
-  //                         double.parse(productModels[index].price.toString())),
-  //                     style: Theme.of(context)
-  //                         .textTheme
-  //                         .button!
-  //                         .copyWith(color: Colors.red, fontSize: 20),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           )
-  //         ])),
-  //   );
-  // }
 
   Widget showProView(int index) {
     String string = '${promotionlist[index].detailpromotion}';

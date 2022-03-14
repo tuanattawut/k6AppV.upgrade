@@ -70,7 +70,7 @@ class _LoginFacebookState extends State<LoginFacebook> {
             ),
           );
           Navigator.of(context).push(route);
-          print(response.toString());
+          //print(response.toString());
           // Navigator.pushNamed(context, '/homepage'); break;
         }
       }
@@ -271,14 +271,15 @@ class _LoginFacebookState extends State<LoginFacebook> {
     );
 
     if (result.status == LoginStatus.success) {
+      print(result.message);
       // you are logged
-      final AccessToken accessToken = result.accessToken!;
-      print('นี่คือโทเคน >> ${accessToken.token}');
+      // final AccessToken accessToken = result.accessToken!;
+      //  print('นี่คือโทเคน >> ${accessToken.token}');
       final userData = await FacebookAuth.i.getUserData(
         fields:
             "first_name,last_name,email,picture.width(200),birthday,friends,gender,link",
       );
-      print(userData);
+      // print(userData);
       onLoginStatusChanged(true, profileData: userData);
     } else {
       print(result.status);
@@ -286,36 +287,4 @@ class _LoginFacebookState extends State<LoginFacebook> {
       onLoginStatusChanged(false);
     }
   }
-
-  // void initiateFacebookLogin() async {
-
-  //   final FacebookLoginResult facebookLoginResult =
-  //       await facebookSignIn.logIn(['email']);
-
-  //   switch (facebookLoginResult.status) {
-  //     case FacebookLoginStatus.error:
-  //       onLoginStatusChanged(false);
-  //       print('การล็อกอินเออเร่อ');
-  //       facebookSignIn.logOut();
-  //       break;
-  //     case FacebookLoginStatus.cancelledByUser:
-  //       onLoginStatusChanged(false);
-  //       print('การล็อกอินถูกยกเลิกโดยผู้ใช้');
-  //       break;
-  //     case FacebookLoginStatus.loggedIn:
-  //       var graphResponse = await http.get(Uri.parse(
-  //           'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}'));
-
-  //       var profile = json.decode(graphResponse.body);
-  //       print(profile.toString());
-
-  //       onLoginStatusChanged(true, profileData: profile);
-
-  //       break;
-  //   }
-  // _logout() async {
-  //   await facebookSignIn.logOut();
-  //   onLoginStatusChanged(false);
-  //   print("Logged out");
-  // }
 }

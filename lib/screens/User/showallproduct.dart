@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:k6_app/models/clickdata_model.dart';
 import 'package:k6_app/models/product_models.dart';
 import 'package:k6_app/models/user_models.dart';
 import 'package:k6_app/screens/User/show_detail.dart';
@@ -60,10 +61,10 @@ class _ProductAllState extends State<ProductAll> {
     });
   }
 
-  Future<Null> addData() async {
+  Future<Null> addData(String clickid) async {
     String iduser = userModel!.idUser;
     String url =
-        '${MyConstant().domain}/api/addClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+        '${MyConstant().domain}/api/addactionClick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
     try {
       Response response = await Dio().get(url);
       // print('res = $response');
@@ -71,7 +72,58 @@ class _ProductAllState extends State<ProductAll> {
       } else {
         normalDialog(context, 'ผิดพลาดโปรดลองอีกครั้ง');
       }
-    } catch (e) {}
+    } catch (e) {
+      ///
+    }
+  }
+
+  ClickdataModel? clickdataModel;
+  Future<Null> checkClickdata(String clickid) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/checkDataclick.php?isAdd=true&id_user=$iduser&id_products=$clickid';
+    await Dio().get(url).then((value) {
+      // print(value.toString());
+      if (value.toString() != 'null') {
+        //  print('มีข้อมูล');
+        for (var item in json.decode(value.data)) {
+          clickdataModel = ClickdataModel.fromMap(item);
+          //    print(clickdataModel!.view);
+          var viewdataclick = int.parse((clickdataModel!.view.toString()));
+          viewdataclick++;
+          setState(() {
+            updateViewClick(clickid, viewdataclick.toString());
+          });
+        }
+      } else {
+        //  print('NO DATA');
+        addClickdata(clickid);
+      }
+    });
+  }
+
+  Future<Null> updateViewClick(String clickid, String view) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/updateViewDataclick.php?isAdd=true&view=$view&id_user=$iduser&id_product=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      print('อัพเดท${response.toString()}');
+    } catch (e) {
+      ///
+    }
+  }
+
+  Future<Null> addClickdata(String clickid) async {
+    String iduser = userModel!.idUser;
+    String url =
+        '${MyConstant().domain}/api/addDataclick.php?isAdd=true&id_user=$iduser&id_product=$clickid';
+    try {
+      Response response = await Dio().get(url);
+      print('อยู่นี่ ${response.toString()}');
+    } catch (e) {
+      ///
+    }
   }
 
   Future<Null> refreshList() async {
@@ -184,9 +236,18 @@ class _ProductAllState extends State<ProductAll> {
 
   Widget showListView(int index) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         clickid = productModels[index].id;
-        addData();
+        var view = int.parse(productModels[index].view.toString());
+        view++;
+        String url =
+            '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
+        await Dio().get(url).then((value) {
+          print(value);
+        });
+        print('view ปัจจุบัน = $view');
+        addData(clickid.toString());
+        checkClickdata(clickid.toString());
         MaterialPageRoute route = MaterialPageRoute(
           builder: (value) => ShowDetail(
             productModel: productModels[index],
