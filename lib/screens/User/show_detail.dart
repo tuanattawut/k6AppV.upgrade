@@ -40,7 +40,7 @@ class _ShowDetailState extends State<ShowDetail> {
   }
 
   Future<Null> readShop() async {
-    idShop = productModel!.idShop;
+    idShop = productModel!.idShop.toString();
     //print('==>$idShop');
     String url =
         '${MyConstant().domain}/api/getShopfromidShop.php?isAdd=true&id_shop=$idShop';

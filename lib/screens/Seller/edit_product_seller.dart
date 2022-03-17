@@ -25,10 +25,10 @@ class _EditProductState extends State<EditProduct> {
     super.initState();
     productModel = widget.productModel;
     nameProduct = productModel!.nameproduct;
-    price = productModel!.price;
+    price = productModel!.price.toString();
     detail = productModel!.detail;
     image = productModel!.image;
-    idcategory = productModel!.idSubcategory;
+    idcategory = productModel!.idSubcategory.toString();
   }
 
   @override

@@ -74,14 +74,14 @@ class ProductModel {
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      id: map['id'],
-      idShop: map['id_shop'],
+      id: map['id'].toString(),
+      idShop: map['id_shop'].toString(),
       nameproduct: map['nameproduct'],
       detail: map['detail'],
-      idSubcategory: map['id_subcategory'],
-      price: map['price'],
+      idSubcategory: map['id_subcategory'].toString(),
+      price: map['price'].toString(),
       image: map['image'],
-      view: map['view'],
+      view: map['view'].toString(),
       createdAt: map['created_at'],
       updatedAt: map['updated_at'],
     );

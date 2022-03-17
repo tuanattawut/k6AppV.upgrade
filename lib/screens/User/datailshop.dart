@@ -23,6 +23,7 @@ class _DetailShopState extends State<DetailShop> {
   String? idSeller, idUser, name;
   SellerModel? sellerModel;
   UserModel? userModel;
+  bool? follow;
 
   @override
   void initState() {
@@ -30,11 +31,10 @@ class _DetailShopState extends State<DetailShop> {
     setState(() {
       shopModels = widget.shopModel;
       userModel = widget.userModel;
-      //print('url ==> ${productModel?.image}');
       readSeller();
-
       idSeller = shopModels!.idSeller;
       idUser = userModel!.idUser;
+      follow = false;
     });
   }
 
@@ -73,12 +73,19 @@ class _DetailShopState extends State<DetailShop> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton.icon(
+                        OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: Colors.blue, width: 2),
+                            ),
                             onPressed: () {
                               checkFollow();
                             },
-                            icon: Icon(Icons.add),
-                            label: Text('ติดตาม')),
+                            icon: follow!
+                                ? Icon(Icons.favorite_border_outlined)
+                                : Icon(Icons.favorite),
+                            label: follow!
+                                ? Text('ยกเลิกติดตาม')
+                                : Text('ติดตาม')),
                       ],
                     ),
                   ),
@@ -195,6 +202,9 @@ class _DetailShopState extends State<DetailShop> {
       //print('res = $response');
       if (response.toString() == 'true') {
         normalDialog(context, 'ติดตาม $name แล้ว');
+        setState(() {
+          follow = true;
+        });
       } else {
         normalDialog(context, 'ล้มเหลว ลองอีกครั้ง');
       }
@@ -210,6 +220,9 @@ class _DetailShopState extends State<DetailShop> {
       //print('res = $response');
 
       if (response.toString() == 'true') {
+        setState(() {
+          follow = false;
+        });
         normalDialog(context, 'ยกเลิกติดตาม $name แล้ว');
       } else {
         normalDialog(context, 'ล้มเหลว ลองอีกครั้ง');

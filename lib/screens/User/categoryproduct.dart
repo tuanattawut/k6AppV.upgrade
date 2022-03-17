@@ -183,7 +183,7 @@ class _CategoryProductState extends State<CategoryProduct> {
       ),
       child: GestureDetector(
           onTap: () async {
-            clickid = productModels[index].id;
+            clickid = productModels[index].id.toString();
             var view = int.parse(productModels[index].view.toString());
             view++;
             String url =

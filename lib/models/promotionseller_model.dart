@@ -6,7 +6,7 @@ class PromotionsellerModel {
   String? detailpromotion;
   String? image;
   String? status;
-  String? regdate;
+  String? updatedAt;
   String? nameshop;
   PromotionsellerModel({
     this.idPromotionseller,
@@ -14,7 +14,7 @@ class PromotionsellerModel {
     this.detailpromotion,
     this.image,
     this.status,
-    this.regdate,
+    this.updatedAt,
     this.nameshop,
   });
 
@@ -24,7 +24,7 @@ class PromotionsellerModel {
     String? detailpromotion,
     String? image,
     String? status,
-    String? regdate,
+    String? updatedAt,
     String? nameshop,
   }) {
     return PromotionsellerModel(
@@ -33,33 +33,32 @@ class PromotionsellerModel {
       detailpromotion: detailpromotion ?? this.detailpromotion,
       image: image ?? this.image,
       status: status ?? this.status,
-      regdate: regdate ?? this.regdate,
+      updatedAt: updatedAt ?? this.updatedAt,
       nameshop: nameshop ?? this.nameshop,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'idpromotionseller': idPromotionseller,
+      'id': idPromotionseller,
       'id_seller': idSeller,
       'detailpromotion': detailpromotion,
       'image': image,
       'status': status,
-      'regdate': regdate,
+      'updated_at': updatedAt,
       'nameshop': nameshop,
     };
   }
 
   factory PromotionsellerModel.fromMap(Map<String, dynamic> map) {
     return PromotionsellerModel(
-      idPromotionseller:
-          map['idpromotionseller'] != null ? map['idpromotionseller'] : null,
+      idPromotionseller: map['id'] != null ? map['id'] : null,
       idSeller: map['id_seller'] != null ? map['id_seller'] : null,
       detailpromotion:
           map['detailpromotion'] != null ? map['detailpromotion'] : null,
       image: map['image'] != null ? map['image'] : null,
       status: map['status'] != null ? map['status'] : null,
-      regdate: map['regdate'] != null ? map['regdate'] : null,
+      updatedAt: map['updated_at'] != null ? map['updated_at'] : null,
       nameshop: map['nameshop'] != null ? map['nameshop'] : null,
     );
   }
@@ -71,7 +70,7 @@ class PromotionsellerModel {
 
   @override
   String toString() {
-    return 'PromotionsellerModel(idPromotionseller: $idPromotionseller, idSeller: $idSeller, detailpromotion: $detailpromotion, image: $image, status: $status, regdate: $regdate,nameshop: $nameshop)';
+    return 'PromotionsellerModel(idPromotionseller: $idPromotionseller, idSeller: $idSeller, detailpromotion: $detailpromotion, image: $image, status: $status, updated_at: $updatedAt,nameshop: $nameshop)';
   }
 
   @override
@@ -84,7 +83,7 @@ class PromotionsellerModel {
         other.detailpromotion == detailpromotion &&
         other.image == image &&
         other.status == status &&
-        other.regdate == regdate &&
+        other.updatedAt == updatedAt &&
         other.nameshop == nameshop;
   }
 
@@ -95,7 +94,7 @@ class PromotionsellerModel {
         detailpromotion.hashCode ^
         image.hashCode ^
         status.hashCode ^
-        regdate.hashCode ^
+        updatedAt.hashCode ^
         nameshop.hashCode;
   }
 }

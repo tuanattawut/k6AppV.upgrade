@@ -42,8 +42,9 @@ class _ProductListUserState extends State<ProductListUser> {
     getCategory();
     getPromotion();
     idUser = userModel!.idUser;
-    getRecom();
+    //  getRecom();
     readPromotion();
+    getProductRecs();
   }
 
   bool? loadStatus = true;
@@ -75,36 +76,79 @@ class _ProductListUserState extends State<ProductListUser> {
     });
   }
 
-  ProductModel? productRecList;
-  Future<Null> getRecom() async {
-    String api =
-        '${MyConstant().domain}/api/reC.php?isAdd=true&id_user=$idUser';
-    await Dio().get(api).then((value) {
-      //print(value.toString());
-      if (value.toString() != 'null') {
-        for (var item in json.decode(value.data)) {
-          setState(() {
-            productRecList = ProductModel.fromMap(item);
-            getProductRecs();
-          });
-          break;
-        }
-      } else if (value.toString() == 'null') {
-        //  getRecomALL();
-        //  print('ไม่มีข้อมูลแนะนำ');
-      }
-    });
-  }
+  // ProductModel? productRecList;
+  // Future<Null> getRecom() async {
+  //   String api =
+  //       '${MyConstant().domain}/api/reC.php?isAdd=true&id_user=$idUser';
+  //   await Dio().get(api).then((value) {
+  //     //print(value.toString());
+  //     if (value.toString() != 'null') {
+  //       for (var item in json.decode(value.data)) {
+  //         setState(() {
+  //           productRecList = ProductModel.fromMap(item);
+  //           getProductRecs();
+  //         });
+  //         break;
+  //       }
+  //     } else if (value.toString() == 'null') {
+  //       getRecomALL();
+  //       print('ไม่มีข้อมูลแนะนำ');
+  //     }
+  //   });
+  // }
+
+  // Future<Null> getRecomALL() async {
+  //   String api = '${MyConstant().domain}/api/reCAll.php?isAdd=true';
+  //   Dio().get(api).then((value) async {
+  //     for (var item in json.decode(value.data)) {
+  //       setState(() {
+  //         productRecList = ProductModel.fromMap(item);
+  //         getProductRecs();
+  //       });
+  //       break;
+  //     }
+  //   });
+  // }
+
+  // bool? loadStatusREC = true;
+  // bool? statusREC = true;
+  // List<ProductModel> allproductRec = [];
+  // Future<Null> getProductRecs() async {
+  //   if (allproductRec.length != 0) {
+  //     loadStatusREC = true;
+  //     statusREC = true;
+  //     allproductRec.clear();
+  //   }
+  //   String? idsub = productRecList!.idSubcategory;
+  //   String api =
+  //       '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
+  //   await Dio().get(api).then((value) {
+  //     setState(() {
+  //       loadStatusREC = false;
+  //     });
+  //     if (value.toString() != 'null') {
+  //       for (var item in json.decode(value.data)) {
+  //         ProductModel productRecLists = ProductModel.fromMap(item);
+  //         setState(() {
+  //           allproductRec.add(productRecLists);
+  //         });
+  //       }
+  //     } else {
+  //       setState(() {
+  //         statusREC = false;
+  //       });
+  //     }
+  //   });
+  // }
 
   Future<Null> getRecomALL() async {
-    String api = '${MyConstant().domain}/api/reCAll.php?isAdd=true';
+    String api = '${MyConstant().domain}/api/relationshipproductusernull';
     Dio().get(api).then((value) async {
       for (var item in json.decode(value.data)) {
+        ProductModel productRecLists = ProductModel.fromMap(item);
         setState(() {
-          productRecList = ProductModel.fromMap(item);
-          getProductRecs();
+          allproductRec.add(productRecLists);
         });
-        break;
       }
     });
   }
@@ -118,27 +162,27 @@ class _ProductListUserState extends State<ProductListUser> {
       statusREC = true;
       allproductRec.clear();
     }
-    String? idsub = productRecList!.idSubcategory;
     String api =
-        '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
-    await Dio().get(api).then((value) {
-      setState(() {
-        loadStatusREC = false;
-      });
+        '${MyConstant().domain}/api/relationshipproductuser?user_id=$idUser';
+    Response response = await Dio().get(api);
+    var result = json.decode(response.data);
+    setState(() {
+      loadStatusREC = false;
+    });
 
-      if (value.toString() != 'null') {
-        for (var item in json.decode(value.data)) {
-          ProductModel productRecLists = ProductModel.fromMap(item);
-          setState(() {
-            allproductRec.add(productRecLists);
-          });
-        }
-      } else {
+    if (result == false) {
+      setState(() {
+        getRecomALL();
+        statusREC = false;
+      });
+    } else {
+      for (var map in result) {
+        ProductModel productRecLists = ProductModel.fromMap(map);
         setState(() {
-          statusREC = false;
+          allproductRec.add(productRecLists);
         });
       }
-    });
+    }
   }
 
 //เพิ่มข้อมูลการคลิก
@@ -339,18 +383,17 @@ class _ProductListUserState extends State<ProductListUser> {
                       ),
                       SizedBox(
                         height: 250,
-                        child:
-                            //loadStatusREC!
-                            //   ? MyStyle().showProgress()
-                            //    :
-                            ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: allproductRec.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              showRecView(index),
-                        ),
+                        child: loadStatusREC!
+                            ? MyStyle().showProgress()
+                            : ListView.builder(
+                                physics: ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: allproductRec.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        showRecView(index),
+                              ),
                       ),
                     ])),
               ],
@@ -416,7 +459,7 @@ class _ProductListUserState extends State<ProductListUser> {
       ),
       child: GestureDetector(
           onTap: () async {
-            clickid = allproductRec[index].id;
+            clickid = allproductRec[index].id.toString();
             var view = int.parse(allproductRec[index].view.toString());
             view++;
             String url =

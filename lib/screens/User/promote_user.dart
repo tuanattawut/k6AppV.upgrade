@@ -55,7 +55,7 @@ class _PromoteUserState extends State<PromoteUser> {
       status = true;
       productRecList.clear();
     }
-    String? idsub = productModel!.idSubcategory;
+    String? idsub = productModel!.idSubcategory.toString();
     String api =
         '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
 
@@ -189,7 +189,7 @@ class _PromoteUserState extends State<PromoteUser> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () {
-        clickid = productRecList[index].id;
+        clickid = productRecList[index].id.toString();
         addData();
 
         MaterialPageRoute route = MaterialPageRoute(

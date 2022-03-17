@@ -230,7 +230,7 @@ class _ShowSearchState extends State<ShowSearch> {
       ),
       child: GestureDetector(
           onTap: () async {
-            clickid = productList[index].id;
+            clickid = productList[index].id.toString();
             var view = int.parse(productList[index].view.toString());
             view++;
             String url =

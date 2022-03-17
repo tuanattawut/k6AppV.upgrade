@@ -237,7 +237,7 @@ class _ProductAllState extends State<ProductAll> {
   Widget showListView(int index) {
     return GestureDetector(
       onTap: () async {
-        clickid = productModels[index].id;
+        clickid = productModels[index].id.toString();
         var view = int.parse(productModels[index].view.toString());
         view++;
         String url =

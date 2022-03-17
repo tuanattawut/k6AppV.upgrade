@@ -132,7 +132,7 @@ class _DetailPromotionsellerState extends State<DetailPromotionseller> {
                 children: [
                   MyStyle().showTitleH2('วันที่ลง:  '),
                   Text(
-                    date(DateTime.parse(promotionlist!.regdate.toString()))
+                    date(DateTime.parse(promotionlist!.updatedAt.toString()))
                         .toString(),
                     style: TextStyle(
                       fontSize: 18,

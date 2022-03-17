@@ -124,7 +124,7 @@ class _DetailProductState extends State<DetailProduct> {
       productModels.clear();
     }
 
-    idshop = productModel?.idShop;
+    idshop = productModel?.idShop.toString();
 
     String url =
         '${MyConstant().domain}/api/getproductIdShop.php?isAdd=true&id_shop=$idshop';
@@ -239,7 +239,7 @@ class _DetailProductState extends State<DetailProduct> {
 
   List<ProductModel> productcateLists = [];
   Future<Null> getProductcate() async {
-    String? idsub = productModel!.idSubcategory;
+    String? idsub = productModel!.idSubcategory.toString();
     String api =
         '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
 
@@ -396,7 +396,7 @@ class _DetailProductState extends State<DetailProduct> {
         ),
         child: GestureDetector(
             onTap: () async {
-              clickid = productModels[index].id;
+              clickid = productModels[index].id.toString();
               addData(clickid.toString());
               var view = int.parse(productModels[index].view.toString());
               view++;
@@ -476,7 +476,7 @@ class _DetailProductState extends State<DetailProduct> {
         ),
         child: GestureDetector(
             onTap: () async {
-              clickid = productcateLists[index].id;
+              clickid = productcateLists[index].id.toString();
               addData(clickid.toString());
               var view = int.parse(productcateLists[index].view.toString());
               view++;
