@@ -96,7 +96,7 @@ class _ChatreportState extends State<Chatreport> {
                       MyStyle().mySizebox(),
                       Text(
                         df.format(
-                            DateTime.parse(reportModel!.regdate.toString())),
+                            DateTime.parse(reportModel!.createdAt.toString())),
                         style: TextStyle(
                           fontSize: 14,
                         ),

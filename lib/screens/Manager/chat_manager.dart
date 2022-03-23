@@ -28,8 +28,7 @@ class _ChatManagerState extends State<ChatManager> {
 
   Future<Null> getShopchat() async {
     idManager = managerModel!.idmanager;
-    String api =
-        '${MyConstant().domain}/api/getManagerChat.php?isAdd=true&id_manager=$idManager';
+    String api = '${MyConstant().domain}/api/getManagerChat.php?isAdd=true';
     await Dio().get(api).then((value) {
       if (value.toString() != 'null') {
         for (var item in json.decode(value.data)) {

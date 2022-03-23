@@ -11,6 +11,7 @@ import 'package:k6_app/screens/Manager/manage_user.dart';
 import 'package:k6_app/screens/Manager/searchshop_manager.dart';
 import 'package:k6_app/screens/Manager/shownoti_manager.dart';
 import 'package:k6_app/screens/Seller/main_seller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homemanager extends StatefulWidget {
   Homemanager({required this.managerModel});
@@ -123,6 +124,7 @@ class _HomemanagerState extends State<Homemanager> {
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/", (Route<dynamic> route) => false);
+                  _logOut();
                 },
                 icon: Icon(
                   Icons.check,
@@ -146,5 +148,12 @@ class _HomemanagerState extends State<Homemanager> {
         ],
       ),
     );
+  }
+
+  Future<void> _logOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('role');
+    prefs.remove('email');
+    prefs.remove('password');
   }
 }

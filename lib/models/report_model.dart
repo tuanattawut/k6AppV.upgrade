@@ -2,8 +2,8 @@ import 'dart:convert';
 
 class ReportModel {
   String? message;
-  String? regdate;
-  String? idUser;
+  String? createdAt;
+  String? id;
   String? firstname;
   String? lastname;
   String? phone;
@@ -11,8 +11,8 @@ class ReportModel {
   String? image;
   ReportModel({
     this.message,
-    this.regdate,
-    this.idUser,
+    this.createdAt,
+    this.id,
     this.firstname,
     this.lastname,
     this.phone,
@@ -22,8 +22,8 @@ class ReportModel {
 
   ReportModel copyWith({
     String? message,
-    String? regdate,
-    String? idUser,
+    String? createdAt,
+    String? id,
     String? firstname,
     String? lastname,
     String? phone,
@@ -32,8 +32,8 @@ class ReportModel {
   }) {
     return ReportModel(
       message: message ?? this.message,
-      regdate: regdate ?? this.regdate,
-      idUser: idUser ?? this.idUser,
+      createdAt: createdAt ?? this.createdAt,
+      id: id ?? this.id,
       firstname: firstname ?? this.firstname,
       lastname: lastname ?? this.lastname,
       phone: phone ?? this.phone,
@@ -45,8 +45,8 @@ class ReportModel {
   Map<String, dynamic> toMap() {
     return {
       'message': message,
-      'regdate': regdate,
-      'id_user': idUser,
+      'created_at': createdAt,
+      'id': id,
       'firstname': firstname,
       'lastname': lastname,
       'phone': phone,
@@ -57,14 +57,14 @@ class ReportModel {
 
   factory ReportModel.fromMap(Map<String, dynamic> map) {
     return ReportModel(
-      message: map['message'] != null ? map['message'] : null,
-      regdate: map['regdate'] != null ? map['regdate'] : null,
-      idUser: map['id_user'] != null ? map['id_user'] : null,
-      firstname: map['firstname'] != null ? map['firstname'] : null,
-      lastname: map['lastname'] != null ? map['lastname'] : null,
-      phone: map['phone'] != null ? map['phone'] : null,
-      email: map['email'] != null ? map['email'] : null,
-      image: map['image'] != null ? map['image'] : null,
+      message: map['message'],
+      createdAt: map['created_at'],
+      id: map['id'],
+      firstname: map['firstname'],
+      lastname: map['lastname'],
+      phone: map['phone'],
+      email: map['email'],
+      image: map['image'],
     );
   }
 
@@ -75,7 +75,7 @@ class ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(message: $message, regdate: $regdate, idUser: $idUser, firstname: $firstname, lastname: $lastname, phone: $phone, email: $email, image: $image)';
+    return 'ReportModel(message: $message, createdAt: $createdAt, id: $id, firstname: $firstname, lastname: $lastname, phone: $phone, email: $email, image: $image)';
   }
 
   @override
@@ -84,8 +84,8 @@ class ReportModel {
 
     return other is ReportModel &&
         other.message == message &&
-        other.regdate == regdate &&
-        other.idUser == idUser &&
+        other.createdAt == createdAt &&
+        other.id == id &&
         other.firstname == firstname &&
         other.lastname == lastname &&
         other.phone == phone &&
@@ -96,8 +96,8 @@ class ReportModel {
   @override
   int get hashCode {
     return message.hashCode ^
-        regdate.hashCode ^
-        idUser.hashCode ^
+        createdAt.hashCode ^
+        id.hashCode ^
         firstname.hashCode ^
         lastname.hashCode ^
         phone.hashCode ^

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k6_app/models/limitshop_model.dart';
 import 'package:k6_app/utility/my_constant.dart';
+import 'package:k6_app/utility/my_style.dart';
 
 class ShowNotimanager extends StatefulWidget {
   @override
@@ -57,7 +58,7 @@ class _ShowNotimanagerState extends State<ShowNotimanager> {
       appBar: AppBar(
         title: Center(child: Text('การแจ้งเตือน')),
       ),
-      body: loadStatus! ? showContent() : shownoti(),
+      body: loadStatus! ? MyStyle().showProgress() : showContent(),
     );
   }
 

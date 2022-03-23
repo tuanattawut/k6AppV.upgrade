@@ -5,6 +5,7 @@ import 'package:k6_app/screens/User/chatmana_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_outlinebutton.dart';
 import 'package:k6_app/utility/my_style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InformationUser extends StatefulWidget {
   InformationUser({required this.usermodel});
@@ -88,6 +89,10 @@ class _InformationUserState extends State<InformationUser> {
 
   Future<void> _logOut() async {
     await FacebookAuth.instance.logOut();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('role');
+    prefs.remove('email');
+    prefs.remove('password');
   }
 
   Widget showImage() {

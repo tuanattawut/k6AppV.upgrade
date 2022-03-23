@@ -1,59 +1,65 @@
 import 'dart:convert';
 
 class ChatmanagersellerModel {
-  final String idchatmanager;
-  final String message;
-  final String idmanager;
-  final String idseller;
-  final String status;
-  final String regdate;
+  String? id;
+  String? message;
+  String? idManager;
+  String? idSeller;
+  String? status;
+  String? createdAt;
+  String? updatedAt;
 
   ChatmanagersellerModel({
-    required this.idchatmanager,
+    this.id,
     required this.message,
-    required this.idmanager,
-    required this.idseller,
+    this.idManager,
+    this.idSeller,
     required this.status,
-    required this.regdate,
+    this.createdAt,
+    this.updatedAt,
   });
 
   ChatmanagersellerModel copyWith({
-    String? idchatmanager,
+    String? id,
     String? message,
-    String? idmanager,
-    String? idseller,
+    String? idManager,
+    String? idSeller,
     String? status,
-    String? regdate,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return ChatmanagersellerModel(
-      idchatmanager: idchatmanager ?? this.idchatmanager,
+      id: id ?? this.id,
       message: message ?? this.message,
-      idmanager: idmanager ?? this.idmanager,
-      idseller: idseller ?? this.idseller,
+      idManager: idManager ?? this.idManager,
+      idSeller: idSeller ?? this.idSeller,
       status: status ?? this.status,
-      regdate: regdate ?? this.regdate,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id_chatmanager': idchatmanager,
+      'id': id,
       'message': message,
-      'id_manager': idmanager,
-      'id_seller': idseller,
+      'id_manager': idManager,
+      'id_seller': idSeller,
       'status': status,
-      'regdate': regdate,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
     };
   }
 
   factory ChatmanagersellerModel.fromMap(Map<String, dynamic> map) {
     return ChatmanagersellerModel(
-      idchatmanager: map['id_chatmanager'],
+      id: map['id'],
       message: map['message'],
-      idmanager: map['id_manager'],
-      idseller: map['id_seller'],
+      idManager: map['id_manager'],
+      idSeller: map['id_seller'],
       status: map['status'],
-      regdate: map['regdate'],
+      createdAt: map['created_at'],
+      updatedAt: map['updated_at'],
     );
   }
 
@@ -64,7 +70,7 @@ class ChatmanagersellerModel {
 
   @override
   String toString() {
-    return 'ChatmanagersellerModel(idchatmanager: $idchatmanager, message: $message, idmanager: $idmanager, idseller: $idseller, status: $status, regdate: $regdate)';
+    return 'ChatmanagersellerModel(id: $id, message: $message, idManager: $idManager, idSeller: $idSeller, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -72,21 +78,23 @@ class ChatmanagersellerModel {
     if (identical(this, other)) return true;
 
     return other is ChatmanagersellerModel &&
-        other.idchatmanager == idchatmanager &&
+        other.id == id &&
         other.message == message &&
-        other.idmanager == idmanager &&
-        other.idseller == idseller &&
+        other.idManager == idManager &&
+        other.idSeller == idSeller &&
         other.status == status &&
-        other.regdate == regdate;
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
-    return idchatmanager.hashCode ^
+    return id.hashCode ^
         message.hashCode ^
-        idmanager.hashCode ^
-        idseller.hashCode ^
+        idManager.hashCode ^
+        idSeller.hashCode ^
         status.hashCode ^
-        regdate.hashCode;
+        createdAt.hashCode ^
+        updatedAt.hashCode;
   }
 }

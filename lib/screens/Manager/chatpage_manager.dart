@@ -120,7 +120,7 @@ class _ChatpageManagerState extends State<ChatpageManager> {
     idSeller = shopmodel!.idSeller;
     idManager = managerModel!.idmanager;
     String url =
-        '${MyConstant().domain}/api/getChatmanagerseller.php?isAdd=true&id_manager=$idManager&id_seller=$idSeller';
+        '${MyConstant().domain}/api/getChatmanagerseller.php?isAdd=true&id_seller=$idSeller';
     Response response = await Dio().get(url);
     var result = json.decode(response.data);
     setState(() {
@@ -198,11 +198,12 @@ class _ChatpageManagerState extends State<ChatpageManager> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      chatlist[index].message,
+                      chatlist[index].message.toString(),
                       style: TextStyle(fontSize: 16),
                     ),
                     Text(
-                      date(DateTime.parse(chatlist[index].regdate)).toString(),
+                      date(DateTime.parse(chatlist[index].createdAt.toString()))
+                          .toString(),
                       style: TextStyle(
                         fontSize: 12,
                       ),
@@ -279,10 +280,20 @@ class _ChatpageManagerState extends State<ChatpageManager> {
                       ),
                     )),
                     IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           message = _controller.text;
-                          sendChat();
-                          showSend(context);
+                          //showSend(context);
+                          //sendChat();
+                          idSeller = shopmodel!.idSeller;
+                          idManager = managerModel!.idmanager;
+                          String status = 'manager';
+                          String url =
+                              '${MyConstant().domain}/api/addChatmanager.php?isAdd=true&message=$message&id_manager=$idManager&id_seller=$idSeller&status=$status';
+                          await Dio().get(url).then((value) async {
+                            print(value);
+                            _controller.clear();
+                            await readChat();
+                          });
                         },
                         icon: Icon(
                           Icons.send,

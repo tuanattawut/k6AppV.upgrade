@@ -108,6 +108,15 @@ class _ShowSearchState extends State<ShowSearch> {
         child: TextField(
       controller: editingController,
       autofocus: true,
+      textInputAction: TextInputAction.search,
+      onSubmitted: (value) {
+        searching = true;
+        print(editingController.text);
+        if (editingController.text.isNotEmpty) {
+          getSearch();
+          editingController.clear();
+        }
+      },
       style: TextStyle(color: Colors.white, fontSize: 18),
       decoration: InputDecoration(
         hintStyle: TextStyle(color: Colors.white, fontSize: 18),
@@ -129,20 +138,27 @@ class _ShowSearchState extends State<ShowSearch> {
               'ไม่พบการค้นหา ...',
               style: TextStyle(fontSize: 18),
             )
-          : Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GridView.count(
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.2),
-                crossAxisCount: 2,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: List.generate(
-                  productList.length,
-                  (index) {
-                    return showAllview(index);
-                  },
-                ),
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GridView.count(
+                      childAspectRatio: MediaQuery.of(context).size.width /
+                          (MediaQuery.of(context).size.height / 1.2),
+                      crossAxisCount: 2,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: List.generate(
+                        productList.length,
+                        (index) {
+                          return showAllview(index);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
     );
@@ -235,31 +251,30 @@ class _ShowSearchState extends State<ShowSearch> {
             view++;
             String url =
                 '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
-            await Dio().get(url).then((value) {
+            await Dio().get(url).then((value) async {
+              await addData(clickid.toString());
+              await checkClickdata(clickid.toString());
               print(value);
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
+                  productModel: productList[index],
+                  userModel: userModel!,
+                ),
+              );
+              Navigator.of(context).push(route);
             });
-            print('view ปัจจุบัน = $view');
-            addData(clickid.toString());
-            checkClickdata(clickid.toString());
-            MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) => ShowDetail(
-                productModel: productList[index],
-                userModel: userModel!,
-              ),
-            );
-            Navigator.of(context).push(route);
           },
           child: Column(children: <Widget>[
             Container(
-              height: 200,
-              width: 200,
+              height: MediaQuery.of(context).size.height * 0.25,
+              width: MediaQuery.of(context).size.height * 0.25,
               child: Image.network(
                 '${MyConstant().domain}/images/products_seller/${productList[index].image}',
                 fit: BoxFit.cover,
               ),
             ),
             Container(
-              width: 200,
+              width: MediaQuery.of(context).size.height * 0.25,
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [

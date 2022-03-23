@@ -114,7 +114,6 @@ class _LoginSellerState extends State<LoginSeller> {
           onPressed: () async {
             if (this._formstate.currentState!.validate()) {
               //print('email =====> $email\npassword =====> $password');
-
               if (email == null ||
                   email!.isEmpty ||
                   !email!.contains('@') ||

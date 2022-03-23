@@ -20,7 +20,8 @@ class _DetailpromotionAproveState extends State<DetailpromotionAprove> {
   void initState() {
     super.initState();
     promotionlist = widget.promotionsellerModel;
-    idPro = promotionlist!.idPromotionseller;
+    nameshop = widget.promotionsellerModel.nameshop;
+    idPro = promotionlist!.id;
   }
 
   dynamic date(DateTime tm) {
@@ -131,6 +132,18 @@ class _DetailpromotionAproveState extends State<DetailpromotionAprove> {
               MyStyle().mySizebox(),
               Row(
                 children: [
+                  MyStyle().showTitleH2('เบอร์โทร:  '),
+                  Text(
+                    promotionlist!.phone.toString(),
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              MyStyle().mySizebox(),
+              Row(
+                children: [
                   MyStyle().showTitleH2('วันที่ลง:  '),
                   Text(
                     date(DateTime.parse(promotionlist!.updatedAt.toString()))
@@ -141,6 +154,7 @@ class _DetailpromotionAproveState extends State<DetailpromotionAprove> {
                   ),
                 ],
               ),
+              MyStyle().mySizebox(),
               saveButton()
             ],
           ),

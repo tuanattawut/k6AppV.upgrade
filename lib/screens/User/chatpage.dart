@@ -288,9 +288,9 @@ class _ChatPageState extends State<ChatPage> {
                           String status = 'user';
                           String url =
                               '${MyConstant().domain}/api/addChat.php?isAdd=true&message=$message&id_user=$idUser&id_seller=$idSeller&status=$status';
-                          await Dio().get(url).then((value) {
+                          await Dio().get(url).then((value) async {
                             _controller.clear();
-                            readChat();
+                            await readChat();
                           });
                         },
                         icon: Icon(

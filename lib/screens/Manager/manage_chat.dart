@@ -55,11 +55,7 @@ class _ManageChatsState extends State<ManageChats> {
                               Chatreport(reportModel: reportList[index]));
                       Navigator.of(context).push(route);
                     },
-                    leading: Image.network(
-                      '${MyConstant().domain}/upload/user/${reportList[index].image}',
-                      fit: BoxFit.cover,
-                      width: 50,
-                    ),
+                    leading: Icon(Icons.person),
                     title: Text(
                       '${reportList[index].firstname} ${reportList[index].lastname}',
                       style: TextStyle(
@@ -67,8 +63,8 @@ class _ManageChatsState extends State<ManageChats> {
                       ),
                     ),
                     trailing: Text(
-                      df.format(
-                          DateTime.parse(reportList[index].regdate.toString())),
+                      df.format(DateTime.parse(
+                          reportList[index].createdAt.toString())),
                       style: TextStyle(
                         fontSize: 14,
                       ),

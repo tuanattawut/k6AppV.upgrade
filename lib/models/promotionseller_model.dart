@@ -1,65 +1,83 @@
 import 'dart:convert';
 
 class PromotionsellerModel {
-  String? idPromotionseller;
+  String? id;
   String? idSeller;
   String? detailpromotion;
   String? image;
   String? status;
   String? updatedAt;
   String? nameshop;
+  String? lat;
+  String? long;
+  String? phone;
+
   PromotionsellerModel({
-    this.idPromotionseller,
+    this.id,
     this.idSeller,
     this.detailpromotion,
     this.image,
     this.status,
     this.updatedAt,
     this.nameshop,
+    this.lat,
+    this.long,
+    this.phone,
   });
 
   PromotionsellerModel copyWith({
-    String? idPromotionseller,
+    String? id,
     String? idSeller,
     String? detailpromotion,
     String? image,
     String? status,
     String? updatedAt,
     String? nameshop,
+    String? lat,
+    String? long,
+    String? phone,
   }) {
     return PromotionsellerModel(
-      idPromotionseller: idPromotionseller ?? this.idPromotionseller,
+      id: id ?? this.id,
       idSeller: idSeller ?? this.idSeller,
       detailpromotion: detailpromotion ?? this.detailpromotion,
       image: image ?? this.image,
       status: status ?? this.status,
       updatedAt: updatedAt ?? this.updatedAt,
       nameshop: nameshop ?? this.nameshop,
+      lat: lat ?? this.lat,
+      long: long ?? this.long,
+      phone: phone ?? this.phone,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': idPromotionseller,
+      'id': id,
       'id_seller': idSeller,
       'detailpromotion': detailpromotion,
       'image': image,
       'status': status,
       'updated_at': updatedAt,
       'nameshop': nameshop,
+      'lat': lat,
+      'long': long,
+      'phone': phone,
     };
   }
 
   factory PromotionsellerModel.fromMap(Map<String, dynamic> map) {
     return PromotionsellerModel(
-      idPromotionseller: map['id'] != null ? map['id'] : null,
-      idSeller: map['id_seller'] != null ? map['id_seller'] : null,
-      detailpromotion:
-          map['detailpromotion'] != null ? map['detailpromotion'] : null,
-      image: map['image'] != null ? map['image'] : null,
-      status: map['status'] != null ? map['status'] : null,
-      updatedAt: map['updated_at'] != null ? map['updated_at'] : null,
-      nameshop: map['nameshop'] != null ? map['nameshop'] : null,
+      id: map['id'],
+      idSeller: map['id_seller'],
+      detailpromotion: map['detailpromotion'],
+      image: map['image'],
+      status: map['status'],
+      updatedAt: map['updated_at'],
+      nameshop: map['nameshop'],
+      lat: map['lat'],
+      long: map['long'],
+      phone: map['phone'],
     );
   }
 
@@ -70,7 +88,7 @@ class PromotionsellerModel {
 
   @override
   String toString() {
-    return 'PromotionsellerModel(idPromotionseller: $idPromotionseller, idSeller: $idSeller, detailpromotion: $detailpromotion, image: $image, status: $status, updated_at: $updatedAt,nameshop: $nameshop)';
+    return 'PromotionsellerModel(id: $id, idSeller: $idSeller, detailpromotion: $detailpromotion, image: $image, status: $status, updatedAt: $updatedAt, nameshop: $nameshop, lat: $lat, long: $long, phone: $phone)';
   }
 
   @override
@@ -78,23 +96,29 @@ class PromotionsellerModel {
     if (identical(this, other)) return true;
 
     return other is PromotionsellerModel &&
-        other.idPromotionseller == idPromotionseller &&
+        other.id == id &&
         other.idSeller == idSeller &&
         other.detailpromotion == detailpromotion &&
         other.image == image &&
         other.status == status &&
         other.updatedAt == updatedAt &&
-        other.nameshop == nameshop;
+        other.nameshop == nameshop &&
+        other.lat == lat &&
+        other.long == long &&
+        other.phone == phone;
   }
 
   @override
   int get hashCode {
-    return idPromotionseller.hashCode ^
+    return id.hashCode ^
         idSeller.hashCode ^
         detailpromotion.hashCode ^
         image.hashCode ^
         status.hashCode ^
         updatedAt.hashCode ^
-        nameshop.hashCode;
+        nameshop.hashCode ^
+        lat.hashCode ^
+        long.hashCode ^
+        phone.hashCode;
   }
 }

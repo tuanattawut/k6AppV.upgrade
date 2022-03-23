@@ -40,7 +40,7 @@ class _ApprovePromotionState extends State<ApprovePromotion> {
         // print('value ==>> $value');
 
         var result = json.decode(value.data);
-        //  print('result ==>> $result');
+        // print('result ==>> $result');
 
         for (var map in result) {
           PromotionsellerModel promotionsellerModel =
@@ -52,6 +52,7 @@ class _ApprovePromotionState extends State<ApprovePromotion> {
           });
         }
       } else {
+        print('ทำนี่อยู่');
         setState(() {
           status = false;
         });
@@ -107,7 +108,7 @@ class _ApprovePromotionState extends State<ApprovePromotion> {
                     Navigator.of(context).push(route);
                   },
                   leading: Image.network(
-                    '${MyConstant().domain}/upload/promotionseller/${promotionlist[index].image}',
+                    '${MyConstant().domain}/images/promotionseller/${promotionlist[index].image}',
                     fit: BoxFit.cover,
                     width: 50,
                   ),

@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:k6_app/models/manager_model.dart';
+import 'package:k6_app/models/seller_model.dart';
 import 'package:k6_app/models/user_models.dart';
-import 'package:k6_app/screens/Manager/loginmanager.dart';
-import 'package:k6_app/screens/Seller/loginseller.dart';
+import 'package:k6_app/screens/Manager/main_manager.dart';
+import 'package:k6_app/screens/Seller/main_seller.dart';
+import 'package:k6_app/screens/Seller/registerseller.dart';
 import 'package:k6_app/screens/User/main_user.dart';
 import 'package:k6_app/utility/my_constant.dart';
 import 'package:k6_app/utility/my_outlinebutton.dart';
 import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/utility/normal_dialog.dart';
 import 'package:k6_app/widget/User/loginfacebook.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,12 +23,17 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formstate = GlobalKey<FormState>();
   bool statusRedEye = true;
-  String? email, password;
+  String? email, password, role;
+
+  @override
+  void initState() {
+    super.initState();
+    find();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Form(
         key: _formstate,
         child: GestureDetector(
@@ -35,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               MyStyle().mySizebox(),
               SizedBox(
-                height: 50,
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               //MyStyle().showLogo(),
               Row(
@@ -56,6 +65,42 @@ class _LoginPageState extends State<LoginPage> {
               buildEmailField(),
               buildPasswordField(),
               MyStyle().mySizebox(),
+              Row(
+                children: [
+                  Text('เข้าสู่ระบบโดย', style: TextStyle(fontSize: 16)),
+                ],
+              ),
+              RadioListTile(
+                value: 'user',
+                groupValue: role,
+                onChanged: (value) {
+                  setState(() {
+                    role = value.toString();
+                  });
+                },
+                title: Text("สมาชิก"),
+              ),
+              RadioListTile(
+                value: 'seller',
+                groupValue: role,
+                onChanged: (value) {
+                  setState(() {
+                    role = value.toString();
+                  });
+                },
+                title: Text("ผู้ขาย"),
+              ),
+              RadioListTile(
+                value: 'manager',
+                groupValue: role,
+                onChanged: (value) {
+                  setState(() {
+                    role = value.toString();
+                  });
+                },
+                title: Text("ผู้จัดการ"),
+              ),
+              MyStyle().mySizebox(),
               buildLoginButton(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -65,27 +110,19 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               LoginFacebook(),
-              // Row(children: const [
-              //   Expanded(
-              //       child: Divider(
-              //     color: Colors.blue,
-              //   )),
-              //   Text(" OR ",
-              //       style: TextStyle(fontSize: 14, color: Colors.black)),
-              //   Expanded(
-              //       child: Divider(
-              //     color: Colors.blue,
-              //   )),
-              // ]),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //   children: [
-              //     buildsellerButton(),
-              //     MyStyle().mySizebox(),
-              //     MyStyle().mySizebox(),
-              //     managerButton(),
-              //   ],
-              // ),
+              Row(children: const [
+                Expanded(
+                    child: Divider(
+                  color: Colors.blue,
+                )),
+                Text(" หรือ ",
+                    style: TextStyle(fontSize: 14, color: Colors.black)),
+                Expanded(
+                    child: Divider(
+                  color: Colors.blue,
+                )),
+              ]),
+              buildRegisterSeller(context),
             ],
           ),
         ),
@@ -93,35 +130,46 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Expanded managerButton() {
-    return Expanded(
-      flex: 1,
-      child: MyOutlinedButton(
-        onPressed: () {
-          MaterialPageRoute route =
-              MaterialPageRoute(builder: (value) => LoginManager());
-          Navigator.of(context).push(route);
-        },
-        gradient: const LinearGradient(
-            colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)]),
-        child: const Text('สำหรับผู้จัดการ'),
-      ),
-    );
+  Future<Null> find() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString('role') != null) {
+        email = prefs.getString('email');
+        password = prefs.getString('password');
+        // print('Thisis > ${prefs.getString('email')}');
+        if (prefs.getString('role') == 'user') {
+          showLoade(context);
+          checkAuthen();
+        } else if (prefs.getString('role') == 'seller') {
+          showLoade(context);
+          checkSeller();
+        } else if (prefs.getString('role') == 'manager') {
+          showLoade(context);
+          checkAuthenManager();
+        } else {
+          normalDialog(context, 'กรุณาเลือกสิทธิ์การเข้าใช้งาน');
+        }
+      }
+    });
   }
 
-  Expanded buildsellerButton() {
-    return Expanded(
-      flex: 1,
-      child: MyOutlinedButton(
-        onPressed: () {
-          MaterialPageRoute route =
-              MaterialPageRoute(builder: (value) => LoginSeller());
-          Navigator.of(context).push(route);
-        },
-        gradient: const LinearGradient(
-            colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)]),
-        child: const Text('สำหรับผู้ขาย'),
-      ),
+  Future<Null> gogo() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('role', role.toString());
+    prefs.setString('email', email.toString());
+    prefs.setString('password', password.toString());
+  }
+
+  MyOutlinedButton buildRegisterSeller(BuildContext context) {
+    return MyOutlinedButton(
+      onPressed: () async {
+        MaterialPageRoute route =
+            MaterialPageRoute(builder: (value) => RegisterSeller());
+        Navigator.of(context).push(route);
+      },
+      gradient: const LinearGradient(
+          colors: [Colors.blue, Color.fromARGB(255, 81, 247, 164)]),
+      child: const Text('สมัครขายสินค้า'),
     );
   }
 
@@ -162,11 +210,118 @@ class _LoginPageState extends State<LoginPage> {
                     password!.length < 8) {
                   normalDialog(context, 'กรุณากรอกข้อมูลให้ถูกต้อง');
                 } else {
-                  showLoade(context);
-                  checkAuthen();
+                  gogo();
+                  if (role == 'user') {
+                    showLoade(context);
+                    checkAuthen();
+                  } else if (role == 'seller') {
+                    showLoade(context);
+                    checkSeller();
+                  } else if (role == 'manager') {
+                    showLoade(context);
+                    checkAuthenManager();
+                  } else {
+                    normalDialog(context, 'กรุณาเลือกสิทธิ์การเข้าใช้งาน');
+                  }
                 }
               }
             }));
+  }
+
+  Future<Null> addLoginManager() async {
+    String url =
+        '${MyConstant().domain}/api/loginmanager?email=$email&password=$password';
+    try {
+      Response response = await Dio().get(url);
+      var result = json.decode(response.data);
+      print(result);
+      if (result == false) {
+        normalDialog(context, 'รหัสผ่านผิด กรุณาลองอีกครั้ง ');
+      } else {
+        for (var map in result) {
+          ManagerModel managerModel = ManagerModel.fromMap(map);
+          Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => Homemanager(
+                    managerModel: managerModel,
+                  )));
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<Null> checkAuthenManager() async {
+    String url =
+        '${MyConstant().domain}/api/getManagerEmail.php?isAdd=true&email=$email';
+    // print('url ===>> $url');
+    try {
+      Response response = await Dio().get(url);
+      //  print('res = $response');
+
+      var result = json.decode(response.data);
+      Navigator.pop(context);
+      // print('result = $result');
+      if (result == null) {
+        normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
+      } else {
+        addLoginManager();
+      }
+    } catch (e) {
+      normalDialog(context, 'ผิดพลาด');
+      //print('Have e Error ===>> ${e.toString()}');
+    }
+  }
+
+  Future<Null> checkSeller() async {
+    String url =
+        '${MyConstant().domain}/api/getSellerEmail.php?isAdd=true&email=$email';
+    //print('url ===>> $url');
+    try {
+      Response response = await Dio().get(url);
+      var result = json.decode(response.data);
+      Navigator.pop(context);
+      if (result == null) {
+        normalDialog(context, 'ไม่พบอีเมลนี้ในระบบ กรุณาลองใหม่อีกครั้ง');
+      } else {
+        addLoginSeller();
+      }
+    } catch (e) {
+      print('Have e Error ===>> ${e.toString()}');
+    }
+  }
+
+  Future<Null> addLoginSeller() async {
+    String url =
+        '${MyConstant().domain}/api/loginseller?email=$email&password=$password';
+    try {
+      Response response = await Dio().get(url);
+      var result = json.decode(response.data);
+      //print(result);
+      if (result == false) {
+        normalDialog(context, 'รหัสผ่านผิด กรุณาลองอีกครั้ง ');
+      } else {
+        for (var map in result) {
+          SellerModel sellerModel = SellerModel.fromMap(map);
+          if (sellerModel.role == 'seller') {
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (context) => Homeseller(
+                sellerModel: sellerModel,
+              ),
+            ));
+            break;
+          } else if (sellerModel.role == 'noseller') {
+            normalDialog(
+                context, 'บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากผู้จัดการ');
+          } else {
+            normalDialog(
+                context, 'บัญชีของคุณไม่ผ่านการตรวจสอบ\nโปรดติดต่อผู้จัดการ');
+          }
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   TextFormField buildPasswordField() {
@@ -245,6 +400,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       normalDialog(context, 'ผิดพลาด ${e.toString()}');
+      print(e.toString());
     }
   }
 

@@ -240,8 +240,11 @@ class _DetailProductState extends State<DetailProduct> {
   List<ProductModel> productcateLists = [];
   Future<Null> getProductcate() async {
     String? idsub = productModel!.idSubcategory.toString();
+    String? idshop = productModel!.idShop.toString();
+
+    print('idshop=$idshop');
     String api =
-        '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub';
+        '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsub&id_shop=$idshop';
 
     await Dio().get(api).then((value) {
       if (value.toString() != 'null') {
@@ -281,7 +284,7 @@ class _DetailProductState extends State<DetailProduct> {
                             showListView(index),
                       ),
                     ),
-                    _buildSectiontitle('สินค้าที่คล้ายกัน', () {}),
+                    _buildSectiontitle('สินค้าที่คุณอาจจะชอบ', () {}),
                     SizedBox(
                       height: 260,
                       child: ListView.builder(
@@ -378,6 +381,11 @@ class _DetailProductState extends State<DetailProduct> {
                 ),
               ],
             ),
+            Row(
+              children: [
+                MyStyle().showTitleH2('มีผู้เข้าชม: ${productModel!.view}'),
+              ],
+            ),
           ]));
 
   Widget showListView(int index) {
@@ -397,20 +405,23 @@ class _DetailProductState extends State<DetailProduct> {
         child: GestureDetector(
             onTap: () async {
               clickid = productModels[index].id.toString();
-              addData(clickid.toString());
               var view = int.parse(productModels[index].view.toString());
               view++;
               String url =
                   '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
-              await Dio().get(url).then((value) => readProduct());
-              checkClickdata(clickid.toString());
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowDetail(
-                  productModel: productModels[index],
-                  userModel: userModel!,
-                ),
-              );
-              Navigator.of(context).push(route);
+              await Dio().get(url).then((value) async {
+                await addData(clickid.toString());
+                await checkClickdata(clickid.toString());
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => ShowDetail(
+                    productModel: productModels[index],
+                    userModel: userModel!,
+                  ),
+                );
+                Navigator.of(context)
+                    .push(route)
+                    .then((value) => readProduct());
+              });
             },
             child: Column(children: <Widget>[
               Container(
@@ -477,21 +488,23 @@ class _DetailProductState extends State<DetailProduct> {
         child: GestureDetector(
             onTap: () async {
               clickid = productcateLists[index].id.toString();
-              addData(clickid.toString());
               var view = int.parse(productcateLists[index].view.toString());
               view++;
               String url =
                   '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
-              await Dio().get(url).then((value) => getProductcate());
-              checkClickdata(clickid.toString());
-
-              MaterialPageRoute route = MaterialPageRoute(
-                builder: (value) => ShowDetail(
-                  productModel: productcateLists[index],
-                  userModel: userModel!,
-                ),
-              );
-              Navigator.of(context).push(route);
+              await Dio().get(url).then((value) async {
+                await checkClickdata(clickid.toString());
+                await addData(clickid.toString());
+                MaterialPageRoute route = MaterialPageRoute(
+                  builder: (value) => ShowDetail(
+                    productModel: productcateLists[index],
+                    userModel: userModel!,
+                  ),
+                );
+                Navigator.of(context)
+                    .push(route)
+                    .then((value) => getProductcate());
+              });
             },
             child: Column(children: <Widget>[
               Container(

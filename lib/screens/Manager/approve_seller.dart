@@ -49,7 +49,7 @@ class _ApproveSellerState extends State<ApproveSeller> {
                   builder: (value) =>
                       DetailApprove(sellerModel: sellerModels[index]),
                 );
-                Navigator.of(context).push(route);
+                Navigator.of(context).push(route).then((value) => getData());
               },
               title: Text(
                 sellerModels[index].firstname +

@@ -1,36 +1,34 @@
 import 'dart:convert';
 
 class SubcategoryModel {
-  String? idsubcategory;
+  String? id;
   String? namesubcategory;
   SubcategoryModel({
-    this.idsubcategory,
+    this.id,
     this.namesubcategory,
   });
 
   SubcategoryModel copyWith({
-    String? idsubcategory,
+    String? id,
     String? namesubcategory,
   }) {
     return SubcategoryModel(
-      idsubcategory: idsubcategory ?? this.idsubcategory,
+      id: id ?? this.id,
       namesubcategory: namesubcategory ?? this.namesubcategory,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id_subcategory': idsubcategory,
+      'id': id,
       'namesubcategory': namesubcategory,
     };
   }
 
   factory SubcategoryModel.fromMap(Map<String, dynamic> map) {
     return SubcategoryModel(
-      idsubcategory:
-          map['id_subcategory'] != null ? map['id_subcategory'] : null,
-      namesubcategory:
-          map['namesubcategory'] != null ? map['namesubcategory'] : null,
+      id: map['id'],
+      namesubcategory: map['namesubcategory'],
     );
   }
 
@@ -41,17 +39,17 @@ class SubcategoryModel {
 
   @override
   String toString() =>
-      'SubcategoryModel(idsubcategory: $idsubcategory, namesubcategory: $namesubcategory)';
+      'SubcategoryModel(id: $id, namesubcategory: $namesubcategory)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is SubcategoryModel &&
-        other.idsubcategory == idsubcategory &&
+        other.id == id &&
         other.namesubcategory == namesubcategory;
   }
 
   @override
-  int get hashCode => idsubcategory.hashCode ^ namesubcategory.hashCode;
+  int get hashCode => id.hashCode ^ namesubcategory.hashCode;
 }

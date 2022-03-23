@@ -18,7 +18,7 @@ class _DetailPromotionsellerState extends State<DetailPromotionseller> {
   void initState() {
     super.initState();
     promotionlist = widget.promotionsellerModel;
-    idPro = promotionlist!.idPromotionseller;
+    idPro = promotionlist!.id;
     nameshop = promotionlist!.nameshop;
   }
 
@@ -121,6 +121,18 @@ class _DetailPromotionsellerState extends State<DetailPromotionseller> {
                   MyStyle().showTitleH2('จากร้าน:  '),
                   Text(
                     nameshop.toString(),
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              MyStyle().mySizebox(),
+              Row(
+                children: [
+                  MyStyle().showTitleH2('เบอร์โทร:  '),
+                  Text(
+                    promotionlist!.phone.toString(),
                     style: TextStyle(
                       fontSize: 18,
                     ),

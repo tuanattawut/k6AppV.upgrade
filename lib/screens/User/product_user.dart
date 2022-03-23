@@ -322,7 +322,7 @@ class _ProductListUserState extends State<ProductListUser> {
                         },
                       ),
                       SizedBox(
-                        height: 200,
+                        height: MediaQuery.of(context).size.height * 0.25,
                         child: loadCate!
                             ? MyStyle().showProgress()
                             : GridView.count(
@@ -351,7 +351,7 @@ class _ProductListUserState extends State<ProductListUser> {
                         },
                       ),
                       SizedBox(
-                        height: 250,
+                        height: MediaQuery.of(context).size.height * 0.35,
                         child: loadPro!
                             ? MyStyle().showProgress()
                             : ListView.builder(
@@ -382,7 +382,7 @@ class _ProductListUserState extends State<ProductListUser> {
                         },
                       ),
                       SizedBox(
-                        height: 250,
+                        height: MediaQuery.of(context).size.height * 0.35,
                         child: loadStatusREC!
                             ? MyStyle().showProgress()
                             : ListView.builder(
@@ -464,31 +464,30 @@ class _ProductListUserState extends State<ProductListUser> {
             view++;
             String url =
                 '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
-            await Dio().get(url).then((value) {
-              print(value);
+            await Dio().get(url).then((value) async {
+              await addData(clickid.toString());
+              await checkClickdata(clickid.toString());
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
+                  productModel: allproductRec[index],
+                  userModel: userModel!,
+                ),
+              );
+              Navigator.of(context)
+                  .push(route)
+                  .then((value) => getProductRecs());
             });
-            print('view ปัจจุบัน = $view');
-            addData(clickid.toString());
-            checkClickdata(clickid.toString());
-            MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) => ShowDetail(
-                productModel: allproductRec[index],
-                userModel: userModel!,
-              ),
-            );
-            Navigator.of(context).push(route);
           },
           child: Column(children: <Widget>[
             Container(
-              height: 150,
-              width: 150,
+              height: MediaQuery.of(context).size.height * 0.20,
               child: Image.network(
                 '${MyConstant().domain}/images/products_seller/${allproductRec[index].image}',
                 fit: BoxFit.cover,
               ),
             ),
             Container(
-              width: 200,
+              width: MediaQuery.of(context).size.height * 0.25,
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [

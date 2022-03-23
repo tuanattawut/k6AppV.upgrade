@@ -3,7 +3,7 @@ import 'dart:convert';
 class ChatModel {
   String? id;
   String? message;
-  String? idManager;
+  String? idUser;
   String? idSeller;
   String? status;
   String? createdAt;
@@ -11,7 +11,7 @@ class ChatModel {
   ChatModel({
     this.id,
     this.message,
-    this.idManager,
+    this.idUser,
     this.idSeller,
     this.status,
     this.createdAt,
@@ -21,7 +21,7 @@ class ChatModel {
   ChatModel copyWith({
     String? id,
     String? message,
-    String? idManager,
+    String? idUser,
     String? idSeller,
     String? status,
     String? createdAt,
@@ -30,7 +30,7 @@ class ChatModel {
     return ChatModel(
       id: id ?? this.id,
       message: message ?? this.message,
-      idManager: idManager ?? this.idManager,
+      idUser: idUser ?? this.idUser,
       idSeller: idSeller ?? this.idSeller,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
@@ -42,7 +42,7 @@ class ChatModel {
     return {
       'id': id,
       'message': message,
-      'id_manager': idManager,
+      'id_user': idUser,
       'id_seller': idSeller,
       'status': status,
       'created_at': createdAt,
@@ -54,7 +54,7 @@ class ChatModel {
     return ChatModel(
       id: map['id'],
       message: map['message'],
-      idManager: map['id_manager'],
+      idUser: map['id_user'],
       idSeller: map['id_seller'],
       status: map['status'],
       createdAt: map['created_at'],
@@ -69,7 +69,7 @@ class ChatModel {
 
   @override
   String toString() {
-    return 'ChatModel(id: $id, message: $message, idManager: $idManager, idSeller: $idSeller, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ChatModel(id: $id, message: $message, idManager: $idUser, idSeller: $idSeller, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -79,7 +79,7 @@ class ChatModel {
     return other is ChatModel &&
         other.id == id &&
         other.message == message &&
-        other.idManager == idManager &&
+        other.idUser == idUser &&
         other.idSeller == idSeller &&
         other.status == status &&
         other.createdAt == createdAt &&
@@ -90,7 +90,7 @@ class ChatModel {
   int get hashCode {
     return id.hashCode ^
         message.hashCode ^
-        idManager.hashCode ^
+        idUser.hashCode ^
         idSeller.hashCode ^
         status.hashCode ^
         createdAt.hashCode ^

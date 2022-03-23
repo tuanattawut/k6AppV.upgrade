@@ -15,6 +15,7 @@ import 'package:k6_app/utility/my_style.dart';
 import 'package:k6_app/screens/Seller/chat_seller.dart';
 import 'package:k6_app/screens/Seller/product_list_seller.dart';
 import 'package:k6_app/screens/Seller/rent_seller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homeseller extends StatefulWidget {
   Homeseller({required this.sellerModel});
@@ -200,6 +201,10 @@ class _HomesellerState extends State<Homeseller> {
 
   Future<void> _logOut() async {
     await FacebookAuth.instance.logOut();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('role');
+    prefs.remove('email');
+    prefs.remove('password');
   }
 }
 

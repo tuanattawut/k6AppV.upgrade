@@ -31,14 +31,14 @@ class _CategoryProductState extends State<CategoryProduct> {
     userModel = widget.userModel;
     subcategoryModels = widget.subcategoryModel;
     getProduct();
-    //print(categoryModels!.idcategory);
+    print(subcategoryModels!.id);
   }
 
   Future<Null> getProduct() async {
-    idsubcategory = subcategoryModels?.idsubcategory;
+    idsubcategory = subcategoryModels?.id;
     // print(idcategory);
     String api =
-        '${MyConstant().domain}/api/getproductfromidsubCategory.php?isAdd=true&id_subcategory=$idsubcategory';
+        '${MyConstant().domain}/api/getproductfromidsub.php?isAdd=true&id_subcategory=$idsubcategory';
     Response response = await Dio().get(api);
     var result = json.decode(response.data);
     if (result != null) {
@@ -188,19 +188,17 @@ class _CategoryProductState extends State<CategoryProduct> {
             view++;
             String url =
                 '${MyConstant().domain}/api/updateViewProduct.php?isAdd=true&view=$view&id=$clickid';
-            await Dio().get(url).then((value) {
-              print(value);
+            await Dio().get(url).then((value) async {
+              await addData(clickid.toString());
+              await checkClickdata(clickid.toString());
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (value) => ShowDetail(
+                  productModel: productModels[index],
+                  userModel: userModel!,
+                ),
+              );
+              Navigator.of(context).push(route).then((value) => getProduct());
             });
-            print('view ปัจจุบัน = $view');
-            addData(clickid.toString());
-            checkClickdata(clickid.toString());
-            MaterialPageRoute route = MaterialPageRoute(
-              builder: (value) => ShowDetail(
-                productModel: productModels[index],
-                userModel: userModel!,
-              ),
-            );
-            Navigator.of(context).push(route);
           },
           child: Column(children: <Widget>[
             Container(

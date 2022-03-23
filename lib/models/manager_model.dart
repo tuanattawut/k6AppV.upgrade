@@ -32,7 +32,7 @@ class ManagerModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id_manager': idmanager,
+      'id': idmanager,
       'email': email,
       'password': password,
       'firstname': firstname,
@@ -42,7 +42,7 @@ class ManagerModel {
 
   factory ManagerModel.fromMap(Map<String, dynamic> map) {
     return ManagerModel(
-      idmanager: map['id_manager'],
+      idmanager: map['id'].toString(),
       email: map['email'],
       password: map['password'],
       firstname: map['firstname'],
