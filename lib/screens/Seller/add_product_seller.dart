@@ -200,7 +200,8 @@ class _AddProductState extends State<AddProduct> {
       keyboardType: TextInputType.number,
       onChanged: (value) => price = value.trim(),
       inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly
+        FilteringTextInputFormatter.digitsOnly,
+        new LengthLimitingTextInputFormatter(7),
       ],
       decoration: InputDecoration(
         labelText: 'ราคาสินค้า :',

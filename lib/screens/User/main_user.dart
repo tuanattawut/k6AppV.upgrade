@@ -19,6 +19,7 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     super.initState();
     userModel = widget.usermodel;
+
     _widgetOptions = <Widget>[
       ProductListUser(usermodel: userModel!),
       AllchatUser(userModel: userModel!),
